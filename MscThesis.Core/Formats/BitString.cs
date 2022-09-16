@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MscThesis.Core
 {
@@ -26,6 +24,11 @@ namespace MscThesis.Core
             {
                 Values = values[0..size]
             };
+        }
+
+        public override int GetSize()
+        {
+            return Values.Length;
         }
 
         public override string ToString()

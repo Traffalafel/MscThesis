@@ -6,6 +6,6 @@ namespace MscThesis.Core
 {
     public abstract class OptimizationHeuristic<T> where T : InstanceFormat
     {
-        public abstract T Optimize(FitnessFunction<T> function, int problemsSize);
+        public abstract Individual<T> Optimize(FitnessFunction<T> function, int problemsSize);
     }
 }

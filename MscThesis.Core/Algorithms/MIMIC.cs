@@ -3,36 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using MscThesis.Core.InstanceFormats;
+using MscThesis.Core.Selection;
 
 namespace MscThesis.Core
 {
     public class MIMIC : OptimizationHeuristic<BitString>
     {
         private int _initialPopSize;
-        private double _quartile;
+        private SelectionOperator<BitString> _selectionOperator;
+        private TerminationCriterion<BitString> _terminationCriterion;
 
-        public MIMIC(int intitialPopSize, double quartile)
+        public MIMIC(
+            int intitialPopSize, 
+            SelectionOperator<BitString> selectionOperator, 
+            TerminationCriterion<BitString> terminationCriterion
+            )
         {
             _initialPopSize = intitialPopSize;
-            _quartile = quartile;
+            _selectionOperator = selectionOperator;
+            _terminationCriterion = terminationCriterion;
         }
 
-        public override BitString Optimize(FitnessFunction<BitString> function, int problemSize)
+        public override Individual<BitString> Optimize(FitnessFunction<BitString> targetFunction, int problemSize)
         {
             // Initialize population uniformly
-            var population = new List<Individual<BitString>>();
+            var population = new Population<BitString>();
             for (int i = 0; i < _initialPopSize; i++)
             {
                 var bs = BitString.GenerateUniformly(problemSize);
                 population.Add(new Individual<BitString>(bs));
             }
 
-            var c = 1000;
+            var c = 0;
             
             // While stopping criterion not met
-            while (c > 0)
+            while (!_terminationCriterion.ShouldTerminate())
             {
-                var values = population.Select(p => p.Value);
+                c++;
+
+                var values = population.GetValues();
 
                 // Compute univariate empirical entropies
                 var up = ComputeUnivariateProbabilities(values);
@@ -118,17 +128,16 @@ namespace MscThesis.Core
                         continue;
                     }
 
-                    individual.Fitness = function.ComputeFitness(individual.Value);
+                    individual.Fitness = targetFunction.ComputeFitness(individual.Value);
                 }
 
-                var populationSize = population.Count();
-                var targetSize = Convert.ToInt32(Math.Round(populationSize * _quartile));
-                population = population.OrderByDescending(i => i.Fitness).Take(targetSize).ToList();
+                population = _selectionOperator.Select(population, targetFunction);
 
-                c--;
+                _terminationCriterion.Iteration(population);
             }
 
-            return population.First().Value;
+            Console.WriteLine($"Total Iterations: {c}");
+            return population.First();
         }
 
         public double ComputeJointEntropyTerm(double pXY, double pX)
