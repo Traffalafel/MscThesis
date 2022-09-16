@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using MscThesis.Core.InstanceFormats;
 using MscThesis.Core.Selection;
+using MscThesis.Core.Formats;
+using MscThesis.Core.TerminationCriterion;
 
-namespace MscThesis.Core
+namespace MscThesis.Core.Algorithms
 {
     public class MIMIC : OptimizationHeuristic<BitString>
     {

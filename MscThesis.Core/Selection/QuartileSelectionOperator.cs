@@ -1,4 +1,4 @@
-﻿using MscThesis.Core.InstanceFormats;
+﻿using MscThesis.Core.Formats;
 using System;
 using System.Linq;
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 
-namespace MscThesis.Core
+namespace MscThesis.Core.Formats
 {
     public class BitString : InstanceFormat
     {

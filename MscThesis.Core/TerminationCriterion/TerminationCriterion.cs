@@ -1,7 +1,7 @@
-﻿using MscThesis.Core.InstanceFormats;
+﻿using MscThesis.Core.Formats;
 using System;
 
-namespace MscThesis.Core
+namespace MscThesis.Core.TerminationCriterion
 {
     public abstract class TerminationCriterion<T> where T : InstanceFormat
     {

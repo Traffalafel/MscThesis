@@ -1,4 +1,4 @@
-﻿using MscThesis.Core.InstanceFormats;
+﻿using MscThesis.Core.Formats;
 
 namespace MscThesis.Core.Selection
 {

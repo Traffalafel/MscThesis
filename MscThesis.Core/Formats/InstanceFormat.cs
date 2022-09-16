@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MscThesis.Core
+namespace MscThesis.Core.Formats
 {
     public abstract class InstanceFormat
     {

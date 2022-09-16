@@ -1,18 +1,18 @@
-﻿using MscThesis.Core.InstanceFormats;
+﻿using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace MscThesis.Core.TerminationCriterion
 {
-    public class StagnationCriterion<T> : TerminationCriterion<T> where T : InstanceFormat
+    public class StagnationTerminationCriterion<T> : TerminationCriterion<T> where T : InstanceFormat
     {
         private readonly double _epsilon;
         private readonly int _maxIterations;
         private double _bestFitnessPrev;
         private int _stagnatedIterations;
 
-        public StagnationCriterion(double epsilon, int maxIterations)
+        public StagnationTerminationCriterion(double epsilon, int maxIterations)
         {
             _epsilon = epsilon;
             _maxIterations = maxIterations;

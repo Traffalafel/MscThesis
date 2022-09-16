@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MscThesis.Core.Formats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MscThesis.Core
+namespace MscThesis.Core.FitnessFunctions
 {
     public class OneMax : FitnessFunction<BitString>
     {

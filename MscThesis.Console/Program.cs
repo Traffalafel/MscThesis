@@ -1,5 +1,7 @@
 ﻿using MscThesis.Core;
+using MscThesis.Core.Algorithms;
 using MscThesis.Core.FitnessFunctions;
+using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
 using MscThesis.Core.TerminationCriterion;
 using System;
@@ -17,7 +19,7 @@ namespace MscThesis.CLI
             var epsilon = 10E-6;
 
             var selection = new QuartileSelectionOperator<BitString>(quartile);
-            var termination = new StagnationCriterion<BitString>(epsilon, maxIterations);
+            var termination = new StagnationTerminationCriterion<BitString>(epsilon, maxIterations);
 
             var mimic = new MIMIC(initialPopSize, selection, termination);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MscThesis.Core.Formats;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

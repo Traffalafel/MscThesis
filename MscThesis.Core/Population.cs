@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MscThesis.Core.Formats;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MscThesis.Core.InstanceFormats
+namespace MscThesis.Core
 {
     public class Population<T> : IEnumerable<Individual<T>> where T : InstanceFormat
     {
