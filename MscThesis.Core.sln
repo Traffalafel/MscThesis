@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.Core", "MscThesis.Core\MscThesis.Core.csproj", "{C7D79A78-5807-47DB-9177-34BEA8642734}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.CLI", "MscThesis.Console\MscThesis.CLI.csproj", "{09D632D7-62A8-4C54-BA08-CAD466025CCE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7D79A78-5807-47DB-9177-34BEA8642734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7D79A78-5807-47DB-9177-34BEA8642734}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7D79A78-5807-47DB-9177-34BEA8642734}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7D79A78-5807-47DB-9177-34BEA8642734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09D632D7-62A8-4C54-BA08-CAD466025CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09D632D7-62A8-4C54-BA08-CAD466025CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09D632D7-62A8-4C54-BA08-CAD466025CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09D632D7-62A8-4C54-BA08-CAD466025CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4099D084-C5C5-4CE3-9894-F83014F9E838}
+	EndGlobalSection
+EndGlobal
