@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using MscThesis.Core.Selection;
 using MscThesis.Core.Formats;
-using MscThesis.Core.TerminationCriterion;
+using MscThesis.Core.TerminationCriteria;
 
 namespace MscThesis.Core.Algorithms
 {
@@ -88,6 +86,9 @@ namespace MscThesis.Core.Algorithms
                     remaining.Remove(iMin);
                 }
 
+                var minProb = 1.0d / problemSize;
+                var maxProb = 1.0d - minProb;
+
                 // Sample solutions from model
                 for (int i = 0; i < _initialPopSize; i++)
                 {
@@ -96,6 +97,7 @@ namespace MscThesis.Core.Algorithms
                     // Sample the first variable
                     var first = ordering[0];
                     var probFirst = up[first];
+                    probFirst = ApplyMargins(probFirst, minProb, maxProb);
                     vals[first] = Utils.SampleBit(probFirst);
 
                     // Sample the rest
@@ -115,6 +117,7 @@ namespace MscThesis.Core.Algorithms
                         {
                             p = joint[2] / (1 - up[prev]);
                         }
+                        p = ApplyMargins(p, minProb, maxProb);
                         vals[position] = Utils.SampleBit(p);
                     }
 
@@ -171,16 +174,18 @@ namespace MscThesis.Core.Algorithms
             }
 
             var probabilities = new double[problemSize];
-            //var minProb = 1.0d / problemSize;
-            //var maxProb = 1.0d - minProb;
             for (var i = 0; i < problemSize; i++)
             {
                 var p = (double)oneCounts[i] / populationSize;
                 probabilities[i] = p;
-                //probabilities[i] = Math.Min(maxProb, Math.Max(minProb, p));
             }
 
             return probabilities;
+        }
+
+        private double ApplyMargins(double p, double min, double max)
+        {
+            return Math.Min(max, Math.Max(min, p));
         }
 
         public double[,][] ComputeJointProbabilities(IEnumerable<BitString> instances)
@@ -217,35 +222,11 @@ namespace MscThesis.Core.Algorithms
                 for (var j = 0; j < problemSize; j++)
                 {
                     probabilities[i, j] = new double[4];
-                    //var marginNet = 0.0d;
-                    //var affected = new HashSet<int>(Enumerable.Range(0, 4));
                     for (var k = 0; k < 4; k++)
                     {
                         var p = (double)counts[i, j, k] / populationSize;
-                        //if (p < minProb)
-                        //{
-                        //    marginNet -= minProb - p;
-                        //    p = minProb;
-                        //    affected.Remove(k);
-                        //}
-                        //if (p > maxProb)
-                        //{
-                        //    marginNet += p - maxProb;
-                        //    p = maxProb;
-                        //    affected.Remove(k);
-                        //}
                         probabilities[i,j][k] = p;
                     }
-
-                    //if (affected.Count < 4)
-                    //{
-                    //    foreach (var k in affected)
-                    //    {
-                    //        var prev = probabilities[i, j][k];
-                    //        probabilities[i, j][k] *= 1 + marginNet;
-                    //    }
-                    //}
-
                 }
             }
 
