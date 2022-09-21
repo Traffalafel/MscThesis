@@ -12,7 +12,7 @@ namespace MscThesis.Core.FitnessFunctions
             _m = m;
         }
 
-        public override double ComputeFitness(BitString instance)
+        protected override double Compute(BitString instance)
         {
             var numOnes = instance.Values.Where(val => val == true).Count();
             var n = instance.GetSize();

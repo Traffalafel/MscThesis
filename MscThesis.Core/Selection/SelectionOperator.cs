@@ -2,8 +2,8 @@
 
 namespace MscThesis.Core.Selection
 {
-    public abstract class SelectionOperator<T> where T : InstanceFormat
+    public interface ISelectionOperator<T> where T : InstanceFormat
     {
-        public abstract Population<T> Select(Population<T> population, FitnessFunction<T> fitnessFunction);
+        public Population<T> Select(Population<T> population, FitnessFunction<T> fitnessFunction);
     }
 }

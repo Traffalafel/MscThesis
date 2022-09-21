@@ -1,10 +1,6 @@
-﻿using MscThesis.Core;
-using MscThesis.Core.Algorithms;
-using MscThesis.Core.FitnessFunctions;
-using MscThesis.Core.Formats;
-using MscThesis.Core.Selection;
-using MscThesis.Core.TerminationCriterion;
+﻿using MscThesis.Application;
 using System;
+using System.Linq;
 
 namespace MscThesis.CLI
 {
@@ -12,22 +8,20 @@ namespace MscThesis.CLI
     {
         static void Main(string[] args)
         {
-            var problemSize = 50;
-            var initialPopSize = 1000;
-            var quartile = 0.5d;
-            var maxIterations = 10;
-            var epsilon = 10E-6;
+            var runner = new TestRunner();
 
-            var selection = new QuartileSelectionOperator<BitString>(quartile);
-            var termination = new StagnationTerminationCriterion<BitString>(epsilon, maxIterations);
+            var results = runner.TestMIMIC();
 
-            var mimic = new MIMIC(initialPopSize, selection, termination);
+            Console.WriteLine($"Fittest: {results.Fittest}");
+            Console.WriteLine($"Number of iterations: {results.NumIterations}");
+            Console.WriteLine($"Best fitnesses: {string.Join(", ", results.BestFitnesses)}");
+            Console.WriteLine($"Total function calls: {results.NumFunctionCalls}");
+            Console.WriteLine($"Population sizes: {string.Join(", ", results.PopulationSizes)}");
 
-            var oneMax = new OneMax();
-            var jumpOffsetSpike = new JumpOffsetSpike(8);
-            var optimal = mimic.Optimize(jumpOffsetSpike, problemSize);
+            //var minEntropies = results.Statistics["MinEntropy"];
+            //var minEntropiesFormatted = string.Join(", ", minEntropies);
+            //Console.WriteLine($"Min entropies: {minEntropiesFormatted}");
 
-            Console.WriteLine(optimal.ToString());
         }
     }
 }

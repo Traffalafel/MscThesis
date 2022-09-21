@@ -1,15 +1,17 @@
 ﻿using MscThesis.Core.Formats;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MscThesis.Core
 {
     public abstract class FitnessFunction<T> where T : InstanceFormat
     {
         private int _numCalls = 0;
+        protected abstract double Compute(T instance);
 
-        public abstract double ComputeFitness(T instance);
+        public double ComputeFitness(T instance)
+        {
+            _numCalls++;
+            return Compute(instance);
+        }
 
         public int GetNumCalls()
         {

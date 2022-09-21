@@ -3,148 +3,147 @@ using System.Collections.Generic;
 using System.Linq;
 using MscThesis.Core.Selection;
 using MscThesis.Core.Formats;
-using MscThesis.Core.TerminationCriteria;
 
 namespace MscThesis.Core.Algorithms
 {
     public class MIMIC : OptimizationHeuristic<BitString>
-    {
-        private int _initialPopSize;
-        private SelectionOperator<BitString> _selectionOperator;
-        private TerminationCriterion<BitString> _terminationCriterion;
+    {        
+        private readonly ISelectionOperator<BitString> _selectionOperator;
+        private readonly int _initialPopulationSize;
+        private Population<BitString> _population;
 
         public MIMIC(
-            int intitialPopSize, 
-            SelectionOperator<BitString> selectionOperator, 
-            TerminationCriterion<BitString> terminationCriterion
-            )
+            int problemSize,
+            int initialPopulationSize, 
+            ISelectionOperator<BitString> selectionOperator) : base(problemSize)
         {
-            _initialPopSize = intitialPopSize;
             _selectionOperator = selectionOperator;
-            _terminationCriterion = terminationCriterion;
-        }
+            _initialPopulationSize = initialPopulationSize;
 
-        public override Individual<BitString> Optimize(FitnessFunction<BitString> targetFunction, int problemSize)
-        {
             // Initialize population uniformly
-            var population = new Population<BitString>();
-            for (int i = 0; i < _initialPopSize; i++)
+            _population = new Population<BitString>();
+            for (int i = 0; i < initialPopulationSize; i++)
             {
                 var bs = BitString.GenerateUniformly(problemSize);
-                population.Add(new Individual<BitString>(bs));
+                _population.Add(new Individual<BitString>(bs));
             }
-
-            var c = 0;
-            
-            // While stopping criterion not met
-            while (!_terminationCriterion.ShouldTerminate())
-            {
-                c++;
-
-                var values = population.GetValues();
-
-                // Compute univariate empirical entropies
-                var up = ComputeUnivariateProbabilities(values);
-                var uniEntropies = new double[problemSize];
-                for (int i = 0; i < problemSize; i++)
-                {
-                    uniEntropies[i] = ComputeEntropy(up[i]);
-                }
-
-                // Compute joint empirical entropies
-                var jointProbs = ComputeJointProbabilities(values);
-                var jointEntropies = new double[problemSize,problemSize];
-                for (int i = 0; i < problemSize; i++)
-                {
-                    for (int j = 0; j < problemSize; j++)
-                    {
-                        var jp = jointProbs[i,j];
-                        var entropy =
-                            - ComputeJointEntropyTerm(jp[0], up[j])
-                            - ComputeJointEntropyTerm(jp[1], (1-up[j]))
-                            - ComputeJointEntropyTerm(jp[2], up[j])
-                            - ComputeJointEntropyTerm(jp[3], (1-up[j]));
-                        jointEntropies[i,j] = entropy;
-                    }
-                }
-
-                var remaining = new HashSet<int>(Enumerable.Range(0, problemSize));
-                var ordering = new int[problemSize];
-
-                // Find lowest univariate entropy and set to start of chain
-                var (_, minIdx) = uniEntropies.Select((e, i) => (e, i)).Min();
-                ordering[0] = minIdx;
-                remaining.Remove(minIdx);
-
-                // Find lowest pairwise entropies and build chain
-                for (int pos = 1; pos < problemSize; pos++)
-                {
-                    var posPrev = ordering[pos - 1];
-                    var (_, iMin) = remaining.Select(i => (jointEntropies[i, posPrev], i)).Min();
-
-                    ordering[pos] = iMin;
-                    remaining.Remove(iMin);
-                }
-
-                var minProb = 1.0d / problemSize;
-                var maxProb = 1.0d - minProb;
-
-                // Sample solutions from model
-                for (int i = 0; i < _initialPopSize; i++)
-                {
-                    var vals = new bool[problemSize];
-
-                    // Sample the first variable
-                    var first = ordering[0];
-                    var probFirst = up[first];
-                    probFirst = ApplyMargins(probFirst, minProb, maxProb);
-                    vals[first] = Utils.SampleBit(probFirst);
-
-                    // Sample the rest
-                    for (int k = 1; k < problemSize; k++)
-                    {
-                        var position = ordering[k];
-                        var prev = ordering[k - 1];
-                        var prevVal = vals[prev];
-                        var joint = jointProbs[position, prev];
-
-                        double p;
-                        if (prevVal)
-                        {
-                            p = joint[3] / up[prev];
-                        }
-                        else
-                        {
-                            p = joint[2] / (1 - up[prev]);
-                        }
-                        p = ApplyMargins(p, minProb, maxProb);
-                        vals[position] = Utils.SampleBit(p);
-                    }
-
-                    var bs = new BitString { Values = vals };
-                    population.Add(new Individual<BitString>(bs));
-                }
-
-                foreach (var individual in population)
-                {
-                    if (individual.Fitness != null)
-                    {
-                        continue;
-                    }
-
-                    individual.Fitness = targetFunction.ComputeFitness(individual.Value);
-                }
-
-                population = _selectionOperator.Select(population, targetFunction);
-
-                _terminationCriterion.Iteration(population);
-            }
-
-            Console.WriteLine($"Total Iterations: {c}");
-            return population.First();
         }
 
-        public double ComputeJointEntropyTerm(double pXY, double pX)
+        protected override IterationResult<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
+        {
+            var values = _population.GetValues();
+
+            // Compute univariate empirical entropies
+            var up = ComputeUnivariateProbabilities(values);
+            var uniEntropies = new double[_problemSize];
+            for (int i = 0; i < _problemSize; i++)
+            {
+                uniEntropies[i] = ComputeEntropy(up[i]);
+            }
+
+            // Compute joint empirical entropies
+            var jointProbs = ComputeJointProbabilities(values);
+            var jointEntropies = new double[_problemSize, _problemSize];
+            for (int i = 0; i < _problemSize; i++)
+            {
+                for (int j = 0; j < _problemSize; j++)
+                {
+                    var jp = jointProbs[i, j];
+                    var entropy =
+                        -ComputeJointEntropyTerm(jp[0], up[j])
+                        - ComputeJointEntropyTerm(jp[1], (1 - up[j]))
+                        - ComputeJointEntropyTerm(jp[2], up[j])
+                        - ComputeJointEntropyTerm(jp[3], (1 - up[j]));
+                    jointEntropies[i, j] = entropy;
+                }
+            }
+
+            var remaining = new HashSet<int>(Enumerable.Range(0, _problemSize));
+            var ordering = new int[_problemSize];
+
+            // Find lowest univariate entropy and set to start of chain
+            var (_, minIdx) = uniEntropies.Select((e, i) => (e, i)).Min();
+            ordering[0] = minIdx;
+            remaining.Remove(minIdx);
+
+            // Find lowest pairwise entropies and build chain
+            for (int pos = 1; pos < _problemSize; pos++)
+            {
+                var posPrev = ordering[pos - 1];
+                var (_, iMin) = remaining.Select(i => (jointEntropies[i, posPrev], i)).Min();
+
+                ordering[pos] = iMin;
+                remaining.Remove(iMin);
+            }
+
+            var minProb = 1.0d / _problemSize;
+            var maxProb = 1.0d - minProb;
+
+            // Sample solutions from model
+            for (int i = 0; i < _initialPopulationSize; i++)
+            {
+                var vals = new bool[_problemSize];
+
+                // Sample the first variable
+                var first = ordering[0];
+                var probFirst = up[first];
+                probFirst = ApplyMargins(probFirst, minProb, maxProb);
+                vals[first] = Sampling.SampleBit(probFirst);
+
+                // Sample the rest
+                for (int k = 1; k < _problemSize; k++)
+                {
+                    var position = ordering[k];
+                    var prev = ordering[k - 1];
+                    var prevVal = vals[prev];
+                    var joint = jointProbs[position, prev];
+
+                    double p;
+                    if (prevVal)
+                    {
+                        p = joint[3] / up[prev];
+                    }
+                    else
+                    {
+                        p = joint[2] / (1 - up[prev]);
+                    }
+                    p = ApplyMargins(p, minProb, maxProb);
+                    vals[position] = Sampling.SampleBit(p);
+                }
+
+                var bs = new BitString { Values = vals };
+                _population.Add(new Individual<BitString>(bs));
+            }
+
+            foreach (var individual in _population)
+            {
+                if (individual.Fitness != null)
+                {
+                    continue;
+                }
+
+                individual.Fitness = fitnessFunction.ComputeFitness(individual.Value);
+            }
+
+            _population = _selectionOperator.Select(_population, fitnessFunction);
+
+            var minUniEntropy = uniEntropies.Min();
+            var minJointEntropy = jointEntropies.Cast<double>().Min();
+            var minEntropy = Math.Min(minUniEntropy, minJointEntropy);
+
+            var stats = new Dictionary<Property, double>()
+            {
+                { Property.MinEntropy, minEntropy }
+            };
+
+            return new IterationResult<BitString>
+            {
+                Population = _population,
+                Statistics = stats
+            };
+        }
+
+        private double ComputeJointEntropyTerm(double pXY, double pX)
         {
             if (pXY == 0 || pX == 0)
             {
@@ -153,7 +152,7 @@ namespace MscThesis.Core.Algorithms
             return pXY * Math.Log2(pXY / pX);
         }
 
-        public double[] ComputeUnivariateProbabilities(IEnumerable<BitString> instances)
+        private double[] ComputeUnivariateProbabilities(IEnumerable<BitString> instances)
         {
             var populationSize = instances.Count();
             if (populationSize == 0)
@@ -188,7 +187,7 @@ namespace MscThesis.Core.Algorithms
             return Math.Min(max, Math.Max(min, p));
         }
 
-        public double[,][] ComputeJointProbabilities(IEnumerable<BitString> instances)
+        private double[,][] ComputeJointProbabilities(IEnumerable<BitString> instances)
         {
             var populationSize = instances.Count();
             if (populationSize == 0)
@@ -214,8 +213,6 @@ namespace MscThesis.Core.Algorithms
                 }
             }
 
-            //var minProb = 1.0d / Math.Pow(problemSize, 2.0d);
-            //var maxProb = 1.0d - minProb;
             var probabilities = new double[problemSize,problemSize][];
             for (var i = 0; i < problemSize; i++)
             {
@@ -233,11 +230,10 @@ namespace MscThesis.Core.Algorithms
             return probabilities;
         }
 
-        public double ComputeEntropy(double p)
+        private double ComputeEntropy(double p)
         {
             return -p * Math.Log2(p) - (1-p) * Math.Log2(1 - p);
         }
-
 
     }
 }

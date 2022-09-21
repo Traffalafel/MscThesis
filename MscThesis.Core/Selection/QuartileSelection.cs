@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace MscThesis.Core.Selection
 {
-    public class QuartileSelectionOperator<T> : SelectionOperator<T> where T : InstanceFormat
+    public class QuartileSelection<T> : ISelectionOperator<T> where T : InstanceFormat
     {
         private double _quartile;
 
-        public QuartileSelectionOperator(double quartile)
+        public QuartileSelection(double quartile)
         {
             _quartile = quartile;
         }
 
-        public override Population<T> Select(Population<T> population, FitnessFunction<T> fitnessFunction)
+        public Population<T> Select(Population<T> population, FitnessFunction<T> fitnessFunction)
         {
-            var targetSize = Convert.ToInt32(Math.Round(population.Size * _quartile));
+            var targetSize = Convert.ToInt32(Math.Ceiling(population.Size * _quartile));
             var newIndividuals = population.OrderByDescending(i => i.Fitness).Take(targetSize);
             return new Population<T>(newIndividuals);
         }

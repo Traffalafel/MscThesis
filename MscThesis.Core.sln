@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.Core", "MscThesis.Core\MscThesis.Core.csproj", "{C7D79A78-5807-47DB-9177-34BEA8642734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MscThesis.Core", "MscThesis.Core\MscThesis.Core.csproj", "{C7D79A78-5807-47DB-9177-34BEA8642734}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.CLI", "MscThesis.Console\MscThesis.CLI.csproj", "{09D632D7-62A8-4C54-BA08-CAD466025CCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MscThesis.CLI", "MscThesis.Console\MscThesis.CLI.csproj", "{09D632D7-62A8-4C54-BA08-CAD466025CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.UI", "MscThesis.UI\MscThesis.UI.csproj", "{6A16A72B-22E6-475C-92E9-DF938FE509B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.Application", "MscThesis.Application\MscThesis.Application.csproj", "{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,16 @@ Global
 		{09D632D7-62A8-4C54-BA08-CAD466025CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09D632D7-62A8-4C54-BA08-CAD466025CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09D632D7-62A8-4C54-BA08-CAD466025CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A16A72B-22E6-475C-92E9-DF938FE509B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A16A72B-22E6-475C-92E9-DF938FE509B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A16A72B-22E6-475C-92E9-DF938FE509B6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6A16A72B-22E6-475C-92E9-DF938FE509B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A16A72B-22E6-475C-92E9-DF938FE509B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A16A72B-22E6-475C-92E9-DF938FE509B6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

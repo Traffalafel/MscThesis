@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MscThesis.Core
 {
-    public static class Utils
+    public static class Sampling
     {
         public static bool SampleBit(double p)
         {
@@ -13,7 +13,7 @@ namespace MscThesis.Core
             return d < p;
         }
 
-        public static int Sample(double[] distribution)
+        public static int SampleDistribution(double[] distribution)
         {
             var rnd = new Random();
             var d = rnd.NextDouble();

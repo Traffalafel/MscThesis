@@ -8,7 +8,7 @@ namespace MscThesis.Core.FitnessFunctions
 {
     public class OneMax : FitnessFunction<BitString>
     {
-        public override double ComputeFitness(BitString instance)
+        protected override double Compute(BitString instance)
         {
             return instance.Values.Where(val => val == true).Count();
         }
