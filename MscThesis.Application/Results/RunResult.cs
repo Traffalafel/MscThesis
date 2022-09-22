@@ -5,17 +5,17 @@ using System;
 
 namespace MscThesis.Runner.Results
 {
-    // Results of ONE run of ONE algorithm on ONE problem of ONE size
-    internal class RunResult<T> : IDisplayableResult<T> where T : InstanceFormat
+    // 1 run of 1 optimizer on 1 problem of 1 size
+    public class RunResult<T> : IResult<T> where T : InstanceFormat
     {
-        public string AlgorithmName { get; }
+        public string OptimizerName { get; }
         public Individual<T> Fittest { get; }
         public Dictionary<Property, List<double>> SeriesData { get; }
         public Dictionary<Property, double> ItemData { get; }
 
-        public RunResult(IEnumerable<IterationResult<T>> results, FitnessFunction<T> fitnessFunction, string algorithmName)
+        public RunResult(IEnumerable<RunIteration<T>> iterations, FitnessFunction<T> fitnessFunction, string optimizerName)
         {
-            AlgorithmName = algorithmName;
+            OptimizerName = optimizerName;
             ItemData = new Dictionary<Property, double>();
             SeriesData = new Dictionary<Property, List<double>>();
 
@@ -23,9 +23,9 @@ namespace MscThesis.Runner.Results
             var populationSizes = new List<double>();
             Individual<T> globalFittest = null;
             var numIterations = 0;
-            foreach (var result in results)
+            foreach (var iteration in iterations)
             {
-                foreach (var (key, value) in result.Statistics)
+                foreach (var (key, value) in iteration.Statistics)
                 {
                     // Add to statistics
                     if (SeriesData.ContainsKey(key))
@@ -38,7 +38,7 @@ namespace MscThesis.Runner.Results
                     }
                 }
 
-                var fittest = result.Population.GetFittest();
+                var fittest = iteration.Population.GetFittest();
                 if (fittest == null || fittest.Fitness == null)
                 {
                     throw new Exception();
@@ -49,7 +49,7 @@ namespace MscThesis.Runner.Results
                     globalFittest = fittest;
                 }
 
-                populationSizes.Add((double) result.Population.Size);
+                populationSizes.Add((double) iteration.Population.NumIndividuals);
 
                 numIterations++;
             }
@@ -66,14 +66,14 @@ namespace MscThesis.Runner.Results
             return Fittest;
         }
 
-        public ICollection<string> GetCases()
+        public IEnumerable<string> GetOptimizerNames()
         {
-            return new List<string> { AlgorithmName }; 
+            return new List<string> { OptimizerName }; 
         }
 
-        public ICollection<Property> GetItemProperties(string testCase)
+        public IEnumerable<Property> GetItemProperties(string testCase)
         {
-            if (testCase != AlgorithmName)
+            if (testCase != OptimizerName)
             {
                 return new List<Property>();
             }
@@ -83,7 +83,7 @@ namespace MscThesis.Runner.Results
 
         public double GetItemValue(string testCase, Property property)
         {
-            if (testCase != AlgorithmName)
+            if (testCase != OptimizerName)
             {
                 throw new Exception("");
             }
@@ -98,14 +98,14 @@ namespace MscThesis.Runner.Results
             }
         }
 
-        public ICollection<Property> GetSeriesProperties(string testCase)
+        public IEnumerable<Property> GetSeriesProperties(string testCase)
         {
             return SeriesData.Keys;
         }
 
         public List<double> GetSeriesValues(string testCase, Property property)
         {
-            if (testCase != AlgorithmName)
+            if (testCase != OptimizerName)
             {
                 throw new Exception("");
             }

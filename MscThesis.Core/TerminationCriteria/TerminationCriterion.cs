@@ -8,7 +8,7 @@ namespace MscThesis.Core.TerminationCriteria
     {
         protected abstract bool ShouldTerminate(Population<T> pop);
 
-        public IEnumerable<IterationResult<T>> AddTerminationCriterion(IEnumerable<IterationResult<T>> results)
+        public IEnumerable<RunIteration<T>> AddTerminationCriterion(IEnumerable<RunIteration<T>> results)
         {
             foreach (var result in results)
             {

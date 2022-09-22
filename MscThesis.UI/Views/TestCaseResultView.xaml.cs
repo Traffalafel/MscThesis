@@ -1,3 +1,6 @@
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Maui;
 using MscThesis.Core;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Results;
@@ -15,7 +18,7 @@ public partial class TestCaseResultView : ContentView
 		}
 	}
 
-	public static TestCaseResultView Create<T>(IDisplayableResult<T> result, string testCase) where T : InstanceFormat
+	public static TestCaseResultView Create<T>(IResult<T> result, string testCase) where T : InstanceFormat
 	{
 		var views = new List<IView>();
 		foreach (var property in result.GetItemProperties(testCase))
@@ -27,6 +30,29 @@ public partial class TestCaseResultView : ContentView
 						};
 			views.Add(label);
 		}
+		foreach (var property in result.GetSeriesProperties(testCase))
+		{
+			var values = result.GetSeriesValues(testCase, property);
+			var label = new Label
+			{
+				Text = $"{GetName(property)}:"
+			};
+			ISeries[] series =
+			{
+				new LineSeries<double>
+				{
+					Values = values
+				}
+			};
+			var chart = new CartesianChart
+			{
+				Series = series,
+				HeightRequest = 300,
+				WidthRequest = 500
+			};
+            views.Add(label);
+            views.Add(chart);
+        }
 
 		return new TestCaseResultView(views);
 	}

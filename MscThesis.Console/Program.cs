@@ -14,7 +14,7 @@ namespace MscThesis.CLI
 
             Console.WriteLine($"Fittest: {result.GetFittest()}");
 
-            foreach (var testCase in result.GetCases())
+            foreach (var testCase in result.GetOptimizerNames())
             {
                 Console.WriteLine($"{testCase}:");
 

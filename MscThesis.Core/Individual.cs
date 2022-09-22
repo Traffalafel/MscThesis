@@ -16,6 +16,11 @@ namespace MscThesis.Core
 
         public T Value { get; }
         public double? Fitness { get; set; }
+        public int Size { get
+            {
+                return Value.GetSize();
+            } 
+        }
 
         public int CompareTo([AllowNull] Individual<T> other)
         {

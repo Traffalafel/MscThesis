@@ -5,10 +5,7 @@
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui">
 
     <ScrollView>
-        <VerticalStackLayout>
-            <Label Text="{Binding Text}"/>
-            <lvc:CartesianChart Series="{Binding Series}" WidthRequest="500" HeightRequest="300"/>
-        </VerticalStackLayout>
+        <VerticalStackLayout x:Name="Layout"/>
     </ScrollView>
 
 </ContentPage>

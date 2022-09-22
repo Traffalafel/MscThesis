@@ -6,48 +6,52 @@ using MscThesis.Core.Formats;
 
 namespace MscThesis.Core.Algorithms
 {
-    public class MIMIC : OptimizationHeuristic<BitString>
+    public class MIMIC : Optimizer<BitString>
     {        
         private readonly ISelectionOperator<BitString> _selectionOperator;
         private readonly int _initialPopulationSize;
-        private Population<BitString> _population;
 
         public MIMIC(
-            int problemSize,
             Random random,
             int initialPopulationSize, 
-            ISelectionOperator<BitString> selectionOperator) : base(problemSize, random)
+            ISelectionOperator<BitString> selectionOperator) : base(random)
         {
             _selectionOperator = selectionOperator;
             _initialPopulationSize = initialPopulationSize;
 
-            // Initialize population uniformly
-            _population = new Population<BitString>();
-            for (int i = 0; i < initialPopulationSize; i++)
-            {
-                var bs = BitString.CreateUniform(problemSize, random);
-                _population.Add(new Individual<BitString>(bs));
-            }
         }
 
-        protected override IterationResult<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
+        protected override Population<BitString> Initialize(int problemSize)
         {
-            var values = _population.GetValues();
+            // Initialize population uniformly
+            var population = new Population<BitString>();
+            for (int i = 0; i < _initialPopulationSize; i++)
+            {
+                var bs = BitString.CreateUniform(problemSize, _random);
+                population.Add(new Individual<BitString>(bs));
+            }
+            return population;
+        }
+
+        protected override RunIteration<BitString> NextIteration(Population<BitString> population, FitnessFunction<BitString> fitnessFunction)
+        {
+            var values = population.GetValues();
+            var problemSize = population.ProblemSize;
 
             // Compute univariate empirical entropies
             var up = ComputeUnivariateProbabilities(values);
-            var uniEntropies = new double[_problemSize];
-            for (int i = 0; i < _problemSize; i++)
+            var uniEntropies = new double[problemSize];
+            for (int i = 0; i < problemSize; i++)
             {
                 uniEntropies[i] = ComputeEntropy(up[i]);
             }
 
             // Compute joint empirical entropies
             var jointProbs = ComputeJointProbabilities(values);
-            var jointEntropies = new double[_problemSize, _problemSize];
-            for (int i = 0; i < _problemSize; i++)
+            var jointEntropies = new double[problemSize, problemSize];
+            for (int i = 0; i < problemSize; i++)
             {
-                for (int j = 0; j < _problemSize; j++)
+                for (int j = 0; j < problemSize; j++)
                 {
                     var jp = jointProbs[i, j];
                     var entropy =
@@ -59,8 +63,8 @@ namespace MscThesis.Core.Algorithms
                 }
             }
 
-            var remaining = new HashSet<int>(Enumerable.Range(0, _problemSize));
-            var ordering = new int[_problemSize];
+            var remaining = new HashSet<int>(Enumerable.Range(0, problemSize));
+            var ordering = new int[problemSize];
 
             // Find lowest univariate entropy and set to start of chain
             var (_, minIdx) = uniEntropies.Select((e, i) => (e, i)).Min();
@@ -68,7 +72,7 @@ namespace MscThesis.Core.Algorithms
             remaining.Remove(minIdx);
 
             // Find lowest pairwise entropies and build chain
-            for (int pos = 1; pos < _problemSize; pos++)
+            for (int pos = 1; pos < problemSize; pos++)
             {
                 var posPrev = ordering[pos - 1];
                 var (_, iMin) = remaining.Select(i => (jointEntropies[i, posPrev], i)).Min();
@@ -77,13 +81,13 @@ namespace MscThesis.Core.Algorithms
                 remaining.Remove(iMin);
             }
 
-            var minProb = 1.0d / _problemSize;
+            var minProb = 1.0d / problemSize;
             var maxProb = 1.0d - minProb;
 
             // Sample solutions from model
             for (int i = 0; i < _initialPopulationSize; i++)
             {
-                var vals = new bool[_problemSize];
+                var vals = new bool[problemSize];
 
                 // Sample the first variable
                 var first = ordering[0];
@@ -92,7 +96,7 @@ namespace MscThesis.Core.Algorithms
                 vals[first] = Sampling.SampleBit(probFirst, _random);
 
                 // Sample the rest
-                for (int k = 1; k < _problemSize; k++)
+                for (int k = 1; k < problemSize; k++)
                 {
                     var position = ordering[k];
                     var prev = ordering[k - 1];
@@ -113,10 +117,10 @@ namespace MscThesis.Core.Algorithms
                 }
 
                 var bs = new BitString { Values = vals };
-                _population.Add(new Individual<BitString>(bs));
+                population.Add(new Individual<BitString>(bs));
             }
 
-            foreach (var individual in _population)
+            foreach (var individual in population)
             {
                 if (individual.Fitness != null)
                 {
@@ -126,7 +130,7 @@ namespace MscThesis.Core.Algorithms
                 individual.Fitness = fitnessFunction.ComputeFitness(individual.Value);
             }
 
-            _population = _selectionOperator.Select(_population, fitnessFunction);
+            population = _selectionOperator.Select(population, fitnessFunction);
 
             var minUniEntropy = uniEntropies.Min();
             var minJointEntropy = jointEntropies.Cast<double>().Min();
@@ -137,9 +141,9 @@ namespace MscThesis.Core.Algorithms
                 { Property.MinEntropy, minEntropy }
             };
 
-            return new IterationResult<BitString>
+            return new RunIteration<BitString>
             {
-                Population = _population,
+                Population = population,
                 Statistics = stats
             };
         }

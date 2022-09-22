@@ -10,7 +10,14 @@ namespace MscThesis.Core
     {
         private List<Individual<T>> _individuals;
 
-        public int Size { get
+        public int ProblemSize { get
+            {
+                var first = _individuals.FirstOrDefault();
+                return first != null ? first.Size : 0;
+            } 
+        }
+
+        public int NumIndividuals { get
             {
                 return _individuals.Count;
             } 
