@@ -3,26 +3,24 @@ using MscThesis.Core;
 using System.Collections.Generic;
 using System;
 
-namespace MscThesis.Application.Results
+namespace MscThesis.Runner.Results
 {
     // Results of ONE run of ONE algorithm on ONE problem of ONE size
-    public class RunResult<T> : IDisplayData<T> where T : InstanceFormat
+    internal class RunResult<T> : IDisplayableResult<T> where T : InstanceFormat
     {
-        private string _algorithmName;
+        public string AlgorithmName { get; }
         public Individual<T> Fittest { get; }
         public Dictionary<Property, List<double>> SeriesData { get; }
-        public int NumIterations { get; }
-        public int NumFunctionCalls { get; }
-        public List<double> BestFitnesses { get; }
-        public List<int> PopulationSizes { get; }
+        public Dictionary<Property, double> ItemData { get; }
 
         public RunResult(IEnumerable<IterationResult<T>> results, FitnessFunction<T> fitnessFunction, string algorithmName)
         {
-            _algorithmName = algorithmName;
+            AlgorithmName = algorithmName;
+            ItemData = new Dictionary<Property, double>();
+            SeriesData = new Dictionary<Property, List<double>>();
 
-            var statistics = new Dictionary<Property, List<double>>();
             var bestFitnesses = new List<double>();
-            var populationSizes = new List<int>();
+            var populationSizes = new List<double>();
             Individual<T> globalFittest = null;
             var numIterations = 0;
             foreach (var result in results)
@@ -30,13 +28,13 @@ namespace MscThesis.Application.Results
                 foreach (var (key, value) in result.Statistics)
                 {
                     // Add to statistics
-                    if (statistics.ContainsKey(key))
+                    if (SeriesData.ContainsKey(key))
                     {
-                        statistics[key].Add(value);
+                        SeriesData[key].Add(value);
                     }
                     else
                     {
-                        statistics.Add(key, new List<double> { value });
+                        SeriesData.Add(key, new List<double> { value });
                     }
                 }
 
@@ -51,17 +49,16 @@ namespace MscThesis.Application.Results
                     globalFittest = fittest;
                 }
 
-                populationSizes.Add(result.Population.Size);
+                populationSizes.Add((double) result.Population.Size);
 
                 numIterations++;
             }
 
             Fittest = globalFittest;
-            SeriesData = statistics;
-            NumIterations = numIterations;
-            BestFitnesses = bestFitnesses;
-            NumFunctionCalls = fitnessFunction.GetNumCalls();
-            PopulationSizes = populationSizes;
+            ItemData[Property.NumberIterations] = numIterations;
+            ItemData[Property.NumberFitnessCalls] = fitnessFunction.GetNumCalls();
+            SeriesData[Property.BestFitness] = bestFitnesses;
+            SeriesData[Property.PopulationSize] = populationSizes;
         }
 
         public Individual<T> GetFittest()
@@ -69,20 +66,58 @@ namespace MscThesis.Application.Results
             return Fittest;
         }
 
-        public Dictionary<(Property property, string algorithmName), double> GetValues()
+        public ICollection<string> GetCases()
         {
-            return new Dictionary<(Property property, string algorithmName), double>
-            {
-                { (Property.NumberIterations, _algorithmName), NumIterations },
-                { (Property.NumberFitnessCalls, _algorithmName), NumFunctionCalls }
-            };
+            return new List<string> { AlgorithmName }; 
         }
 
-        public Dictionary<(Property property, string algorithmName), (string xAxis, List<double> values)> GetSeriesValues()
+        public ICollection<Property> GetItemProperties(string testCase)
         {
-            return new Dictionary<(Property property, string algorithmName), (string xAxis, List<double> values)>
+            if (testCase != AlgorithmName)
             {
-            };
+                return new List<Property>();
+            }
+
+            return ItemData.Keys;
+        }
+
+        public double GetItemValue(string testCase, Property property)
+        {
+            if (testCase != AlgorithmName)
+            {
+                throw new Exception("");
+            }
+
+            if (ItemData.ContainsKey(property))
+            {
+                return ItemData[property];
+            }
+            else
+            {
+                throw new Exception("");
+            }
+        }
+
+        public ICollection<Property> GetSeriesProperties(string testCase)
+        {
+            return SeriesData.Keys;
+        }
+
+        public List<double> GetSeriesValues(string testCase, Property property)
+        {
+            if (testCase != AlgorithmName)
+            {
+                throw new Exception("");
+            }
+
+            if (SeriesData.ContainsKey(property))
+            {
+                return SeriesData[property];
+            }
+            else
+            {
+                throw new Exception("");
+            }
         }
     }
 }

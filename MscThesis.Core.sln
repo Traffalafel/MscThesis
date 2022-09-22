@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MscThesis.CLI", "MscThesis.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.UI", "MscThesis.UI\MscThesis.UI.csproj", "{6A16A72B-22E6-475C-92E9-DF938FE509B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.Application", "MscThesis.Application\MscThesis.Application.csproj", "{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.Runner", "MscThesis.Application\MscThesis.Runner.csproj", "{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

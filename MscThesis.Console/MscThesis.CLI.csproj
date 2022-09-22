@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MscThesis.Application\MscThesis.Application.csproj" />
+    <ProjectReference Include="..\MscThesis.Application\MscThesis.Runner.csproj" />
   </ItemGroup>
 
 </Project>

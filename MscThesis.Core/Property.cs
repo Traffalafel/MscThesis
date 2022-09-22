@@ -5,6 +5,8 @@ namespace MscThesis.Core
     {
         NumberFitnessCalls,
         NumberIterations,
-        MinEntropy
+        MinEntropy,
+        BestFitness,
+        PopulationSize
     }
 }

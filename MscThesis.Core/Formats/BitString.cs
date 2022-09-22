@@ -8,21 +8,11 @@ namespace MscThesis.Core.Formats
     {
         public bool[] Values { get; set; }
 
-        public static BitString GenerateUniformly(int size)
+        public static BitString CreateUniform(int size, Random random)
         {
-            var rnd = new Random();
-
-            var numBytes = (size / 8) + 1;
-            var bytes = new byte[numBytes];
-            rnd.NextBytes(bytes);
-            var bits = new BitArray(bytes);
-
-            var values = new bool[bits.Count];
-            bits.CopyTo(values, 0);
-
             return new BitString
             {
-                Values = values[0..size]
+                Values = Sampling.SampleBitStringUniformly(size, random)
             };
         }
 

@@ -1,18 +1,18 @@
-﻿using MscThesis.Application.Results;
-using MscThesis.Core;
+﻿using MscThesis.Core;
 using MscThesis.Core.Algorithms;
 using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
 using MscThesis.Core.TerminationCriteria;
+using MscThesis.Runner.Results;
 using System;
 using System.Collections.Generic;
 
-namespace MscThesis.Application
+namespace MscThesis.Runner
 {
     public class TestRunner
     {
-        public RunResult<BitString> TestMIMIC()
+        public IDisplayableResult<BitString> TestMIMIC()
         {
             var problemSize = 50;
             var initialPopSize = 100;
@@ -22,9 +22,12 @@ namespace MscThesis.Application
             var algorithmName = "MIMIC1";
 
             var gapSize = 8;
+            var seed = 420;
+
+            var random = new Random(420);
 
             var selection = new QuartileSelection<BitString>(quartile);
-            var mimic = new MIMIC(problemSize, initialPopSize, selection);
+            var mimic = new MIMIC(problemSize, random, initialPopSize, selection);
 
             var oneMax = new OneMax();
             var results = mimic.GetResults(oneMax);
@@ -34,7 +37,33 @@ namespace MscThesis.Application
 
             return new RunResult<BitString>(results, oneMax, algorithmName);
         }
- 
+
+        public IDisplayableResult<T> SingleRun<T>(
+            OptimizationHeuristic<T> heuristic,
+            FitnessFunction<T> fitnessFunction,
+            IEnumerable<TerminationCriterion<T>> terminationCriteria,
+            string name
+            ) where T : InstanceFormat
+        {
+            var results = heuristic.GetResults(fitnessFunction);
+            var output = results;
+            foreach (var criterion in terminationCriteria)
+            {
+                output = criterion.AddTerminationCriterion(output);
+            }
+            return new RunResult<T>(results, fitnessFunction, name);
+        }
+
+        public IEnumerable<string> GetAlgorithms()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> GetRequiredParameters()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
     // TODO: 

@@ -14,8 +14,9 @@ namespace MscThesis.Core.Algorithms
 
         public MIMIC(
             int problemSize,
+            Random random,
             int initialPopulationSize, 
-            ISelectionOperator<BitString> selectionOperator) : base(problemSize)
+            ISelectionOperator<BitString> selectionOperator) : base(problemSize, random)
         {
             _selectionOperator = selectionOperator;
             _initialPopulationSize = initialPopulationSize;
@@ -24,7 +25,7 @@ namespace MscThesis.Core.Algorithms
             _population = new Population<BitString>();
             for (int i = 0; i < initialPopulationSize; i++)
             {
-                var bs = BitString.GenerateUniformly(problemSize);
+                var bs = BitString.CreateUniform(problemSize, random);
                 _population.Add(new Individual<BitString>(bs));
             }
         }
@@ -88,7 +89,7 @@ namespace MscThesis.Core.Algorithms
                 var first = ordering[0];
                 var probFirst = up[first];
                 probFirst = ApplyMargins(probFirst, minProb, maxProb);
-                vals[first] = Sampling.SampleBit(probFirst);
+                vals[first] = Sampling.SampleBit(probFirst, _random);
 
                 // Sample the rest
                 for (int k = 1; k < _problemSize; k++)
@@ -108,7 +109,7 @@ namespace MscThesis.Core.Algorithms
                         p = joint[2] / (1 - up[prev]);
                     }
                     p = ApplyMargins(p, minProb, maxProb);
-                    vals[position] = Sampling.SampleBit(p);
+                    vals[position] = Sampling.SampleBit(p, _random);
                 }
 
                 var bs = new BitString { Values = vals };
