@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MscThesis.UI.Pages.SetupPage"
+             xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
+             x:DataType="vm:SetupPageViewModel"
+             >
+    <VerticalStackLayout x:Name="Layout" Padding="20,0,20,0">
+        
+        <Label Text="Specify tests"/>
+
+        <StackLayout>
+            <Border Stroke="#fff"
+                    StrokeThickness="1">
+                <StackLayout Padding="5,5,5,5">
+                    <Label Text="Problem"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label>Name:</Label>
+                        <Picker ItemsSource="{Binding ProblemNames}" SelectedItem="{Binding ProblemName}"/>
+                    </StackLayout>
+                </StackLayout>
+            </Border>
+        </StackLayout>
+
+        <ListView ItemsSource="{Binding Optimizers}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell x:DataType="vm:OptimizerSetupViewModel">
+
+                        <Border Stroke="#fff"
+                                StrokeThickness="1"
+                                Margin="0,10,0,0">
+                            <StackLayout Padding="5,5,5,5">
+                                <Label Text="Optimizer"/>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Name:"/>
+                                    <Entry Text="{Binding Name}"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Algorithm:"/>
+                                    <Picker 
+                                        ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupPageViewModel}}, Path=OptimizerNames}" 
+                                        SelectedItem="{Binding Algorithm}"/>
+                                </StackLayout>
+                                <Button 
+                                    Text="Remove"
+                                    Clicked="RemoveOptimizer"/>
+                                <Button 
+                                    Text="Add termination criterion"
+                                    Clicked="AddTerminationCriterion"/>
+
+                            </StackLayout>
+                        </Border>
+                        
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button 
+            Text="Add optimizer"
+            Clicked="AddOptimizer"/>
+
+        <Button 
+            Text="Run!"
+            Clicked="Run"/>
+        
+    </VerticalStackLayout>
+</ContentView>

@@ -21,7 +21,7 @@ namespace MscThesis.CLI
 
             var spec = new TestSpecification
             {
-                NumRuns = 100,
+                NumRuns = 1,
                 ProblemSizes = new List<int>
                 {
                     50

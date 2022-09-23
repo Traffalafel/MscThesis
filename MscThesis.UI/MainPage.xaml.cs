@@ -9,10 +9,10 @@ namespace MscThesis.UI
         {
             InitializeComponent();
 
-            var runner = new TestRunner();
-            var result = runner.TestMIMIC();
-            var view = ResultsView.Create(result);
-            Layout.Add(view);
+            //var runner = new TestRunner();
+            //var result = runner.TestMIMIC();
+            //var view = ResultsView.Create(result);
+            //Layout.Add(view);
         }
     }
 }

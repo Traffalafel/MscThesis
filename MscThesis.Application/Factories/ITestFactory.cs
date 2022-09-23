@@ -6,7 +6,7 @@ namespace MscThesis.Runner.Factories
 {
     public interface ITestFactory<out T> where T : InstanceFormat
     {
-        public ISet<string> Optimizers { get; }
+        public ISet<string> Algorithms { get; }
         public ISet<string> Problems { get; }
         public ISet<string> Terminations { get; }
 

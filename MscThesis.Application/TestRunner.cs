@@ -1,8 +1,4 @@
-﻿using MscThesis.Core.Algorithms;
-using MscThesis.Core.FitnessFunctions;
-using MscThesis.Core.Formats;
-using MscThesis.Core.Selection;
-using MscThesis.Core.TerminationCriteria;
+﻿using MscThesis.Core.Formats;
 using MscThesis.Runner.Factories;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
@@ -27,14 +23,37 @@ namespace MscThesis.Runner
 
         public IResult<InstanceFormat> Run(TestSpecification spec)
         {
-            var factory = GetTestFactory(spec);
+            var problemName = spec.Problem.Name;
+            var factory = GetTestFactory(problemName);
             var tests = factory.BuildTests(spec);
             return GatherResults(tests, spec.ProblemSizes, spec.NumRuns);
         }
 
-        private ITestFactory<InstanceFormat> GetTestFactory(TestSpecification spec)
+        public List<string> GetProblemNames()
         {
-            var problemName = spec.Problem.Name;
+            var names = new List<string>();
+            foreach (var factory in _factories)
+            {
+                names.AddRange(factory.Problems);
+            }
+            return names;
+        }
+
+        public List<string> GetAlgorithmNames(string problemName)
+        {
+            var factory = GetTestFactory(problemName);
+            if (factory != null)
+            {
+                return factory.Algorithms.ToList();
+            }
+            else
+            {
+                return new List<string>();
+            }
+        }
+
+        private ITestFactory<InstanceFormat> GetTestFactory(string problemName)
+        {
             foreach (var factory in _factories)
             {
                 if (factory.Problems.Contains(problemName))
@@ -42,7 +61,7 @@ namespace MscThesis.Runner
                     return factory;
                 }
             }
-            throw new Exception("Problem not found");
+            return null;
         }
 
         private IResult<T> GatherResults<T>(IEnumerable<Test<T>> tests, IEnumerable<int> problemSizes, int numRuns) where T : InstanceFormat

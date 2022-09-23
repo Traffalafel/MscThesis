@@ -8,7 +8,7 @@ namespace MscThesis.Runner.Factories
 {
     public abstract class TestFactory<T> : ITestFactory<T> where T : InstanceFormat
     {
-        public ISet<string> Optimizers => _optimizers.Keys.ToHashSet();
+        public ISet<string> Algorithms => _optimizers.Keys.ToHashSet();
         public ISet<string> Problems => _problems.Keys.ToHashSet();
         public ISet<string> Terminations => _terminations.Keys.ToHashSet();
 

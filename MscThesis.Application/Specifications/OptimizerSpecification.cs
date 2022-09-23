@@ -1,6 +1,7 @@
 ﻿using MscThesis.Core;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MscThesis.Runner.Specification
 {
@@ -10,6 +11,14 @@ namespace MscThesis.Runner.Specification
         public string Name { get; set; }
         public string Algorithm { get; set; }
         public IDictionary<Parameter, double> Parameters { get; set; }
-        public IEnumerable<TerminationSpecification> TerminationCriteria { get; set; }
+        public List<TerminationSpecification> TerminationCriteria { get; set; }
+
+        public OptimizerSpecification()
+        {
+            Name = "<OptimizerName>";
+            Algorithm = "<AlgorithmName>";
+            Parameters = new Dictionary<Parameter, double>();
+            TerminationCriteria = new List<TerminationSpecification>();
+        }
     }
 }

@@ -7,5 +7,11 @@ namespace MscThesis.Runner.Specification
     {
         public string Name { get; set; }
         public IDictionary<Parameter, double> Parameters { get; set; }
+
+        public ProblemSpecification()
+        {
+            Name = "<ProblemName>";
+            Parameters = new Dictionary<Parameter, double>();
+        }
     }
 }
