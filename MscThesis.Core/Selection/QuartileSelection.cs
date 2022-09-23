@@ -1,4 +1,5 @@
-﻿using MscThesis.Core.Formats;
+﻿using MscThesis.Core.FitnessFunctions;
+using MscThesis.Core.Formats;
 using System;
 using System.Linq;
 

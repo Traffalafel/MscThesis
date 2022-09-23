@@ -1,6 +1,6 @@
 ﻿using MscThesis.Core.Formats;
 
-namespace MscThesis.Core
+namespace MscThesis.Core.FitnessFunctions
 {
     public abstract class FitnessFunction<T> where T : InstanceFormat
     {
@@ -16,6 +16,11 @@ namespace MscThesis.Core
         public int GetNumCalls()
         {
             return _numCalls;
+        }
+
+        public void Reset()
+        {
+            _numCalls = 0;
         }
     }
 }

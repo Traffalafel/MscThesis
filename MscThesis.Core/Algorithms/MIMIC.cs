@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MscThesis.Core.Selection;
 using MscThesis.Core.Formats;
+using MscThesis.Core.FitnessFunctions;
 
 namespace MscThesis.Core.Algorithms
 {
@@ -28,7 +29,7 @@ namespace MscThesis.Core.Algorithms
             for (int i = 0; i < _initialPopulationSize; i++)
             {
                 var bs = BitString.CreateUniform(problemSize, _random);
-                population.Add(new Individual<BitString>(bs));
+                population.Add(new IndividualImpl<BitString>(bs));
             }
             return population;
         }
@@ -117,7 +118,7 @@ namespace MscThesis.Core.Algorithms
                 }
 
                 var bs = new BitString { Values = vals };
-                population.Add(new Individual<BitString>(bs));
+                population.Add(new IndividualImpl<BitString>(bs));
             }
 
             foreach (var individual in population)

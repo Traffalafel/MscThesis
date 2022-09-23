@@ -6,5 +6,9 @@ namespace MscThesis.Core
 {
     public enum Parameter
     {
+        InitialPopulation,
+        SelectionQuartile,
+        Epsilon,
+        MaxStagnatedIterations
     }
 }

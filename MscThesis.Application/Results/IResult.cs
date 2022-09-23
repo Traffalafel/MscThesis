@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Results
 {
-    public interface IResult<T> where T : InstanceFormat
+    public interface IResult<out T> where T : InstanceFormat
     {
         public Individual<T> GetFittest();
 

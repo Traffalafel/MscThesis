@@ -2,14 +2,14 @@
 using MscThesis.Core;
 using System.Collections.Generic;
 using System;
+using MscThesis.Core.FitnessFunctions;
 
 namespace MscThesis.Runner.Results
 {
     // 1 run of 1 optimizer on 1 problem of 1 size
-    public class RunResult<T> : IResult<T> where T : InstanceFormat
+    public class RunResult<T> : Result<T>, IResult<T> where T : InstanceFormat
     {
         public string OptimizerName { get; }
-        public Individual<T> Fittest { get; }
         public Dictionary<Property, List<double>> SeriesData { get; }
         public Dictionary<Property, double> ItemData { get; }
 
@@ -21,7 +21,6 @@ namespace MscThesis.Runner.Results
 
             var bestFitnesses = new List<double>();
             var populationSizes = new List<double>();
-            Individual<T> globalFittest = null;
             var numIterations = 0;
             foreach (var iteration in iterations)
             {
@@ -44,17 +43,13 @@ namespace MscThesis.Runner.Results
                     throw new Exception();
                 }
                 bestFitnesses.Add(fittest.Fitness.Value);
-                if (globalFittest == null || globalFittest.Fitness < fittest.Fitness)
-                {
-                    globalFittest = fittest;
-                }
+                TryUpdateFittest(fittest);
 
                 populationSizes.Add((double) iteration.Population.NumIndividuals);
 
                 numIterations++;
             }
 
-            Fittest = globalFittest;
             ItemData[Property.NumberIterations] = numIterations;
             ItemData[Property.NumberFitnessCalls] = fitnessFunction.GetNumCalls();
             SeriesData[Property.BestFitness] = bestFitnesses;
@@ -63,7 +58,7 @@ namespace MscThesis.Runner.Results
 
         public Individual<T> GetFittest()
         {
-            return Fittest;
+            return _fittest;
         }
 
         public IEnumerable<string> GetOptimizerNames()

@@ -5,10 +5,9 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Results
 {
-    internal class MeanResult<T> : IResult<T> where T : InstanceFormat
+    internal class MeanResult<T> : Result<T>, IResult<T> where T : InstanceFormat
     {
         private HashSet<string> _optimizerNames;
-        private Individual<T> _fittest { get; }
         private Dictionary<string, Dictionary<Property, double>> _medians { get; }
 
         public MeanResult(IEnumerable<IResult<T>> results)
@@ -18,12 +17,7 @@ namespace MscThesis.Runner.Results
 
             foreach (var result in results)
             {
-                // Overwrite fittest if better
-                var f = result.GetFittest();
-                if (f > _fittest)
-                {
-                    _fittest = f;
-                }
+                TryUpdateFittest(result.GetFittest());
 
                 var names = result.GetOptimizerNames();
                 foreach (var name in names)

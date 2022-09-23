@@ -1,7 +1,4 @@
-﻿using MscThesis.Core;
-using MscThesis.Core.Algorithms;
-using MscThesis.Core.Formats;
-using MscThesis.Core.TerminationCriteria;
+﻿using MscThesis.Core.Formats;
 using MscThesis.Runner.Results;
 using System;
 using System.Collections.Generic;
@@ -9,30 +6,8 @@ using System.Text;
 
 namespace MscThesis.Runner
 {
-    // 1 optimizer on 1 problem
-    public class Test<T> where T : InstanceFormat
+    public interface Test<out T> where T : InstanceFormat
     {
-        private readonly string _name;
-        private readonly Optimizer<T> _optimizer;
-        private readonly FitnessFunction<T> _fitnessfunction;
-        private readonly IEnumerable<TerminationCriterion<T>> _terminationCriteria;
-
-        public Test(string name, Optimizer<T> optimizer, FitnessFunction<T> fitnessFunction, IEnumerable<TerminationCriterion<T>> terminationCriteria)
-        {
-            _name = name;
-            _optimizer = optimizer;
-            _fitnessfunction = fitnessFunction;
-            _terminationCriteria = terminationCriteria;
-        }
-
-        public RunResult<T> Run(int size)
-        {
-            var iterations = _optimizer.Run(_fitnessfunction, size);
-            foreach (var criterion in _terminationCriteria)
-            {
-                iterations = criterion.AddTerminationCriterion(iterations);
-            }
-            return new RunResult<T>(iterations, _fitnessfunction, _name);
-        }
+        public IResult<T> Run(int size);
     }
 }

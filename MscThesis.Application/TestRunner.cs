@@ -1,57 +1,51 @@
-﻿using MscThesis.Core;
-using MscThesis.Core.Algorithms;
+﻿using MscThesis.Core.Algorithms;
 using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
 using MscThesis.Core.TerminationCriteria;
+using MscThesis.Runner.Factories;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MscThesis.Runner
 {
     public class TestRunner
     {
-        public IResult<BitString> TestMIMIC()
+        private List<ITestFactory<InstanceFormat>> _factories;
+
+        public TestRunner()
         {
-            var problemSize = 50;
-            var initialPopSize = 100;
-            var quartile = 0.5d;
-            var maxStagnatedIterations = 5;
-            var epsilon = 10E-6;
-            var algorithmName = "MIMIC1";
-
-            var gapSize = 8;
-            var seed = 420;
-
-            var random = new Random(420);
-
-            var selection = new QuartileSelection<BitString>(quartile);
-            var mimic = new MIMIC(random, initialPopSize, selection);
-
-            var oneMax = new OneMax();
-            var results = mimic.Run(oneMax, problemSize);
-            
-            var termination = new StagnationTermination<BitString>(epsilon, maxStagnatedIterations);
-            results = termination.AddTerminationCriterion(results);
-
-            return new RunResult<BitString>(results, oneMax, algorithmName);
+            _factories = new List<ITestFactory<InstanceFormat>>
+            {
+                new BitStringTestFactory(),
+                new PermutationTestFactory()
+            };
         }
 
-        public IResult<InstanceFormat> BuildAndRun(TestSpecification spec)
+        public IResult<InstanceFormat> Run(TestSpecification spec)
         {
-            var tests = Build(spec);
-            return RunTests(tests, spec.ProblemSizes, spec.NumRuns);
+            var factory = GetTestFactory(spec);
+            var tests = factory.BuildTests(spec);
+            return GatherResults(tests, spec.ProblemSizes, spec.NumRuns);
         }
 
-        public IResult<T> RunTests<T>(IEnumerable<Test<T>> tests, IEnumerable<int> problemSizes, int numRuns) where T : InstanceFormat
+        private ITestFactory<InstanceFormat> GetTestFactory(TestSpecification spec)
+        {
+            var problemName = spec.Problem.Name;
+            foreach (var factory in _factories)
+            {
+                if (factory.Problems.Contains(problemName))
+                {
+                    return factory;
+                }
+            }
+            throw new Exception("Problem not found");
+        }
+
+        private IResult<T> GatherResults<T>(IEnumerable<Test<T>> tests, IEnumerable<int> problemSizes, int numRuns) where T : InstanceFormat
         {
             var results = new List<IResult<T>>();
             foreach (var test in tests)
@@ -98,25 +92,6 @@ namespace MscThesis.Runner
             {
                 return new CollectionResult<T>(results);
             }
-        }
-
-        private IEnumerable<Test<InstanceFormat>> Build(TestSpecification spec)
-        {
-            FitnessFunction<InstanceFormat> fitnessFunction;
-            if (spec.Problem.Name == "OneMax")
-            {
-                fitnessFunction = new OneMax();
-            }
-            else
-            {
-                throw new Exception("");
-            }
-
-            var mimic = new MIMIC(new Random(), 0, new QuartileSelection<BitString>(0.4));
-            var criteria = new List<TerminationCriterion<BitString>>();
-            return new Test<BitString>("", mimic, fitnessFunction, criteria);
-
-            throw new NotImplementedException();
         }
 
     }

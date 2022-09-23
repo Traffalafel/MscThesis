@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MscThesis.Runner.Results
 {
-    public class CollectionResult<T> : IResult<T> where T : InstanceFormat
+    public class CollectionResult<T> : Result<T>, IResult<T> where T : InstanceFormat
     {
         public CollectionResult(IEnumerable<IResult<T>> results)
         {
