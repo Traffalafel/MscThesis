@@ -1,4 +1,5 @@
-﻿using MscThesis.Core.Formats;
+﻿using MscThesis.Core;
+using MscThesis.Core.Formats;
 using MscThesis.Core.TerminationCriteria;
 using MscThesis.Runner.Specification;
 using System.Collections.Generic;
@@ -13,8 +14,8 @@ namespace MscThesis.Runner.Factories
         public ISet<string> Terminations => _terminations.Keys.ToHashSet();
 
         protected Dictionary<string, OptimizerFactory<T>> _optimizers;
-        protected Dictionary<string, ProblemFactory<T>> _problems;
-        protected Dictionary<string, TerminationFactory<T>> _terminations;
+        protected Dictionary<string, IProblemFactory<T>> _problems;
+        protected Dictionary<string, ITerminationFactory<T>> _terminations;
 
         public IEnumerable<Test<InstanceFormat>> BuildTests(TestSpecification spec)
         {
@@ -27,7 +28,7 @@ namespace MscThesis.Runner.Factories
                 var problem = problemFactory.BuildProblem(spec.Problem);
 
                 var terminations = new List<TerminationCriterion<T>>();
-                foreach (var terminationSpec in optimizerSpec.TerminationCriteria)
+                foreach (var terminationSpec in spec.Terminations)
                 {
                     var terminationFactory = GetTerminationFactory(terminationSpec);
                     var termination = terminationFactory.BuildCriterion(terminationSpec);
@@ -44,14 +45,50 @@ namespace MscThesis.Runner.Factories
             return _optimizers[spec.Algorithm];
         }
 
-        protected ProblemFactory<T> GetProblemFactory(ProblemSpecification spec)
+        protected IProblemFactory<T> GetProblemFactory(ProblemSpecification spec)
         {
             return _problems[spec.Name];
         }
 
-        protected TerminationFactory<T> GetTerminationFactory(TerminationSpecification spec)
+        protected ITerminationFactory<T> GetTerminationFactory(TerminationSpecification spec)
         {
             return _terminations[spec.Name];
+        }
+
+        public IEnumerable<Parameter> GetAlgorithmParameters(string algorithmName)
+        {
+            if (_optimizers.ContainsKey(algorithmName))
+            {
+                return _optimizers[algorithmName].RequiredParameters;
+            }
+            else
+            {
+                return new List<Parameter>();
+            }
+        }
+
+        public IEnumerable<Parameter> GetProblemParameters(string problemName)
+        {
+            if (_problems.ContainsKey(problemName))
+            {
+                return _problems[problemName].RequiredParameters;
+            }
+            else
+            {
+                return new List<Parameter>();
+            }
+        }
+
+        public IEnumerable<Parameter> GetTerminationParameters(string terminationName)
+        {
+            if (_terminations.ContainsKey(terminationName))
+            {
+                return _terminations[terminationName].RequiredParameters;
+            }
+            else
+            {
+                return new List<Parameter>();
+            }
         }
     }
 }

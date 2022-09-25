@@ -17,12 +17,12 @@ namespace MscThesis.Runner.Factories
             {
                 { "MIMIC", new MIMICFactory() }
             };
-            _problems = new Dictionary<string, ProblemFactory<BitString>>
+            _problems = new Dictionary<string, IProblemFactory<BitString>>
             {
                 { "OneMax", new OneMaxFactory() },
                 { "JumpOffsetSpike", new JumpOffsetSpikeFactory() }
             };
-            _terminations = new Dictionary<string, TerminationFactory<BitString>>
+            _terminations = new Dictionary<string, ITerminationFactory<BitString>>
             {
                 { "Stagnation", new StagnationFactory<BitString>() }
             };

@@ -1,16 +1,14 @@
-using MscThesis.Runner;
-using MscThesis.Runner.Specification;
 using MscThesis.UI.ViewModels;
 
 namespace MscThesis.UI.Pages;
 
-public partial class SetupPage : ContentView
+public partial class SetupPage : ContentPage
 {
-    public SetupPageViewModel VM { get; set; }
+    public SetupVM VM { get; set; }
 
 	public SetupPage()
 	{
-		VM = new SetupPageViewModel();
+		VM = new SetupVM();
 
 		BindingContext = VM;
 
@@ -19,27 +17,26 @@ public partial class SetupPage : ContentView
 
     public void AddOptimizer(object sender, EventArgs e)
     {
-		var newOptimizer = new OptimizerSetupViewModel();
-		VM.Optimizers.Add(newOptimizer);
+        VM.AddOptimizer();
     }
 
     public void RemoveOptimizer(object sender, EventArgs e)
     {
 		var button = (Button)sender;
-		var buttonVM = (OptimizerSetupViewModel)button.BindingContext;
+		var buttonVM = (OptimizerSetupVM)button.BindingContext;
 		VM.Optimizers.Remove(buttonVM);
     }
 
 	public void AddTerminationCriterion(object sender, EventArgs e)
 	{
-        var button = (Button)sender;
-        var buttonVM = (OptimizerSetupViewModel)button.BindingContext;
-        buttonVM.AddTerminationCriterion();
+        VM.AddTerminationCriterion();
     }
 
     public void RemoveTerminationCriterion(object sender, EventArgs e)
     {
-
+        var button = (Button)sender;
+        var buttonVM = (TerminationSetupVM)button.BindingContext;
+        VM.Terminations.Remove(buttonVM);
     }
 
     public void Run(object sender, EventArgs e)

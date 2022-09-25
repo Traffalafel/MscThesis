@@ -35,7 +35,7 @@ namespace MscThesis.CLI
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, double>
                         {
-                            { Parameter.InitialPopulation, 100 },
+                            { Parameter.InitialPopulationSize, 100 },
                             { Parameter.SelectionQuartile, 0.5d }
                         },
                         TerminationCriteria = new List<TerminationSpecification>
@@ -45,7 +45,7 @@ namespace MscThesis.CLI
                                 Name = "Stagnation",
                                 Parameters = new Dictionary<Parameter, double>
                                 {
-                                    { Parameter.MaxStagnatedIterations, 5 },
+                                    { Parameter.MaxIterations, 5 },
                                     { Parameter.Epsilon, 10E-6 }
                                 }
                             }

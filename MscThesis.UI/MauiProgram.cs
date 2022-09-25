@@ -1,4 +1,6 @@
-﻿using SkiaSharp.Views.Maui.Controls.Hosting;
+﻿using MscThesis.UI.Pages;
+using MscThesis.UI.ViewModels;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace MscThesis.UI
 {

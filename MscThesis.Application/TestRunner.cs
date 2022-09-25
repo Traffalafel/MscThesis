@@ -1,4 +1,5 @@
-﻿using MscThesis.Core.Formats;
+﻿using MscThesis.Core;
+using MscThesis.Core.Formats;
 using MscThesis.Runner.Factories;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
@@ -39,6 +40,31 @@ namespace MscThesis.Runner
             return names;
         }
 
+        public IEnumerable<Parameter> GetProblemParameters(string problemName)
+        {
+            foreach (var factory in _factories)
+            {
+                if (factory.Problems.Contains(problemName))
+                {
+                    return factory.GetProblemParameters(problemName);
+                }
+            }
+            return new List<Parameter>();
+        }
+
+        public List<string> GetTerminationNames(string problemName)
+        {
+            var factory = GetTestFactory(problemName);
+            if (factory != null)
+            {
+                return factory.Terminations.ToList();
+            }
+            else
+            {
+                return new List<string>();
+            }
+        }
+
         public List<string> GetAlgorithmNames(string problemName)
         {
             var factory = GetTestFactory(problemName);
@@ -50,6 +76,30 @@ namespace MscThesis.Runner
             {
                 return new List<string>();
             }
+        }
+
+        public IEnumerable<Parameter> GetAlgorithmParameters(string algorithmName)
+        {
+            foreach (var factory in _factories)
+            {
+                if (factory.Algorithms.Contains(algorithmName))
+                {
+                    return factory.GetAlgorithmParameters(algorithmName);
+                }
+            }
+            return new List<Parameter>();
+        }
+
+        public IEnumerable<Parameter> GetTerminationParameters(string terminationName)
+        {
+            foreach (var factory in _factories)
+            {
+                if (factory.Terminations.Contains(terminationName))
+                {
+                    return factory.GetTerminationParameters(terminationName);
+                }
+            }
+            return new List<Parameter>();
         }
 
         private ITestFactory<InstanceFormat> GetTestFactory(string problemName)

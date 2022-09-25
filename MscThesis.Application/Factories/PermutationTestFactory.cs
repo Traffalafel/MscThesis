@@ -11,10 +11,10 @@ namespace MscThesis.Runner.Factories
             _optimizers = new Dictionary<string, OptimizerFactory<Permutation>>
             {
             };
-            _problems = new Dictionary<string, ProblemFactory<Permutation>>
+            _problems = new Dictionary<string, IProblemFactory<Permutation>>
             {
             };
-            _terminations = new Dictionary<string, TerminationFactory<Permutation>>
+            _terminations = new Dictionary<string, ITerminationFactory<Permutation>>
             {
                 { "Stagnation", new StagnationFactory<Permutation>() }
             };

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="this"
+             x:Class="MscThesis.UI.Views.ParameterListSetup"
+             xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
+             xmlns:view="clr-namespace:MscThesis.UI.Views">
+
+    <Frame BindingContext="{x:Reference this}">
+        
+        <ListView ItemsSource="{Binding Parameters}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell x:DataType="vm:ParameterVM">
+                        <view:ParameterSetup 
+                            Name="{Binding Name}" 
+                            Value="{Binding Value, Mode=TwoWay}"
+                            />
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+    </Frame>
+</ContentView>

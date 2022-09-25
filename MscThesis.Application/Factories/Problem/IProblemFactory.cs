@@ -4,7 +4,7 @@ using MscThesis.Runner.Specification;
 
 namespace MscThesis.Runner.Factories
 {
-    public interface ProblemFactory<T> where T : InstanceFormat
+    public interface IProblemFactory<T> : IParameterProvider where T : InstanceFormat
     {
         public FitnessFunction<T> BuildProblem(ProblemSpecification spec);
     }
