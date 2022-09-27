@@ -3,7 +3,6 @@ using MscThesis.Core.Formats;
 using MscThesis.Runner.Factories;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -114,7 +113,8 @@ namespace MscThesis.Runner
             return null;
         }
 
-        private IResult<T> GatherResults<T>(IEnumerable<Test<T>> tests, IEnumerable<int> problemSizes, int numRuns) where T : InstanceFormat
+
+        public IResult<T> GatherResults<T>(IEnumerable<Test<T>> tests, IEnumerable<int> problemSizes, int numRuns) where T : InstanceFormat
         {
             var results = new List<IResult<T>>();
             foreach (var test in tests)

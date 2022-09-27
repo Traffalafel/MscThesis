@@ -1,12 +1,37 @@
-﻿using MscThesis.Runner;
+﻿using MscThesis.Core;
+using MscThesis.Runner;
+using MscThesis.Runner.Specification;
 using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.ViewModels
 {
 
+    public static class Utils
+    {
+        public static IDictionary<Parameter, double> ToSpecification(ObservableCollection<ParameterVM> vms)
+        {
+            try
+            {
+                return vms.GroupBy(vm => vm.Parameter).ToDictionary(x => x.Key, x => Convert.ToDouble(x.First().Value));
+            }
+            catch (Exception e)
+            {
+                return new Dictionary<Parameter, double>();
+            }
+        }
+    }
+
     public class ParameterVM
     {
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
+        public Parameter Parameter
+        {
+            get
+            {
+                Enum.TryParse(Name, out Parameter param);
+                return param;
+            }
+        }
         public string Value { get; set; } = string.Empty;
     }
 
@@ -38,6 +63,15 @@ namespace MscThesis.UI.ViewModels
                     Parameters.Add(vm);
                 }
             }
+        }
+
+        public TerminationSpecification ToSpecification()
+        {
+            return new TerminationSpecification
+            {
+                Name = Name,
+                Parameters = Utils.ToSpecification(Parameters)
+            };
         }
     }
 
@@ -71,6 +105,17 @@ namespace MscThesis.UI.ViewModels
                     Parameters.Add(vm);
                 }
             }
+        }
+
+        public OptimizerSpecification ToSpecification()
+        {
+            return new OptimizerSpecification
+            {
+                Seed = Seed,
+                Name = Name,
+                Algorithm = _algorithm,
+                Parameters = Utils.ToSpecification(Parameters)
+            };
         }
 
     }
@@ -114,7 +159,8 @@ namespace MscThesis.UI.ViewModels
             } 
         }
 
-        public int NumRuns { get; set; } = 1;
+        public string NumRuns { get; set; } = "1";
+        public string ProblemSize { get; set; }
         public ObservableCollection<ParameterVM> ProblemParameters { get; set; } = new();
         public ObservableCollection<TerminationSetupVM> Terminations { get; set; } = new();
         public ObservableCollection<OptimizerSetupVM> Optimizers { get; set; } = new();
@@ -134,6 +180,23 @@ namespace MscThesis.UI.ViewModels
             var newCriterion = new TerminationSetupVM(_runner);
             Terminations.Add(newCriterion);
         }
+
+        public TestSpecification ToSpecification()
+        {
+            return new TestSpecification
+            {
+                NumRuns = Convert.ToInt32(NumRuns),
+                Optimizers = Optimizers.Select(o => o.ToSpecification()).ToList(),
+                Problem = new ProblemSpecification
+                {
+                    Name = _problemName,
+                    Parameters = Utils.ToSpecification(ProblemParameters)
+                },
+                ProblemSizes = new List<int> { Convert.ToInt32(ProblemSize) },
+                Terminations = Terminations.Select(t => t.ToSpecification()).ToList()
+            };
+        }
+
     }
 
 }

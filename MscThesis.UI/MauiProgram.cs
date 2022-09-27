@@ -1,4 +1,6 @@
-﻿using MscThesis.UI.Pages;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MscThesis.Runner;
+using MscThesis.UI.Pages;
 using MscThesis.UI.ViewModels;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
@@ -17,6 +19,13 @@ namespace MscThesis.UI
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            builder.Services.AddSingleton<TestRunner>();
+            builder.Services.AddTransient<RunVM>();
+            builder.Services.AddTransient<RunPage>();
+
+            builder.Services.AddTransient<ResultsVM>();
+            builder.Services.AddTransient<ResultPage>();
 
             return builder.Build();
         }

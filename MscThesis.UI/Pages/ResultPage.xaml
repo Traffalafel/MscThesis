@@ -2,8 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MscThesis.UI.Pages.ResultPage"
-             Title="ResultPage">
+             Title="ResultPage"
+             xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
+             x:DataType="vm:ResultsVM">
     <VerticalStackLayout>
-        <Label Text="Results!" />
     </VerticalStackLayout>
 </ContentPage>

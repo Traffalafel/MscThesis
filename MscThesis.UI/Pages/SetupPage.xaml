@@ -6,93 +6,105 @@
              xmlns:view="clr-namespace:MscThesis.UI.Views"
              x:DataType="vm:SetupVM"
              >
-    <VerticalStackLayout x:Name="Layout" Padding="20,0,20,0">
-        
-        <Label Text="Specify tests"/>
+    <ScrollView>
+        <VerticalStackLayout x:Name="Layout" Padding="20,0,20,0">
 
-        <StackLayout>
-            <Border Stroke="#fff"
-                    StrokeThickness="1">
-                <StackLayout Padding="5,5,5,5">
-                    <Label Text="Problem"/>
-                    <StackLayout Orientation="Horizontal">
-                        <Label>Name:</Label>
-                        <Picker ItemsSource="{Binding PossibleProblemNames}" SelectedItem="{Binding ProblemName}"/>
-                    </StackLayout>
-                    <view:ParameterListSetup Parameters="{Binding ProblemParameters}"/>
+            <Label Text="Specify tests"/>
+
+            <StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Problem size:"/>
+                    <Entry Text="{Binding ProblemSize}"/>
                 </StackLayout>
-            </Border>
-        </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Number of runs:"/>
+                    <Entry Text="{Binding NumRuns}"/>
+                </StackLayout>
 
-        <ListView ItemsSource="{Binding Optimizers}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell x:DataType="vm:OptimizerSetupVM">
+                <Border Stroke="#fff"
+                        StrokeThickness="1">
+                    <StackLayout Padding="5,5,5,5">
+                        <Label Text="Problem"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Name:"></Label>
+                            <Picker ItemsSource="{Binding PossibleProblemNames}" SelectedItem="{Binding ProblemName}"/>
+                        </StackLayout>
+                        <view:ParameterListSetup Parameters="{Binding ProblemParameters}"/>
+                    </StackLayout>
+                </Border>
+            </StackLayout>
 
-                        <Border Stroke="#fff"
-                                StrokeThickness="1"
-                                Margin="0,10,0,0">
-                            <StackLayout Padding="5,5,5,5">
-                                <Label Text="Optimizer"/>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="Name:"/>
-                                    <Entry Text="{Binding Name}"/>
+            <ListView ItemsSource="{Binding Optimizers}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell x:DataType="vm:OptimizerSetupVM">
+
+                            <Border Stroke="#fff"
+                                    StrokeThickness="1"
+                                    Margin="0,10,0,0">
+                                <StackLayout Padding="5,5,5,5">
+                                    <Label Text="Optimizer"/>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Name:"/>
+                                        <Entry Text="{Binding Name}"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Algorithm:"/>
+                                        <Picker 
+                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleAlgorithmNames}" 
+                                            SelectedItem="{Binding Algorithm}"/>
+                                    </StackLayout>
+                                    <view:ParameterListSetup Parameters="{Binding Parameters}"/>
+                                    <Button 
+                                        Text="Remove"
+                                        Clicked="RemoveOptimizer"/>
+
                                 </StackLayout>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="Algorithm:"/>
-                                    <Picker 
-                                        ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleAlgorithmNames}" 
-                                        SelectedItem="{Binding Algorithm}"/>
+                            </Border>
+
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Button 
+                Text="Add optimizer"
+                Clicked="AddOptimizer"/>
+
+            <ListView ItemsSource="{Binding Terminations}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell x:DataType="vm:TerminationSetupVM">
+                            <Border Stroke="#fff"
+                                    StrokeThickness="1">
+                                <StackLayout Padding="5,5,5,5">
+                                    <Label Text="Termination criterion"/>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label>Name:</Label>
+                                        <Picker 
+                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleTerminationNames}" 
+                                            SelectedItem="{Binding Name}"/>
+                                    </StackLayout>
+                                    <view:ParameterListSetup Parameters="{Binding Parameters}"/>
+                                    <Button 
+                                        Text="Remove"
+                                        Clicked="RemoveOptimizer"/>
                                 </StackLayout>
-                                <view:ParameterListSetup Parameters="{Binding Parameters}"/>
-                                <Button 
-                                    Text="Remove"
-                                    Clicked="RemoveOptimizer"/>
+                            </Border>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-                            </StackLayout>
-                        </Border>
-                        
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            <Button 
+                Text="Add termination criterion"
+                Clicked="AddTerminationCriterion"/>
 
-        <Button 
-            Text="Add optimizer"
-            Clicked="AddOptimizer"/>
+            <Button 
+                Text="Run!"
+                Clicked="Run"/>
 
-        <ListView ItemsSource="{Binding Terminations}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell x:DataType="vm:TerminationSetupVM">
-                        <Border Stroke="#fff"
-                                StrokeThickness="1">
-                            <StackLayout Padding="5,5,5,5">
-                                <Label Text="Termination criterion"/>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label>Name:</Label>
-                                    <Picker 
-                                        ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleTerminationNames}" 
-                                        SelectedItem="{Binding Name}"/>
-                                </StackLayout>
-                                <view:ParameterListSetup Parameters="{Binding Parameters}"/>
-                                <Button 
-                                    Text="Remove"
-                                    Clicked="RemoveOptimizer"/>
-                            </StackLayout>
-                        </Border>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        
-        <Button 
-            Text="Add termination criterion"
-            Clicked="AddTerminationCriterion"/>
-
-        <Button 
-            Text="Run!"
-            Clicked="Run"/>
-        
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

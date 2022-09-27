@@ -1,15 +1,8 @@
 ﻿using MscThesis.Core;
-using MscThesis.Core.Algorithms;
-using MscThesis.Core.FitnessFunctions;
-using MscThesis.Core.Formats;
-using MscThesis.Core.Selection;
-using MscThesis.Core.TerminationCriteria;
 using MscThesis.Runner;
-using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MscThesis.CLI
 {
@@ -38,17 +31,17 @@ namespace MscThesis.CLI
                             { Parameter.InitialPopulationSize, 100 },
                             { Parameter.SelectionQuartile, 0.5d }
                         },
-                        TerminationCriteria = new List<TerminationSpecification>
+                    }
+                },
+                Terminations = new List<TerminationSpecification>
+                {
+                    new TerminationSpecification
+                    {
+                        Name = "Stagnation",
+                        Parameters = new Dictionary<Parameter, double>
                         {
-                            new TerminationSpecification
-                            {
-                                Name = "Stagnation",
-                                Parameters = new Dictionary<Parameter, double>
-                                {
-                                    { Parameter.MaxIterations, 5 },
-                                    { Parameter.Epsilon, 10E-6 }
-                                }
-                            }
+                            { Parameter.MaxIterations, 5 },
+                            { Parameter.Epsilon, 10E-6 }
                         }
                     }
                 },
