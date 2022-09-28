@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 
 namespace MscThesis.Runner
 {
     public class ObservableValue<T> : IObservableValue<T>
     {
         private T _value;
-        private List<Action<T>> _observers = new List<Action<T>>();
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public T Value
         {
@@ -14,10 +13,7 @@ namespace MscThesis.Runner
             set
             {
                 _value = value;
-                foreach (var observer in _observers)
-                {
-                    observer.Invoke(_value);
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value)));
             }
         }
 
@@ -28,11 +24,6 @@ namespace MscThesis.Runner
         public ObservableValue(T value)
         {
             _value = value;
-        }
-
-        public void Subscribe(Action<T> observer)
-        {
-            _observers.Add(observer);
         }
 
     }
