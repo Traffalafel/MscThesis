@@ -9,7 +9,6 @@ namespace MscThesis.UI
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(SetupPage), typeof(SetupPage));
-            Routing.RegisterRoute(nameof(RunPage), typeof(RunPage));
             Routing.RegisterRoute(nameof(ResultPage), typeof(ResultPage));
         }
     }

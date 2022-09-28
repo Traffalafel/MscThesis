@@ -21,10 +21,7 @@ namespace MscThesis.UI
                 });
 
             builder.Services.AddSingleton<TestRunner>();
-            builder.Services.AddTransient<RunVM>();
-            builder.Services.AddTransient<RunPage>();
-
-            builder.Services.AddTransient<ResultsVM>();
+            builder.Services.AddTransient<ResultVM>();
             builder.Services.AddTransient<ResultPage>();
 
             return builder.Build();

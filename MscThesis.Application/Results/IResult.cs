@@ -1,18 +1,22 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Formats;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
     public interface IResult<out T> where T : InstanceFormat
     {
-        public Individual<T> GetFittest();
+        public bool IsTerminated { get; }
+        public Task Execute();
 
         public IEnumerable<string> GetOptimizerNames();
         public IEnumerable<Property> GetItemProperties(string optimizerName);
-        public double GetItemValue(string optimizerName, Property property);
-
         public IEnumerable<Property> GetSeriesProperties(string optimizerName);
-        public List<double> GetSeriesValues(string optimizerName, Property property);
+
+        public IObservableValue<Individual<T>> Fittest { get; }
+        public IObservableValue<double> GetItemValue(string optimizerName, Property property);
+        public ObservableCollection<double> GetSeriesValues(string optimizerName, Property property);
     }
 }

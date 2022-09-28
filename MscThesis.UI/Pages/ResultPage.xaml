@@ -4,7 +4,11 @@
              x:Class="MscThesis.UI.Pages.ResultPage"
              Title="ResultPage"
              xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
-             x:DataType="vm:ResultsVM">
-    <VerticalStackLayout>
-    </VerticalStackLayout>
+             x:DataType="vm:ResultVM">
+
+    <ScrollView>
+        <VerticalStackLayout x:Name="Layout"/>
+
+    </ScrollView>
+
 </ContentPage>

@@ -8,14 +8,18 @@ namespace MscThesis.Runner.Results
 {
     public abstract class Result<T> where T : InstanceFormat
     {
-        protected Individual<T> _fittest;
+        protected bool _isTerminated;
+        protected ObservableValue<Individual<T>> _fittest = new ObservableValue<Individual<T>>();
+
+        public bool IsTerminated => _isTerminated;
+        public IObservableValue<Individual<T>> Fittest => _fittest;
 
         protected void TryUpdateFittest(Individual<T> other)
         {
             // Overwrite fittest if better
-            if (CompareIndividuals(_fittest, other) < 0)
+            if (CompareIndividuals(_fittest.Value, other) < 0)
             {
-                _fittest = other;
+                _fittest.Value = other;
             }
         }
 
@@ -31,11 +35,11 @@ namespace MscThesis.Runner.Results
             }
             if (i1 != null && i2 == null)
             {
-                return -1;
+                return 1;
             }
             if (i1 == null && i2 != null)
             {
-                return 1;
+                return -1;
             }
 
             if (i1.Fitness == null && i2.Fitness == null)
@@ -44,11 +48,11 @@ namespace MscThesis.Runner.Results
             }
             if (i1.Fitness != null && i2.Fitness == null)
             {
-                return -1;
+                return 1;
             }
             if (i1.Fitness == null && i2.Fitness != null)
             {
-                return 1;
+                return -1;
             }
 
             var diff = i1.Fitness.Value - i2.Fitness.Value;

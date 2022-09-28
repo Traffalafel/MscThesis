@@ -2,7 +2,9 @@
 using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
@@ -13,7 +15,7 @@ namespace MscThesis.Runner.Results
 
         }
 
-        public Individual<T> GetFittest()
+        public Task Execute()
         {
             throw new NotImplementedException();
         }
@@ -23,7 +25,7 @@ namespace MscThesis.Runner.Results
             throw new NotImplementedException();
         }
 
-        public double GetItemValue(string optimizerName, Property property)
+        public IObservableValue<double> GetItemValue(string optimizerName, Property property)
         {
             throw new NotImplementedException();
         }
@@ -38,7 +40,7 @@ namespace MscThesis.Runner.Results
             throw new NotImplementedException();
         }
 
-        public List<double> GetSeriesValues(string optimizerName, Property property)
+        public ObservableCollection<double> GetSeriesValues(string optimizerName, Property property)
         {
             throw new NotImplementedException();
         }

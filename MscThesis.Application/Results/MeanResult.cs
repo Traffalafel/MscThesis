@@ -2,6 +2,8 @@
 using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
@@ -12,58 +14,53 @@ namespace MscThesis.Runner.Results
 
         public MeanResult(IEnumerable<IResult<T>> results)
         {
-            _optimizerNames = new HashSet<string>();
-            var values = new Dictionary<string, Dictionary<Property, List<double>>>();
+            //_optimizerNames = new HashSet<string>();
+            //var values = new Dictionary<string, Dictionary<Property, List<double>>>();
 
-            foreach (var result in results)
-            {
-                TryUpdateFittest(result.GetFittest());
+            //foreach (var result in results)
+            //{
+            //    TryUpdateFittest(result.GetFittest());
 
-                var names = result.GetOptimizerNames();
-                foreach (var name in names)
-                {
-                    _optimizerNames.Add(name);
-                    if (!values.ContainsKey(name))
-                    {
-                        values[name] = new Dictionary<Property, List<double>>();
-                    }
+            //    var names = result.GetOptimizerNames();
+            //    foreach (var name in names)
+            //    {
+            //        _optimizerNames.Add(name);
+            //        if (!values.ContainsKey(name))
+            //        {
+            //            values[name] = new Dictionary<Property, List<double>>();
+            //        }
 
-                    foreach (var property in result.GetItemProperties(name))
-                    {
-                        if (!values[name].ContainsKey(property))
-                        {
-                            values[name].Add(property, new List<double>());
-                        }
-                        var value = result.GetItemValue(name, property);
-                        values[name][property].Add(value);
-                    }
-                }
-            }
+            //        foreach (var property in result.GetItemProperties(name))
+            //        {
+            //            if (!values[name].ContainsKey(property))
+            //            {
+            //                values[name].Add(property, new List<double>());
+            //            }
+            //            var value = result.GetItemValue(name, property);
+            //            values[name][property].Add(value);
+            //        }
+            //    }
+            //}
 
-            _medians = new Dictionary<string, Dictionary<Property, double>>();
-            foreach (var name in _optimizerNames)
-            {
-                if (!_medians.ContainsKey(name))
-                {
-                    _medians.Add(name, new Dictionary<Property, double>());
-                }
+            //_medians = new Dictionary<string, Dictionary<Property, double>>();
+            //foreach (var name in _optimizerNames)
+            //{
+            //    if (!_medians.ContainsKey(name))
+            //    {
+            //        _medians.Add(name, new Dictionary<Property, double>());
+            //    }
 
-                foreach (var property in values[name].Keys)
-                {
-                    _medians[name][property] = FindMedian(values[name][property]);
-                }
-            }
+            //    foreach (var property in values[name].Keys)
+            //    {
+            //        _medians[name][property] = FindMedian(values[name][property]);
+            //    }
+            //}
         }
 
         private double FindMedian(List<double> values)
         {
             values.Sort();
             return values[values.Count / 2];
-        }
-
-        public Individual<T> GetFittest()
-        {
-            return _fittest;
         }
 
         public IEnumerable<string> GetOptimizerNames()
@@ -104,6 +101,21 @@ namespace MscThesis.Runner.Results
         public List<double> GetSeriesValues(string optimizerName, Property property)
         {
             return new List<double>();
+        }
+
+        public Task Execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        IObservableValue<double> IResult<T>.GetItemValue(string optimizerName, Property property)
+        {
+            throw new NotImplementedException();
+        }
+
+        ObservableCollection<double> IResult<T>.GetSeriesValues(string optimizerName, Property property)
+        {
+            throw new NotImplementedException();
         }
     }
 }

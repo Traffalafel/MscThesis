@@ -55,6 +55,10 @@
                                             ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleAlgorithmNames}" 
                                             SelectedItem="{Binding Algorithm}"/>
                                     </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Seed"/>
+                                        <Entry Text="{Binding Seed}"/>
+                                    </StackLayout>
                                     <view:ParameterListSetup Parameters="{Binding Parameters}"/>
                                     <Button 
                                         Text="Remove"

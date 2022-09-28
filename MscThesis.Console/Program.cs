@@ -17,7 +17,7 @@ namespace MscThesis.CLI
                 NumRuns = 1,
                 ProblemSizes = new List<int>
                 {
-                    50
+                    200
                 },
                 Optimizers = new List<OptimizerSpecification>()
                 {
@@ -40,7 +40,7 @@ namespace MscThesis.CLI
                         Name = "Stagnation",
                         Parameters = new Dictionary<Parameter, double>
                         {
-                            { Parameter.MaxIterations, 5 },
+                            { Parameter.MaxIterations, 10 },
                             { Parameter.Epsilon, 10E-6 }
                         }
                     }

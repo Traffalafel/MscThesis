@@ -42,7 +42,7 @@ public partial class SetupPage : ContentPage
     public void Run(object sender, EventArgs e)
     {
         var specification = VM.ToSpecification();
-        Shell.Current.GoToAsync(nameof(RunPage), new Dictionary<string, object>
+        Shell.Current.GoToAsync(nameof(ResultPage), new Dictionary<string, object>
         {
             ["Specification"] = specification
         });

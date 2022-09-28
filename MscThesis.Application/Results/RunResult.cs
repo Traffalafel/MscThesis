@@ -3,62 +3,74 @@ using MscThesis.Core;
 using System.Collections.Generic;
 using System;
 using MscThesis.Core.FitnessFunctions;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace MscThesis.Runner.Results
 {
     // 1 run of 1 optimizer on 1 problem of 1 size
     public class RunResult<T> : Result<T>, IResult<T> where T : InstanceFormat
     {
-        public string OptimizerName { get; }
-        public Dictionary<Property, List<double>> SeriesData { get; }
-        public Dictionary<Property, double> ItemData { get; }
+        private string _optimizerName;
+        private Dictionary<Property, ObservableValue<double>> _itemData;
+        private Dictionary<Property, ObservableCollection<double>> _seriesData;
+        private IEnumerable<RunIteration<T>> _iterations;
+        private FitnessFunction<T> _fitnessFunction;
 
-        public RunResult(IEnumerable<RunIteration<T>> iterations, FitnessFunction<T> fitnessFunction, string optimizerName)
+        public string OptimizerName => _optimizerName;
+        public Dictionary<Property, ObservableCollection<double>> SeriesData => _seriesData;
+        public Dictionary<Property, ObservableValue<double>> ItemData => _itemData;
+
+        public async Task Execute()
         {
-            OptimizerName = optimizerName;
-            ItemData = new Dictionary<Property, double>();
-            SeriesData = new Dictionary<Property, List<double>>();
-
-            var bestFitnesses = new List<double>();
-            var populationSizes = new List<double>();
             var numIterations = 0;
-            foreach (var iteration in iterations)
+            await Task.Run(() =>
             {
-                foreach (var (key, value) in iteration.Statistics)
+                foreach (var iteration in _iterations)
                 {
-                    // Add to statistics
-                    if (SeriesData.ContainsKey(key))
+                    foreach (var (key, value) in iteration.Statistics)
                     {
                         SeriesData[key].Add(value);
                     }
-                    else
+
+                    var fittest = iteration.Population.GetFittest();
+                    if (fittest == null || fittest.Fitness == null)
                     {
-                        SeriesData.Add(key, new List<double> { value });
+                        throw new Exception();
                     }
+                    SeriesData[Property.BestFitness].Add(fittest.Fitness.Value);
+                    TryUpdateFittest(fittest);
+
+                    SeriesData[Property.PopulationSize].Add(iteration.Population.NumIndividuals);
+
+                    ItemData[Property.NumberIterations].Value = numIterations;
+                    ItemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
+
+                    numIterations++;
                 }
-
-                var fittest = iteration.Population.GetFittest();
-                if (fittest == null || fittest.Fitness == null)
-                {
-                    throw new Exception();
-                }
-                bestFitnesses.Add(fittest.Fitness.Value);
-                TryUpdateFittest(fittest);
-
-                populationSizes.Add((double) iteration.Population.NumIndividuals);
-
-                numIterations++;
-            }
-
-            ItemData[Property.NumberIterations] = numIterations;
-            ItemData[Property.NumberFitnessCalls] = fitnessFunction.GetNumCalls();
-            SeriesData[Property.BestFitness] = bestFitnesses;
-            SeriesData[Property.PopulationSize] = populationSizes;
+            });
         }
 
-        public Individual<T> GetFittest()
+        public RunResult(IEnumerable<RunIteration<T>> iterations, FitnessFunction<T> fitnessFunction, string optimizerName)
         {
-            return _fittest;
+            _iterations = iterations;
+            _fitnessFunction = fitnessFunction;
+            _optimizerName = optimizerName;
+
+            _itemData = new Dictionary<Property, ObservableValue<double>>();
+            _seriesData = new Dictionary<Property, ObservableCollection<double>>();
+
+            var first = iterations.First();
+            foreach (var (key, value) in first.Statistics)
+            {
+                SeriesData.Add(key, new ObservableCollection<double> { value });
+            }
+
+            SeriesData[Property.BestFitness] = new ObservableCollection<double>();
+            SeriesData[Property.PopulationSize] = new ObservableCollection<double>();
+            ItemData[Property.NumberIterations] = new ObservableValue<double>();
+            ItemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
         }
 
         public IEnumerable<string> GetOptimizerNames()
@@ -76,7 +88,7 @@ namespace MscThesis.Runner.Results
             return ItemData.Keys;
         }
 
-        public double GetItemValue(string testCase, Property property)
+        public IObservableValue<double> GetItemValue(string testCase, Property property)
         {
             if (testCase != OptimizerName)
             {
@@ -98,7 +110,7 @@ namespace MscThesis.Runner.Results
             return SeriesData.Keys;
         }
 
-        public List<double> GetSeriesValues(string testCase, Property property)
+        public ObservableCollection<double> GetSeriesValues(string testCase, Property property)
         {
             if (testCase != OptimizerName)
             {

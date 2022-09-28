@@ -2,6 +2,7 @@
 using MscThesis.Runner;
 using MscThesis.Runner.Specification;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace MscThesis.UI.ViewModels
 {
@@ -12,7 +13,9 @@ namespace MscThesis.UI.ViewModels
         {
             try
             {
-                return vms.GroupBy(vm => vm.Parameter).ToDictionary(x => x.Key, x => Convert.ToDouble(x.First().Value));
+                return vms
+                    .GroupBy(vm => vm.Parameter)
+                    .ToDictionary(x => x.Key, x => double.Parse(x.First().Value, CultureInfo.InvariantCulture));
             }
             catch (Exception e)
             {
@@ -85,7 +88,7 @@ namespace MscThesis.UI.ViewModels
             _runner = runner;
         }
 
-        public int? Seed { get; set; } = null;
+        public string Seed { get; set; }
         public string Name { get; set; }
         public ObservableCollection<ParameterVM> Parameters { get; set; } = new();
         public string Algorithm
@@ -111,7 +114,7 @@ namespace MscThesis.UI.ViewModels
         {
             return new OptimizerSpecification
             {
-                Seed = Seed,
+                Seed = string.IsNullOrWhiteSpace(Seed) ? null : Convert.ToInt32(Seed),
                 Name = Name,
                 Algorithm = _algorithm,
                 Parameters = Utils.ToSpecification(Parameters)
