@@ -12,6 +12,14 @@ namespace MscThesis.Core.Algorithms
         private readonly ISelectionOperator<BitString> _selectionOperator;
         private readonly int _initialPopulationSize;
 
+        public override ISet<Property> StatisticsProperties
+        {
+            get => new HashSet<Property>
+            {
+                Property.MinEntropy
+            };
+        }
+
         public MIMIC(
             Random random,
             int initialPopulationSize, 
@@ -19,7 +27,6 @@ namespace MscThesis.Core.Algorithms
         {
             _selectionOperator = selectionOperator;
             _initialPopulationSize = initialPopulationSize;
-
         }
 
         protected override Population<BitString> Initialize(int problemSize)

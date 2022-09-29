@@ -1,13 +1,16 @@
 ﻿using MscThesis.Core;
+using MscThesis.Core.Algorithms;
+using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.TerminationCriteria;
 using MscThesis.Runner.Specification;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MscThesis.Runner.Factories
 {
-    public abstract class TestFactory<T> : ITestFactory<T> where T : InstanceFormat
+    public abstract class TestCaseFactory<T> : ITestCaseFactory<T> where T : InstanceFormat
     {
         public ISet<string> Algorithms => _optimizers.Keys.ToHashSet();
         public ISet<string> Problems => _problems.Keys.ToHashSet();
@@ -17,26 +20,37 @@ namespace MscThesis.Runner.Factories
         protected Dictionary<string, IProblemFactory<T>> _problems;
         protected Dictionary<string, ITerminationFactory<T>> _terminations;
 
-        public IEnumerable<Test<InstanceFormat>> BuildTests(TestSpecification spec)
+        public IEnumerable<ITestCase<InstanceFormat>> BuildTestCases(TestSpecification spec)
         {
             foreach (var optimizerSpec in spec.Optimizers)
             {
-                var optimizerFactory = GetOptimizerFactory(optimizerSpec);
-                var optimizer = optimizerFactory.BuildOptimizer(optimizerSpec);
-
-                var problemFactory = GetProblemFactory(spec.Problem);
-                var problem = problemFactory.BuildProblem(spec.Problem);
-
-                var terminations = new List<TerminationCriterion<T>>();
-                foreach (var terminationSpec in spec.Terminations)
+                var buildOptimizer = new Func<Optimizer<T>>(() =>
                 {
-                    var terminationFactory = GetTerminationFactory(terminationSpec);
-                    var termination = terminationFactory.BuildCriterion(terminationSpec);
-                    terminations.Add(termination);
-                }
+                    var optimizerFactory = GetOptimizerFactory(optimizerSpec);
+                    return optimizerFactory.BuildOptimizer(optimizerSpec);
+                });
+
+                var buildProblem = new Func<FitnessFunction<T>>(() =>
+                {
+                    var problemFactory = GetProblemFactory(spec.Problem);
+                    return problemFactory.BuildProblem(spec.Problem);
+                });
+
+                var buildTerminations = new Func<IEnumerable<TerminationCriterion<T>>>(() =>
+                {
+                    var terminations = new List<TerminationCriterion<T>>();
+                    foreach (var terminationSpec in spec.Terminations)
+                    {
+                        var terminationFactory = GetTerminationFactory(terminationSpec);
+                        var termination = terminationFactory.BuildCriterion(terminationSpec);
+                        terminations.Add(termination);
+                    }
+                    return terminations;
+                });
 
                 var name = optimizerSpec.Name;
-                yield return new TestImpl<T>(name, optimizer, problem, terminations); ;
+
+                yield return new TestCase<T>(name, buildOptimizer, buildProblem, buildTerminations); ;
             }
         }
 

@@ -16,14 +16,14 @@ namespace MscThesis.UI.ViewModels
         [ObservableProperty]
         double bestFitness;
         
-        private TestRunner _runner;
+        private TestProvider _runner;
 
-        public ResultVM(TestRunner runner)
+        public ResultVM(TestProvider runner)
         {
             _runner = runner;
         }
 
-        public IResult<InstanceFormat> Run()
+        public ITest<InstanceFormat> Run()
         {
             return _runner.Run(specification);
         }

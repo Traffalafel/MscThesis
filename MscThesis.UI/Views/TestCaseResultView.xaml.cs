@@ -18,7 +18,7 @@ public partial class TestCaseResultView : ContentView
 		}
 	}
 
-	public static TestCaseResultView Create<T>(IResult<T> result, string testCase) where T : InstanceFormat
+	public static TestCaseResultView Create<T>(ITest<T> result, string testCase) where T : InstanceFormat
 	{
 		var views = new List<IView>();
 		foreach (var property in result.GetItemProperties(testCase))

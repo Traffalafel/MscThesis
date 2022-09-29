@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories
 {
-    public class PermutationTestFactory : TestFactory<Permutation>
+    public class PermutationTestCaseFactory : TestCaseFactory<Permutation>
     {
-        public PermutationTestFactory()
+        public PermutationTestCaseFactory()
         {
             _optimizers = new Dictionary<string, OptimizerFactory<Permutation>>
             {

@@ -10,6 +10,8 @@ namespace MscThesis.Core.Algorithms
     {
         protected readonly Random _random;
 
+        public abstract ISet<Property> StatisticsProperties { get; }
+
         protected Optimizer(Random random)
         {
             _random = random;

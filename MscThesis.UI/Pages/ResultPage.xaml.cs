@@ -67,6 +67,29 @@ public partial class ResultPage : ContentPage
                     WidthRequest = 600
                 });
             }
+
+            var histogramProps = result.GetHistogramProperties(optimizerName);
+            foreach (var prop in histogramProps)
+            {
+                var propName = prop.ToString();
+                var values = result.GetHistogramValues(optimizerName, prop);
+                Layout.Add(new Label
+                {
+                    Text = $"{propName}:"
+                });
+                Layout.Add(new CartesianChart
+                {
+                    Series = new List<ISeries> {
+                        new ColumnSeries<double>
+                        {
+                            Values = values,
+                            Fill = null
+                        }
+                    },
+                    HeightRequest = 400,
+                    WidthRequest = 600
+                });
+            }
         }
 
 		await result.Execute();

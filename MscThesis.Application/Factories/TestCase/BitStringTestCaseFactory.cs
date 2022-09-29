@@ -9,9 +9,9 @@ using System.Text;
 
 namespace MscThesis.Runner.Factories
 {
-    public class BitStringTestFactory : TestFactory<BitString>
+    public class BitStringTestCaseFactory : TestCaseFactory<BitString>
     {
-        public BitStringTestFactory()
+        public BitStringTestCaseFactory()
         {
             _optimizers = new Dictionary<string, OptimizerFactory<BitString>>
             {

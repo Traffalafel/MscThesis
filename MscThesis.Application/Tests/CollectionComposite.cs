@@ -3,16 +3,20 @@ using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
-    public class SeriesResult<T> : Result<T>, IResult<T> where T : InstanceFormat
+    public class CollectionComposite<T> : ITest<T> where T : InstanceFormat
     {
-        public SeriesResult(IEnumerable<IResult<T>> results)
-        {
+        public bool IsTerminated => throw new NotImplementedException();
 
+        public IObservableValue<Individual<T>> Fittest => throw new NotImplementedException();
+
+        public CollectionComposite(IEnumerable<ITest<T>> results)
+        {
+            throw new NotImplementedException();
         }
 
         public Task Execute()
@@ -41,6 +45,16 @@ namespace MscThesis.Runner.Results
         }
 
         public ObservableCollection<double> GetSeriesValues(string optimizerName, Property property)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Property> GetHistogramProperties(string optimizerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObservableCollection<double> GetHistogramValues(string optimizerName, Property property)
         {
             throw new NotImplementedException();
         }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MscThesis.Runner.Results
 {
-    public abstract class Result<T> where T : InstanceFormat
+    public abstract class Test<T> where T : InstanceFormat
     {
         protected bool _isTerminated;
         protected ObservableValue<Individual<T>> _fittest = new ObservableValue<Individual<T>>();

@@ -14,7 +14,7 @@ public partial class ResultsView : ContentView
 		}
 	}
 
-	public static ResultsView Create<T>(IResult<T> results) where T : InstanceFormat
+	public static ResultsView Create<T>(ITest<T> results) where T : InstanceFormat
 	{
 		var testCases = results.GetOptimizerNames();
 

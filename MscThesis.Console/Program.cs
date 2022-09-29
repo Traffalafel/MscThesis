@@ -10,14 +10,14 @@ namespace MscThesis.CLI
     {
         static void Main(string[] args)
         {
-            var runner = new TestRunner();
+            var runner = new TestProvider();
 
             var spec = new TestSpecification
             {
-                NumRuns = 1,
+                NumRuns = 30,
                 ProblemSizes = new List<int>
                 {
-                    200
+                    100
                 },
                 Optimizers = new List<OptimizerSpecification>()
                 {
@@ -28,7 +28,7 @@ namespace MscThesis.CLI
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, double>
                         {
-                            { Parameter.InitialPopulationSize, 100 },
+                            { Parameter.InitialPopulationSize, 50 },
                             { Parameter.SelectionQuartile, 0.5d }
                         },
                     }
@@ -57,7 +57,7 @@ namespace MscThesis.CLI
 
             var result = runner.Run(spec);
 
-            Console.WriteLine($"Fittest: {result.GetFittest()}");
+            Console.WriteLine($"Fittest: {result.Fittest}");
 
             foreach (var testCase in result.GetOptimizerNames())
             {

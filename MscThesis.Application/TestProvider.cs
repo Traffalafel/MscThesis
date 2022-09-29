@@ -8,24 +8,24 @@ using System.Linq;
 
 namespace MscThesis.Runner
 {
-    public class TestRunner
+    public class TestProvider
     {
-        private List<ITestFactory<InstanceFormat>> _factories;
+        private List<ITestCaseFactory<InstanceFormat>> _factories;
 
-        public TestRunner()
+        public TestProvider()
         {
-            _factories = new List<ITestFactory<InstanceFormat>>
+            _factories = new List<ITestCaseFactory<InstanceFormat>>
             {
-                new BitStringTestFactory(),
-                new PermutationTestFactory()
+                new BitStringTestCaseFactory(),
+                new PermutationTestCaseFactory()
             };
         }
 
-        public IResult<InstanceFormat> Run(TestSpecification spec)
+        public ITest<InstanceFormat> Run(TestSpecification spec)
         {
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);
-            var tests = factory.BuildTests(spec);
+            var tests = factory.BuildTestCases(spec);
             return GatherResults(tests, spec.ProblemSizes, spec.NumRuns);
         }
 
@@ -101,7 +101,7 @@ namespace MscThesis.Runner
             return new List<Parameter>();
         }
 
-        private ITestFactory<InstanceFormat> GetTestFactory(string problemName)
+        private ITestCaseFactory<InstanceFormat> GetTestFactory(string problemName)
         {
             foreach (var factory in _factories)
             {
@@ -113,42 +113,41 @@ namespace MscThesis.Runner
             return null;
         }
 
-
-        public IResult<T> GatherResults<T>(IEnumerable<Test<T>> tests, IEnumerable<int> problemSizes, int numRuns) where T : InstanceFormat
+        private ITest<T> GatherResults<T>(IEnumerable<ITestCase<T>> tests, IEnumerable<int> problemSizes, int numRuns) where T : InstanceFormat
         {
-            var results = new List<IResult<T>>();
+            var results = new List<ITest<T>>();
             foreach (var test in tests)
             {
-                var sizeResults = new List<IResult<T>>();
+                var sizeResults = new List<ITest<T>>();
                 foreach (var size in problemSizes)
                 {
-                    var runResults = new List<IResult<T>>();
+                    var runResults = new List<ITest<T>>();
                     foreach (var _ in Enumerable.Range(0, numRuns))
                     {
-                        var result = test.Run(size);
+                        var result = test.CreateRun(size);
                         runResults.Add(result);
                     }
 
-                    IResult<T> runResult;
+                    ITest<T> runResult;
                     if (numRuns == 1)
                     {
                         runResult = runResults.First();
                     }
                     else
                     {
-                        runResult = new MeanResult<T>(runResults);
+                        runResult = new MeanComposite<T>(runResults);
                     }
                     sizeResults.Add(runResult);
                 }
 
-                IResult<T> sizeResult;
+                ITest<T> sizeResult;
                 if (problemSizes.Count() == 1)
                 {
                     sizeResult = sizeResults.First();
                 }
                 else
                 {
-                    sizeResult = new SeriesResult<T>(sizeResults);
+                    sizeResult = new SeriesComposite<T>(sizeResults);
                 }
                 results.Add(sizeResult);
             }
@@ -159,7 +158,7 @@ namespace MscThesis.Runner
             }
             else
             {
-                return new CollectionResult<T>(results);
+                return new CollectionComposite<T>(results);
             }
         }
 

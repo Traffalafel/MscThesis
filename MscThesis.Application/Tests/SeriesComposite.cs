@@ -8,14 +8,24 @@ using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
-    public class CollectionResult<T> : Result<T>, IResult<T> where T : InstanceFormat
+    public class SeriesComposite<T> : Test<T>, ITest<T> where T : InstanceFormat
     {
-        public CollectionResult(IEnumerable<IResult<T>> results)
+        public SeriesComposite(IEnumerable<ITest<T>> results)
         {
 
         }
 
         public Task Execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Property> GetHistogramProperties(string optimizerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObservableCollection<double> GetHistogramValues(string optimizerName, Property property)
         {
             throw new NotImplementedException();
         }

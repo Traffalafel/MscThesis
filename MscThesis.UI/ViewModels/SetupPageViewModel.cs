@@ -41,9 +41,9 @@ namespace MscThesis.UI.ViewModels
     public class TerminationSetupVM
     {
         private string _name = string.Empty;
-        private TestRunner _runner;
+        private TestProvider _runner;
 
-        public TerminationSetupVM(TestRunner runner)
+        public TerminationSetupVM(TestProvider runner)
         {
             _runner = runner;
         }
@@ -80,10 +80,10 @@ namespace MscThesis.UI.ViewModels
 
     public class OptimizerSetupVM
     {
-        private TestRunner _runner;
+        private TestProvider _runner;
         private string _algorithm = string.Empty;
 
-        public OptimizerSetupVM(TestRunner runner)
+        public OptimizerSetupVM(TestProvider runner)
         {
             _runner = runner;
         }
@@ -127,7 +127,7 @@ namespace MscThesis.UI.ViewModels
     {
         private string _problemName = string.Empty;
 
-        private TestRunner _runner { get; set; } = new TestRunner();
+        private TestProvider _runner { get; set; } = new TestProvider();
 
         public string ProblemName {
             get => _problemName;

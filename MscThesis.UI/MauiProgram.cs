@@ -20,7 +20,7 @@ namespace MscThesis.UI
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            builder.Services.AddSingleton<TestRunner>();
+            builder.Services.AddSingleton<TestProvider>();
             builder.Services.AddTransient<ResultVM>();
             builder.Services.AddTransient<ResultPage>();
 

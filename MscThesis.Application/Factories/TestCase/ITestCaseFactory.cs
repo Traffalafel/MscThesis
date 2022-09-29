@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories
 {
-    public interface ITestFactory<out T> where T : InstanceFormat
+    public interface ITestCaseFactory<out T> where T : InstanceFormat
     {
         public ISet<string> Algorithms { get; }
         public ISet<string> Problems { get; }
         public ISet<string> Terminations { get; }
 
-        public IEnumerable<Test<InstanceFormat>> BuildTests(TestSpecification spec);
+        public IEnumerable<ITestCase<InstanceFormat>> BuildTestCases(TestSpecification spec);
 
         public IEnumerable<Parameter> GetAlgorithmParameters(string algorithmName);
         public IEnumerable<Parameter> GetProblemParameters(string problemName);
