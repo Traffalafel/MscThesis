@@ -163,7 +163,12 @@ namespace MscThesis.UI.ViewModels
         }
 
         public string NumRuns { get; set; } = "1";
-        public string ProblemSize { get; set; }
+
+        public string ProblemSizeStart { get; set; }
+        public string ProblemSizeStop { get; set; }
+        public string ProblemSizeStep { get; set; }
+
+        public string MaxParallelization { get; set; }
         public ObservableCollection<ParameterVM> ProblemParameters { get; set; } = new();
         public ObservableCollection<TerminationSetupVM> Terminations { get; set; } = new();
         public ObservableCollection<OptimizerSetupVM> Optimizers { get; set; } = new();
@@ -190,14 +195,38 @@ namespace MscThesis.UI.ViewModels
             {
                 NumRuns = Convert.ToInt32(NumRuns),
                 Optimizers = Optimizers.Select(o => o.ToSpecification()).ToList(),
+                MaxParallelization = Convert.ToDouble(MaxParallelization),
                 Problem = new ProblemSpecification
                 {
                     Name = _problemName,
                     Parameters = Utils.ToSpecification(ProblemParameters)
                 },
-                ProblemSizes = new List<int> { Convert.ToInt32(ProblemSize) },
+                ProblemSizes = ParseProblemSizes(ProblemSizeStart, ProblemSizeStop, ProblemSizeStep).ToList(),
                 Terminations = Terminations.Select(t => t.ToSpecification()).ToList()
             };
+        }
+
+        private IEnumerable<int> ParseProblemSizes(string startStr, string stopStr, string stepStr)
+        {
+            var start = Convert.ToInt32(startStr);
+            var stop = Convert.ToInt32(stopStr);
+            var step = Convert.ToInt32(stepStr);
+
+            if (stop < start)
+            {
+                throw new Exception("");
+            }
+            if (step <= 0)
+            {
+                throw new Exception("");
+            }
+
+            var c = start;
+            while (c <= stop)
+            {
+                yield return c;
+                c += step;
+            }
         }
 
     }

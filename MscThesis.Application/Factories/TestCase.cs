@@ -35,7 +35,7 @@ namespace MscThesis.Runner.Factories
             {
                 iterations = criterion.AddTerminationCriterion(iterations);
             }
-            return new TestRun<T>(iterations, problem, _name, optimizer.StatisticsProperties);
+            return new TestRun<T>(iterations, problem, _name, optimizer.StatisticsProperties, size);
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using MscThesis.Core.FitnessFunctions;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace MscThesis.Runner.Results
 {
@@ -13,31 +14,28 @@ namespace MscThesis.Runner.Results
     {
         private string _optimizerName;
         private Dictionary<Property, ObservableValue<double>> _itemData;
-        private Dictionary<Property, ObservableCollection<double>> _seriesData;
+        private Dictionary<Property, ObservableCollection<(double, double)>> _seriesData;
         private IEnumerable<RunIteration<T>> _iterations;
         private FitnessFunction<T> _fitnessFunction;
 
-        public string OptimizerName => _optimizerName;
-        public Dictionary<Property, ObservableCollection<double>> SeriesData => _seriesData;
-        public Dictionary<Property, ObservableValue<double>> ItemData => _itemData;
-
-        public TestRun(IEnumerable<RunIteration<T>> iterations, FitnessFunction<T> fitnessFunction, string optimizerName, ISet<Property> statisticsProperties)
+        public TestRun(IEnumerable<RunIteration<T>> iterations, FitnessFunction<T> fitnessFunction, string optimizerName, ISet<Property> statisticsProperties, int problemSize)
         {
             _iterations = iterations;
             _fitnessFunction = fitnessFunction;
             _optimizerName = optimizerName;
 
             _itemData = new Dictionary<Property, ObservableValue<double>>();
-            _seriesData = new Dictionary<Property, ObservableCollection<double>>();
+            _seriesData = new Dictionary<Property, ObservableCollection<(double, double)>>();
 
             foreach (var property in statisticsProperties)
             {
-                SeriesData.Add(property, new ObservableCollection<double>());
+                _seriesData.Add(property, new ObservableCollection<(double, double)>());
             }
-            SeriesData[Property.BestFitness] = new ObservableCollection<double>();
-            SeriesData[Property.PopulationSize] = new ObservableCollection<double>();
-            ItemData[Property.NumberIterations] = new ObservableValue<double>();
-            ItemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
+            _seriesData[Property.BestFitness] = new ObservableCollection<(double, double)>();
+            _seriesData[Property.PopulationSize] = new ObservableCollection<(double, double)>();
+            _itemData[Property.NumberIterations] = new ObservableValue<double>();
+            _itemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
+            _itemData[Property.ProblemSize] = new ObservableValue<double>(problemSize);
         }
 
         public async Task Execute()
@@ -49,7 +47,7 @@ namespace MscThesis.Runner.Results
                 {
                     foreach (var (key, value) in iteration.Statistics)
                     {
-                        SeriesData[key].Add(value);
+                        _seriesData[key].Add((numIterations, value));
                     }
 
                     var fittest = iteration.Population.GetFittest();
@@ -57,13 +55,13 @@ namespace MscThesis.Runner.Results
                     {
                         throw new Exception();
                     }
-                    SeriesData[Property.BestFitness].Add(fittest.Fitness.Value);
+                    _seriesData[Property.BestFitness].Add((numIterations, fittest.Fitness.Value));
                     TryUpdateFittest(fittest);
 
-                    SeriesData[Property.PopulationSize].Add(iteration.Population.NumIndividuals);
+                    _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.NumIndividuals));
 
-                    ItemData[Property.NumberIterations].Value = numIterations;
-                    ItemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
+                    _itemData[Property.NumberIterations].Value = numIterations;
+                    _itemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
 
                     numIterations++;
                 }
@@ -71,68 +69,23 @@ namespace MscThesis.Runner.Results
         }
 
 
-        public IEnumerable<string> GetOptimizerNames()
+        public ISet<string> OptimizerNames => new HashSet<string> { _optimizerName };
+
+        public IEnumerable<ItemResult> Items => _itemData.Select(item => new ItemResult
         {
-            return new List<string> { OptimizerName }; 
-        }
+            OptimizerName = _optimizerName,
+            Property = item.Key,
+            Observable = item.Value
+        });
 
-        public IEnumerable<Property> GetItemProperties(string testCase)
+        public IEnumerable<SeriesResult> Series => _seriesData.Select(series => new SeriesResult
         {
-            if (testCase != OptimizerName)
-            {
-                return new List<Property>();
-            }
+            OptimizerName = _optimizerName,
+            XAxis = Property.NumberIterations,
+            Property = series.Key,
+            Points = series.Value
+        });
 
-            return ItemData.Keys;
-        }
-
-        public IObservableValue<double> GetItemValue(string testCase, Property property)
-        {
-            if (testCase != OptimizerName)
-            {
-                throw new Exception("");
-            }
-
-            if (ItemData.ContainsKey(property))
-            {
-                return ItemData[property];
-            }
-            else
-            {
-                throw new Exception("");
-            }
-        }
-
-        public IEnumerable<Property> GetSeriesProperties(string testCase)
-        {
-            return SeriesData.Keys;
-        }
-
-        public ObservableCollection<double> GetSeriesValues(string testCase, Property property)
-        {
-            if (testCase != OptimizerName)
-            {
-                throw new Exception("");
-            }
-
-            if (SeriesData.ContainsKey(property))
-            {
-                return SeriesData[property];
-            }
-            else
-            {
-                throw new Exception("");
-            }
-        }
-
-        public IEnumerable<Property> GetHistogramProperties(string optimizerName)
-        {
-            return new List<Property>();
-        }
-
-        public ObservableCollection<double> GetHistogramValues(string optimizerName, Property property)
-        {
-            return new ObservableCollection<double>();
-        }
+        public IEnumerable<HistogramResult> Histograms => new List<HistogramResult>();
     }
 }

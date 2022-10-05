@@ -7,6 +7,7 @@ namespace MscThesis.Core
         NumberIterations,
         MinEntropy,
         BestFitness,
-        PopulationSize
+        PopulationSize,
+        ProblemSize
     }
 }

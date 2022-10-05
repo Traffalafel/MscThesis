@@ -13,13 +13,26 @@
 
             <StackLayout>
 
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Problem size:"/>
-                    <Entry Text="{Binding ProblemSize}"/>
+                <StackLayout Orientation="Vertical" >
+                    <Label Text="Problem sizes:"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Start:"/>
+                        <Entry Text="{Binding ProblemSizeStart}"/>
+
+                        <Label Text="Stop"/>
+                        <Entry Text="{Binding ProblemSizeStop}"/>
+
+                        <Label Text="Step"/>
+                        <Entry Text="{Binding ProblemSizeStep}"/>
+                    </StackLayout>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Number of runs:"/>
                     <Entry Text="{Binding NumRuns}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Maximum number of parallel runs:"/>
+                    <Entry Text="{Binding MaxParallelization}"/>
                 </StackLayout>
 
                 <Border Stroke="#fff"

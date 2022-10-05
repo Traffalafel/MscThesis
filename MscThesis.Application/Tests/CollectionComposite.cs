@@ -1,62 +1,56 @@
-﻿using MscThesis.Core;
-using MscThesis.Core.Formats;
-using System;
+﻿using MscThesis.Core.Formats;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Net.Http.Headers;
+using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MscThesis.Runner.Results
 {
-    public class CollectionComposite<T> : ITest<T> where T : InstanceFormat
+    public class CollectionComposite<T> : Test<T>, ITest<T> where T : InstanceFormat
     {
-        public bool IsTerminated => throw new NotImplementedException();
+        private List<ITest<T>> _tests;
+        private int _batchSize;
+        private HashSet<string> _optimizerNames;
 
-        public IObservableValue<Individual<T>> Fittest => throw new NotImplementedException();
+        private List<ItemResult> _items;
+        private List<SeriesResult> _series;
+        private List<HistogramResult> _hisograms;
 
-        public CollectionComposite(IEnumerable<ITest<T>> results)
+        public CollectionComposite(List<ITest<T>> tests, int batchSize)
         {
-            throw new NotImplementedException();
+            _tests = tests;
+            _batchSize = batchSize;
+            _optimizerNames = new HashSet<string>();
+            _items = new List<ItemResult>();
+            _series = new List<SeriesResult>();
+            _hisograms = new List<HistogramResult>();
+
+            foreach (var test in _tests)
+            {
+                _optimizerNames.UnionWith(test.OptimizerNames);
+                _items.AddRange(test.Items);
+                _series.AddRange(test.Series);
+                _hisograms.AddRange(test.Histograms);
+            }
         }
 
-        public Task Execute()
-        {
-            throw new NotImplementedException();
-        }
+        public ISet<string> OptimizerNames => _optimizerNames;
+        public IEnumerable<ItemResult> Items => _items;
+        public IEnumerable<SeriesResult> Series => _series;
+        public IEnumerable<HistogramResult> Histograms => _hisograms;
 
-        public IEnumerable<Property> GetItemProperties(string optimizerName)
+        public async Task Execute()
         {
-            throw new NotImplementedException();
-        }
+            var batches = _tests.Select((result, idx) => (result, idx))
+                                  .GroupBy(x => x.idx / _batchSize)
+                                  .ToList();
 
-        public IObservableValue<double> GetItemValue(string optimizerName, Property property)
-        {
-            throw new NotImplementedException();
-        }
+            foreach (var batch in batches)
+            {
+                var tasks = batch.Select(x => Task.Run(() => x.result.Execute()));
 
-        public IEnumerable<string> GetOptimizerNames()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Property> GetSeriesProperties(string optimizerName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ObservableCollection<double> GetSeriesValues(string optimizerName, Property property)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Property> GetHistogramProperties(string optimizerName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ObservableCollection<double> GetHistogramValues(string optimizerName, Property property)
-        {
-            throw new NotImplementedException();
+                await Task.WhenAll(tasks);
+            }
         }
     }
 }

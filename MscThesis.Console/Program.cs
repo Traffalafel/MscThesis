@@ -3,6 +3,10 @@ using MscThesis.Runner;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace MscThesis.CLI
 {
@@ -17,19 +21,41 @@ namespace MscThesis.CLI
                 NumRuns = 30,
                 ProblemSizes = new List<int>
                 {
+                    10,
+                    20,
+                    30,
+                    40,
+                    50,
+                    60,
+                    70,
+                    80,
+                    90,
                     100
                 },
                 Optimizers = new List<OptimizerSpecification>()
                 {
                     new OptimizerSpecification
                     {
-                        Name = "HelloWorld",
-                        Seed = 420,
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, double>
                         {
-                            { Parameter.InitialPopulationSize, 50 },
-                            { Parameter.SelectionQuartile, 0.5d }
+                            { Parameter.InitialPopulationSize, 10 }
+                        },
+                    },
+                    new OptimizerSpecification
+                    {
+                        Algorithm = "MIMIC",
+                        Parameters = new Dictionary<Parameter, double>
+                        {
+                            { Parameter.InitialPopulationSize, 20 }
+                        },
+                    },
+                    new OptimizerSpecification
+                    {
+                        Algorithm = "MIMIC",
+                        Parameters = new Dictionary<Parameter, double>
+                        {
+                            { Parameter.InitialPopulationSize, 30 }
                         },
                     }
                 },
@@ -55,30 +81,35 @@ namespace MscThesis.CLI
                 }
             };
 
-            var result = runner.Run(spec);
+            var timer = new Stopwatch();
+            timer.Start();
 
-            Console.WriteLine($"Fittest: {result.Fittest}");
+            var test = runner.Run(spec);
+            var task = Task.Run(async () => await test.Execute());
+            task.Wait();
 
-            foreach (var testCase in result.GetOptimizerNames())
+            timer.Stop();
+            var time = timer.Elapsed;
+
+            Console.WriteLine($"Time elapsed: {time.TotalSeconds} seconds");
+            
+            Console.WriteLine($"Fittest: {test.Fittest.Value}");
+
+            foreach (var item in test.Items)
             {
-                Console.WriteLine($"{testCase}:");
-
-                foreach (var property in result.GetItemProperties(testCase))
-                {
-                    var value = result.GetItemValue(testCase, property);
-                    Console.WriteLine($"{property}: {value}");
-                }
-
-                foreach (var property in result.GetSeriesProperties(testCase))
-                {
-                    var values = result.GetSeriesValues(testCase, property);
-                    Console.WriteLine($"{property}: {string.Join(", ", values)}");
-                }
-
-                Console.Write("\n");
+                var value = item.Observable.Value;
+                Console.WriteLine($"{item.Property}: {value}");
             }
 
+            Console.Write("\n");
+
+            foreach (var series in test.Series)
+            {
+                var points = series.Points;
+                Console.WriteLine($"{series.Property}: {string.Join(", ", points)}");
+            }
 
         }
+
     }
 }

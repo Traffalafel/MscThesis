@@ -1,8 +1,5 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Formats;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MscThesis.Runner.Results
 {

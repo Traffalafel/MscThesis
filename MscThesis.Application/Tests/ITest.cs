@@ -11,14 +11,32 @@ namespace MscThesis.Runner.Results
         public bool IsTerminated { get; }
         public Task Execute();
 
-        public IEnumerable<string> GetOptimizerNames();
-        public IEnumerable<Property> GetItemProperties(string optimizerName);
-        public IEnumerable<Property> GetSeriesProperties(string optimizerName);
-        public IEnumerable<Property> GetHistogramProperties(string optimizerName);
-
+        public ISet<string> OptimizerNames { get; }
         public IObservableValue<Individual<T>> Fittest { get; }
-        public IObservableValue<double> GetItemValue(string optimizerName, Property property);
-        public ObservableCollection<double> GetSeriesValues(string optimizerName, Property property);
-        public ObservableCollection<double> GetHistogramValues(string optimizerName, Property property);
+        public IEnumerable<ItemResult> Items { get; }
+        public IEnumerable<SeriesResult> Series { get; }
+        public IEnumerable<HistogramResult> Histograms { get; }
+    }
+
+    public abstract class Result
+    {
+        public string OptimizerName { get; set; }
+        public Property Property { get; set; }
+    }
+
+    public class ItemResult : Result
+    {
+        public IObservableValue<double> Observable { get; set; }
+    }
+
+    public class SeriesResult : Result
+    {
+        public Property XAxis { get; set; }
+        public ObservableCollection<(double x, double y)> Points { get; set; }
+    }
+
+    public class HistogramResult : Result
+    {
+        public ObservableCollection<double> Values { get; set; }
     }
 }

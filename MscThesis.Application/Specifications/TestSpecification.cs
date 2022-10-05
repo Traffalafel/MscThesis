@@ -7,6 +7,7 @@ namespace MscThesis.Runner.Specification
     {
         public int NumRuns { get; set; }
         public List<int> ProblemSizes { get; set; }
+        public double MaxParallelization { get; set; }
         public ProblemSpecification Problem { get; set; }
         public List<OptimizerSpecification> Optimizers { get; set; }
         public List<TerminationSpecification> Terminations { get; set; }

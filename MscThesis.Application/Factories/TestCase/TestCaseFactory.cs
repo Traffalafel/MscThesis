@@ -48,7 +48,17 @@ namespace MscThesis.Runner.Factories
                     return terminations;
                 });
 
-                var name = optimizerSpec.Name;
+                string name;
+                if (!string.IsNullOrWhiteSpace(optimizerSpec.Name))
+                {
+                    name = optimizerSpec.Name;
+                }
+                else
+                {
+                    var paramStrings = optimizerSpec.Parameters.Select(kv => $"{kv.Key}:{kv.Value}");
+                    var algoName = optimizerSpec.Algorithm;
+                    name = $"{algoName}_{string.Join('_', paramStrings)}";
+                }
 
                 yield return new TestCase<T>(name, buildOptimizer, buildProblem, buildTerminations); ;
             }

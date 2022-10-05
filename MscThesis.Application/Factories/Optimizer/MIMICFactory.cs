@@ -10,19 +10,19 @@ namespace MscThesis.Runner.Factories
 {
     public class MIMICFactory : OptimizerFactory<BitString>
     {
+        private static double _selectionQuartile = 0.5d;
+
         public override IEnumerable<Parameter> RequiredParameters => new List<Parameter> 
         { 
-            Parameter.InitialPopulationSize,
-            Parameter.SelectionQuartile,
+            Parameter.InitialPopulationSize
         };
 
         public override Optimizer<BitString> BuildOptimizer(OptimizerSpecification spec)
         {
             var initialPopSize = Convert.ToInt32(spec.Parameters[Parameter.InitialPopulationSize]);
-            var quartile = spec.Parameters[Parameter.SelectionQuartile];
 
             var random = BuildRandom(spec.Seed);
-            var selection = new QuartileSelection<BitString>(quartile);
+            var selection = new QuartileSelection<BitString>(_selectionQuartile);
             return new MIMIC(random, initialPopSize, selection);
         }
     }

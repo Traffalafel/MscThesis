@@ -3,6 +3,7 @@ using MscThesis.Core.Formats;
 using MscThesis.Runner.Factories;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,7 +27,7 @@ namespace MscThesis.Runner
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);
             var tests = factory.BuildTestCases(spec);
-            return GatherResults(tests, spec.ProblemSizes, spec.NumRuns);
+            return GatherResults(tests, spec.ProblemSizes, spec.NumRuns, spec.MaxParallelization);
         }
 
         public List<string> GetProblemNames()
@@ -113,8 +114,20 @@ namespace MscThesis.Runner
             return null;
         }
 
-        private ITest<T> GatherResults<T>(IEnumerable<ITestCase<T>> tests, IEnumerable<int> problemSizes, int numRuns) where T : InstanceFormat
+        private ITest<T> GatherResults<T>(IEnumerable<ITestCase<T>> tests, IEnumerable<int> problemSizes, int numRuns, double maxParallelization) where T : InstanceFormat
         {
+            var numSizes = problemSizes.Count();
+            var sizeRuns = numRuns;
+            var testRuns = sizeRuns * numSizes;
+
+            var testBatchSize = (int)Math.Ceiling(maxParallelization / testRuns);
+            maxParallelization /= testBatchSize;
+
+            var sizeBatchSize = (int)Math.Ceiling(maxParallelization / sizeRuns);
+            maxParallelization /= sizeBatchSize;
+
+            var runBatchSize = (int)maxParallelization;
+
             var results = new List<ITest<T>>();
             foreach (var test in tests)
             {
@@ -135,7 +148,7 @@ namespace MscThesis.Runner
                     }
                     else
                     {
-                        runResult = new MeanComposite<T>(runResults);
+                        runResult = new AverageComposite<T>(runResults, runBatchSize);
                     }
                     sizeResults.Add(runResult);
                 }
@@ -147,7 +160,7 @@ namespace MscThesis.Runner
                 }
                 else
                 {
-                    sizeResult = new SeriesComposite<T>(sizeResults);
+                    sizeResult = new SeriesComposite<T>(sizeResults, Property.ProblemSize, sizeBatchSize);
                 }
                 results.Add(sizeResult);
             }
@@ -158,7 +171,7 @@ namespace MscThesis.Runner
             }
             else
             {
-                return new CollectionComposite<T>(results);
+                return new CollectionComposite<T>(results, testBatchSize);
             }
         }
 
