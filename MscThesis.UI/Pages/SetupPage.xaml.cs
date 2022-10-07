@@ -1,23 +1,34 @@
+using MscThesis.UI.Behaviors;
 using MscThesis.UI.ViewModels;
 
 namespace MscThesis.UI.Pages;
 
 public partial class SetupPage : ContentPage
 {
-    public SetupVM VM { get; set; }
+    public SetupVM _vm { get; set; }
 
 	public SetupPage()
 	{
-		VM = new SetupVM();
+        _vm = new SetupVM();
 
-		BindingContext = VM;
+		BindingContext = _vm;
+
+        NumericValidator.VM = _vm;
+        ExpressionValidator.VM = _vm;
+        NameValidator.VM = _vm;
+        ParentBehavior.VM = _vm;
 
 		InitializeComponent();
 	}
 
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+    }
+
     public void AddOptimizer(object sender, EventArgs e)
     {
-        VM.AddOptimizer();
+        _vm.AddOptimizer();
     }
 
     public void RemoveOptimizer(object sender, EventArgs e)
@@ -26,7 +37,7 @@ public partial class SetupPage : ContentPage
         {
 		    var button = (Button)sender;
 		    var buttonVM = (OptimizerSetupVM)button.BindingContext;
-		    VM.Optimizers.Remove(buttonVM);
+		    _vm.Optimizers.Remove(buttonVM);
         }
         catch (Exception ex)
         {
@@ -36,16 +47,16 @@ public partial class SetupPage : ContentPage
 
 	public void AddTerminationCriterion(object sender, EventArgs e)
 	{
-        VM.AddTerminationCriterion();
+        _vm.AddTerminationCriterion();
     }
 
-    public void RemoveTerminationCriterion(object sender, EventArgs e)
+    public void RemoveTermination(object sender, EventArgs e)
     {
         try
         {
             var button = (Button)sender;
             var buttonVM = (TerminationSetupVM)button.BindingContext;
-            VM.Terminations.Remove(buttonVM);
+            _vm.Terminations.Remove(buttonVM);
         }
         catch (Exception ex)
         {
@@ -55,7 +66,7 @@ public partial class SetupPage : ContentPage
 
     public void Run(object sender, EventArgs e)
     {
-        var specification = VM.ToSpecification();
+        var specification = _vm.ToSpecification();
         Shell.Current.GoToAsync(nameof(ResultPage), new Dictionary<string, object>
         {
             ["Specification"] = specification

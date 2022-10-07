@@ -4,6 +4,7 @@
              x:Class="MscThesis.UI.Pages.SetupPage"
              xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
              xmlns:view="clr-namespace:MscThesis.UI.Views"
+             xmlns:behavior="clr-namespace:MscThesis.UI.Behaviors"
              x:DataType="vm:SetupVM"
              >
     <ScrollView>
@@ -16,19 +17,38 @@
                 <StackLayout Orientation="Vertical" >
                     <Label Text="Problem sizes:"/>
                     <StackLayout Orientation="Horizontal">
+                        
                         <Label Text="Start:"/>
-                        <Entry Text="{Binding ProblemSizeStart}"/>
+                        <Entry Text="{Binding ProblemSizeStart}">
+                            <Entry.Behaviors>
+                                <behavior:NumericValidator/>
+                            </Entry.Behaviors>
+                        </Entry>
 
                         <Label Text="Stop"/>
-                        <Entry Text="{Binding ProblemSizeStop}"/>
+                        <Entry Text="{Binding ProblemSizeStop}">
+                            <Entry.Behaviors>
+                                <behavior:NumericValidator/>
+                            </Entry.Behaviors>
+                        </Entry>
 
                         <Label Text="Step"/>
-                        <Entry Text="{Binding ProblemSizeStep}"/>
+                        <Entry Text="{Binding ProblemSizeStep}">
+                            <Entry.Behaviors>
+                                <behavior:NumericValidator/>
+                            </Entry.Behaviors>
+                        </Entry>
+                        
                     </StackLayout>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Number of runs:"/>
-                    <Entry Text="{Binding NumRuns}"/>
+                    <Entry Text="{Binding NumRuns}">
+                        <Entry.Behaviors>
+                            <behavior:NumericValidator/>
+                        </Entry.Behaviors>
+                    </Entry>
+
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Maximum number of parallel runs:"/>
@@ -41,7 +61,11 @@
                         <Label Text="Problem"/>
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Name:"></Label>
-                            <Picker ItemsSource="{Binding PossibleProblemNames}" SelectedItem="{Binding ProblemName}"/>
+                            <Picker ItemsSource="{Binding PossibleProblemNames}" SelectedItem="{Binding ProblemName}">
+                                <Picker.Behaviors>
+                                    <behavior:NameValidator/>
+                                </Picker.Behaviors>
+                            </Picker>
                         </StackLayout>
                         <view:ParameterListSetup Parameters="{Binding ProblemParameters}"/>
                     </StackLayout>
@@ -66,7 +90,11 @@
                                         <Label Text="Algorithm:"/>
                                         <Picker 
                                             ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleAlgorithmNames}" 
-                                            SelectedItem="{Binding Algorithm}"/>
+                                            SelectedItem="{Binding Algorithm}">
+                                            <Picker.Behaviors>
+                                                <behavior:NameValidator/>
+                                            </Picker.Behaviors>
+                                        </Picker>
                                     </StackLayout>
                                     <StackLayout Orientation="Horizontal">
                                         <Label Text="Seed"/>
@@ -101,12 +129,16 @@
                                         <Label>Name:</Label>
                                         <Picker 
                                             ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleTerminationNames}" 
-                                            SelectedItem="{Binding Name}"/>
+                                            SelectedItem="{Binding Name}">
+                                            <Picker.Behaviors>
+                                                <behavior:NameValidator/>
+                                            </Picker.Behaviors>
+                                        </Picker>
                                     </StackLayout>
                                     <view:ParameterListSetup Parameters="{Binding Parameters}"/>
                                     <Button 
                                         Text="Remove"
-                                        Clicked="RemoveOptimizer"/>
+                                        Clicked="RemoveTermination"/>
                                 </StackLayout>
                             </Border>
                         </ViewCell>
@@ -119,8 +151,27 @@
                 Clicked="AddTerminationCriterion"/>
 
             <Button 
+                
                 Text="Run!"
-                Clicked="Run"/>
+                Clicked="Run">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor" Value="Red"/>
+                        <Setter Property="IsEnabled" Value="False"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsValid.Value}" Value="True" TargetType="Button">
+                                <Setter Property="BackgroundColor" Value="White"/>
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsValid.Value}" Value="False" TargetType="Button">
+                                <Setter Property="BackgroundColor" Value="Red"/>
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                
+            </Button>
 
         </VerticalStackLayout>
     </ScrollView>

@@ -4,18 +4,21 @@
              x:Name="this"
              x:Class="MscThesis.UI.Views.ParameterListSetup"
              xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
+             xmlns:behavior="clr-namespace:MscThesis.UI.Behaviors"
              xmlns:view="clr-namespace:MscThesis.UI.Views">
 
     <Frame BindingContext="{x:Reference this}">
-        
+
         <ListView ItemsSource="{Binding Parameters}">
+            <ListView.Behaviors>
+                <behavior:ParentBehavior/>
+            </ListView.Behaviors>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell x:DataType="vm:ParameterVM">
                         <view:ParameterSetup 
                             Name="{Binding Name}" 
-                            Value="{Binding Value, Mode=TwoWay}"
-                            />
+                            Value="{Binding Value, Mode=TwoWay}"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

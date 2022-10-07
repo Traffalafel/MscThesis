@@ -16,7 +16,7 @@ namespace MscThesis.Core.Algorithms
         {
             get => new HashSet<Property>
             {
-                Property.MinEntropy
+                Property.AvgEntropy
             };
         }
 
@@ -45,6 +45,11 @@ namespace MscThesis.Core.Algorithms
         {
             var values = population.GetValues();
             var problemSize = population.ProblemSize;
+
+            if (problemSize == 0)
+            {
+                ;
+            }
 
             // Compute univariate empirical entropies
             var up = ComputeUnivariateProbabilities(values);
@@ -165,11 +170,11 @@ namespace MscThesis.Core.Algorithms
             population = _selectionOperator.Select(population, fitnessFunction);
 
             var jointIndices = Enumerable.Range(0, problemSize).Select(i => Enumerable.Range(i + 1, problemSize - i - 1).Select(j => (i, j))).SelectMany(x => x);
-            var minJointEntropy = jointIndices.Select(idxs => jointEntropies[idxs.i, idxs.j]).Min();
+            var avgJointEntropy = jointIndices.Select(idxs => jointEntropies[idxs.i, idxs.j]).Sum() / (problemSize*(problemSize+1))/2;
 
             var stats = new Dictionary<Property, double>()
             {
-                { Property.MinEntropy, minJointEntropy }
+                { Property.AvgEntropy, avgJointEntropy }
             };
 
             return new RunIteration<BitString>

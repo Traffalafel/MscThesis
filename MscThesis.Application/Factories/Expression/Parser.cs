@@ -9,6 +9,12 @@ namespace MscThesis.Runner.Factories.Expression
         private Symbol[][] _rules;
         private int[,] _parsingTable;
 
+        private static HashSet<Symbol> _terminals = new HashSet<Symbol>
+        {
+            Symbol.N, Symbol.Constant, Symbol.End, Symbol.ParensOpen, Symbol.ParensClose,
+            Symbol.Sqrt, Symbol.Log, Symbol.Plus, Symbol.Minus, Symbol.Asterisk, Symbol.Slash
+        };
+
         public Parser()
         {
             _rules = new Symbol[][]
@@ -33,43 +39,43 @@ namespace MscThesis.Runner.Factories.Expression
             _parsingTable = new int[numSymbols, numSymbols];
 
             // Row 1
-            _parsingTable[(int)Symbol.TERM, (int)Symbol.N] = 0;
-            _parsingTable[(int)Symbol.TERM, (int)Symbol.Constant] = 0;
-            _parsingTable[(int)Symbol.TERM, (int)Symbol.ParensOpen] = 0;
-            _parsingTable[(int)Symbol.TERM, (int)Symbol.Log] = 0;
-            _parsingTable[(int)Symbol.TERM, (int)Symbol.Sqrt] = 0;
+            _parsingTable[(int)Symbol.TERM, (int)Symbol.N] = 1;
+            _parsingTable[(int)Symbol.TERM, (int)Symbol.Constant] = 1;
+            _parsingTable[(int)Symbol.TERM, (int)Symbol.ParensOpen] = 1;
+            _parsingTable[(int)Symbol.TERM, (int)Symbol.Log] = 1;
+            _parsingTable[(int)Symbol.TERM, (int)Symbol.Sqrt] = 1;
 
             // Row 2
-            _parsingTable[(int)Symbol.TERM_E, (int)Symbol.Plus] = 1;
-            _parsingTable[(int)Symbol.TERM_E, (int)Symbol.Minus] = 2;
-            _parsingTable[(int)Symbol.TERM_E, (int)Symbol.End] = 3;
-            _parsingTable[(int)Symbol.TERM_E, (int)Symbol.ParensClose] = 3;
+            _parsingTable[(int)Symbol.TERM_E, (int)Symbol.Plus] = 2;
+            _parsingTable[(int)Symbol.TERM_E, (int)Symbol.Minus] = 3;
+            _parsingTable[(int)Symbol.TERM_E, (int)Symbol.End] = 4;
+            _parsingTable[(int)Symbol.TERM_E, (int)Symbol.ParensClose] = 4;
 
             // Row 3
-            _parsingTable[(int)Symbol.MUL, (int)Symbol.N] = 4;
-            _parsingTable[(int)Symbol.MUL, (int)Symbol.Constant] = 4;
-            _parsingTable[(int)Symbol.MUL, (int)Symbol.ParensOpen] = 4;
-            _parsingTable[(int)Symbol.MUL, (int)Symbol.Log] = 4;
-            _parsingTable[(int)Symbol.MUL, (int)Symbol.Sqrt] = 4;
+            _parsingTable[(int)Symbol.MUL, (int)Symbol.N] = 5;
+            _parsingTable[(int)Symbol.MUL, (int)Symbol.Constant] = 5;
+            _parsingTable[(int)Symbol.MUL, (int)Symbol.ParensOpen] = 5;
+            _parsingTable[(int)Symbol.MUL, (int)Symbol.Log] = 5;
+            _parsingTable[(int)Symbol.MUL, (int)Symbol.Sqrt] = 5;
 
             // Row 4
-            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Asterisk] = 5;
-            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Slash] = 6;
-            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.End] = 7;
-            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Plus] = 7;
-            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Minus] = 7;
-            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.ParensClose] = 7;
+            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Asterisk] = 6;
+            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Slash] = 7;
+            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.End] = 8;
+            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Plus] = 8;
+            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Minus] = 8;
+            _parsingTable[(int)Symbol.MUL_E, (int)Symbol.ParensClose] = 8;
 
             // Row 5
-            _parsingTable[(int)Symbol.EXPR, (int)Symbol.ParensOpen] = 8;
-            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Log] = 9;
-            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Sqrt] = 10;
-            _parsingTable[(int)Symbol.EXPR, (int)Symbol.N] = 11;
-            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Constant] = 11;
+            _parsingTable[(int)Symbol.EXPR, (int)Symbol.ParensOpen] = 9;
+            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Log] = 10;
+            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Sqrt] = 11;
+            _parsingTable[(int)Symbol.EXPR, (int)Symbol.N] = 12;
+            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Constant] = 12;
 
             // Row 6
-            _parsingTable[(int)Symbol.VAL, (int)Symbol.Constant] = 12;
-            _parsingTable[(int)Symbol.VAL, (int)Symbol.N] = 13;
+            _parsingTable[(int)Symbol.VAL, (int)Symbol.Constant] = 13;
+            _parsingTable[(int)Symbol.VAL, (int)Symbol.N] = 14;
         }
 
         public ParseTree Parse(Scanner scanner)
@@ -96,12 +102,13 @@ namespace MscThesis.Runner.Factories.Expression
 
             while (true)
             {
-                var symbol = scanner.Current.Symbol;
+                var foundSymbol = scanner.Current.Symbol;
                 var node = stack.Pop();
 
-                if (symbol == node.Token.Symbol)
+                var symbolStack = node.Token.Symbol;
+                if (foundSymbol == symbolStack)
                 {
-                    if (symbol == Symbol.End)
+                    if (foundSymbol == Symbol.End)
                     {
                         break;
                     }
@@ -111,9 +118,24 @@ namespace MscThesis.Runner.Factories.Expression
                 }
                 else
                 {
+                    if (IsTerminal(foundSymbol) && IsTerminal(symbolStack))
+                    {
+                        throw new Exception();
+                    }
+                    if (foundSymbol == Symbol.End)
+                    {
+                        continue;
+                    }
+
                     // Push rule to stack
-                    var ruleIdx = _parsingTable[(int)node.Token.Symbol, (int)symbol];
-                    var rule = _rules[ruleIdx];
+                    var ruleIdx = _parsingTable[(int)node.Token.Symbol, (int)foundSymbol];
+
+                    if (ruleIdx == 0)
+                    {
+                        throw new Exception();
+                    }
+
+                    var rule = _rules[ruleIdx-1];
                     foreach (var symb in rule.Reverse())
                     {
                         var newNode = new ParseTree
@@ -133,6 +155,12 @@ namespace MscThesis.Runner.Factories.Expression
 
             return root;
         }
+
+        private bool IsTerminal(Symbol s)
+        {
+            return _terminals.Contains(s);
+        }
+
     }
 
 }

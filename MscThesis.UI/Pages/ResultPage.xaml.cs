@@ -118,8 +118,15 @@ public partial class ResultPage : ContentPage
         //    });
         //}
 
-        _cancellationTokenSource = new CancellationTokenSource();
-		await result.Execute(_cancellationTokenSource.Token);
+        try
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+    		await result.Execute(_cancellationTokenSource.Token);
+        }
+        catch (Exception e)
+        {
+            ;
+        }
     }
 
     private List<LineSeries<(double,double)>> BuildSeries(IEnumerable<IGrouping<string, SeriesResult>> groups)

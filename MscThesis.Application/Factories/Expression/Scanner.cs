@@ -1,4 +1,7 @@
 ﻿
+using System;
+using System.Collections.Generic;
+
 namespace MscThesis.Runner.Factories.Expression
 {
     internal class Scanner
@@ -76,6 +79,10 @@ namespace MscThesis.Runner.Factories.Expression
                     _currentIdx += 1;
                     return;
                 case 'l':
+                    if (_content.Length - _currentIdx < 3 || _content.Substring(_currentIdx, 3) != "log")
+                    {
+                        throw new Exception();
+                    }
                     _current = new Token
                     {
                         Symbol = Symbol.Log
@@ -83,6 +90,10 @@ namespace MscThesis.Runner.Factories.Expression
                     _currentIdx += 3;
                     return;
                 case 's':
+                    if (_content.Length - _currentIdx < 4 ||  _content.Substring(_currentIdx, 4) != "sqrt")
+                    {
+                        throw new Exception();
+                    } 
                     _current = new Token
                     {
                         Symbol = Symbol.Sqrt
@@ -98,7 +109,11 @@ namespace MscThesis.Runner.Factories.Expression
                     return;
                 default:
                     var s = "";
-                    while (char.IsDigit(c) || c == '.' || c == 'E')
+                    if (!IsAllowedConstantChar(c))
+                    {
+                        throw new Exception();
+                    }
+                    do
                     {
                         if (c != 'E')
                         {
@@ -123,6 +138,8 @@ namespace MscThesis.Runner.Factories.Expression
                             c = _content[_currentIdx];
                         }
                     }
+                    while (IsAllowedConstantChar(c));
+
                     _current = new Token
                     {
                         Value = s,
@@ -131,5 +148,11 @@ namespace MscThesis.Runner.Factories.Expression
                     return;
             }
         }
+
+        private bool IsAllowedConstantChar(char c)
+        {
+            return char.IsDigit(c) || c == '.' || c == 'E';
+        }
+
     }
 }

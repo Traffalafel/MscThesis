@@ -24,4 +24,5 @@ public partial class ParameterSetup : ContentView
 	{
 		InitializeComponent();
 	}
+
 }

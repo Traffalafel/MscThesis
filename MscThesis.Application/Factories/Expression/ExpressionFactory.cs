@@ -7,6 +7,11 @@ namespace MscThesis.Runner.Factories.Expression
     {
         public IExpression BuildExpression(string expression)
         {
+            if (string.IsNullOrWhiteSpace(expression))
+            {
+                throw new Exception("Expression cannot be null or white-space");
+            }
+
             var scanner = new Scanner(expression);
             var parser = new Parser();
             var tree = parser.Parse(scanner);

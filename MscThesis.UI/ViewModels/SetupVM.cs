@@ -1,127 +1,9 @@
-﻿using MscThesis.Core;
-using MscThesis.Runner;
+﻿using MscThesis.Runner;
 using MscThesis.Runner.Specification;
 using System.Collections.ObjectModel;
-using System.Globalization;
 
 namespace MscThesis.UI.ViewModels
 {
-
-    public static class Utils
-    {
-        public static IDictionary<Parameter, string> ToSpecification(ObservableCollection<ParameterVM> vms)
-        {
-            try
-            {
-                return vms
-                    .GroupBy(vm => vm.Parameter)
-                    .ToDictionary(x => x.Key, x => x.First().Value);
-            }
-            catch (Exception e)
-            {
-                return new Dictionary<Parameter, string>();
-            }
-        }
-    }
-
-    public class ParameterVM
-    {
-        public string Name { get; set; }
-        public Parameter Parameter
-        {
-            get
-            {
-                Enum.TryParse(Name, out Parameter param);
-                return param;
-            }
-        }
-        public string Value { get; set; } = string.Empty;
-    }
-
-    public class TerminationSetupVM
-    {
-        private string _name = string.Empty;
-        private TestProvider _runner;
-
-        public TerminationSetupVM(TestProvider runner)
-        {
-            _runner = runner;
-        }
-
-        public ObservableCollection<ParameterVM> Parameters { get; set; } = new();
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                var paramsNew = _runner.GetTerminationParameters(value);
-                var vms = paramsNew.Select(p => new ParameterVM
-                {
-                    Name = p.ToString()
-                });
-                Parameters.Clear();
-                foreach (var vm in vms)
-                {
-                    Parameters.Add(vm);
-                }
-            }
-        }
-
-        public TerminationSpecification ToSpecification()
-        {
-            return new TerminationSpecification
-            {
-                Name = Name,
-                Parameters = Utils.ToSpecification(Parameters)
-            };
-        }
-    }
-
-    public class OptimizerSetupVM
-    {
-        private TestProvider _runner;
-        private string _algorithm = string.Empty;
-
-        public OptimizerSetupVM(TestProvider runner)
-        {
-            _runner = runner;
-        }
-
-        public string Seed { get; set; }
-        public string Name { get; set; }
-        public ObservableCollection<ParameterVM> Parameters { get; set; } = new();
-        public string Algorithm
-        {
-            get => _algorithm;
-            set
-            {
-                _algorithm = value;
-                var paramsNew = _runner.GetAlgorithmParameters(value);
-                var vms = paramsNew.Select(p => new ParameterVM
-                {
-                    Name = p.ToString()
-                });
-                Parameters.Clear();
-                foreach (var vm in vms)
-                {
-                    Parameters.Add(vm);
-                }
-            }
-        }
-
-        public OptimizerSpecification ToSpecification()
-        {
-            return new OptimizerSpecification
-            {
-                Seed = string.IsNullOrWhiteSpace(Seed) ? null : Convert.ToInt32(Seed),
-                Name = Name,
-                Algorithm = _algorithm,
-                Parameters = Utils.ToSpecification(Parameters)
-            };
-        }
-
-    }
 
     public class SetupVM
     {
@@ -154,12 +36,32 @@ namespace MscThesis.UI.ViewModels
                 {
                     Name = vm.ToString()
                 });
+
                 ProblemParameters.Clear();
                 foreach (var vm in vms)
                 {
                     ProblemParameters.Add(vm);
                 }
             } 
+        }
+
+        public ObservableValue<bool> IsValid { get; } = new ObservableValue<bool>(false);
+        private HashSet<IView> _invalidInputs = new HashSet<IView>();
+        public void InputValid(IView input)
+        {
+            _invalidInputs.Remove(input);
+            if (!IsValid.Value && _invalidInputs.Count == 0)
+            {
+                IsValid.Value = true;
+            }
+        }
+        public void InputInvalid(IView input)
+        {
+            _invalidInputs.Add(input);
+            if (IsValid.Value && _invalidInputs.Count > 0)
+            {
+                IsValid.Value = false;
+            }
         }
 
         public string NumRuns { get; set; } = "1";

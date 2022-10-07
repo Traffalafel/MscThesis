@@ -17,22 +17,14 @@ namespace MscThesis.CLI
 
             var spec = new TestSpecification
             {
-                NumRuns = 1,
+                NumRuns = 100,
                 ProblemSizes = new List<int>
                 {
                     100
                 },
-                MaxParallelization = 1,
+                MaxParallelization = 20,
                 Optimizers = new List<OptimizerSpecification>()
                 {
-                    //new OptimizerSpecification
-                    //{
-                    //    Algorithm = "MIMIC",
-                    //    Parameters = new Dictionary<Parameter, string>
-                    //    {
-                    //        { Parameter.InitialPopulationSize, "n" }
-                    //    },
-                    //},
                     new OptimizerSpecification
                     {
                         Algorithm = "MIMIC",
@@ -41,14 +33,22 @@ namespace MscThesis.CLI
                             { Parameter.InitialPopulationSize, "0.5*n" }
                         },
                     },
-                    //new OptimizerSpecification
-                    //{
-                    //    Algorithm = "MIMIC",
-                    //    Parameters = new Dictionary<Parameter, string>
-                    //    {
-                    //        { Parameter.InitialPopulationSize, "sqrt(n)" }
-                    //    },
-                    //}
+                    new OptimizerSpecification
+                    {
+                        Algorithm = "MIMIC",
+                        Parameters = new Dictionary<Parameter, string>
+                        {
+                            { Parameter.InitialPopulationSize, "1*n" }
+                        },
+                    },
+                    new OptimizerSpecification
+                    {
+                        Algorithm = "MIMIC",
+                        Parameters = new Dictionary<Parameter, string>
+                        {
+                            { Parameter.InitialPopulationSize, "2*n" }
+                        },
+                    },
                 },
                 Terminations = new List<TerminationSpecification>
                 {
@@ -64,7 +64,11 @@ namespace MscThesis.CLI
                 },
                 Problem = new ProblemSpecification
                 {
-                    Name = "OneMax"
+                    Name = "JumpOffsetSpike",
+                    Parameters = new Dictionary<Parameter, string>
+                    {
+                        { Parameter.GapSize, "0.1*n" }
+                    }
                 }
             };
 
