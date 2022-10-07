@@ -1,12 +1,12 @@
 ﻿using MscThesis.Core.Formats;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MscThesis.Runner.Results
 {
-    public class CollectionComposite<T> : Test<T>, ITest<T> where T : InstanceFormat
+    public class MultipleOptimizersComposite<T> : Test<T>, ITest<T> where T : InstanceFormat
     {
         private List<ITest<T>> _tests;
         private int _batchSize;
@@ -16,7 +16,7 @@ namespace MscThesis.Runner.Results
         private List<SeriesResult> _series;
         private List<HistogramResult> _hisograms;
 
-        public CollectionComposite(List<ITest<T>> tests, int batchSize)
+        public MultipleOptimizersComposite(List<ITest<T>> tests, int batchSize)
         {
             _tests = tests;
             _batchSize = batchSize;
@@ -39,7 +39,7 @@ namespace MscThesis.Runner.Results
         public IEnumerable<SeriesResult> Series => _series;
         public IEnumerable<HistogramResult> Histograms => _hisograms;
 
-        public async Task Execute()
+        public async Task Execute(CancellationToken cancellationToken)
         {
             var batches = _tests.Select((result, idx) => (result, idx))
                                   .GroupBy(x => x.idx / _batchSize)
@@ -47,7 +47,7 @@ namespace MscThesis.Runner.Results
 
             foreach (var batch in batches)
             {
-                var tasks = batch.Select(x => Task.Run(() => x.result.Execute()));
+                var tasks = batch.Select(x => Task.Run(() => x.result.Execute(cancellationToken)));
 
                 await Task.WhenAll(tasks);
             }

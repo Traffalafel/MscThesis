@@ -2,6 +2,7 @@
 using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Specification;
+using System;
 using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories.Problem
@@ -10,9 +11,9 @@ namespace MscThesis.Runner.Factories.Problem
     {
         public IEnumerable<Parameter> RequiredParameters => new List<Parameter>();
 
-        public FitnessFunction<BitString> BuildProblem(ProblemSpecification _)
+        public Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification _)
         {
-            return new OneMax();
+            return (_) => new OneMax();
         }
     }
 }

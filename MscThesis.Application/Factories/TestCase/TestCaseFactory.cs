@@ -3,6 +3,8 @@ using MscThesis.Core.Algorithms;
 using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.TerminationCriteria;
+using MscThesis.Runner.Factories.Expression;
+using MscThesis.Runner.Factories.Parameters;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,14 @@ namespace MscThesis.Runner.Factories
         public ISet<string> Problems => _problems.Keys.ToHashSet();
         public ISet<string> Terminations => _terminations.Keys.ToHashSet();
 
+        protected IParameterFactory _parameterFactory;
+
+        public TestCaseFactory()
+        {
+            var expressionFactory = new ExpressionFactory();
+            _parameterFactory = new ParameterFactory(expressionFactory);
+        }
+
         protected Dictionary<string, OptimizerFactory<T>> _optimizers;
         protected Dictionary<string, IProblemFactory<T>> _problems;
         protected Dictionary<string, ITerminationFactory<T>> _terminations;
@@ -24,25 +34,28 @@ namespace MscThesis.Runner.Factories
         {
             foreach (var optimizerSpec in spec.Optimizers)
             {
-                var buildOptimizer = new Func<Optimizer<T>>(() =>
+                var buildOptimizer = new Func<int, Optimizer<T>>((size) =>
                 {
                     var optimizerFactory = GetOptimizerFactory(optimizerSpec);
-                    return optimizerFactory.BuildOptimizer(optimizerSpec);
+                    var creator = optimizerFactory.BuildCreator(optimizerSpec);
+                    return creator.Invoke(size);
                 });
 
-                var buildProblem = new Func<FitnessFunction<T>>(() =>
+                var buildProblem = new Func<int, FitnessFunction<T>>((size) =>
                 {
                     var problemFactory = GetProblemFactory(spec.Problem);
-                    return problemFactory.BuildProblem(spec.Problem);
+                    var creator = problemFactory.BuildProblem(spec.Problem);
+                    return creator.Invoke(size);
                 });
 
-                var buildTerminations = new Func<IEnumerable<TerminationCriterion<T>>>(() =>
+                var buildTerminations = new Func<int, IEnumerable<TerminationCriterion<T>>>((size) =>
                 {
                     var terminations = new List<TerminationCriterion<T>>();
                     foreach (var terminationSpec in spec.Terminations)
                     {
                         var terminationFactory = GetTerminationFactory(terminationSpec);
-                        var termination = terminationFactory.BuildCriterion(terminationSpec);
+                        var creator = terminationFactory.BuildCriterion(terminationSpec);
+                        var termination = creator.Invoke(size);
                         terminations.Add(termination);
                     }
                     return terminations;
@@ -60,7 +73,7 @@ namespace MscThesis.Runner.Factories
                     name = $"{algoName}_{string.Join('_', paramStrings)}";
                 }
 
-                yield return new TestCase<T>(name, buildOptimizer, buildProblem, buildTerminations); ;
+                yield return new TestCase<T>(name, buildOptimizer, buildProblem, buildTerminations);
             }
         }
 

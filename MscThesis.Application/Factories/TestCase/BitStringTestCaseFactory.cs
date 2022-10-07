@@ -1,30 +1,26 @@
-﻿using MscThesis.Core.FitnessFunctions;
-using MscThesis.Core.Formats;
+﻿using MscThesis.Core.Formats;
 using MscThesis.Runner.Factories.Problem;
 using MscThesis.Runner.Factories.Termination;
-using MscThesis.Runner.Specification;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MscThesis.Runner.Factories
 {
     public class BitStringTestCaseFactory : TestCaseFactory<BitString>
     {
-        public BitStringTestCaseFactory()
+        public BitStringTestCaseFactory() : base()
         {
             _optimizers = new Dictionary<string, OptimizerFactory<BitString>>
             {
-                { "MIMIC", new MIMICFactory() }
+                { "MIMIC", new MIMICFactory(_parameterFactory) }
             };
             _problems = new Dictionary<string, IProblemFactory<BitString>>
             {
                 { "OneMax", new OneMaxFactory() },
-                { "JumpOffsetSpike", new JumpOffsetSpikeFactory() }
+                { "JumpOffsetSpike", new JumpOffsetSpikeFactory(_parameterFactory) }
             };
             _terminations = new Dictionary<string, ITerminationFactory<BitString>>
             {
-                { "Stagnation", new StagnationFactory<BitString>() }
+                { "Stagnation", new StagnationFactory<BitString>(_parameterFactory) }
             };
         }
     }

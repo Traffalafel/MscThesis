@@ -51,7 +51,7 @@ namespace MscThesis.Core.Algorithms
             var uniEntropies = new double[problemSize];
             for (int i = 0; i < problemSize; i++)
             {
-                uniEntropies[i] = ComputeEntropy(up[i]);
+                uniEntropies[i] = UnivariateEntropy(up[i]);
             }
 
             // Compute joint empirical entropies
@@ -59,15 +59,20 @@ namespace MscThesis.Core.Algorithms
             var jointEntropies = new double[problemSize, problemSize];
             for (int i = 0; i < problemSize; i++)
             {
-                for (int j = 0; j < problemSize; j++)
+                for (int j = i + 1; j < problemSize; j++)
                 {
                     var jp = jointProbs[i, j];
-                    var entropy =
-                        -ComputeJointEntropyTerm(jp[0], up[j])
-                        - ComputeJointEntropyTerm(jp[1], (1 - up[j]))
-                        - ComputeJointEntropyTerm(jp[2], up[j])
-                        - ComputeJointEntropyTerm(jp[3], (1 - up[j]));
-                    jointEntropies[i, j] = entropy;
+                    jointEntropies[i, j] = -jp.Sum(p =>
+                    {
+                        if (p <= 0 || p >= 1)
+                        {
+                            return 0.0;
+                        }
+                        else
+                        {
+                            return p * Math.Log2(p);
+                        }
+                    });
                 }
             }
 
@@ -83,7 +88,17 @@ namespace MscThesis.Core.Algorithms
             for (int pos = 1; pos < problemSize; pos++)
             {
                 var posPrev = ordering[pos - 1];
-                var (_, iMin) = remaining.Select(i => (jointEntropies[i, posPrev], i)).Min();
+                var (_, iMin) = remaining.Select(i =>
+                {
+                    if (i < posPrev)
+                    {
+                        return (jointEntropies[i, posPrev], i);
+                    }
+                    else
+                    {
+                        return (jointEntropies[posPrev, i], i);
+                    }
+                }).Min();
 
                 ordering[pos] = iMin;
                 remaining.Remove(iMin);
@@ -109,7 +124,16 @@ namespace MscThesis.Core.Algorithms
                     var position = ordering[k];
                     var prev = ordering[k - 1];
                     var prevVal = vals[prev];
-                    var joint = jointProbs[position, prev];
+
+                    double[] joint;
+                    if (position < prev)
+                    {
+                        joint = jointProbs[position, prev];
+                    }
+                    else
+                    {
+                        joint = jointProbs[prev, position];
+                    }
 
                     double p;
                     if (prevVal)
@@ -140,13 +164,12 @@ namespace MscThesis.Core.Algorithms
 
             population = _selectionOperator.Select(population, fitnessFunction);
 
-            var minUniEntropy = uniEntropies.Min();
-            var minJointEntropy = jointEntropies.Cast<double>().Min();
-            var minEntropy = Math.Min(minUniEntropy, minJointEntropy);
+            var jointIndices = Enumerable.Range(0, problemSize).Select(i => Enumerable.Range(i + 1, problemSize - i - 1).Select(j => (i, j))).SelectMany(x => x);
+            var minJointEntropy = jointIndices.Select(idxs => jointEntropies[idxs.i, idxs.j]).Min();
 
             var stats = new Dictionary<Property, double>()
             {
-                { Property.MinEntropy, minEntropy }
+                { Property.MinEntropy, minJointEntropy }
             };
 
             return new RunIteration<BitString>
@@ -154,15 +177,6 @@ namespace MscThesis.Core.Algorithms
                 Population = population,
                 Statistics = stats
             };
-        }
-
-        private double ComputeJointEntropyTerm(double pXY, double pX)
-        {
-            if (pXY == 0 || pX == 0)
-            {
-                return 0;
-            }
-            return pXY * Math.Log2(pXY / pX);
         }
 
         private double[] ComputeUnivariateProbabilities(IEnumerable<BitString> instances)
@@ -216,7 +230,7 @@ namespace MscThesis.Core.Algorithms
                 var vals = instance.Values;
                 for (int i = 0; i < problemSize; i++)
                 {
-                    for (int j = 0; j < problemSize; j++)
+                    for (int j = i+1; j < problemSize; j++)
                     {
                         if (!vals[i] && !vals[j]) counts[i,j,0]++;
                         if (!vals[i] && vals[j]) counts[i,j,1]++;
@@ -229,7 +243,7 @@ namespace MscThesis.Core.Algorithms
             var probabilities = new double[problemSize,problemSize][];
             for (var i = 0; i < problemSize; i++)
             {
-                for (var j = 0; j < problemSize; j++)
+                for (var j = i+1; j < problemSize; j++)
                 {
                     probabilities[i, j] = new double[4];
                     for (var k = 0; k < 4; k++)
@@ -243,9 +257,20 @@ namespace MscThesis.Core.Algorithms
             return probabilities;
         }
 
-        private double ComputeEntropy(double p)
+        private double UnivariateEntropy(double p)
         {
-            return -p * Math.Log2(p) - (1-p) * Math.Log2(1 - p);
+            if (p <= 0)
+            {
+                return 0.0;
+            }
+            if (p >= 1)
+            {
+                return 0.0;
+            }
+            else
+            {
+                return -p * Math.Log2(p) - (1-p) * Math.Log2(1 - p);
+            }
         }
 
     }

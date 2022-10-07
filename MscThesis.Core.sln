@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MscThesis.UI", "MscThesis.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MscThesis.Runner", "MscThesis.Application\MscThesis.Runner.csproj", "{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MscThesis.Runner.Test", "MscThesis.Runner.Test\MscThesis.Runner.Test.csproj", "{A4F46AC2-F409-44A2-BC79-ADF5E54AA9E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31A370E7-FA6A-4BB4-BEDA-2EC0E335F751}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4F46AC2-F409-44A2-BC79-ADF5E54AA9E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4F46AC2-F409-44A2-BC79-ADF5E54AA9E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4F46AC2-F409-44A2-BC79-ADF5E54AA9E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4F46AC2-F409-44A2-BC79-ADF5E54AA9E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

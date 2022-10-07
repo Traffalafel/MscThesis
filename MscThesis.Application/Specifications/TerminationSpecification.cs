@@ -6,6 +6,6 @@ namespace MscThesis.Runner.Specification
     public class TerminationSpecification
     {
         public string Name { get; set; }
-        public IDictionary<Parameter, double> Parameters { get; set; }
+        public IDictionary<Parameter, string> Parameters { get; set; }
     }
 }

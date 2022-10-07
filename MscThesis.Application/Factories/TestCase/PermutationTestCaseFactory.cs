@@ -16,7 +16,7 @@ namespace MscThesis.Runner.Factories
             };
             _terminations = new Dictionary<string, ITerminationFactory<Permutation>>
             {
-                { "Stagnation", new StagnationFactory<Permutation>() }
+                { "Stagnation", new StagnationFactory<Permutation>(_parameterFactory) }
             };
         }
     }

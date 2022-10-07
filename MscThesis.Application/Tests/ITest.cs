@@ -2,6 +2,7 @@
 using MscThesis.Core.Formats;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
@@ -9,7 +10,7 @@ namespace MscThesis.Runner.Results
     public interface ITest<out T> where T : InstanceFormat
     {
         public bool IsTerminated { get; }
-        public Task Execute();
+        public Task Execute(CancellationToken cancellationToken);
 
         public ISet<string> OptimizerNames { get; }
         public IObservableValue<Individual<T>> Fittest { get; }

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace MscThesis.CLI
 {
@@ -18,66 +17,54 @@ namespace MscThesis.CLI
 
             var spec = new TestSpecification
             {
-                NumRuns = 30,
+                NumRuns = 1,
                 ProblemSizes = new List<int>
                 {
-                    10,
-                    20,
-                    30,
-                    40,
-                    50,
-                    60,
-                    70,
-                    80,
-                    90,
                     100
                 },
+                MaxParallelization = 1,
                 Optimizers = new List<OptimizerSpecification>()
                 {
+                    //new OptimizerSpecification
+                    //{
+                    //    Algorithm = "MIMIC",
+                    //    Parameters = new Dictionary<Parameter, string>
+                    //    {
+                    //        { Parameter.InitialPopulationSize, "n" }
+                    //    },
+                    //},
                     new OptimizerSpecification
                     {
                         Algorithm = "MIMIC",
-                        Parameters = new Dictionary<Parameter, double>
+                        Parameters = new Dictionary<Parameter, string>
                         {
-                            { Parameter.InitialPopulationSize, 10 }
+                            { Parameter.InitialPopulationSize, "0.5*n" }
                         },
                     },
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Parameters = new Dictionary<Parameter, double>
-                        {
-                            { Parameter.InitialPopulationSize, 20 }
-                        },
-                    },
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Parameters = new Dictionary<Parameter, double>
-                        {
-                            { Parameter.InitialPopulationSize, 30 }
-                        },
-                    }
+                    //new OptimizerSpecification
+                    //{
+                    //    Algorithm = "MIMIC",
+                    //    Parameters = new Dictionary<Parameter, string>
+                    //    {
+                    //        { Parameter.InitialPopulationSize, "sqrt(n)" }
+                    //    },
+                    //}
                 },
                 Terminations = new List<TerminationSpecification>
                 {
                     new TerminationSpecification
                     {
                         Name = "Stagnation",
-                        Parameters = new Dictionary<Parameter, double>
+                        Parameters = new Dictionary<Parameter, string>
                         {
-                            { Parameter.MaxIterations, 10 },
-                            { Parameter.Epsilon, 10E-6 }
+                            { Parameter.MaxIterations, "10" },
+                            { Parameter.Epsilon, "10E-6" }
                         }
                     }
                 },
                 Problem = new ProblemSpecification
                 {
-                    Name = "OneMax",
-                    Parameters = new Dictionary<Parameter, double>
-                    {
-                        // No params for OneMax
-                    }
+                    Name = "OneMax"
                 }
             };
 
@@ -85,8 +72,12 @@ namespace MscThesis.CLI
             timer.Start();
 
             var test = runner.Run(spec);
-            var task = Task.Run(async () => await test.Execute());
-            task.Wait();
+
+            using (var source = new CancellationTokenSource())
+            {
+                var task = Task.Run(async () => await test.Execute(source.Token));
+                task.Wait();
+            }
 
             timer.Stop();
             var time = timer.Elapsed;

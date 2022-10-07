@@ -148,7 +148,7 @@ namespace MscThesis.Runner
                     }
                     else
                     {
-                        runResult = new AverageComposite<T>(runResults, runBatchSize);
+                        runResult = new MultipleRunsComposite<T>(runResults, runBatchSize);
                     }
                     sizeResults.Add(runResult);
                 }
@@ -160,7 +160,7 @@ namespace MscThesis.Runner
                 }
                 else
                 {
-                    sizeResult = new SeriesComposite<T>(sizeResults, Property.ProblemSize, sizeBatchSize);
+                    sizeResult = new MultipleSizesComposite<T>(sizeResults, Property.ProblemSize, sizeBatchSize);
                 }
                 results.Add(sizeResult);
             }
@@ -171,7 +171,7 @@ namespace MscThesis.Runner
             }
             else
             {
-                return new CollectionComposite<T>(results, testBatchSize);
+                return new MultipleOptimizersComposite<T>(results, testBatchSize);
             }
         }
 

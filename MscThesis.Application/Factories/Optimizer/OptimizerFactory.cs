@@ -11,7 +11,7 @@ namespace MscThesis.Runner.Factories
     {
         public abstract IEnumerable<Parameter> RequiredParameters { get; }
 
-        public abstract Optimizer<T> BuildOptimizer(OptimizerSpecification spec);
+        public abstract Func<int, Optimizer<T>> BuildCreator(OptimizerSpecification spec);
 
         protected Random BuildRandom(int? seed)
         {

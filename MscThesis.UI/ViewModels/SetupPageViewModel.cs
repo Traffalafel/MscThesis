@@ -9,17 +9,17 @@ namespace MscThesis.UI.ViewModels
 
     public static class Utils
     {
-        public static IDictionary<Parameter, double> ToSpecification(ObservableCollection<ParameterVM> vms)
+        public static IDictionary<Parameter, string> ToSpecification(ObservableCollection<ParameterVM> vms)
         {
             try
             {
                 return vms
                     .GroupBy(vm => vm.Parameter)
-                    .ToDictionary(x => x.Key, x => double.Parse(x.First().Value, CultureInfo.InvariantCulture));
+                    .ToDictionary(x => x.Key, x => x.First().Value);
             }
             catch (Exception e)
             {
-                return new Dictionary<Parameter, double>();
+                return new Dictionary<Parameter, string>();
             }
         }
     }
@@ -212,21 +212,30 @@ namespace MscThesis.UI.ViewModels
             var stop = Convert.ToInt32(stopStr);
             var step = Convert.ToInt32(stepStr);
 
+            if (start <= 0 || stop <= 0)
+            {
+                throw new Exception("Start and stop must both be strictly positive.");
+            }
             if (stop < start)
             {
-                throw new Exception("");
+                throw new Exception("Start must be lower than stop.");
             }
-            if (step <= 0)
+            if (step < 0)
             {
-                throw new Exception("");
+                throw new Exception("Cannot have negative step size.");
+            }
+            if (step == 0 && start != stop)
+            {
+                throw new Exception("Start and stop must be equal for step size zero.");
             }
 
             var c = start;
-            while (c <= stop)
+            do
             {
                 yield return c;
                 c += step;
             }
+            while (c < stop);
         }
 
     }

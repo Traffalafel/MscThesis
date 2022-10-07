@@ -3,11 +3,12 @@ using MscThesis.Core.Formats;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
-    public class SeriesComposite<T> : Test<T>, ITest<T> where T : InstanceFormat
+    public class MultipleSizesComposite<T> : Test<T>, ITest<T> where T : InstanceFormat
     {
         private List<ITest<T>> _tests;
         private Property _xAxis;
@@ -29,7 +30,7 @@ namespace MscThesis.Runner.Results
         }).SelectMany(x => x);
         public IEnumerable<HistogramResult> Histograms => new List<HistogramResult>();
 
-        public SeriesComposite(List<ITest<T>> tests, Property xAxis, int batchSize)
+        public MultipleSizesComposite(List<ITest<T>> tests, Property xAxis, int batchSize)
         {
             _tests = tests;
             _xAxis = xAxis;
@@ -50,7 +51,7 @@ namespace MscThesis.Runner.Results
             }
         }
 
-        public async Task Execute()
+        public async Task Execute(CancellationToken cancellationToken)
         {
             var batches = _tests.Select((result, idx) => (result, idx))
                                   .GroupBy(x => x.idx / _batchSize)
@@ -60,7 +61,7 @@ namespace MscThesis.Runner.Results
             {
                 var remainingTasks = batch.Select(async x =>
                 {
-                    await x.result.Execute();
+                    await x.result.Execute(cancellationToken);
                     return x.result;
                 }).ToList();
 
@@ -68,6 +69,11 @@ namespace MscThesis.Runner.Results
                 {
                     var completedTask = await Task.WhenAny(remainingTasks);
                     var result = completedTask.Result;
+
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return; // stop execution
+                    }
 
                     TryUpdateFittest(result.Fittest?.Value);
 

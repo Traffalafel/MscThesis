@@ -4,12 +4,14 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using MscThesis.Runner.Results;
 using MscThesis.UI.ViewModels;
 using SkiaSharp;
+using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.Pages;
 
 public partial class ResultPage : ContentPage
 {
 	private ResultVM _vm;
+    private CancellationTokenSource _cancellationTokenSource;
 
 	public ResultPage(ResultVM vm)
 	{
@@ -17,6 +19,14 @@ public partial class ResultPage : ContentPage
 		BindingContext = vm;
 		_vm = vm;
 	}
+
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        base.OnNavigatedFrom(args);
+
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
+    }
 
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
@@ -42,24 +52,26 @@ public partial class ResultPage : ContentPage
             Layout.Add(itemLabel);
         }
 
-        var groups = result.Series.GroupBy(series => series.Property);
-        foreach (var group in groups)
+        var propertyGroups = result.Series.GroupBy(series => series.Property);
+        foreach (var propertyGroup in propertyGroups)
         {
-            var propName = group.Key.ToString();
+            var propName = propertyGroup.Key.ToString();
 
-            var first = group.First();
+            var optimizerGroups = propertyGroup.GroupBy(group => group.OptimizerName);
+            var series = BuildSeries(optimizerGroups);
+
             Layout.Add(new Label
             {
                 Text = $"{propName}:"
             });
-            Layout.Add(new CartesianChart
+            var chart = new CartesianChart
             {
-                Series = CreateSeries(group),
+                Series = series,
                 XAxes = new List<Axis>
                 {
                     new Axis
                     {
-                        Name = first.XAxis.ToString(),
+                        Name = propertyGroup.First().XAxis.ToString(),
                         NamePaint = new SolidColorPaint { Color = SKColors.White },
                         NameTextSize = 20
                     }
@@ -68,19 +80,20 @@ public partial class ResultPage : ContentPage
                 {
                     new Axis
                     {
-                        Name = group.Key.ToString(),
+                        Name = propertyGroup.Key.ToString(),
                         NamePaint = new SolidColorPaint { Color = SKColors.White },
                         NameTextSize = 20
                     }
                 },
                 LegendPosition = LiveChartsCore.Measure.LegendPosition.Bottom,
                 LegendFontSize = 12,
-                LegendTextBrush = Color.FromRgb(255,255,255),
-                LegendBackground = Color.FromRgb(0,0,0),
+                LegendTextBrush = Color.FromRgb(255, 255, 255),
+                LegendBackground = Color.FromRgb(0, 0, 0),
                 LegendOrientation = LiveChartsCore.Measure.LegendOrientation.Vertical,
                 HeightRequest = 500,
                 WidthRequest = 700
-            }); ;
+            };
+            Layout.Add(chart);
 
         }
 
@@ -105,21 +118,45 @@ public partial class ResultPage : ContentPage
         //    });
         //}
 
-		await result.Execute();
+        _cancellationTokenSource = new CancellationTokenSource();
+		await result.Execute(_cancellationTokenSource.Token);
     }
 
-    private List<LineSeries<(double,double)>> CreateSeries(IEnumerable<SeriesResult> results)
+    private List<LineSeries<(double,double)>> BuildSeries(IEnumerable<IGrouping<string, SeriesResult>> groups)
     {
-        return results.Select(series => new LineSeries<(double, double)>
+        return groups.Select(group =>
         {
-            Values = series.Points,
-            Mapping = (value, point) =>
+            if (group.Count() > 1)
             {
-                point.PrimaryValue = value.Item2;
-                point.SecondaryValue = value.Item1;
-            },
-            Fill = null,
-            Name = series.OptimizerName
+                // Points are not connected
+                return new LineSeries<(double, double)>
+                {
+                    Values = group.SelectMany(x => x.Points),
+                    Mapping = (value, point) =>
+                    {
+                        point.PrimaryValue = value.Item2;
+                        point.SecondaryValue = value.Item1;
+                    },
+                    Stroke = new SolidColorPaint { Color = SKColors.Transparent },
+                    Fill = null,
+                    Name = group.Key
+                };
+            }
+            else
+            {
+                // Points are connected
+                return new LineSeries<(double, double)>
+                {
+                    Values = group.First().Points,
+                    Mapping = (value, point) =>
+                    {
+                        point.PrimaryValue = value.Item2;
+                        point.SecondaryValue = value.Item1;
+                    },
+                    Fill = null,
+                    Name = group.Key
+                };
+            }
         }).ToList();
     }
 

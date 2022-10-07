@@ -6,11 +6,12 @@ using MscThesis.Core.FitnessFunctions;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 
 namespace MscThesis.Runner.Results
 {
     // 1 run of 1 optimizer on 1 problem of 1 size
-    public class TestRun<T> : Test<T>, ITest<T> where T : InstanceFormat
+    public class SingleRun<T> : Test<T>, ITest<T> where T : InstanceFormat
     {
         private string _optimizerName;
         private Dictionary<Property, ObservableValue<double>> _itemData;
@@ -18,7 +19,7 @@ namespace MscThesis.Runner.Results
         private IEnumerable<RunIteration<T>> _iterations;
         private FitnessFunction<T> _fitnessFunction;
 
-        public TestRun(IEnumerable<RunIteration<T>> iterations, FitnessFunction<T> fitnessFunction, string optimizerName, ISet<Property> statisticsProperties, int problemSize)
+        public SingleRun(IEnumerable<RunIteration<T>> iterations, FitnessFunction<T> fitnessFunction, string optimizerName, ISet<Property> statisticsProperties, int problemSize)
         {
             _iterations = iterations;
             _fitnessFunction = fitnessFunction;
@@ -38,13 +39,18 @@ namespace MscThesis.Runner.Results
             _itemData[Property.ProblemSize] = new ObservableValue<double>(problemSize);
         }
 
-        public async Task Execute()
+        public async Task Execute(CancellationToken cancellationToken)
         {
             var numIterations = 0;
             await Task.Run(() =>
             {
                 foreach (var iteration in _iterations)
                 {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return; // stop execution
+                    }
+
                     foreach (var (key, value) in iteration.Statistics)
                     {
                         _seriesData[key].Add((numIterations, value));

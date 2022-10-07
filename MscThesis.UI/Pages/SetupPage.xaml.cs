@@ -22,9 +22,16 @@ public partial class SetupPage : ContentPage
 
     public void RemoveOptimizer(object sender, EventArgs e)
     {
-		var button = (Button)sender;
-		var buttonVM = (OptimizerSetupVM)button.BindingContext;
-		VM.Optimizers.Remove(buttonVM);
+        try
+        {
+		    var button = (Button)sender;
+		    var buttonVM = (OptimizerSetupVM)button.BindingContext;
+		    VM.Optimizers.Remove(buttonVM);
+        }
+        catch (Exception ex)
+        {
+            ;
+        }
     }
 
 	public void AddTerminationCriterion(object sender, EventArgs e)
@@ -34,9 +41,16 @@ public partial class SetupPage : ContentPage
 
     public void RemoveTerminationCriterion(object sender, EventArgs e)
     {
-        var button = (Button)sender;
-        var buttonVM = (TerminationSetupVM)button.BindingContext;
-        VM.Terminations.Remove(buttonVM);
+        try
+        {
+            var button = (Button)sender;
+            var buttonVM = (TerminationSetupVM)button.BindingContext;
+            VM.Terminations.Remove(buttonVM);
+        }
+        catch (Exception ex)
+        {
+            ;
+        }
     }
 
     public void Run(object sender, EventArgs e)

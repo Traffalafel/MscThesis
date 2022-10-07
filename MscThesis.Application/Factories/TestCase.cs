@@ -12,11 +12,11 @@ namespace MscThesis.Runner.Factories
     public class TestCase<T> : ITestCase<T> where T : InstanceFormat
     {
         private readonly string _name;
-        private readonly Func<Optimizer<T>> _buildOptimizer;
-        private readonly Func<FitnessFunction<T>> _buildProblem;
-        private readonly Func<IEnumerable<TerminationCriterion<T>>> _buildTerminations;
+        private readonly Func<int, Optimizer<T>> _buildOptimizer;
+        private readonly Func<int, FitnessFunction<T>> _buildProblem;
+        private readonly Func<int, IEnumerable<TerminationCriterion<T>>> _buildTerminations;
 
-        public TestCase(string name, Func<Optimizer<T>> buildOptimizer, Func<FitnessFunction<T>> buildProblem, Func<IEnumerable<TerminationCriterion<T>>> buildTerminations)
+        public TestCase(string name, Func<int, Optimizer<T>> buildOptimizer, Func<int, FitnessFunction<T>> buildProblem, Func<int, IEnumerable<TerminationCriterion<T>>> buildTerminations)
         {
             _name = name;
             _buildOptimizer = buildOptimizer;
@@ -26,16 +26,16 @@ namespace MscThesis.Runner.Factories
 
         public ITest<T> CreateRun(int size)
         {
-            var optimizer = _buildOptimizer.Invoke();
-            var problem = _buildProblem.Invoke();
-            var terminations = _buildTerminations.Invoke();
+            var optimizer = _buildOptimizer.Invoke(size);
+            var problem = _buildProblem.Invoke(size);
+            var terminations = _buildTerminations.Invoke(size);
 
             var iterations = optimizer.Run(problem, size);
             foreach (var criterion in terminations)
             {
                 iterations = criterion.AddTerminationCriterion(iterations);
             }
-            return new TestRun<T>(iterations, problem, _name, optimizer.StatisticsProperties, size);
+            return new SingleRun<T>(iterations, problem, _name, optimizer.StatisticsProperties, size);
         }
     }
 }
