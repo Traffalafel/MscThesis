@@ -64,6 +64,13 @@ namespace MscThesis.Runner.Factories.Expression
                     };
                     _currentIdx += 1;
                     return;
+                case '^':
+                    _current = new Token
+                    {
+                        Symbol = Symbol.Power
+                    };
+                    _currentIdx += 1;
+                    return;
                 case '(':
                     _current = new Token
                     {

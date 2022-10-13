@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace MscThesis.Runner.Factories.Expression
 {
     internal class DivisionExpression : IExpression
@@ -14,7 +16,13 @@ namespace MscThesis.Runner.Factories.Expression
 
         public double Compute(int n)
         {
-            return _e1.Compute(n) / _e2.Compute(n);
+            var denominator = _e2.Compute(n);
+            if (denominator == 0.0)
+            {
+                throw new Exception("Cannot divide by zero");
+            }
+
+            return _e1.Compute(n) / denominator;
         }
     }
 }

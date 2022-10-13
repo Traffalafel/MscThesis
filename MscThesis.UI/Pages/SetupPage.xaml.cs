@@ -1,5 +1,6 @@
 using MscThesis.UI.Behaviors;
 using MscThesis.UI.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.Pages;
 
@@ -12,11 +13,6 @@ public partial class SetupPage : ContentPage
         _vm = new SetupVM();
 
 		BindingContext = _vm;
-
-        NumericValidator.VM = _vm;
-        ExpressionValidator.VM = _vm;
-        NameValidator.VM = _vm;
-        ParentBehavior.VM = _vm;
 
 		InitializeComponent();
 	}
@@ -33,16 +29,9 @@ public partial class SetupPage : ContentPage
 
     public void RemoveOptimizer(object sender, EventArgs e)
     {
-        try
-        {
-		    var button = (Button)sender;
-		    var buttonVM = (OptimizerSetupVM)button.BindingContext;
-		    _vm.Optimizers.Remove(buttonVM);
-        }
-        catch (Exception ex)
-        {
-            ;
-        }
+		var button = (Button)sender;
+		var buttonVM = (OptimizerSetupVM)button.BindingContext;
+		_vm.Optimizers.Remove(buttonVM);
     }
 
 	public void AddTerminationCriterion(object sender, EventArgs e)
@@ -52,24 +41,24 @@ public partial class SetupPage : ContentPage
 
     public void RemoveTermination(object sender, EventArgs e)
     {
-        try
-        {
-            var button = (Button)sender;
-            var buttonVM = (TerminationSetupVM)button.BindingContext;
-            _vm.Terminations.Remove(buttonVM);
-        }
-        catch (Exception ex)
-        {
-            ;
-        }
+        var button = (Button)sender;
+        var buttonVM = (TerminationSetupVM)button.BindingContext;
+        _vm.Terminations.Remove(buttonVM);
     }
 
     public void Run(object sender, EventArgs e)
     {
-        var specification = _vm.ToSpecification();
-        Shell.Current.GoToAsync(nameof(ResultPage), new Dictionary<string, object>
+        try
         {
-            ["Specification"] = specification
-        });
+            var specification = _vm.ToSpecification();
+            Shell.Current.GoToAsync(nameof(ResultPage), new Dictionary<string, object>
+            {
+                ["Specification"] = specification
+            });
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Error", "Please fix any errors before proceeding.", "Close");
+        }
 	}
 }

@@ -15,6 +15,7 @@ namespace MscThesis.Runner.Factories.Expression
         Asterisk,
         Slash,
         End,
+        Power,
 
         // Non-terminals
         TERM,
@@ -22,6 +23,7 @@ namespace MscThesis.Runner.Factories.Expression
         MUL,
         MUL_E,
         EXPR,
+        POW,
         VAL
     }
 }

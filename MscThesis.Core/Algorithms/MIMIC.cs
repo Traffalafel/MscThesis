@@ -10,7 +10,9 @@ namespace MscThesis.Core.Algorithms
     public class MIMIC : Optimizer<BitString>
     {        
         private readonly ISelectionOperator<BitString> _selectionOperator;
-        private readonly int _initialPopulationSize;
+        private readonly int _populationSize;
+
+        private Population<BitString> _population;
 
         public override ISet<Property> StatisticsProperties
         {
@@ -22,64 +24,33 @@ namespace MscThesis.Core.Algorithms
 
         public MIMIC(
             Random random,
-            int initialPopulationSize, 
-            ISelectionOperator<BitString> selectionOperator) : base(random)
+            int problemSize,
+            int populationSize, 
+            ISelectionOperator<BitString> selectionOperator) : base(random, problemSize)
         {
             _selectionOperator = selectionOperator;
-            _initialPopulationSize = initialPopulationSize;
-        }
+            _populationSize = populationSize;
 
-        protected override Population<BitString> Initialize(int problemSize)
-        {
             // Initialize population uniformly
-            var population = new Population<BitString>();
-            for (int i = 0; i < _initialPopulationSize; i++)
+            _population = new Population<BitString>();
+            for (int i = 0; i < _populationSize; i++)
             {
                 var bs = BitString.CreateUniform(problemSize, _random);
-                population.Add(new IndividualImpl<BitString>(bs));
+                _population.Add(new IndividualImpl<BitString>(bs));
             }
-            return population;
         }
 
-        protected override RunIteration<BitString> NextIteration(Population<BitString> population, FitnessFunction<BitString> fitnessFunction)
+        protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
-            var values = population.GetValues();
-            var problemSize = population.ProblemSize;
+            var problemSize = _population.ProblemSize;
 
-            if (problemSize == 0)
-            {
-                ;
-            }
+            var uniCounts = Utils.GetUniCounts(_population);
+            var uniFreqs = Utils.ComputeUniFrequencies(uniCounts, _population.Size);
+            var uniEntropies = Utils.ComputeUniEntropies(_population);
 
-            // Compute univariate empirical entropies
-            var up = ComputeUnivariateProbabilities(values);
-            var uniEntropies = new double[problemSize];
-            for (int i = 0; i < problemSize; i++)
-            {
-                uniEntropies[i] = UnivariateEntropy(up[i]);
-            }
-
-            // Compute joint empirical entropies
-            var jointProbs = ComputeJointProbabilities(values);
-            var jointEntropies = new double[problemSize, problemSize];
-            for (int i = 0; i < problemSize; i++)
-            {
-                for (int j = i + 1; j < problemSize; j++)
-                {
-                    var jp = jointProbs[i, j];
-                    jointEntropies[i, j] = -jp.Sum(p =>
-                    {
-                        if (p <= 0 || p >= 1)
-                        {
-                            return 0.0;
-                        }
-                        else
-                        {
-                            return p * Math.Log2(p);
-                        }
-                    });
-                }
-            }
+            var jointCounts = Utils.GetJointCounts(_population);
+            var jointFreqs = Utils.ComputeJointFrequencies(jointCounts, _population.Size);
+            var jointEntropies = Utils.ComputeJointEntropies(jointFreqs);
 
             var remaining = new HashSet<int>(Enumerable.Range(0, problemSize));
             var ordering = new int[problemSize];
@@ -113,15 +84,15 @@ namespace MscThesis.Core.Algorithms
             var maxProb = 1.0d - minProb;
 
             // Sample solutions from model
-            for (int i = 0; i < _initialPopulationSize; i++)
+            for (int i = 0; i < _populationSize; i++)
             {
                 var vals = new bool[problemSize];
 
                 // Sample the first variable
                 var first = ordering[0];
-                var probFirst = up[first];
+                var probFirst = uniFreqs[first];
                 probFirst = ApplyMargins(probFirst, minProb, maxProb);
-                vals[first] = Sampling.SampleBit(probFirst, _random);
+                vals[first] = RandomUtils.SampleBit(probFirst, _random);
 
                 // Sample the rest
                 for (int k = 1; k < problemSize; k++)
@@ -133,31 +104,31 @@ namespace MscThesis.Core.Algorithms
                     double[] joint;
                     if (position < prev)
                     {
-                        joint = jointProbs[position, prev];
+                        joint = jointFreqs[position, prev];
                     }
                     else
                     {
-                        joint = jointProbs[prev, position];
+                        joint = jointFreqs[prev, position];
                     }
 
                     double p;
                     if (prevVal)
                     {
-                        p = joint[3] / up[prev];
+                        p = joint[3] / uniFreqs[prev];
                     }
                     else
                     {
-                        p = joint[2] / (1 - up[prev]);
+                        p = joint[2] / (1 - uniFreqs[prev]);
                     }
                     p = ApplyMargins(p, minProb, maxProb);
-                    vals[position] = Sampling.SampleBit(p, _random);
+                    vals[position] = RandomUtils.SampleBit(p, _random);
                 }
 
                 var bs = new BitString { Values = vals };
-                population.Add(new IndividualImpl<BitString>(bs));
+                _population.Add(new IndividualImpl<BitString>(bs));
             }
 
-            foreach (var individual in population)
+            foreach (var individual in _population)
             {
                 if (individual.Fitness != null)
                 {
@@ -167,7 +138,7 @@ namespace MscThesis.Core.Algorithms
                 individual.Fitness = fitnessFunction.ComputeFitness(individual.Value);
             }
 
-            population = _selectionOperator.Select(population, fitnessFunction);
+            _population = _selectionOperator.Select(_population, fitnessFunction);
 
             var jointIndices = Enumerable.Range(0, problemSize).Select(i => Enumerable.Range(i + 1, problemSize - i - 1).Select(j => (i, j))).SelectMany(x => x);
             var avgJointEntropy = jointIndices.Select(idxs => jointEntropies[idxs.i, idxs.j]).Sum() / (problemSize*(problemSize+1))/2;
@@ -179,103 +150,14 @@ namespace MscThesis.Core.Algorithms
 
             return new RunIteration<BitString>
             {
-                Population = population,
+                Population = _population,
                 Statistics = stats
             };
-        }
-
-        private double[] ComputeUnivariateProbabilities(IEnumerable<BitString> instances)
-        {
-            var populationSize = instances.Count();
-            if (populationSize == 0)
-            {
-                return new double[0];
-            }
-
-            var problemSize = instances.First().Values.Length;
-
-            var oneCounts = new int[problemSize];
-            foreach (var instance in instances)
-            {
-                var vals = instance.Values;
-                for (int i = 0; i < problemSize; i++)
-                {
-                    if (vals[i]) oneCounts[i]++;
-                }
-            }
-
-            var probabilities = new double[problemSize];
-            for (var i = 0; i < problemSize; i++)
-            {
-                var p = (double)oneCounts[i] / populationSize;
-                probabilities[i] = p;
-            }
-
-            return probabilities;
         }
 
         private double ApplyMargins(double p, double min, double max)
         {
             return Math.Min(max, Math.Max(min, p));
-        }
-
-        private double[,][] ComputeJointProbabilities(IEnumerable<BitString> instances)
-        {
-            var populationSize = instances.Count();
-            if (populationSize == 0)
-            {
-                return new double[0,0][];
-            }
-
-            var problemSize = instances.First().Values.Length;
-
-            var counts = new int[problemSize,problemSize,4];
-            foreach (var instance in instances)
-            {
-                var vals = instance.Values;
-                for (int i = 0; i < problemSize; i++)
-                {
-                    for (int j = i+1; j < problemSize; j++)
-                    {
-                        if (!vals[i] && !vals[j]) counts[i,j,0]++;
-                        if (!vals[i] && vals[j]) counts[i,j,1]++;
-                        if (vals[i] && !vals[j]) counts[i,j,2]++;
-                        if (vals[i] && vals[j]) counts[i,j,3]++;
-                    }
-                }
-            }
-
-            var probabilities = new double[problemSize,problemSize][];
-            for (var i = 0; i < problemSize; i++)
-            {
-                for (var j = i+1; j < problemSize; j++)
-                {
-                    probabilities[i, j] = new double[4];
-                    for (var k = 0; k < 4; k++)
-                    {
-                        var p = (double)counts[i, j, k] / populationSize;
-                        probabilities[i,j][k] = p;
-                    }
-                }
-            }
-
-            return probabilities;
-        }
-
-        private double UnivariateEntropy(double p)
-        {
-            if (p <= 0)
-            {
-                return 0.0;
-            }
-            if (p >= 1)
-            {
-                return 0.0;
-            }
-            else
-            {
-                return -p * Math.Log2(p) - (1-p) * Math.Log2(1 - p);
-            }
         }
 
     }

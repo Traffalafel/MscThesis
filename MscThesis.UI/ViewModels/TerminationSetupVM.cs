@@ -36,6 +36,10 @@ namespace MscThesis.UI.ViewModels
 
         public TerminationSpecification ToSpecification()
         {
+            if (string.IsNullOrWhiteSpace(_name))
+            {
+                throw new Exception();
+            }
             return new TerminationSpecification
             {
                 Name = Name,

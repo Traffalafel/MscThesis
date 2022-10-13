@@ -13,7 +13,13 @@ namespace MscThesis.Runner.Factories.Expression
 
         public double Compute(int n)
         {
-            return Math.Sqrt(_e.Compute(n));
+            var val = _e.Compute(n);
+            if (val < 0)
+            {
+                throw new Exception("Cannot take square root of negative number");
+            }
+
+            return Math.Sqrt(val);
         }
     }
 }

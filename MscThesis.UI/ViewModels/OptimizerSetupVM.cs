@@ -38,6 +38,10 @@ namespace MscThesis.UI.ViewModels
 
         public OptimizerSpecification ToSpecification()
         {
+            if (string.IsNullOrWhiteSpace(_algorithm))
+            {
+                throw new Exception();
+            }
             return new OptimizerSpecification
             {
                 Seed = string.IsNullOrWhiteSpace(Seed) ? null : Convert.ToInt32(Seed),

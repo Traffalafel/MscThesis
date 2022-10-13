@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MscThesis.Core
 {
-    public static class Sampling
+    public static class RandomUtils
     {
         public static bool[] SampleBitStringUniformly(int size, Random random)
         {
@@ -45,5 +45,23 @@ namespace MscThesis.Core
             }
             throw new Exception("Probabilities do not sum to 1");
         }
+
+        public static T Choose<T>(List<T> items, Random random)
+        {
+            var i = random.Next(items.Count);
+            return items[i];
+        }
+
+        public static IEnumerable<T> Shuffle<T>(List<T> items, Random random)
+        {
+            var remaining = items.Count;
+            while (remaining > 0)
+            {
+                var i = random.Next(remaining);
+                yield return items[i];
+                remaining--;
+            }
+        }
+
     }
 }

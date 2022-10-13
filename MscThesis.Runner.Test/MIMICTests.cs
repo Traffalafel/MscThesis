@@ -30,7 +30,7 @@ namespace MscThesis.Runner.Test
                         Seed = 1,
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.InitialPopulationSize] = "n"
+                            [Parameter.PopulationSize] = "n"
                         }
                     },
                     new OptimizerSpecification
@@ -39,7 +39,7 @@ namespace MscThesis.Runner.Test
                         Seed = 2,
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.InitialPopulationSize] = "0.5*n"
+                            [Parameter.PopulationSize] = "0.5*n"
                         }
                     },
                     new OptimizerSpecification
@@ -48,7 +48,7 @@ namespace MscThesis.Runner.Test
                         Seed = 3,
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.InitialPopulationSize] = "2*n"
+                            [Parameter.PopulationSize] = "2*n"
                         }
                     },
                     new OptimizerSpecification
@@ -57,7 +57,7 @@ namespace MscThesis.Runner.Test
                         Seed = 4,
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.InitialPopulationSize] = "sqrt(n)"
+                            [Parameter.PopulationSize] = "sqrt(n)"
                         }
                     },
                     new OptimizerSpecification
@@ -66,7 +66,7 @@ namespace MscThesis.Runner.Test
                         Seed = 5,
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.InitialPopulationSize] = "n*log(n)"
+                            [Parameter.PopulationSize] = "n*log(n)"
                         }
                     }
                 },
@@ -119,7 +119,7 @@ namespace MscThesis.Runner.Test
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            { Parameter.InitialPopulationSize, "0.5*n" }
+                            { Parameter.PopulationSize, "0.5*n" }
                         },
                     },
                     new OptimizerSpecification
@@ -127,7 +127,7 @@ namespace MscThesis.Runner.Test
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            { Parameter.InitialPopulationSize, "1*n" }
+                            { Parameter.PopulationSize, "1*n" }
                         },
                     },
                     new OptimizerSpecification
@@ -135,7 +135,7 @@ namespace MscThesis.Runner.Test
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            { Parameter.InitialPopulationSize, "2*n" }
+                            { Parameter.PopulationSize, "2*n" }
                         },
                     },
                 },

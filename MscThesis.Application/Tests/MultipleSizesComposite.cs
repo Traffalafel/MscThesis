@@ -1,18 +1,15 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Formats;
+using MscThesis.Runner.Tests;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
-    public class MultipleSizesComposite<T> : Test<T>, ITest<T> where T : InstanceFormat
+    public class MultipleSizesComposite<T> : TestComposite<T>, ITest<T> where T : InstanceFormat
     {
-        private List<ITest<T>> _tests;
         private Property _xAxis;
-        private int _batchSize;
         private HashSet<string> _optimizerNames;
         private Dictionary<string, Dictionary<Property, ObservableCollection<(double,double)>>> _points { get; }
 
@@ -30,11 +27,9 @@ namespace MscThesis.Runner.Results
         }).SelectMany(x => x);
         public IEnumerable<HistogramResult> Histograms => new List<HistogramResult>();
 
-        public MultipleSizesComposite(List<ITest<T>> tests, Property xAxis, int batchSize)
+        public MultipleSizesComposite(List<ITest<T>> tests, int maxParallel, Property xAxis) : base(tests, maxParallel)
         {
-            _tests = tests;
             _xAxis = xAxis;
-            _batchSize = batchSize;
             _optimizerNames = new HashSet<string>();
             _points = new Dictionary<string, Dictionary<Property, ObservableCollection<(double,double)>>>();
 
@@ -51,47 +46,17 @@ namespace MscThesis.Runner.Results
             }
         }
 
-        public async Task Execute(CancellationToken cancellationToken)
+        protected override void ConsumeResult(ITest<T> result)
         {
-            var batches = _tests.Select((result, idx) => (result, idx))
-                                  .GroupBy(x => x.idx / _batchSize)
-                                  .ToList();
+            var xItem = result.Items.FirstOrDefault(item => item.Property == _xAxis);
+            var xValue = xItem.Observable.Value;
 
-            foreach (var batch in batches)
+            foreach (var item in NotX(result.Items))
             {
-                var remainingTasks = batch.Select(async x =>
-                {
-                    await x.result.Execute(cancellationToken);
-                    return x.result;
-                }).ToList();
+                _optimizerNames.Add(item.OptimizerName);
 
-                while (remainingTasks.Count > 0)
-                {
-                    var completedTask = await Task.WhenAny(remainingTasks);
-                    var result = completedTask.Result;
-
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return; // stop execution
-                    }
-
-                    TryUpdateFittest(result.Fittest?.Value);
-
-                    var xItem = result.Items.FirstOrDefault(item => item.Property == _xAxis);
-                    var xValue = xItem.Observable.Value;
-
-                    foreach (var item in NotX(result.Items))
-                    {
-                        _optimizerNames.Add(item.OptimizerName);
-
-                        var observable = item.Observable;
-                        _points[item.OptimizerName][item.Property].Add((xValue, observable.Value));
-                    }
-
-                    remainingTasks.Remove(completedTask);
-                }
-
-                _isTerminated = true;
+                var observable = item.Observable;
+                _points[item.OptimizerName][item.Property].Add((xValue, observable.Value));
             }
         }
 

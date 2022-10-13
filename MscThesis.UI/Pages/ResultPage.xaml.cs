@@ -1,10 +1,12 @@
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Maui;
 using LiveChartsCore.SkiaSharpView.Painting;
+using Microsoft.Extensions.Configuration;
+using MscThesis.Core.Formats;
 using MscThesis.Runner.Results;
+using MscThesis.UI.Loading;
 using MscThesis.UI.ViewModels;
 using SkiaSharp;
-using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.Pages;
 
@@ -13,11 +15,16 @@ public partial class ResultPage : ContentPage
 	private ResultVM _vm;
     private CancellationTokenSource _cancellationTokenSource;
 
-	public ResultPage(ResultVM vm)
+    private ITest<InstanceFormat> _test;
+    private string _resultsDir;
+
+	public ResultPage(ResultVM vm, IConfiguration config)
 	{
 		InitializeComponent();
 		BindingContext = vm;
 		_vm = vm;
+
+        _resultsDir = config["ResultsDirectory"];
 	}
 
     protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
@@ -32,16 +39,16 @@ public partial class ResultPage : ContentPage
     {
         base.OnNavigatedTo(args);
 
-		var result = _vm.Run();
+		_test = _vm.BuildTest();
 
         var label = new Label
         {
-            BindingContext = result.Fittest
+            BindingContext = _test.Fittest
         };
         label.SetBinding(Label.TextProperty, "Value.Fitness", stringFormat: "Best fitness: {0}");
         Layout.Add(label);
 
-        foreach (var item in result.Items)
+        foreach (var item in _test.Items)
         {
             var propName = item.Property.ToString();
             var itemLabel = new Label
@@ -52,7 +59,7 @@ public partial class ResultPage : ContentPage
             Layout.Add(itemLabel);
         }
 
-        var propertyGroups = result.Series.GroupBy(series => series.Property);
+        var propertyGroups = _test.Series.GroupBy(series => series.Property);
         foreach (var propertyGroup in propertyGroups)
         {
             var propName = propertyGroup.Key.ToString();
@@ -121,11 +128,12 @@ public partial class ResultPage : ContentPage
         try
         {
             _cancellationTokenSource = new CancellationTokenSource();
-    		await result.Execute(_cancellationTokenSource.Token);
+    		await _test.Execute(_cancellationTokenSource.Token);
         }
         catch (Exception e)
         {
-            ;
+            var msg = $"An exception was thrown with the message:\n{e.Message}";
+            await DisplayAlert("Exception occured", msg, "Close");
         }
     }
 
@@ -146,7 +154,8 @@ public partial class ResultPage : ContentPage
                     },
                     Stroke = new SolidColorPaint { Color = SKColors.Transparent },
                     Fill = null,
-                    Name = group.Key
+                    Name = group.Key,
+                    LineSmoothness = 0
                 };
             }
             else
@@ -161,10 +170,41 @@ public partial class ResultPage : ContentPage
                         point.SecondaryValue = value.Item1;
                     },
                     Fill = null,
-                    Name = group.Key
+                    Name = group.Key,
+                    LineSmoothness = 0
                 };
             }
         }).ToList();
+    }
+
+    public void Save(object sender, EventArgs e)
+    {
+        if (!Directory.Exists(_resultsDir))
+        {
+            try
+            {
+                Directory.CreateDirectory(_resultsDir);
+            }
+            catch
+            {
+                return;
+            }
+        }
+
+        try
+        {
+            var content = ResultExporter.Export(_test);
+            var fileName = DateTime.Now.ToString("dd MMM HHmmss");
+            var filePath = Path.Combine(_resultsDir, $"{fileName}.txt");
+            File.WriteAllText(filePath, content);
+
+            var message = $"Saved to file \"{filePath}\"";
+            DisplayAlert("", message, "Close");
+        }
+        catch
+        {
+            return;
+        }
     }
 
 }

@@ -33,7 +33,7 @@ namespace MscThesis.Runner.Test
                         Seed = 1,
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.InitialPopulationSize] = "10"
+                            [Parameter.PopulationSize] = "10"
                         }
                     }
                 },

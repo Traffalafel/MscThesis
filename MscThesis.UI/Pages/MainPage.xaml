@@ -5,5 +5,7 @@
     <VerticalStackLayout>
         <Button Text="New run"
                 Clicked="NavigateNewRun"/>
+        <Button Text="Load results from file"
+                Clicked="NavigateLoadResults"/>
     </VerticalStackLayout>
 </ContentPage>

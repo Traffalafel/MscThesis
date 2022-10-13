@@ -10,6 +10,11 @@ namespace MscThesis.Core
         {
             Value = value;
         }
+        public IndividualImpl(T value, double fitness)
+        {
+            Value = value;
+            Fitness = fitness;
+        }
 
         public T Value { get; }
         public double? Fitness { get; set; }

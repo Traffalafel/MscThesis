@@ -30,7 +30,7 @@ namespace MscThesis.Runner.Factories
             var problem = _buildProblem.Invoke(size);
             var terminations = _buildTerminations.Invoke(size);
 
-            var iterations = optimizer.Run(problem, size);
+            var iterations = optimizer.Run(problem);
             foreach (var criterion in terminations)
             {
                 iterations = criterion.AddTerminationCriterion(iterations);

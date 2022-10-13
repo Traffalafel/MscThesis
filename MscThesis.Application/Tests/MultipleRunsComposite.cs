@@ -1,17 +1,14 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Formats;
+using MscThesis.Runner.Tests;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
-    internal class MultipleRunsComposite<T> : Test<T>, ITest<T> where T : InstanceFormat
+    internal class MultipleRunsComposite<T> : TestComposite<T>, ITest<T> where T : InstanceFormat
     {
-        private List<ITest<T>> _results;
-        private int _batchSize;
         private ObservableValue<int> _numRuns;
         private HashSet<string> _optimizerNames;
         private Dictionary<string, Dictionary<Property, ObservableCollection<double>>> _itemValues { get; }
@@ -43,10 +40,8 @@ namespace MscThesis.Runner.Results
             });
         }).SelectMany(x => x);
 
-        public MultipleRunsComposite(List<ITest<T>> results, int batchSize)
+        public MultipleRunsComposite(List<ITest<T>> results, int maxParallel) : base(results, maxParallel)
         {
-            _results = results;
-            _batchSize = batchSize;
             _numRuns = new ObservableValue<int>(0);
             _optimizerNames = new HashSet<string>();
             _itemValues = new Dictionary<string, Dictionary<Property, ObservableCollection<double>>>();
@@ -92,105 +87,32 @@ namespace MscThesis.Runner.Results
 
         }
 
-        public async Task Execute(CancellationToken cancellationToken)
+        protected override void ConsumeResult(ITest<T> result)
         {
-            var initial = _results.Take(_batchSize);
-            var remaining = _results.Skip(_batchSize).ToList();
-
-            var tasks = initial.Select(async result =>
+            foreach (var item in result.Items)
             {
-                await result.Execute(cancellationToken);
-                return result;
-            }).ToList();
+                var optimizerName = item.OptimizerName;
+                var property = item.Property;
+                var observable = item.Observable;
 
-            while (tasks.Count > 0)
-            {
-                var completedTask = await Task.WhenAny(tasks);
-                var result = completedTask.Result;
+                _sums[optimizerName][property] += observable.Value;
 
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return; // stop execution
-                }
+                var values = _itemValues[optimizerName][property];
+                var sum = _sums[optimizerName][property];
 
-                TryUpdateFittest(result.Fittest?.Value);
-
-                foreach (var item in result.Items)
-                {
-                    var optimizerName = item.OptimizerName;
-                    var property = item.Property;
-                    var observable = item.Observable;
-
-                    _sums[optimizerName][property] += observable.Value;
-
-                    var values = _itemValues[optimizerName][property];
-                    var sum = _sums[optimizerName][property];
-
-                    values.Add(observable.Value);
-                    var average = _averages[optimizerName][property];
-                    average.Value = sum / values.Count;
-                }
-
-                foreach (var series in result.Series)
-                {
-                    var optimizerName = series.OptimizerName;
-                    var property = series.Property;
-                    _seriesValues[optimizerName][property].Add(series);
-                }
-
-                _numRuns.Value += 1;
-
-                tasks.Remove(completedTask);
-                if (remaining.Any())
-                {
-                    var first = remaining.First();
-                    remaining.Remove(first);
-                    tasks.Add(Task.Run(async () =>
-                    {
-                        await first.Execute(cancellationToken);
-                        return first;
-                    }));
-                }
+                values.Add(observable.Value);
+                var average = _averages[optimizerName][property];
+                average.Value = sum / values.Count;
             }
 
-            //foreach (var batch in batches)
-            //{
-            //    var remainingTasks = batch.Select(async x =>
-            //    {
-            //        await x.result.Execute();
-            //        return x.result;
-            //    }).ToList();
+            foreach (var series in result.Series)
+            {
+                var optimizerName = series.OptimizerName;
+                var property = series.Property;
+                _seriesValues[optimizerName][property].Add(series);
+            }
 
-            //    while (remainingTasks.Count > 0)
-            //    {
-            //        var completedTask = await Task.WhenAny(remainingTasks);
-            //        var result = completedTask.Result;
-
-            //        TryUpdateFittest(result.Fittest?.Value);
-
-            //        foreach (var item in result.Items)
-            //        {
-            //            var optimizerName = item.OptimizerName;
-            //            var property = item.Property;
-            //            var observable = item.Observable;
-
-            //            _sums[optimizerName][property] += observable.Value;
-
-            //            var values = _values[optimizerName][property];
-            //            var sum = _sums[optimizerName][property];
-
-            //            values.Add(observable.Value);
-            //            var average = _averages[optimizerName][property];
-            //            average.Value = sum / values.Count;
-            //        }
-
-            //        _numRuns.Value += 1;
-            //        remainingTasks.Remove(completedTask);
-            //    }
-
-            //}
-
-            _isTerminated = true;
+            _numRuns.Value += 1;
         }
     }
 }

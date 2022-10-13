@@ -16,7 +16,7 @@ namespace MscThesis.Core.Selection
 
         public Population<T> Select(Population<T> population, FitnessFunction<T> fitnessFunction)
         {
-            var targetSize = Convert.ToInt32(Math.Ceiling(population.NumIndividuals * _quartile));
+            var targetSize = Convert.ToInt32(Math.Ceiling(population.Size * _quartile));
             var newIndividuals = population.OrderByDescending(i => i.Fitness).Take(targetSize);
             return new Population<T>(newIndividuals);
         }

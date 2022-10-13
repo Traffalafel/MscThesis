@@ -5,7 +5,6 @@ namespace MscThesis.UI.Behaviors
 {
     public class ExpressionValidator : Behavior<Entry>
     {
-        public static SetupVM VM { get; set; }
 
         private IExpressionFactory _factory;
 
@@ -41,15 +40,6 @@ namespace MscThesis.UI.Behaviors
             }
             var entry = (Entry)sender;
             entry.TextColor = isValid ? Colors.White : Colors.Red;
-
-            if (isValid)
-            {
-                VM.InputValid(entry);
-            }
-            else
-            {
-                VM.InputInvalid(entry);
-            }
         }
 
     }

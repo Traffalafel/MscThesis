@@ -1,5 +1,6 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Formats;
+using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {

@@ -10,9 +10,6 @@
     <Frame BindingContext="{x:Reference this}">
 
         <ListView ItemsSource="{Binding Parameters}">
-            <ListView.Behaviors>
-                <behavior:ParentBehavior/>
-            </ListView.Behaviors>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell x:DataType="vm:ParameterVM">

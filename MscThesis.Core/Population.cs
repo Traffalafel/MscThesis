@@ -6,9 +6,12 @@ using System.Linq;
 
 namespace MscThesis.Core
 {
-    public class Population<T> : IEnumerable<IndividualImpl<T>> where T : InstanceFormat
+    public class Population<T> : IEnumerable<Individual<T>> where T : InstanceFormat
     {
-        private List<IndividualImpl<T>> _individuals;
+        private List<Individual<T>> _individuals;
+        private Individual<T> _fittest;
+
+        public List<Individual<T>> Individuals => _individuals;
 
         public int ProblemSize { get
             {
@@ -17,7 +20,7 @@ namespace MscThesis.Core
             } 
         }
 
-        public int NumIndividuals { get
+        public int Size { get
             {
                 return _individuals.Count;
             } 
@@ -25,17 +28,31 @@ namespace MscThesis.Core
 
         public Population()
         {
-            _individuals = new List<IndividualImpl<T>>();
+            _individuals = new List<Individual<T>>();
         }
 
-        public Population(IEnumerable<IndividualImpl<T>> individuals)
+        public Population(IEnumerable<Individual<T>> individuals)
         {
             _individuals = individuals.ToList();
+
+            var fittest = individuals.Aggregate((i1, i2) => (i1.Fitness ?? double.MinValue) > (i2.Fitness ?? double.MinValue) ? i1 : i2);
+            _fittest = fittest;
         }
 
-        public void Add(IndividualImpl<T> individual)
+        public void Add(Individual<T> individual)
         {
             _individuals.Add(individual);
+
+            if (_fittest == null)
+            {
+                _fittest = individual;
+                return;
+            }
+            if (individual.Fitness != null && individual.Fitness > _fittest.Fitness)
+            {
+                _fittest = individual;
+                return;
+            }
         }
 
         public IEnumerable<T> GetValues()
@@ -43,12 +60,12 @@ namespace MscThesis.Core
             return _individuals.Select(p => p.Value);
         }
 
-        public IndividualImpl<T> GetFittest()
+        public Individual<T> GetFittest()
         {
-            return _individuals.OrderByDescending(p => p.Fitness ?? double.MinValue).FirstOrDefault();
+            return _fittest;
         }
 
-        public IEnumerator<IndividualImpl<T>> GetEnumerator()
+        public IEnumerator<Individual<T>> GetEnumerator()
         {
             foreach (var individual in _individuals)
             {
@@ -60,5 +77,16 @@ namespace MscThesis.Core
         {
             return GetEnumerator();
         }
+
+        public double GetAverageFitness()
+        {
+            if (_individuals.Any(ind => ind.Fitness == null))
+            {
+                throw new Exception();
+            }
+
+            return _individuals.Sum(ind => ind.Fitness.Value) / _individuals.Count;
+        }
+
     }
 }

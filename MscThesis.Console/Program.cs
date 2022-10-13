@@ -30,7 +30,7 @@ namespace MscThesis.CLI
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            { Parameter.InitialPopulationSize, "0.5*n" }
+                            { Parameter.PopulationSize, "0.5*n" }
                         },
                     },
                     new OptimizerSpecification
@@ -38,7 +38,7 @@ namespace MscThesis.CLI
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            { Parameter.InitialPopulationSize, "1*n" }
+                            { Parameter.PopulationSize, "1*n" }
                         },
                     },
                     new OptimizerSpecification
@@ -46,7 +46,7 @@ namespace MscThesis.CLI
                         Algorithm = "MIMIC",
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            { Parameter.InitialPopulationSize, "2*n" }
+                            { Parameter.PopulationSize, "2*n" }
                         },
                     },
                 },

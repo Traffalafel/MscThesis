@@ -19,20 +19,35 @@ namespace MscThesis.Runner.Factories.Expression
         {
             _rules = new Symbol[][]
             {
-                /*  0 */ new Symbol[] { Symbol.MUL, Symbol.TERM_E },
-                /*  1 */ new Symbol[] { Symbol.Plus, Symbol.TERM },
-                /*  2 */ new Symbol[] { Symbol.Minus, Symbol.TERM },
-                /*  3 */ new Symbol[] { },
-                /*  4 */ new Symbol[] { Symbol.EXPR, Symbol.MUL_E },
-                /*  5 */ new Symbol[] { Symbol.Asterisk, Symbol.MUL },
-                /*  6 */ new Symbol[] { Symbol.Slash, Symbol.MUL },
-                /*  7 */ new Symbol[] { },
-                /*  8 */ new Symbol[] { Symbol.ParensOpen, Symbol.TERM, Symbol.ParensClose },
-                /*  9 */ new Symbol[] { Symbol.Log, Symbol.ParensOpen, Symbol.TERM, Symbol.ParensClose },
-                /* 10 */ new Symbol[] { Symbol.Sqrt, Symbol.ParensOpen, Symbol.TERM, Symbol.ParensClose },
-                /* 11 */ new Symbol[] { Symbol.VAL },
-                /* 12 */ new Symbol[] { Symbol.Constant },
-                /* 13 */ new Symbol[] { Symbol.N},
+                // TERM
+                /*  1 */ new Symbol[] { Symbol.MUL, Symbol.TERM_E },
+                
+                // TERM_E
+                /*  2 */ new Symbol[] { Symbol.Plus, Symbol.TERM },
+                /*  3 */ new Symbol[] { Symbol.Minus, Symbol.TERM },
+                /*  4 */ new Symbol[] { },
+                
+                // MUL
+                /*  5 */ new Symbol[] { Symbol.EXPR, Symbol.MUL_E },
+
+                // MUL_E
+                /*  6 */ new Symbol[] { Symbol.Asterisk, Symbol.MUL },
+                /*  7 */ new Symbol[] { Symbol.Slash, Symbol.MUL },
+                /*  8 */ new Symbol[] { },
+
+                // EXPR
+                /*  9 */ new Symbol[] { Symbol.VAL, Symbol.POW },
+                /* 10 */ new Symbol[] { Symbol.Log, Symbol.VAL },
+                /* 11 */ new Symbol[] { Symbol.Sqrt, Symbol.VAL },
+
+                // POW
+                /* 12 */ new Symbol[] { Symbol.Power, Symbol.VAL },
+                /* 13 */ new Symbol[] { },
+
+                // VAL
+                /* 14 */ new Symbol[] { Symbol.ParensOpen, Symbol.TERM, Symbol.ParensClose },
+                /* 15 */ new Symbol[] { Symbol.Constant },
+                /* 16 */ new Symbol[] { Symbol.N},
             };
 
             var numSymbols = Enum.GetNames(typeof(Symbol)).Length;
@@ -67,15 +82,25 @@ namespace MscThesis.Runner.Factories.Expression
             _parsingTable[(int)Symbol.MUL_E, (int)Symbol.ParensClose] = 8;
 
             // Row 5
+            _parsingTable[(int)Symbol.EXPR, (int)Symbol.N] = 9;
+            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Constant] = 9;
             _parsingTable[(int)Symbol.EXPR, (int)Symbol.ParensOpen] = 9;
             _parsingTable[(int)Symbol.EXPR, (int)Symbol.Log] = 10;
             _parsingTable[(int)Symbol.EXPR, (int)Symbol.Sqrt] = 11;
-            _parsingTable[(int)Symbol.EXPR, (int)Symbol.N] = 12;
-            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Constant] = 12;
 
             // Row 6
-            _parsingTable[(int)Symbol.VAL, (int)Symbol.Constant] = 13;
-            _parsingTable[(int)Symbol.VAL, (int)Symbol.N] = 14;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Power] = 12;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.End] = 13;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.ParensClose] = 13;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Slash] = 13;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Asterisk] = 13;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Plus] = 13;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Minus] = 13;
+
+            // Row 7
+            _parsingTable[(int)Symbol.VAL, (int)Symbol.ParensOpen] = 14;
+            _parsingTable[(int)Symbol.VAL, (int)Symbol.Constant] = 15;
+            _parsingTable[(int)Symbol.VAL, (int)Symbol.N] = 16;
         }
 
         public ParseTree Parse(Scanner scanner)

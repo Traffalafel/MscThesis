@@ -12,4 +12,19 @@ public partial class MainPage : ContentPage
 		Shell.Current.GoToAsync(nameof(SetupPage));
 	}
 
+	public async void NavigateLoadResults(object sender, EventArgs e)
+	{
+        var fileResult = await FilePicker.Default.PickAsync();
+
+		if (fileResult == null)
+		{
+			return;
+		}
+
+        await Shell.Current.GoToAsync(nameof(ResultPage), new Dictionary<string, object>
+        {
+            ["ResultsFilePath"] = fileResult.FullPath
+        });
+    }
+
 }

@@ -77,39 +77,67 @@ namespace MscThesis.Runner.Factories.Expression
         {
             var numChildren = node.Children.Count;
 
-            if (numChildren == 3)
+            if (numChildren != 2)
             {
-                var term = node.Children[1];
-                return BuildTerm(term);
+                throw new Exception();
             }
-            if (numChildren == 4)
+
+            var fst = node.Children[0];
+            var snd = node.Children[1];
+
+            if (fst.Token.Symbol == Symbol.VAL)
             {
-                var op = node.Children[0];
-                var term = node.Children[2];
-                var termExpr = BuildTerm(term);
-                if (op.Token.Symbol == Symbol.Log)
+                var valExpr = BuildVal(fst);
+                if (snd.Children.Count == 0)
                 {
-                    return new LogExpression(termExpr);
+                    return valExpr;
                 }
                 else
                 {
-                    return new SqrtExpression(termExpr);
+                    var power = BuildVal(snd.Children[1]);
+                    return new PowerExpression(valExpr, power);
                 }
             }
             else
             {
-                var val = node.Children[0];
-                var cn = val.Children[0];
-                if (cn.Token.Symbol == Symbol.N)
+                var valExpr = BuildVal(snd);
+                if (fst.Token.Symbol == Symbol.Log)
+                {
+                    return new LogExpression(valExpr);
+                }
+                else if (fst.Token.Symbol == Symbol.Sqrt)
+                {
+                    return new SqrtExpression(valExpr); ;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+        }
+
+        private IExpression BuildVal(ParseTree node)
+        {
+            var numChildren = node.Children.Count;
+
+            if (numChildren == 3)
+            {
+                return BuildTerm(node.Children[1]);
+            }
+            else
+            {
+                var child = node.Children[0];
+                if (child.Token.Symbol == Symbol.N)
                 {
                     return new VariableExpression();
                 }
                 else
                 {
-                    var value = Convert.ToDouble(cn.Token.Value, CultureInfo.InvariantCulture);
+                    var value = Convert.ToDouble(child.Token.Value, CultureInfo.InvariantCulture);
                     return new ConstantExpression(value);
                 }
             }
         }
+
     }
 }

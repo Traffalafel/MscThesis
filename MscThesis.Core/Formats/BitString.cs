@@ -12,13 +12,18 @@ namespace MscThesis.Core.Formats
         {
             return new BitString
             {
-                Values = Sampling.SampleBitStringUniformly(size, random)
+                Values = RandomUtils.SampleBitStringUniformly(size, random)
             };
         }
 
         public override int GetSize()
         {
             return Values.Length;
+        }
+
+        public void Flip(int i)
+        {
+            Values[i] = !Values[i];
         }
 
         public override string ToString()

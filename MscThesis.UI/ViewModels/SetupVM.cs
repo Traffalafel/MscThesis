@@ -9,7 +9,12 @@ namespace MscThesis.UI.ViewModels
     {
         private string _problemName = string.Empty;
 
-        private TestProvider _runner { get; set; } = new TestProvider();
+        private TestProvider _runner { get; set; }
+
+        public SetupVM()
+        {
+            _runner = new TestProvider();
+        }
 
         public string ProblemName {
             get => _problemName;
@@ -45,32 +50,13 @@ namespace MscThesis.UI.ViewModels
             } 
         }
 
-        public ObservableValue<bool> IsValid { get; } = new ObservableValue<bool>(false);
-        private HashSet<IView> _invalidInputs = new HashSet<IView>();
-        public void InputValid(IView input)
-        {
-            _invalidInputs.Remove(input);
-            if (!IsValid.Value && _invalidInputs.Count == 0)
-            {
-                IsValid.Value = true;
-            }
-        }
-        public void InputInvalid(IView input)
-        {
-            _invalidInputs.Add(input);
-            if (IsValid.Value && _invalidInputs.Count > 0)
-            {
-                IsValid.Value = false;
-            }
-        }
-
         public string NumRuns { get; set; } = "1";
 
         public string ProblemSizeStart { get; set; }
         public string ProblemSizeStop { get; set; }
         public string ProblemSizeStep { get; set; }
 
-        public string MaxParallelization { get; set; }
+        public string MaxParallelization { get; set; } = "1";
         public ObservableCollection<ParameterVM> ProblemParameters { get; set; } = new();
         public ObservableCollection<TerminationSetupVM> Terminations { get; set; } = new();
         public ObservableCollection<OptimizerSetupVM> Optimizers { get; set; } = new();
@@ -93,6 +79,10 @@ namespace MscThesis.UI.ViewModels
 
         public TestSpecification ToSpecification()
         {
+            if (string.IsNullOrWhiteSpace(_problemName))
+            {
+                throw new Exception();
+            }
             return new TestSpecification
             {
                 NumRuns = Convert.ToInt32(NumRuns),
@@ -131,13 +121,19 @@ namespace MscThesis.UI.ViewModels
                 throw new Exception("Start and stop must be equal for step size zero.");
             }
 
+            if (step == 0)
+            {
+                yield return start;
+                yield break;
+            }
+
             var c = start;
             do
             {
                 yield return c;
                 c += step;
             }
-            while (c < stop);
+            while (c <= stop);
         }
 
     }

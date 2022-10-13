@@ -7,21 +7,20 @@ using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
 
-namespace MscThesis.Runner.Factories
+namespace MscThesis.Runner.Factories.Optimizer
 {
-    public class MIMICFactory : OptimizerFactory<BitString>
+    public class GOMEAFactory : OptimizerFactory<BitString>
     {
-        private static readonly double _selectionQuartile = 0.5d;
-
+        private static readonly int _tournamentSize = 2;
         private readonly IParameterFactory _parameterFactory;
 
-        public MIMICFactory(IParameterFactory parameterFactory)
+        public GOMEAFactory(IParameterFactory parameterFactory)
         {
             _parameterFactory = parameterFactory;
         }
 
-        public override IEnumerable<Parameter> RequiredParameters => new List<Parameter> 
-        { 
+        public override IEnumerable<Parameter> RequiredParameters => new List<Parameter>
+        {
             Parameter.PopulationSize
         };
 
@@ -30,14 +29,13 @@ namespace MscThesis.Runner.Factories
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
             var random = BuildRandom(spec.Seed);
-            var selection = new QuartileSelection<BitString>(_selectionQuartile);
 
             return problemSize =>
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problemSize);
-                return new MIMIC(random, problemSize, populationSize, selection);
+                var selection = new TournamentSelection<BitString>(random, populationSize, _tournamentSize);
+                return new GOMEA(random, problemSize, populationSize, selection);
             };
         }
     }
-
 }

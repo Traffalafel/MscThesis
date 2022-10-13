@@ -154,6 +154,7 @@
                 
                 Text="Run!"
                 Clicked="Run">
+                <!-- 
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="BackgroundColor" Value="Red"/>
@@ -170,6 +171,7 @@
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
+                -->
                 
             </Button>
 

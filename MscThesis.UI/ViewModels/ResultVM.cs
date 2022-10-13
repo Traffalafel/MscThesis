@@ -1,17 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using MscThesis.Core;
 using MscThesis.Core.Formats;
 using MscThesis.Runner;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
+using MscThesis.UI.Models;
 
 namespace MscThesis.UI.ViewModels
 {
     [QueryProperty(nameof(Specification), nameof(Specification))]
+    [QueryProperty(nameof(ResultsFilePath), nameof(ResultsFilePath))]
     public partial class ResultVM : ObservableObject
     {
         [ObservableProperty]
         TestSpecification specification;
+
+        [ObservableProperty]
+        string resultsFilePath;
 
         [ObservableProperty]
         double bestFitness;
@@ -23,14 +27,20 @@ namespace MscThesis.UI.ViewModels
             _runner = runner;
         }
 
-        public ITest<InstanceFormat> Run()
+        public ITest<InstanceFormat> BuildTest()
         {
-            return _runner.Run(specification);
-        }
+            if (specification != null)
+            {
+                return _runner.Run(specification);
+            }
 
-        public void UpdateBestFitness(Individual<InstanceFormat> fittest)
-        {
-            BestFitness = fittest.Fitness.Value;
+            if (resultsFilePath != null)
+            {
+                var content = File.ReadAllText(resultsFilePath);
+                return new LoadedTest(content);
+            }
+
+            throw new Exception();
         }
 
     }

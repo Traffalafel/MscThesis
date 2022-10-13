@@ -160,7 +160,7 @@ namespace MscThesis.Runner
                 }
                 else
                 {
-                    sizeResult = new MultipleSizesComposite<T>(sizeResults, Property.ProblemSize, sizeBatchSize);
+                    sizeResult = new MultipleSizesComposite<T>(sizeResults, sizeBatchSize, Property.ProblemSize);
                 }
                 results.Add(sizeResult);
             }

@@ -34,8 +34,11 @@ namespace MscThesis.Runner.Results
             }
             _seriesData[Property.BestFitness] = new ObservableCollection<(double, double)>();
             _seriesData[Property.PopulationSize] = new ObservableCollection<(double, double)>();
+            _seriesData[Property.AvgFitness] = new ObservableCollection<(double, double)>();
+            _itemData[Property.BestFitness] = new ObservableValue<double>();
             _itemData[Property.NumberIterations] = new ObservableValue<double>();
             _itemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
+            _itemData[Property.AvgFitness] = new ObservableValue<double>();
             _itemData[Property.ProblemSize] = new ObservableValue<double>(problemSize);
         }
 
@@ -64,10 +67,15 @@ namespace MscThesis.Runner.Results
                     _seriesData[Property.BestFitness].Add((numIterations, fittest.Fitness.Value));
                     TryUpdateFittest(fittest);
 
-                    _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.NumIndividuals));
+                    var avgFitness = iteration.Population.GetAverageFitness();
 
+                    _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.Size));
+                    _seriesData[Property.AvgFitness].Add((numIterations, avgFitness));
+
+                    _itemData[Property.BestFitness].Value = fittest.Fitness.Value;
                     _itemData[Property.NumberIterations].Value = numIterations;
                     _itemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
+                    _itemData[Property.AvgFitness].Value = avgFitness;
 
                     numIterations++;
                 }

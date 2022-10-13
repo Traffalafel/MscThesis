@@ -7,7 +7,11 @@
              x:DataType="vm:ResultVM">
 
     <ScrollView>
-        <VerticalStackLayout x:Name="Layout"/>
+        <VerticalStackLayout>
+            <VerticalStackLayout x:Name="Layout"/>
+            <Button Text="Save"
+                    Clicked="Save"/> 
+        </VerticalStackLayout>
 
     </ScrollView>
 

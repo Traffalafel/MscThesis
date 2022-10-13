@@ -9,25 +9,25 @@ namespace MscThesis.Core.Algorithms
     public abstract class Optimizer<T> where T : InstanceFormat
     {
         protected readonly Random _random;
+        protected readonly int _problemSize;
 
         public abstract ISet<Property> StatisticsProperties { get; }
 
-        protected Optimizer(Random random)
+        protected Optimizer(Random random, int problemSize)
         {
             _random = random;
+            _problemSize = problemSize;
         }
 
-        protected abstract Population<T> Initialize(int size);
-        protected abstract RunIteration<T> NextIteration(Population<T> population, FitnessFunction<T> fitnessFunction);
+        protected virtual void Initialize(FitnessFunction<T> fitnessFunction) { }
+        protected abstract RunIteration<T> NextIteration(FitnessFunction<T> fitnessFunction);
 
-        public IEnumerable<RunIteration<T>> Run(FitnessFunction<T> fitnessFunction, int size)
+        public IEnumerable<RunIteration<T>> Run(FitnessFunction<T> fitnessFunction)
         {
-            var population = Initialize(size);
+            Initialize(fitnessFunction);
             while (true)
             {
-                var iteration = NextIteration(population, fitnessFunction);
-                population = iteration.Population;
-                yield return iteration;
+                yield return NextIteration(fitnessFunction);
             }
         }
     }
