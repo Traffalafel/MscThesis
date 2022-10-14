@@ -23,6 +23,11 @@ namespace MscThesis.UI.ViewModels
         [ObservableProperty]
         string problemInformationDescription = string.Empty;
 
+        [ObservableProperty]
+        bool expressionParamsExist = false;
+        [ObservableProperty]
+        bool optionParamsExist = false;
+
         private string _problemName = string.Empty;
 
         private TestProvider _provider { get; set; }
@@ -67,11 +72,13 @@ namespace MscThesis.UI.ViewModels
                     {
                         ProblemExpressionParameters.Add(vm);
                     }
+                    ExpressionParamsExist = expressionVMs.Count() > 0;
 
                     var optionVMs = definition.OptionParameters.Select(kv =>
                     {
                         return new OptionParameterVM(kv.Key, string.Join(',', kv.Value));
                     });
+                    OptionParamsExist = optionVMs.Count() > 0;
                     
                     ProblemOptionParameters.Clear();
                     foreach (var vm in optionVMs)

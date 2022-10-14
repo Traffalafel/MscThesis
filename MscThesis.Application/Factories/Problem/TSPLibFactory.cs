@@ -51,7 +51,21 @@ namespace MscThesis.Runner.Factories.Problem
             var item = _tspLib.TSPItems().Where(item => item.Problem.Name == problemName).FirstOrDefault();
             var problem = item.Problem;
 
-            return new ProblemInformation(problem.Name, problem.Comment);
+            var nodes = problem.NodeProvider.GetNodes();
+            var problemSize = nodes.Count;
+
+            var description = problem.Comment + $"\nProblem size:{problemSize}";
+            
+            if (item.OptimalTour != null)
+            {
+                description += $"\nOptimal tour distance: {item.OptimalTourDistance}";
+            } 
+            else
+            {
+                description += "\nOptimal tour not known";
+            }
+
+            return new ProblemInformation(problem.Name, description);
         }
     }
 }

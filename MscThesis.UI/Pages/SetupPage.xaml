@@ -12,6 +12,7 @@
     <ContentPage.Resources>
         <conv:SingleProblemSizeConverter x:Key="SingleProblemSizeConverter"/>
         <conv:MultipleProblemSizeConverter x:Key="MultipleProblemSizeConverter"/>
+        <conv:NotEmptyStringConverter x:Key="NotEmptyStringConverter"/>
 
         <Style x:Key="TitleLayout" TargetType="HorizontalStackLayout">
             <Setter Property="HorizontalOptions" Value="Center"/>
@@ -35,11 +36,11 @@
             <Setter Property="VerticalOptions" Value="Center"/>
         </Style>
         <Style x:Key="LeftCol" TargetType="HorizontalStackLayout">
-            <Setter Property="Margin" Value="5,0,0,5"/>
+            <Setter Property="Margin" Value="10,0,0,5"/>
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
         <Style x:Key="RightCol" TargetType="HorizontalStackLayout">
-            <Setter Property="Margin" Value="0,0,5,5"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
         <ColumnDefinitionCollection x:Key="ColsDef">
@@ -253,17 +254,23 @@
                 </HorizontalStackLayout>
             </Grid>
 
-            <view:ExpressionParameterListSetup Parameters="{Binding ProblemExpressionParameters}"/>
-            <view:OptionParameterListSetup Parameters="{Binding ProblemOptionParameters}"/>
+            <view:ExpressionParameterListSetup Parameters="{Binding ProblemExpressionParameters}"
+                                               IsVisible="{Binding ExpressionParamsExist}"/>
+            <view:OptionParameterListSetup Parameters="{Binding ProblemOptionParameters}"
+                                           IsVisible="{Binding OptionParamsExist}"/>
 
-            <HorizontalStackLayout>
-                <Label Text="Name:"/>
-                <Label Text="{Binding ProblemInformationName}"/>
+            <HorizontalStackLayout IsVisible="{Binding ProblemInformationName, Converter={StaticResource NotEmptyStringConverter}}"
+                                   Margin="10,10,0,0">
+                <Label Text="Name: "
+                       FontSize="16"/>
+                <Label Text="{Binding ProblemInformationName}"
+                       FontSize="16"
+                       Margin="5,0,0,0"/>
             </HorizontalStackLayout>
-
-            <VerticalStackLayout>
-                <Label Text="Description:"/>
-                <Label Text="{Binding ProblemInformationDescription}"/>
+            <VerticalStackLayout IsVisible="{Binding ProblemInformationDescription, Converter={StaticResource NotEmptyStringConverter}}"
+                                 Margin="10,5">
+                <Label Text="{Binding ProblemInformationDescription}"
+                       FontSize="Body"/>
             </VerticalStackLayout>
 
         </VerticalStackLayout>

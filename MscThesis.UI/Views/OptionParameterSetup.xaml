@@ -9,11 +9,11 @@
 
     <ContentView.Resources>
         <Style x:Key="LeftCol" TargetType="HorizontalStackLayout">
-            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Margin" Value="-1,0,0,5"/>
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
         <Style x:Key="RightCol" TargetType="HorizontalStackLayout">
-            <Setter Property="Margin" Value="0,0,10,5"/>
+            <Setter Property="Margin" Value="-5,0,0,5"/>
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
         <ColumnDefinitionCollection x:Key="ColsDef">
