@@ -115,7 +115,7 @@ namespace MscThesis.Core.Algorithms
 
         private BitString Clone(BitString values)
         {
-            var size = values.GetSize();
+            var size = values.Size;
             var clone = new bool[size];
             for (int i = 0; i < size; i++)
             {

@@ -1,6 +1,6 @@
-using MscThesis.UI.Behaviors;
+using Microsoft.Extensions.Configuration;
+using MscThesis.Runner;
 using MscThesis.UI.ViewModels;
-using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.Pages;
 
@@ -8,9 +8,14 @@ public partial class SetupPage : ContentPage
 {
     public SetupVM _vm { get; set; }
 
-	public SetupPage()
+	public SetupPage(IConfiguration config)
 	{
-        _vm = new SetupVM();
+        var settings = new Settings
+        {
+            TSPLibDirectoryPath = config["TSPLibDirectoryPath"]
+        };
+
+        _vm = new SetupVM(settings);
 
 		BindingContext = _vm;
 

@@ -16,10 +16,7 @@ namespace MscThesis.Core.Formats
             };
         }
 
-        public override int GetSize()
-        {
-            return Values.Length;
-        }
+        public override int Size => Values.Length;
 
         public void Flip(int i)
         {

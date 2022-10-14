@@ -1,24 +1,35 @@
-﻿using MscThesis.Runner;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MscThesis.Runner;
 using MscThesis.Runner.Specification;
 using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.ViewModels
 {
 
-    public class SetupVM
+    public partial class SetupVM : ObservableObject
     {
+        [ObservableProperty]
+        bool customProblemSizesAllowed = false;
+
+        [ObservableProperty]
+        bool parallelizationEnabled = false;
+
+        [ObservableProperty]
+        bool multipleSizes = false;
+
+        [ObservableProperty]
+        string problemInformationName = string.Empty;
+
+        [ObservableProperty]
+        string problemInformationDescription = string.Empty;
+
         private string _problemName = string.Empty;
 
-        private TestProvider _runner { get; set; }
+        private TestProvider _provider { get; set; }
 
-        public SetupVM()
+        public SetupVM(Settings settings)
         {
-            var settings = new Settings
-            {
-                TSPLibDirectoryPath = "C:\\Users\\traff\\Desktop\\TSPLIB95"
-            };
-
-            _runner = new TestProvider(settings);
+            _provider = new TestProvider(settings);
         }
 
         public string ProblemName {
@@ -27,32 +38,62 @@ namespace MscThesis.UI.ViewModels
             {
                 _problemName = value;
                 
-                var optimizerNamesNew = _runner.GetAlgorithmNames(_problemName);
+                var optimizerNamesNew = _provider.GetAlgorithmNames(_problemName);
                 PossibleAlgorithmNames.Clear();
                 foreach (var optimizerName in optimizerNamesNew)
                 {
                     PossibleAlgorithmNames.Add(optimizerName);
                 }
 
-                var terminationNamesNew = _runner.GetTerminationNames(_problemName);
+                var terminationNamesNew = _provider.GetTerminationNames(_problemName);
                 PossibleTerminationNames.Clear();
                 foreach (var name in terminationNamesNew)
                 {
                     PossibleTerminationNames.Add(name);
                 }
 
-                //var newParameters = _runner.GetProblemParameters(_problemName);
-                //var vms = newParameters.Select(vm => new ParameterVM
-                //{
-                //    Name = vm.ToString()
-                //});
+                try
+                {
+                    var definition = _provider.GetProblemDefinition(_problemName);
 
-                //ProblemParameters.Clear();
-                //foreach (var vm in vms)
-                //{
-                //    ProblemParameters.Add(vm);
-                //}
+                    CustomProblemSizesAllowed = definition.CustomSizesAllowed;
+
+                    var expressionVMs = definition.ExpressionParameters.Select(vm => new ExpressionParameterVM
+                    {
+                        Name = vm.ToString()
+                    });
+                    ProblemExpressionParameters.Clear();
+                    foreach (var vm in expressionVMs)
+                    {
+                        ProblemExpressionParameters.Add(vm);
+                    }
+
+                    var optionVMs = definition.OptionParameters.Select(kv =>
+                    {
+                        return new OptionParameterVM(kv.Key, string.Join(',', kv.Value));
+                    });
+                    
+                    ProblemOptionParameters.Clear();
+                    foreach (var vm in optionVMs)
+                    {
+                        ProblemOptionParameters.Add(vm);
+                    }
+
+                    ReloadProblemInformation();
+                }
+                catch (Exception ex)
+                {
+                    ;
+                }
             } 
+        }
+
+        public void ReloadProblemInformation()
+        {
+            var spec = CreateProblemSpec();
+            var info = _provider.GetProblemInformation(spec);
+            ProblemInformationName = info.Name;
+            ProblemInformationDescription = info.Description;
         }
 
         public string NumRuns { get; set; } = "1";
@@ -62,24 +103,37 @@ namespace MscThesis.UI.ViewModels
         public string ProblemSizeStep { get; set; }
 
         public string MaxParallelization { get; set; } = "1";
-        public ObservableCollection<ParameterVM> ProblemParameters { get; set; } = new();
+
+        public ObservableCollection<ExpressionParameterVM> ProblemExpressionParameters { get; set; } = new();
+        public ObservableCollection<OptionParameterVM> ProblemOptionParameters { get; set; } = new();
+
         public ObservableCollection<TerminationSetupVM> Terminations { get; set; } = new();
         public ObservableCollection<OptimizerSetupVM> Optimizers { get; set; } = new();
 
-        public List<string> PossibleProblemNames => _runner.GetProblemNames();
+        public List<string> PossibleProblemNames => _provider.GetProblemNames();
         public ObservableCollection<string> PossibleAlgorithmNames { get; set; } = new();
         public ObservableCollection<string> PossibleTerminationNames { get; set; } = new();
 
         public void AddOptimizer()
         {
-            var newOptimizer = new OptimizerSetupVM(_runner);
+            var newOptimizer = new OptimizerSetupVM(_provider);
             Optimizers.Add(newOptimizer);
         }
 
         public void AddTerminationCriterion()
         {
-            var newCriterion = new TerminationSetupVM(_runner);
+            var newCriterion = new TerminationSetupVM(_provider);
             Terminations.Add(newCriterion);
+        }
+
+        private ProblemSpecification CreateProblemSpec()
+        {
+            return new ProblemSpecification
+            {
+                Name = _problemName,
+                Parameters = Utils.Join(Utils.ToSpecification(ProblemExpressionParameters),
+                                        Utils.ToSpecification(ProblemOptionParameters))          
+            };
         }
 
         public TestSpecification ToSpecification()
@@ -93,11 +147,7 @@ namespace MscThesis.UI.ViewModels
                 NumRuns = Convert.ToInt32(NumRuns),
                 Optimizers = Optimizers.Select(o => o.ToSpecification()).ToList(),
                 MaxParallelization = Convert.ToDouble(MaxParallelization),
-                Problem = new ProblemSpecification
-                {
-                    Name = _problemName,
-                    Parameters = Utils.ToSpecification(ProblemParameters)
-                },
+                Problem = CreateProblemSpec(),
                 ProblemSizes = ParseProblemSizes(ProblemSizeStart, ProblemSizeStop, ProblemSizeStep).ToList(),
                 Terminations = Terminations.Select(t => t.ToSpecification()).ToList()
             };

@@ -2,7 +2,7 @@
 
 namespace MscThesis.UI.ViewModels
 {
-    public class ParameterVM
+    public class ExpressionParameterVM
     {
         public string Name { get; set; }
         public Parameter Parameter

@@ -40,6 +40,7 @@ namespace MscThesis.UI
             builder.Services.AddSingleton<TestProvider>();
             builder.Services.AddTransient<ResultVM>();
             builder.Services.AddTransient<ResultPage>();
+            builder.Services.AddTransient<SetupPage>();
 
             return builder.Build();
         }

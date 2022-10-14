@@ -1,6 +1,7 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Factories;
+using MscThesis.Runner.Factories.Problem;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using System;
@@ -43,7 +44,7 @@ namespace MscThesis.Runner
             return names;
         }
 
-        public ProblemDefinition GetProblemParameters(string problemName)
+        public ProblemDefinition GetProblemDefinition(string problemName)
         {
             foreach (var factory in _factories)
             {
@@ -52,7 +53,25 @@ namespace MscThesis.Runner
                     return factory.GetProblemDefinition(problemName);
                 }
             }
-            throw new Exception($"Problem \"{problemName}\" is not recognized");
+            return new ProblemDefinition
+            {
+                CustomSizesAllowed = false,
+                ExpressionParameters = new List<Parameter>(),
+                OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
+            };
+        }
+
+        public ProblemInformation GetProblemInformation(ProblemSpecification spec)
+        {
+            try
+            {
+                var factory = GetTestFactory(spec.Name);
+                return factory.GetProblemInformation(spec);
+            }
+            catch
+            {
+                return new ProblemInformation();
+            }
         }
 
         public List<string> GetTerminationNames(string problemName)

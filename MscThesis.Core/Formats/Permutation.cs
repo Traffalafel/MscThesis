@@ -1,19 +1,34 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MscThesis.Core.Formats
 {
-    public class Permutation : InstanceFormat
+    public class Permutation : InstanceFormat, IEnumerable<int>
     {
-        public override int GetSize()
+        private IEnumerable<int> _tour;
+
+        public Permutation(IEnumerable<int> tour)
         {
-            throw new NotImplementedException();
+            _tour = tour;
         }
+
+        public override int Size => _tour.Count();
 
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return string.Join(',', _tour);
+        }
+
+        public IEnumerator<int> GetEnumerator()
+        {
+            return _tour.GetEnumerator();
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

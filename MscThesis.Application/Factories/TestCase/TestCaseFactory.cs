@@ -5,6 +5,7 @@ using MscThesis.Core.Formats;
 using MscThesis.Core.TerminationCriteria;
 using MscThesis.Runner.Factories.Expression;
 using MscThesis.Runner.Factories.Parameters;
+using MscThesis.Runner.Factories.Problem;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
@@ -109,12 +110,18 @@ namespace MscThesis.Runner.Factories
             if (_problems.ContainsKey(problemName))
             {
                 var factory = _problems[problemName];
-                return factory.Parameters;
+                return factory.Definition;
             }
             else
             {
                 throw new Exception($"Problem \"{problemName}\" was not recognized");
             }
+        }
+
+        public ProblemInformation GetProblemInformation(ProblemSpecification spec)
+        {
+            var factory = GetProblemFactory(spec);
+            return factory.GetInformation(spec);
         }
 
         public IEnumerable<Parameter> GetTerminationParameters(string terminationName)

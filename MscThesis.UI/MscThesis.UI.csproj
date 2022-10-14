@@ -69,6 +69,18 @@
 	  <Compile Update="Pages\SetupPage.xaml.cs">
 	    <DependentUpon>SetupPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\OptionParameterSetup.xaml.cs">
+	    <DependentUpon>OptionParameterSetup.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\OptionParameterListSetup.xaml.cs">
+	    <DependentUpon>OptionParameterListSetup.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ExpressionParameterSetup.xaml.cs">
+	    <DependentUpon>ExpressionParameterSetup.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ExpressionParameterListSetup.xaml.cs">
+	    <DependentUpon>ExpressionParameterListSetup.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -78,13 +90,19 @@
 	  <MauiXaml Update="Pages\ResultPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\OptionParameterSetup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\OptionParameterListSetup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\OptimizerSetup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ParameterListSetup.xaml">
+	  <MauiXaml Update="Views\ExpressionParameterListSetup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ParameterSetup.xaml">
+	  <MauiXaml Update="Views\ExpressionParameterSetup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\SetupPage.xaml">

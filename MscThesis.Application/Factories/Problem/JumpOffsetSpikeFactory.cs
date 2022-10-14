@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories.Problem
 {
-    public class JumpOffsetSpikeFactory : IProblemFactory<BitString>
+    public class JumpOffsetSpikeFactory : ProblemFactory<BitString>
     {
         private IParameterFactory _parameterFactory;
 
@@ -17,9 +17,9 @@ namespace MscThesis.Runner.Factories.Problem
             _parameterFactory = parameterFactory;
         }
 
-        public ProblemDefinition Parameters => new ProblemDefinition
+        public override ProblemDefinition Definition => new ProblemDefinition
         {
-            AllowsMultipleSizes = true,
+            CustomSizesAllowed = true,
             ExpressionParameters = new List<Parameter>
             {
                 Parameter.GapSize
@@ -27,7 +27,7 @@ namespace MscThesis.Runner.Factories.Problem
             OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
         };
 
-        public Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification spec)
+        public override Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 

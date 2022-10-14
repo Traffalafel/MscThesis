@@ -7,16 +7,16 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories.Problem
 {
-    public class OneMaxFactory : IProblemFactory<BitString>
+    public class OneMaxFactory : ProblemFactory<BitString>
     {
-        public ProblemDefinition Parameters => new ProblemDefinition
+        public override ProblemDefinition Definition => new ProblemDefinition
         {
-            AllowsMultipleSizes = true,
+            CustomSizesAllowed = true,
             ExpressionParameters = new List<Parameter>(),
             OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
         };
 
-        public Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification _)
+        public override Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification _)
         {
             return (_) => new OneMax();
         }

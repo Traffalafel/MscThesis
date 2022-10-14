@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="TSPLib.Net" Version="1.1.6" />
+  </ItemGroup>
+
 </Project>

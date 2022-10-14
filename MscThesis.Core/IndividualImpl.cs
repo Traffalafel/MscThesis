@@ -20,7 +20,7 @@ namespace MscThesis.Core
         public double? Fitness { get; set; }
         public int Size { get
             {
-                return Value.GetSize();
+                return Value.Size;
             } 
         }
 

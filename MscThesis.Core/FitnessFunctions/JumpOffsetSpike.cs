@@ -17,7 +17,7 @@ namespace MscThesis.Core.FitnessFunctions
         protected override double Compute(BitString instance)
         {
             var numOnes = instance.Values.Where(val => val == true).Count();
-            var n = instance.GetSize();
+            var n = instance.Size;
 
             if (numOnes == (3*n)/4 + _m/2)
             {

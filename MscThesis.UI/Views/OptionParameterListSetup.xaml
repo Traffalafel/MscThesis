@@ -2,24 +2,25 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Name="this"
-             x:Class="MscThesis.UI.Views.ParameterListSetup"
+             x:Class="MscThesis.UI.Views.OptionParameterListSetup"
              xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
              xmlns:behavior="clr-namespace:MscThesis.UI.Behaviors"
              xmlns:view="clr-namespace:MscThesis.UI.Views">
 
-    <Frame BindingContext="{x:Reference this}">
+    <VerticalStackLayout BindingContext="{x:Reference this}">
 
         <ListView ItemsSource="{Binding Parameters}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell x:DataType="vm:ParameterVM">
-                        <view:ParameterSetup 
+                    <ViewCell x:DataType="vm:OptionParameterVM">
+                        <view:OptionParameterSetup 
                             Name="{Binding Name}" 
+                            Options="{Binding Options}"
                             Value="{Binding Value, Mode=TwoWay}"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         
-    </Frame>
+    </VerticalStackLayout>
 </ContentView>

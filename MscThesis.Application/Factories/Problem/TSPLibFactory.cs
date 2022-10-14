@@ -1,5 +1,6 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.FitnessFunctions;
+using MscThesis.Core.FitnessFunctions.TSP;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Specification;
 using System;
@@ -9,13 +10,13 @@ using TspLibNet;
 
 namespace MscThesis.Runner.Factories.Problem
 {
-    public class TSPLibFactory : IProblemFactory<Permutation>
+    public class TSPLibFactory : ProblemFactory<Permutation>
     {
         private IEnumerable<string> _tspNames;
         private TspLib95 _tspLib;
 
         public bool AllowsMultipleSizes => false;
-        public ProblemDefinition Parameters => new ProblemDefinition
+        public override ProblemDefinition Definition => new ProblemDefinition
         {
             ExpressionParameters = new List<Parameter>(),
             OptionParameters = new Dictionary<Parameter, IEnumerable<string>>
@@ -31,17 +32,26 @@ namespace MscThesis.Runner.Factories.Problem
             _tspNames = tsps.Select(tsp => tsp.Problem.Name).ToList();
         }
 
-        public Func<int, FitnessFunction<Permutation>> BuildProblem(ProblemSpecification spec)
+        public override Func<int, FitnessFunction<Permutation>> BuildProblem(ProblemSpecification spec)
         {
             var name = spec.Parameters[Parameter.ProblemName];
-            var tsp = _tspLib.TSPItems().Where(item => item.Problem.Name == name).FirstOrDefault();
+            var item = _tspLib.TSPItems().Where(item => item.Problem.Name == name).FirstOrDefault();
 
-            if (tsp == null)
+            if (item == null)
             {
                 throw new Exception();
             }
 
-            throw new NotImplementedException();
+            return _ => new TSP(item);
+        }
+
+        public override ProblemInformation GetInformation(ProblemSpecification spec)
+        {
+            var problemName = spec.Parameters[Parameter.ProblemName];
+            var item = _tspLib.TSPItems().Where(item => item.Problem.Name == problemName).FirstOrDefault();
+            var problem = item.Problem;
+
+            return new ProblemInformation(problem.Name, problem.Comment);
         }
     }
 }

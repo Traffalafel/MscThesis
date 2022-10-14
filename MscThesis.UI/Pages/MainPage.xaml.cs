@@ -7,9 +7,17 @@ public partial class MainPage : ContentPage
 		InitializeComponent();
 	}
 
-	public void NavigateNewRun(object sender, EventArgs e)
+	public async void NavigateNewRun(object sender, EventArgs e)
 	{
-		Shell.Current.GoToAsync(nameof(SetupPage));
+		var task = Shell.Current.GoToAsync(nameof(SetupPage));
+		try
+		{
+			await task;
+		}
+		catch (Exception ex)
+		{
+			;
+		}
 	}
 
 	public async void NavigateLoadResults(object sender, EventArgs e)

@@ -14,7 +14,7 @@ namespace MscThesis.UI.ViewModels
             _runner = runner;
         }
 
-        public ObservableCollection<ParameterVM> Parameters { get; set; } = new();
+        public ObservableCollection<ExpressionParameterVM> Parameters { get; set; } = new();
         public string Name
         {
             get => _name;
@@ -22,7 +22,7 @@ namespace MscThesis.UI.ViewModels
             {
                 _name = value;
                 var paramsNew = _runner.GetTerminationParameters(value);
-                var vms = paramsNew.Select(p => new ParameterVM
+                var vms = paramsNew.Select(p => new ExpressionParameterVM
                 {
                     Name = p.ToString()
                 });

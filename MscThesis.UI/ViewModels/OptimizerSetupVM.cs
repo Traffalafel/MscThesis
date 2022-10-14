@@ -16,7 +16,7 @@ namespace MscThesis.UI.ViewModels
 
         public string Seed { get; set; }
         public string Name { get; set; }
-        public ObservableCollection<ParameterVM> Parameters { get; set; } = new();
+        public ObservableCollection<ExpressionParameterVM> Parameters { get; set; } = new();
         public string Algorithm
         {
             get => _algorithm;
@@ -24,7 +24,7 @@ namespace MscThesis.UI.ViewModels
             {
                 _algorithm = value;
                 var paramsNew = _runner.GetAlgorithmParameters(value);
-                var vms = paramsNew.Select(p => new ParameterVM
+                var vms = paramsNew.Select(p => new ExpressionParameterVM
                 {
                     Name = p.ToString()
                 });

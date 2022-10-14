@@ -5,176 +5,269 @@
              xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
              xmlns:view="clr-namespace:MscThesis.UI.Views"
              xmlns:behavior="clr-namespace:MscThesis.UI.Behaviors"
+             xmlns:conv="clr-namespace:MscThesis.UI.Converters"
              x:DataType="vm:SetupVM"
              >
-    <ScrollView>
-        <VerticalStackLayout x:Name="Layout" Padding="20,0,20,0">
 
-            <Label Text="Specify tests"/>
+    <ContentPage.Resources>
+        <conv:SingleProblemSizeConverter x:Key="SingleProblemSizeConverter"/>
+        <conv:MultipleProblemSizeConverter x:Key="MultipleProblemSizeConverter"/>
 
-            <StackLayout>
+        <Style x:Key="TitleLayout" TargetType="HorizontalStackLayout">
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+        <Style x:Key="TitleLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="25"/>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+        <Style x:Key="SubLabelStyle" TargetType="Label">
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+        <Style x:Key="SwitchStyle" TargetType="Switch">
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+        <Style x:Key="PickerStyle" TargetType="Picker">
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+        <Style x:Key="LeftCol" TargetType="HorizontalStackLayout">
+            <Setter Property="Margin" Value="5,0,0,5"/>
+            <Setter Property="FlowDirection" Value="LeftToRight"/>
+        </Style>
+        <Style x:Key="RightCol" TargetType="HorizontalStackLayout">
+            <Setter Property="Margin" Value="0,0,5,5"/>
+            <Setter Property="FlowDirection" Value="LeftToRight"/>
+        </Style>
+        <ColumnDefinitionCollection x:Key="ColsDef">
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </ColumnDefinitionCollection>
+        <RowDefinitionCollection x:Key="RowDef">
+            <RowDefinition Height="Auto"/>
+        </RowDefinitionCollection>
+    </ContentPage.Resources>
 
-                <StackLayout Orientation="Vertical" >
-                    <Label Text="Problem sizes:"/>
-                    <StackLayout Orientation="Horizontal">
-                        
-                        <Label Text="Start:"/>
-                        <Entry Text="{Binding ProblemSizeStart}">
-                            <Entry.Behaviors>
-                                <behavior:NumericValidator/>
-                            </Entry.Behaviors>
-                        </Entry>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
-                        <Label Text="Stop"/>
-                        <Entry Text="{Binding ProblemSizeStop}">
-                            <Entry.Behaviors>
-                                <behavior:NumericValidator/>
-                            </Entry.Behaviors>
-                        </Entry>
+        <!-- Header bar -->
+        <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Style="{StaticResource TitleLayout}">
+            <Label Text="Problem" Style="{StaticResource TitleLabel}"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Style="{StaticResource TitleLayout}">
+            <Label Text="Optimizers" Style="{StaticResource TitleLabel}"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Grid.Row="0" Grid.Column="2" Style="{StaticResource TitleLayout}">
+            <Label Text="Termination criteria" Style="{StaticResource TitleLabel}"/>
+        </HorizontalStackLayout>
 
-                        <Label Text="Step"/>
-                        <Entry Text="{Binding ProblemSizeStep}">
-                            <Entry.Behaviors>
-                                <behavior:NumericValidator/>
-                            </Entry.Behaviors>
-                        </Entry>
-                        
-                    </StackLayout>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Number of runs:"/>
-                    <Entry Text="{Binding NumRuns}">
+        <StackLayout Grid.Row="0" Grid.Column="3">
+            <Button Clicked="Run"
+                    Text="Run!"/>
+        </StackLayout>
+
+        
+        <!-- Problem setup -->
+        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+
+            <!-- Problem name -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="0" Grid.Column="0" 
+                       Style="{StaticResource LabelStyle}"
+                       Text="Problem"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Picker Grid.Row="0" Grid.Column="1"
+                        Style="{StaticResource PickerStyle}"
+                        ItemsSource="{Binding PossibleProblemNames}" SelectedItem="{Binding ProblemName}">
+                        <Picker.Behaviors>
+                            <behavior:NameValidator/>
+                        </Picker.Behaviors>
+                    </Picker>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- NumRuns -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"
+                    Text="Number of runs"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Entry Grid.Row="1" Grid.Column="1"
+                       Style="{StaticResource EntryStyle}"
+                       Text="{Binding NumRuns}">
                         <Entry.Behaviors>
                             <behavior:NumericValidator/>
                         </Entry.Behaviors>
                     </Entry>
+                </HorizontalStackLayout>
+            </Grid>
 
-                </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Maximum number of parallel runs:"/>
-                    <Entry Text="{Binding MaxParallelization}"/>
-                </StackLayout>
+            <!-- Parallelization -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource LabelStyle}"
+                       Text="Parallelization"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Switch Grid.Row="2" Grid.Column="1"
+                        Style="{StaticResource SwitchStyle}"
+                        IsToggled="{Binding ParallelizationEnabled}"/>
+                </HorizontalStackLayout>
+            </Grid>
 
-                <Border Stroke="#fff"
-                        StrokeThickness="1">
-                    <StackLayout Padding="5,5,5,5">
-                        <Label Text="Problem"/>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Name:"></Label>
-                            <Picker ItemsSource="{Binding PossibleProblemNames}" SelectedItem="{Binding ProblemName}">
-                                <Picker.Behaviors>
-                                    <behavior:NameValidator/>
-                                </Picker.Behaviors>
-                            </Picker>
-                        </StackLayout>
-                        <view:ParameterListSetup Parameters="{Binding ProblemParameters}"/>
-                    </StackLayout>
-                </Border>
-            </StackLayout>
+            <!-- NumThreads -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                  IsVisible="{Binding ParallelizationEnabled}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="3" Grid.Column="0"
+                       Style="{StaticResource LabelStyle}"
+                       Text="#Threads"
+                       />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Entry Grid.Row="3" Grid.Column="1" 
+                       Style="{StaticResource EntryStyle}"
+                       Text="{Binding MaxParallelization}"/>
+                </HorizontalStackLayout>
+            </Grid>
 
-            <ListView ItemsSource="{Binding Optimizers}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell x:DataType="vm:OptimizerSetupVM">
+            <!-- Multiple sizes -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                  IsVisible="{Binding CustomProblemSizesAllowed}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="4" Grid.Column="0" 
+                           Style="{StaticResource LabelStyle}"
+                           Text="Multiple sizes"
+                       />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Switch Grid.Row="4" Grid.Column="1" 
+                            Style="{StaticResource SwitchStyle}"
+                            IsToggled="{Binding MultipleSizes}"/>
+                </HorizontalStackLayout>
+            </Grid>
 
-                            <Border Stroke="#fff"
-                                    StrokeThickness="1"
-                                    Margin="0,10,0,0">
-                                <StackLayout Padding="5,5,5,5">
-                                    <Label Text="Optimizer"/>
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="Name:"/>
-                                        <Entry Text="{Binding Name}"/>
-                                    </StackLayout>
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="Algorithm:"/>
-                                        <Picker 
-                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleAlgorithmNames}" 
-                                            SelectedItem="{Binding Algorithm}">
-                                            <Picker.Behaviors>
-                                                <behavior:NameValidator/>
-                                            </Picker.Behaviors>
-                                        </Picker>
-                                    </StackLayout>
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="Seed"/>
-                                        <Entry Text="{Binding Seed}"/>
-                                    </StackLayout>
-                                    <view:ParameterListSetup Parameters="{Binding Parameters}"/>
-                                    <Button 
-                                        Text="Remove"
-                                        Clicked="RemoveOptimizer"/>
+            <!-- Problem size start -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                  IsVisible="{Binding CustomProblemSizesAllowed}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label
+                       Style="{StaticResource LabelStyle}"
+                       Text="Problem size">
+                        <Label.IsVisible>
+                            <MultiBinding Converter="{StaticResource SingleProblemSizeConverter}">
+                                <Binding Path="CustomProblemSizesAllowed"/>
+                                <Binding Path="MultipleSizes"/>
+                            </MultiBinding>
+                        </Label.IsVisible>
+                    </Label>
+                    <Label
+                       Style="{StaticResource LabelStyle}"
+                       Text="Problem size start">
+                        <Label.IsVisible>
+                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
+                                <Binding Path="CustomProblemSizesAllowed"/>
+                                <Binding Path="MultipleSizes"/>
+                            </MultiBinding>
+                        </Label.IsVisible>
+                    </Label>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Entry
+                       Style="{StaticResource EntryStyle}"
+                       Text="{Binding ProblemSizeStart}"/>
+                </HorizontalStackLayout>
+            </Grid>
 
-                                </StackLayout>
-                            </Border>
+            <!-- Problem size stop -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                  IsVisible="{Binding CustomProblemSizesAllowed}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="6" Grid.Column="0"
+                       Style="{StaticResource LabelStyle}"
+                       Text="Problem size stop">
+                        <Label.IsVisible>
+                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
+                                <Binding Path="CustomProblemSizesAllowed"/>
+                                <Binding Path="MultipleSizes"/>
+                            </MultiBinding>
+                        </Label.IsVisible>
+                    </Label>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Entry Grid.Row="6" Grid.Column="1"
+                       Style="{StaticResource EntryStyle}"
+                       Text="{Binding ProblemSizeStop}">
+                        <Entry.IsVisible>
+                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
+                                <Binding Path="CustomProblemSizesAllowed"/>
+                                <Binding Path="MultipleSizes"/>
+                            </MultiBinding>
+                        </Entry.IsVisible>
+                    </Entry>
+                </HorizontalStackLayout>
+            </Grid>
 
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <!-- Problem size step -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                  IsVisible="{Binding CustomProblemSizesAllowed}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="6" Grid.Column="0"
+                       Style="{StaticResource LabelStyle}"
+                       Text="Problem size step">
+                        <Label.IsVisible>
+                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
+                                <Binding Path="CustomProblemSizesAllowed"/>
+                                <Binding Path="MultipleSizes"/>
+                            </MultiBinding>
+                        </Label.IsVisible>
+                    </Label>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Entry Grid.Row="6" Grid.Column="1"
+                       Style="{StaticResource EntryStyle}"
+                       Text="{Binding ProblemSizeStep}">
+                        <Entry.IsVisible>
+                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
+                                <Binding Path="CustomProblemSizesAllowed"/>
+                                <Binding Path="MultipleSizes"/>
+                            </MultiBinding>
+                        </Entry.IsVisible>
+                    </Entry>
+                </HorizontalStackLayout>
+            </Grid>
 
-            <Button 
-                Text="Add optimizer"
-                Clicked="AddOptimizer"/>
+            <view:ExpressionParameterListSetup Parameters="{Binding ProblemExpressionParameters}"/>
+            <view:OptionParameterListSetup Parameters="{Binding ProblemOptionParameters}"/>
 
-            <ListView ItemsSource="{Binding Terminations}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell x:DataType="vm:TerminationSetupVM">
-                            <Border Stroke="#fff"
-                                    StrokeThickness="1">
-                                <StackLayout Padding="5,5,5,5">
-                                    <Label Text="Termination criterion"/>
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label>Name:</Label>
-                                        <Picker 
-                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleTerminationNames}" 
-                                            SelectedItem="{Binding Name}">
-                                            <Picker.Behaviors>
-                                                <behavior:NameValidator/>
-                                            </Picker.Behaviors>
-                                        </Picker>
-                                    </StackLayout>
-                                    <view:ParameterListSetup Parameters="{Binding Parameters}"/>
-                                    <Button 
-                                        Text="Remove"
-                                        Clicked="RemoveTermination"/>
-                                </StackLayout>
-                            </Border>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <HorizontalStackLayout>
+                <Label Text="Name:"/>
+                <Label Text="{Binding ProblemInformationName}"/>
+            </HorizontalStackLayout>
 
-            <Button 
-                Text="Add termination criterion"
-                Clicked="AddTerminationCriterion"/>
-
-            <Button 
-                
-                Text="Run!"
-                Clicked="Run">
-                <!-- 
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="BackgroundColor" Value="Red"/>
-                        <Setter Property="IsEnabled" Value="False"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsValid.Value}" Value="True" TargetType="Button">
-                                <Setter Property="BackgroundColor" Value="White"/>
-                                <Setter Property="IsEnabled" Value="True"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsValid.Value}" Value="False" TargetType="Button">
-                                <Setter Property="BackgroundColor" Value="Red"/>
-                                <Setter Property="IsEnabled" Value="False"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-                -->
-                
-            </Button>
+            <VerticalStackLayout>
+                <Label Text="Description:"/>
+                <Label Text="{Binding ProblemInformationDescription}"/>
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
-    </ScrollView>
+
+    </Grid>
+
 </ContentPage>

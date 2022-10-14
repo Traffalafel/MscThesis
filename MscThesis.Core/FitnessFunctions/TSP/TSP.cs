@@ -1,32 +1,24 @@
 ﻿using MscThesis.Core.Formats;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using TspLibNet;
+using TspLibNet.Tours;
 
 namespace MscThesis.Core.FitnessFunctions.TSP
 {
     public class TSP : FitnessFunction<Permutation>
     {
-        private double? _optimum;
+        private TspLib95Item _item;
 
-        public TSP(string TSPfromTSPlib_10hif9s)
+        public TSP(TspLib95Item item)
         {
-            _optimum = 420;
-            throw new NotImplementedException();
+            _item = item;
         }
 
-        public TSP(double[,] distances)
-        {
-            _optimum = null;
-
-            throw new NotImplementedException();
-        }
-
-        public override double? Optimum => _optimum;
+        public override double? Optimum => _item.OptimalTourDistance;
 
         protected override double Compute(Permutation instance)
         {
-            throw new NotImplementedException();
+            var tour = new Tour(string.Empty, string.Empty, instance.Size, instance);
+            return _item.Problem.TourDistance(tour);
         }
     }
 }
