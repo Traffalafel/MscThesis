@@ -6,6 +6,7 @@ using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TspLibNet;
 
 namespace MscThesis.Runner
 {
@@ -13,12 +14,14 @@ namespace MscThesis.Runner
     {
         private List<ITestCaseFactory<InstanceFormat>> _factories;
 
-        public TestProvider()
+        public TestProvider(Settings settings)
         {
+            var tspLib = new TspLib95(settings.TSPLibDirectoryPath);
+
             _factories = new List<ITestCaseFactory<InstanceFormat>>
             {
                 new BitStringTestCaseFactory(),
-                new PermutationTestCaseFactory()
+                new PermutationTestCaseFactory(tspLib)
             };
         }
 
@@ -40,16 +43,16 @@ namespace MscThesis.Runner
             return names;
         }
 
-        public IEnumerable<Parameter> GetProblemParameters(string problemName)
+        public ProblemDefinition GetProblemParameters(string problemName)
         {
             foreach (var factory in _factories)
             {
                 if (factory.Problems.Contains(problemName))
                 {
-                    return factory.GetProblemParameters(problemName);
+                    return factory.GetProblemDefinition(problemName);
                 }
             }
-            return new List<Parameter>();
+            throw new Exception($"Problem \"{problemName}\" is not recognized");
         }
 
         public List<string> GetTerminationNames(string problemName)

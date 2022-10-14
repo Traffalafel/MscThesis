@@ -96,7 +96,7 @@ namespace MscThesis.Runner.Factories
         {
             if (_optimizers.ContainsKey(algorithmName))
             {
-                return _optimizers[algorithmName].RequiredParameters;
+                return _optimizers[algorithmName].Parameters;
             }
             else
             {
@@ -104,15 +104,16 @@ namespace MscThesis.Runner.Factories
             }
         }
 
-        public IEnumerable<Parameter> GetProblemParameters(string problemName)
+        public ProblemDefinition GetProblemDefinition(string problemName)
         {
             if (_problems.ContainsKey(problemName))
             {
-                return _problems[problemName].RequiredParameters;
+                var factory = _problems[problemName];
+                return factory.Parameters;
             }
             else
             {
-                return new List<Parameter>();
+                throw new Exception($"Problem \"{problemName}\" was not recognized");
             }
         }
 
@@ -120,7 +121,7 @@ namespace MscThesis.Runner.Factories
         {
             if (_terminations.ContainsKey(terminationName))
             {
-                return _terminations[terminationName].RequiredParameters;
+                return _terminations[terminationName].Parameters;
             }
             else
             {

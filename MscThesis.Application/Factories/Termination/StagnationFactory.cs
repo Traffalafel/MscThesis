@@ -17,7 +17,7 @@ namespace MscThesis.Runner.Factories.Termination
             _parameterFactory = parameterFactory;
         }
 
-        public IEnumerable<Parameter> RequiredParameters => new List<Parameter>
+        public IEnumerable<Parameter> Parameters => new List<Parameter>
         {
             Parameter.MaxIterations,
             Parameter.Epsilon

@@ -6,6 +6,7 @@ namespace MscThesis.Core
         PopulationSize,
         Epsilon,
         MaxIterations,
-        GapSize
+        GapSize,
+        ProblemName
     }
 }

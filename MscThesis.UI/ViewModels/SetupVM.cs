@@ -13,7 +13,12 @@ namespace MscThesis.UI.ViewModels
 
         public SetupVM()
         {
-            _runner = new TestProvider();
+            var settings = new Settings
+            {
+                TSPLibDirectoryPath = "C:\\Users\\traff\\Desktop\\TSPLIB95"
+            };
+
+            _runner = new TestProvider(settings);
         }
 
         public string ProblemName {
@@ -36,17 +41,17 @@ namespace MscThesis.UI.ViewModels
                     PossibleTerminationNames.Add(name);
                 }
 
-                var newParameters = _runner.GetProblemParameters(_problemName);
-                var vms = newParameters.Select(vm => new ParameterVM
-                {
-                    Name = vm.ToString()
-                });
+                //var newParameters = _runner.GetProblemParameters(_problemName);
+                //var vms = newParameters.Select(vm => new ParameterVM
+                //{
+                //    Name = vm.ToString()
+                //});
 
-                ProblemParameters.Clear();
-                foreach (var vm in vms)
-                {
-                    ProblemParameters.Add(vm);
-                }
+                //ProblemParameters.Clear();
+                //foreach (var vm in vms)
+                //{
+                //    ProblemParameters.Add(vm);
+                //}
             } 
         }
 

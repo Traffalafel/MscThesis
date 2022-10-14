@@ -9,7 +9,12 @@ namespace MscThesis.Runner.Factories.Problem
 {
     public class OneMaxFactory : IProblemFactory<BitString>
     {
-        public IEnumerable<Parameter> RequiredParameters => new List<Parameter>();
+        public ProblemDefinition Parameters => new ProblemDefinition
+        {
+            AllowsMultipleSizes = true,
+            ExpressionParameters = new List<Parameter>(),
+            OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
+        };
 
         public Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification _)
         {

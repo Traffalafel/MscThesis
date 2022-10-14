@@ -5,8 +5,9 @@ using System;
 
 namespace MscThesis.Runner.Factories
 {
-    public interface IProblemFactory<T> : IParameterProvider where T : InstanceFormat
+    public interface IProblemFactory<T> where T : InstanceFormat
     {
+        public ProblemDefinition Parameters { get; }
         public Func<int, FitnessFunction<T>> BuildProblem(ProblemSpecification spec);
     }
 

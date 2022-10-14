@@ -13,8 +13,8 @@ namespace MscThesis.Runner.Factories
 
         public IEnumerable<ITestCase<InstanceFormat>> BuildTestCases(TestSpecification spec);
 
+        public ProblemDefinition GetProblemDefinition(string problemName);
         public IEnumerable<Parameter> GetAlgorithmParameters(string algorithmName);
-        public IEnumerable<Parameter> GetProblemParameters(string problemName);
         public IEnumerable<Parameter> GetTerminationParameters(string terminationName);
     }
 }

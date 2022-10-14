@@ -9,7 +9,7 @@ namespace MscThesis.Runner.Factories.Optimizer
 {
     public class P3Factory : OptimizerFactory<BitString>
     {
-        public override IEnumerable<Parameter> RequiredParameters => new List<Parameter>();
+        public override IEnumerable<Parameter> Parameters => new List<Parameter>();
 
         public override Func<int, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {

@@ -20,7 +20,7 @@ namespace MscThesis.Core.TerminationCriteria
 
         protected override bool ShouldTerminate(Population<T> pop)
         {
-            var fittest = pop.GetFittest();
+            var fittest = pop.Fittest;
             if (fittest == null)
             {
                 throw new Exception("Fittest individual in population cannot be null");

@@ -17,9 +17,14 @@ namespace MscThesis.Runner.Factories.Problem
             _parameterFactory = parameterFactory;
         }
 
-        public IEnumerable<Parameter> RequiredParameters => new List<Parameter> 
-        { 
-            Parameter.GapSize
+        public ProblemDefinition Parameters => new ProblemDefinition
+        {
+            AllowsMultipleSizes = true,
+            ExpressionParameters = new List<Parameter>
+            {
+                Parameter.GapSize
+            },
+            OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
         };
 
         public Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification spec)

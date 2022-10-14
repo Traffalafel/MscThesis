@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="TSPLib.Net" Version="1.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MscThesis.Core\MscThesis.Core.csproj" />
   </ItemGroup>
 

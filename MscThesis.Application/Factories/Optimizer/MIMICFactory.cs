@@ -20,7 +20,7 @@ namespace MscThesis.Runner.Factories
             _parameterFactory = parameterFactory;
         }
 
-        public override IEnumerable<Parameter> RequiredParameters => new List<Parameter> 
+        public override IEnumerable<Parameter> Parameters => new List<Parameter> 
         { 
             Parameter.PopulationSize
         };

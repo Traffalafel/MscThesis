@@ -12,6 +12,7 @@ namespace MscThesis.Core
         private Individual<T> _fittest;
 
         public List<Individual<T>> Individuals => _individuals;
+        public Individual<T> Fittest => _fittest;
 
         public int ProblemSize { get
             {
@@ -58,11 +59,6 @@ namespace MscThesis.Core
         public IEnumerable<T> GetValues()
         {
             return _individuals.Select(p => p.Value);
-        }
-
-        public Individual<T> GetFittest()
-        {
-            return _fittest;
         }
 
         public IEnumerator<Individual<T>> GetEnumerator()

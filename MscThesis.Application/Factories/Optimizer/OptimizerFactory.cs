@@ -7,10 +7,9 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories
 {
-    public abstract class OptimizerFactory<T> : IParameterProvider where T : InstanceFormat
+    public abstract class OptimizerFactory<T> where T : InstanceFormat
     {
-        public abstract IEnumerable<Parameter> RequiredParameters { get; }
-
+        public abstract IEnumerable<Parameter> Parameters { get; }
         public abstract Func<int, Optimizer<T>> BuildCreator(OptimizerSpecification spec);
 
         protected Random BuildRandom(int? seed)

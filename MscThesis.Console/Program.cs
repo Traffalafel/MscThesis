@@ -13,7 +13,12 @@ namespace MscThesis.CLI
     {
         static void Main(string[] args)
         {
-            var runner = new TestProvider();
+            var settings = new Settings
+            {
+                TSPLibDirectoryPath = string.Empty
+            };
+
+            var runner = new TestProvider(settings);
 
             var spec = new TestSpecification
             {

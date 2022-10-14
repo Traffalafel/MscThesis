@@ -12,6 +12,8 @@ namespace MscThesis.Core.FitnessFunctions
             _m = m;
         }
 
+        public override double? Optimum => throw new System.NotImplementedException();
+
         protected override double Compute(BitString instance)
         {
             var numOnes = instance.Values.Where(val => val == true).Count();

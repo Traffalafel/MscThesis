@@ -7,6 +7,8 @@ namespace MscThesis.Core.FitnessFunctions
         private int _numCalls = 0;
         protected abstract double Compute(T instance);
 
+        public abstract double? Optimum { get; }
+
         public double ComputeFitness(T instance)
         {
             _numCalls++;

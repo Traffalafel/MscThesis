@@ -59,7 +59,7 @@ namespace MscThesis.Runner.Results
                         _seriesData[key].Add((numIterations, value));
                     }
 
-                    var fittest = iteration.Population.GetFittest();
+                    var fittest = iteration.Population.Fittest;
                     if (fittest == null || fittest.Fitness == null)
                     {
                         throw new Exception();
