@@ -37,6 +37,10 @@ public partial class SetupPage : ContentPage
 		var button = (Button)sender;
 		var buttonVM = (OptimizerSetupVM)button.BindingContext;
 		_vm.Optimizers.Remove(buttonVM);
+        if (!_vm.Optimizers.Any())
+        {
+            _vm.AnyOptimizersExist = false;
+        }
     }
 
 	public void AddTerminationCriterion(object sender, EventArgs e)
@@ -49,6 +53,10 @@ public partial class SetupPage : ContentPage
         var button = (Button)sender;
         var buttonVM = (TerminationSetupVM)button.BindingContext;
         _vm.Terminations.Remove(buttonVM);
+        if (!_vm.Terminations.Any())
+        {
+            _vm.AnyTerminationsExist = false;
+        }
     }
 
     public void Run(object sender, EventArgs e)

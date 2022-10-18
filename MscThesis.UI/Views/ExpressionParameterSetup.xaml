@@ -12,7 +12,7 @@
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
         <Style x:Key="RightCol" TargetType="HorizontalStackLayout">
-            <Setter Property="Margin" Value="-5,0,0,5"/>
+            <Setter Property="Margin" Value="-5,2,0,5"/>
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
         <ColumnDefinitionCollection x:Key="ColsDef">
@@ -27,10 +27,12 @@
     <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
           BindingContext="{x:Reference this}">
         <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
-            <Label Text="{Binding Name}" />
+            <Label Text="{Binding Name}"
+                   VerticalOptions="Center"/>
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
-            <Entry Text="{Binding Value}" >
+            <Entry Text="{Binding Value}"
+                   VerticalOptions="Center">
                 <Entry.Behaviors>
                     <behavior:ExpressionValidator/>
                 </Entry.Behaviors>

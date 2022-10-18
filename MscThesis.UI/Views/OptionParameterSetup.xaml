@@ -13,7 +13,7 @@
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
         <Style x:Key="RightCol" TargetType="HorizontalStackLayout">
-            <Setter Property="Margin" Value="-5,0,0,5"/>
+            <Setter Property="Margin" Value="-5,2,0,5"/>
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
         <ColumnDefinitionCollection x:Key="ColsDef">
@@ -28,10 +28,12 @@
     <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
               BindingContext="{x:Reference this}">
         <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
-            <Label Text="{Binding Name}" />
+            <Label Text="{Binding Name}"
+                   VerticalOptions="Center"/>
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
-            <Picker ItemsSource="{Binding Options}" SelectedItem="{Binding Value, Mode=TwoWay}"/>
+            <Picker ItemsSource="{Binding Options}" SelectedItem="{Binding Value, Mode=TwoWay}"
+                    VerticalOptions="Center"/>
         </HorizontalStackLayout>
     </Grid>
 

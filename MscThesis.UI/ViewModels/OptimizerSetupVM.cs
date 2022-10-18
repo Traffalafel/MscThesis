@@ -1,11 +1,18 @@
-﻿using MscThesis.Runner;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MscThesis.Runner;
 using MscThesis.Runner.Specification;
 using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.ViewModels
 {
-    public class OptimizerSetupVM
+    public partial class OptimizerSetupVM : ObservableObject
     {
+        [ObservableProperty]
+        bool customSeed = false;
+
+        [ObservableProperty]
+        bool parametersExist = false;
+
         private TestProvider _runner;
         private string _algorithm = string.Empty;
 
@@ -33,6 +40,7 @@ namespace MscThesis.UI.ViewModels
                 {
                     Parameters.Add(vm);
                 }
+                ParametersExist = paramsNew.Count() > 0;
             }
         }
 

@@ -27,6 +27,10 @@ namespace MscThesis.UI.ViewModels
         bool expressionParamsExist = false;
         [ObservableProperty]
         bool optionParamsExist = false;
+        [ObservableProperty]
+        bool anyOptimizersExist = false;
+        [ObservableProperty]
+        bool anyTerminationsExist = false;
 
         private string _problemName = string.Empty;
 
@@ -125,12 +129,14 @@ namespace MscThesis.UI.ViewModels
         {
             var newOptimizer = new OptimizerSetupVM(_provider);
             Optimizers.Add(newOptimizer);
+            AnyOptimizersExist = true;
         }
 
         public void AddTerminationCriterion()
         {
             var newCriterion = new TerminationSetupVM(_provider);
             Terminations.Add(newCriterion);
+            AnyTerminationsExist = true;
         }
 
         private ProblemSpecification CreateProblemSpec()

@@ -18,6 +18,7 @@
             <Setter Property="HorizontalOptions" Value="Center"/>
         </Style>
         <Style x:Key="TitleLabel" TargetType="Label">
+            <Setter Property="Margin" Value="10,0,0,5" />
             <Setter Property="FontSize" Value="25"/>
         </Style>
         <Style x:Key="LabelStyle" TargetType="Label">
@@ -43,6 +44,30 @@
             <Setter Property="Margin" Value="0,0,0,5"/>
             <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
+        <Style x:Key="AddButton" TargetType="Button">
+            <Setter Property="HeightRequest" Value="40"/>
+            <Setter Property="WidthRequest" Value="40"/>
+            <Setter Property="CornerRadius" Value="20"/>
+        </Style>
+        <Style x:Key="RemoveButton" TargetType="Button">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HeightRequest" Value="34"/>
+            <Setter Property="WidthRequest" Value="34"/>
+            <Setter Property="HorizontalOptions" Value="End"/>
+            <Setter Property="CornerRadius" Value="17"/>
+        </Style>
+        <Style x:Key="Line" TargetType="BoxView">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="Margin" Value="5,5,5,5" />
+            <Setter Property="HeightRequest" Value="2" />
+            <Setter Property="HorizontalOptions" Value="Fill" />
+        </Style>
+        <Style x:Key="RunButton" TargetType="Button">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="HeightRequest" Value="40"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="HorizontalOptions" Value="End"/>
+        </Style>
         <ColumnDefinitionCollection x:Key="ColsDef">
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -57,39 +82,22 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <!-- Header bar -->
-        <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Style="{StaticResource TitleLayout}">
-            <Label Text="Problem" Style="{StaticResource TitleLabel}"/>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Style="{StaticResource TitleLayout}">
-            <Label Text="Optimizers" Style="{StaticResource TitleLabel}"/>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout Grid.Row="0" Grid.Column="2" Style="{StaticResource TitleLayout}">
-            <Label Text="Termination criteria" Style="{StaticResource TitleLabel}"/>
-        </HorizontalStackLayout>
-
-        <StackLayout Grid.Row="0" Grid.Column="3">
-            <Button Clicked="Run"
-                    Text="Run!"/>
-        </StackLayout>
-
-        
         <!-- Problem setup -->
-        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+        <VerticalStackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="Center">
+
+            <Label Text="Problem" Style="{StaticResource TitleLabel}"/>
 
             <!-- Problem name -->
             <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
                 <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
                     <Label Grid.Row="0" Grid.Column="0" 
                        Style="{StaticResource LabelStyle}"
-                       Text="Problem"/>
+                       Text="Type"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
                     <Picker Grid.Row="0" Grid.Column="1"
@@ -274,6 +282,141 @@
             </VerticalStackLayout>
 
         </VerticalStackLayout>
+
+        <!-- Optimizer setup -->
+        <ScrollView Grid.Row="0" Grid.Column="1">
+            <VerticalStackLayout Margin="10,0,10,0">
+                <Label Text="Optimizers" Style="{StaticResource TitleLabel}"/>
+
+                <ListView ItemsSource="{Binding Optimizers}"
+                          SelectionMode="None"
+                          IsVisible="{Binding AnyOptimizersExist}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell x:DataType="vm:OptimizerSetupVM">
+
+                                <VerticalStackLayout Margin="-15,0,0,0">
+                                    <Button Text="X"
+                                            Style="{StaticResource RemoveButton}"
+                                            Clicked="RemoveOptimizer"/>
+                                    <VerticalStackLayout Margin="0,-34,0,0"> <!-- Super ugly, I know... -->
+
+                                        <!-- Algorithm -->
+                                        <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
+                                            <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                                                <Label Style="{StaticResource LabelStyle}"
+                                            Text="Algorithm"/>
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                                                <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleAlgorithmNames}"
+                                            SelectedItem="{Binding Algorithm}" />
+                                            </HorizontalStackLayout>
+                                        </Grid>
+
+                                        <!-- Random seed switch -->
+                                        <Grid HorizontalOptions="Fill" RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
+                                            <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}"
+                                                                HorizontalOptions="Fill">
+                                                <Label Style="{StaticResource LabelStyle}"
+                                            Text="Custom seed"/>
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                                                <Switch IsToggled="{Binding CustomSeed}"/>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+
+                                        <!-- Seed entry -->
+                                        <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                                        IsVisible="{Binding CustomSeed}">
+                                            <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                                                <Label Style="{StaticResource LabelStyle}"
+                                            Text="Seed value"/>
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                                                <Entry Text="{Binding Seed}"/>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+
+                                        <view:ExpressionParameterListSetup Parameters="{Binding Parameters}"
+                                                                        IsVisible="{Binding ParametersExist}"/>
+
+                                        <BoxView Style="{StaticResource Line}" />
+
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button Text="+"
+                    Style="{StaticResource AddButton}"
+                    Clicked="AddOptimizer"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Termination setup -->
+        <ScrollView Grid.Row="0" Grid.Column="2">
+
+            <VerticalStackLayout>
+                <Button Clicked="Run"
+                        Style="{StaticResource RunButton}"
+                        Text="Run"/>
+                <VerticalStackLayout Margin="0,-40,0,0">
+
+                    <Label Text="Termination criteria" Style="{StaticResource TitleLabel}"/>
+
+                    <ListView ItemsSource="{Binding Terminations}"
+                              SelectionMode="None"
+                              IsVisible="{Binding AnyTerminationsExist}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell x:DataType="vm:TerminationSetupVM">
+
+                                    <VerticalStackLayout Margin="-15,0,0,0">
+                                        <Button Text="X"
+                                                Style="{StaticResource RemoveButton}"
+                                                Clicked="RemoveTermination"/>
+                                        <VerticalStackLayout Margin="0,-34,0,0">
+                                            <!-- Super ugly, I know... -->
+
+                                            <!-- Type -->
+                                            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
+                                                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                                                    <Label Style="{StaticResource LabelStyle}"
+                                                Text="Type"/>
+                                                </HorizontalStackLayout>
+                                                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                                                    <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:SetupVM}}, Path=PossibleTerminationNames}"
+                                                            SelectedItem="{Binding Name}" />
+                                                </HorizontalStackLayout>
+                                            </Grid>
+
+                                            <view:ExpressionParameterListSetup Parameters="{Binding Parameters}"
+                                                                               IsVisible="{Binding ParametersExist}"/>
+
+                                            <BoxView Style="{StaticResource Line}" />
+
+                                        </VerticalStackLayout>
+                                    </VerticalStackLayout>
+
+
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Button Text="+"
+                        Style="{StaticResource AddButton}"
+                        Clicked="AddTerminationCriterion"/>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+        </ScrollView>
 
     </Grid>
 

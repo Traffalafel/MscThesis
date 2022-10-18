@@ -1,11 +1,16 @@
-﻿using MscThesis.Runner;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MscThesis.Runner;
 using MscThesis.Runner.Specification;
 using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.ViewModels
 {
-    public class TerminationSetupVM
+    public partial class TerminationSetupVM : ObservableObject
     {
+
+        [ObservableProperty]
+        bool parametersExist = false;
+
         private string _name = string.Empty;
         private TestProvider _runner;
 
@@ -31,6 +36,7 @@ namespace MscThesis.UI.ViewModels
                 {
                     Parameters.Add(vm);
                 }
+                ParametersExist = paramsNew.Count() > 0;
             }
         }
 
