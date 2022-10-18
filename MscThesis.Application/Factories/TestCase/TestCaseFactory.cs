@@ -35,27 +35,19 @@ namespace MscThesis.Runner.Factories
         {
             foreach (var optimizerSpec in spec.Optimizers)
             {
-                var buildOptimizer = new Func<int, Optimizer<T>>((size) =>
-                {
-                    var optimizerFactory = GetOptimizerFactory(optimizerSpec);
-                    var creator = optimizerFactory.BuildCreator(optimizerSpec);
-                    return creator.Invoke(size);
-                });
+                var optimizerFactory = GetOptimizerFactory(optimizerSpec);
+                var buildOptimizerFunc = optimizerFactory.BuildCreator(optimizerSpec);
 
-                var buildProblem = new Func<int, FitnessFunction<T>>((size) =>
-                {
-                    var problemFactory = GetProblemFactory(spec.Problem);
-                    var creator = problemFactory.BuildProblem(spec.Problem);
-                    return creator.Invoke(size);
-                });
+                var problemFactory = GetProblemFactory(spec.Problem);
+                var buildProblemFunc = problemFactory.BuildProblem(spec.Problem);
 
-                var buildTerminations = new Func<int, IEnumerable<TerminationCriterion<T>>>((size) =>
+                var buildTerminationsFunc = new Func<int, IEnumerable<TerminationCriterion<T>>>((size) =>
                 {
                     var terminations = new List<TerminationCriterion<T>>();
                     foreach (var terminationSpec in spec.Terminations)
                     {
                         var terminationFactory = GetTerminationFactory(terminationSpec);
-                        var creator = terminationFactory.BuildCriterion(terminationSpec);
+                        var creator = terminationFactory.BuildCriterion(terminationSpec, buildProblemFunc);
                         var termination = creator.Invoke(size);
                         terminations.Add(termination);
                     }
@@ -74,7 +66,7 @@ namespace MscThesis.Runner.Factories
                     name = $"{algoName}_{string.Join('_', paramStrings)}";
                 }
 
-                yield return new TestCase<T>(name, buildOptimizer, buildProblem, buildTerminations);
+                yield return new TestCase<T>(name, buildOptimizerFunc, buildProblemFunc, buildTerminationsFunc);
             }
         }
 

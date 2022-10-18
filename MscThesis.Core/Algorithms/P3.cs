@@ -25,8 +25,8 @@ namespace MscThesis.Core.Algorithms
 
         protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
-            var uniform = BitString.CreateUniform(_problemSize, _random);
-            var individual = HillClimb(uniform, fitnessFunction, _random);
+            var uniform = BitString.CreateUniform(_random, _problemSize);
+            var individual = HillClimb(_random, uniform, fitnessFunction);
 
             if (!Exists(individual))
             {
@@ -65,19 +65,19 @@ namespace MscThesis.Core.Algorithms
             };
         }
 
-        private Individual<BitString> HillClimb(BitString solution, FitnessFunction<BitString> fitnessFunction, Random random)
+        private Individual<BitString> HillClimb(Random random, BitString solution, FitnessFunction<BitString> fitnessFunction)
         {
             var fitness = fitnessFunction.ComputeFitness(solution);
             var individual = new IndividualImpl<BitString>(solution, fitness);
 
             var problemSize = solution.Values.Length;
-            var options = Enumerable.Range(0, problemSize).ToList();
+            var options = Enumerable.Range(0, problemSize).ToArray();
 
             var tried = new HashSet<int>();
 
             while (tried.Count < problemSize)
             {
-                foreach (var index in RandomUtils.Shuffle(options, random))
+                foreach (var index in RandomUtils.Shuffle(random, options))
                 {
                     if (tried.Contains(index))
                     {
@@ -163,7 +163,7 @@ namespace MscThesis.Core.Algorithms
         {
             foreach (var cluster in _clusters)
             {
-                var other = RandomUtils.Choose(_population.Individuals, _random);
+                var other = RandomUtils.Choose(_random, _population.Individuals);
                 var fitnessPrev = individual.Fitness;
 
                 var solution = individual.Value;

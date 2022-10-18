@@ -155,13 +155,20 @@ namespace MscThesis.UI.ViewModels
             {
                 throw new Exception();
             }
+
+            var problemSizes = new List<int>();
+            if (CustomProblemSizesAllowed)
+            {
+                problemSizes = ParseProblemSizes(ProblemSizeStart, ProblemSizeStop, ProblemSizeStep).ToList();
+            }
+
             return new TestSpecification
             {
                 NumRuns = Convert.ToInt32(NumRuns),
                 Optimizers = Optimizers.Select(o => o.ToSpecification()).ToList(),
                 MaxParallelization = Convert.ToDouble(MaxParallelization),
                 Problem = CreateProblemSpec(),
-                ProblemSizes = ParseProblemSizes(ProblemSizeStart, ProblemSizeStop, ProblemSizeStep).ToList(),
+                ProblemSizes = problemSizes,
                 Terminations = Terminations.Select(t => t.ToSpecification()).ToList()
             };
         }

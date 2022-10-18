@@ -8,11 +8,11 @@ namespace MscThesis.Core.Formats
     {
         public bool[] Values { get; set; }
 
-        public static BitString CreateUniform(int size, Random random)
+        public static BitString CreateUniform(Random random, int size)
         {
             return new BitString
             {
-                Values = RandomUtils.SampleBitStringUniformly(size, random)
+                Values = RandomUtils.SampleBitStringUniformly(random, size)
             };
         }
 

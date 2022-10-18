@@ -28,7 +28,7 @@ namespace MscThesis.Core.Algorithms
             _population = new Population<BitString>();
             for (int i = 0; i < _populationSize; i++)
             {
-                var bs = BitString.CreateUniform(problemSize, _random);
+                var bs = BitString.CreateUniform(_random, problemSize);
                 _population.Add(new IndividualImpl<BitString>(bs));
             }
         }
@@ -62,7 +62,7 @@ namespace MscThesis.Core.Algorithms
 
                 foreach (var cluster in clusters)
                 {
-                    var p = RandomUtils.Choose(_population.Individuals, _random).Value;
+                    var p = RandomUtils.Choose(_random, _population.Individuals).Value;
 
                     Copy(p, o, cluster);
 

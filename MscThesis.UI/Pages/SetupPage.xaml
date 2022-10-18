@@ -362,9 +362,7 @@
         <ScrollView Grid.Row="0" Grid.Column="2">
 
             <VerticalStackLayout>
-                <Button Clicked="Run"
-                        Style="{StaticResource RunButton}"
-                        Text="Run"/>
+                <Button Text="Run" Clicked="Run" Style="{StaticResource RunButton}" ZIndex="1"/>
                 <VerticalStackLayout Margin="0,-40,0,0">
 
                     <Label Text="Termination criteria" Style="{StaticResource TitleLabel}"/>

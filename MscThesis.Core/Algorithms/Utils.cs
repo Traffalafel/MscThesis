@@ -19,6 +19,25 @@ namespace MscThesis.Core.Algorithms
             return ComputeUniEntropies(freqs);
         }
 
+        internal static double[] ComputeUniEntropies(double[] uniFrequencies)
+        {
+            var problemSize = uniFrequencies.GetLength(0);
+            var entropies = new double[problemSize];
+            for (int i = 0; i < problemSize; i++)
+            {
+                var p = uniFrequencies[i];
+                if (p <= 0 || p >= 1)
+                {
+                    continue;
+                }
+                else
+                {
+                    entropies[i] = -p * Math.Log2(p) - (1 - p) * Math.Log2(1 - p);
+                }
+            }
+            return entropies;
+        }
+
         internal static double[,] ComputeJointEntropies(Population<BitString> population)
         {
             if (population.Size == 0)
@@ -29,6 +48,35 @@ namespace MscThesis.Core.Algorithms
             var counts = GetJointCounts(population);
             var freqs = ComputeJointFrequencies(counts, population.Size);
             return ComputeJointEntropies(freqs);
+        }
+
+        internal static double[,] ComputeJointEntropies(double[,][] jointFrequencies)
+        {
+            var problemSize = jointFrequencies.GetLength(0);
+
+            var jointEntropies = new double[problemSize, problemSize];
+            for (int i = 0; i < problemSize; i++)
+            {
+                for (int j = i + 1; j < problemSize; j++)
+                {
+                    var jp = jointFrequencies[i, j];
+                    jointEntropies[i, j] = -jp.Sum(p =>
+                    {
+                        if (p <= 0 || p >= 1)
+                        {
+                            return 0.0;
+                        }
+                        else
+                        {
+                            return p * Math.Log2(p);
+                        }
+                    });
+
+                    jointEntropies[j, i] = jointEntropies[i, j];
+                }
+            }
+
+            return jointEntropies;
         }
 
         internal static double[] GetUniCounts(Population<BitString> population)
@@ -119,54 +167,6 @@ namespace MscThesis.Core.Algorithms
             }
 
             return freqs;
-        }
-
-        internal static double[] ComputeUniEntropies(double[] uniFrequencies)
-        {
-            var problemSize = uniFrequencies.GetLength(0);
-            var entropies = new double[problemSize];
-            for (int i = 0; i < problemSize; i++)
-            {
-                var p = uniFrequencies[i];
-                if (p <= 0 || p >= 1)
-                {
-                    continue;
-                }
-                else
-                {
-                    entropies[i] = -p * Math.Log2(p) - (1 - p) * Math.Log2(1 - p);
-                }
-            }
-            return entropies;
-        }
-
-        internal static double[,] ComputeJointEntropies(double[,][] jointFrequencies)
-        {
-            var problemSize = jointFrequencies.GetLength(0);
-
-            var jointEntropies = new double[problemSize, problemSize];
-            for (int i = 0; i < problemSize; i++)
-            {
-                for (int j = i + 1; j < problemSize; j++)
-                {
-                    var jp = jointFrequencies[i, j];
-                    jointEntropies[i, j] = -jp.Sum(p =>
-                    {
-                        if (p <= 0 || p >= 1)
-                        {
-                            return 0.0;
-                        }
-                        else
-                        {
-                            return p * Math.Log2(p);
-                        }
-                    });
-
-                    jointEntropies[j, i] = jointEntropies[i, j];
-                }
-            }
-
-            return jointEntropies;
         }
 
         internal static List<HashSet<int>> BuildClusters(double[] uniEntropies, double[,] jointEntropies)

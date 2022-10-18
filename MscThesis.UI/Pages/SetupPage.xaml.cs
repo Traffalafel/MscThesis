@@ -59,19 +59,19 @@ public partial class SetupPage : ContentPage
         }
     }
 
-    public void Run(object sender, EventArgs e)
+    public async void Run(object sender, EventArgs e)
     {
         try
         {
             var specification = _vm.ToSpecification();
-            Shell.Current.GoToAsync(nameof(ResultPage), new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(ResultPage), new Dictionary<string, object>
             {
                 ["Specification"] = specification
             });
         }
         catch (Exception ex)
         {
-            DisplayAlert("Error", "Please fix any errors before proceeding.", "Close");
+            await DisplayAlert("Error", "Please fix any errors before proceeding.", "Close");
         }
 	}
 }

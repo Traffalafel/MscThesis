@@ -22,9 +22,9 @@ namespace MscThesis.UI.ViewModels
         
         private TestProvider _runner;
 
-        public ResultVM(TestProvider runner)
+        public ResultVM(Settings settings)
         {
-            _runner = runner;
+            _runner = new TestProvider(settings);
         }
 
         public ITest<InstanceFormat> BuildTest()

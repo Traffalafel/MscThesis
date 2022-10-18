@@ -26,7 +26,7 @@ namespace MscThesis.Core.Selection
             {
                 var sample = Enumerable.Range(0, _tournamentSize).Select(_ =>
                 {
-                    return RandomUtils.Choose(population.Individuals, _random);
+                    return RandomUtils.Choose(_random, population.Individuals);
                 });
                 var fittest = sample.Aggregate((i1, i2) => (i1.Fitness ?? double.MinValue) > (i2.Fitness ?? double.MinValue) ? i1 : i2);
                 output.Add(fittest);

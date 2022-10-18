@@ -14,13 +14,10 @@ namespace MscThesis.Core.Algorithms
 
         private Population<BitString> _population;
 
-        public override ISet<Property> StatisticsProperties
+        public override ISet<Property> StatisticsProperties  => new HashSet<Property>
         {
-            get => new HashSet<Property>
-            {
-                Property.AvgEntropy
-            };
-        }
+            Property.AvgEntropy
+        };
 
         public MIMIC(
             Random random,
@@ -35,7 +32,7 @@ namespace MscThesis.Core.Algorithms
             _population = new Population<BitString>();
             for (int i = 0; i < _populationSize; i++)
             {
-                var bs = BitString.CreateUniform(problemSize, _random);
+                var bs = BitString.CreateUniform(_random, problemSize);
                 _population.Add(new IndividualImpl<BitString>(bs));
             }
         }
@@ -52,38 +49,11 @@ namespace MscThesis.Core.Algorithms
             var jointFreqs = Utils.ComputeJointFrequencies(jointCounts, _population.Size);
             var jointEntropies = Utils.ComputeJointEntropies(jointFreqs);
 
-            var remaining = new HashSet<int>(Enumerable.Range(0, problemSize));
-            var ordering = new int[problemSize];
-
-            // Find lowest univariate entropy and set to start of chain
-            var (_, minIdx) = uniEntropies.Select((e, i) => (e, i)).Min();
-            ordering[0] = minIdx;
-            remaining.Remove(minIdx);
-
-            // Find lowest pairwise entropies and build chain
-            for (int pos = 1; pos < problemSize; pos++)
-            {
-                var posPrev = ordering[pos - 1];
-                var (_, iMin) = remaining.Select(i =>
-                {
-                    if (i < posPrev)
-                    {
-                        return (jointEntropies[i, posPrev], i);
-                    }
-                    else
-                    {
-                        return (jointEntropies[posPrev, i], i);
-                    }
-                }).Min();
-
-                ordering[pos] = iMin;
-                remaining.Remove(iMin);
-            }
-
-            var minProb = 1.0d / problemSize;
-            var maxProb = 1.0d - minProb;
+            var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, jointEntropies);
 
             // Sample solutions from model
+            var minProb = 1.0d / problemSize;
+            var maxProb = 1.0d - minProb;
             for (int i = 0; i < _populationSize; i++)
             {
                 var vals = new bool[problemSize];
@@ -92,7 +62,7 @@ namespace MscThesis.Core.Algorithms
                 var first = ordering[0];
                 var probFirst = uniFreqs[first];
                 probFirst = ApplyMargins(probFirst, minProb, maxProb);
-                vals[first] = RandomUtils.SampleBit(probFirst, _random);
+                vals[first] = RandomUtils.SampleBit(_random, probFirst);
 
                 // Sample the rest
                 for (int k = 1; k < problemSize; k++)
@@ -121,7 +91,7 @@ namespace MscThesis.Core.Algorithms
                         p = joint[2] / (1 - uniFreqs[prev]);
                     }
                     p = ApplyMargins(p, minProb, maxProb);
-                    vals[position] = RandomUtils.SampleBit(p, _random);
+                    vals[position] = RandomUtils.SampleBit(_random, p);
                 }
 
                 var bs = new BitString { Values = vals };

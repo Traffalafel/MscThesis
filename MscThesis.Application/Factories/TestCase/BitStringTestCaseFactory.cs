@@ -23,7 +23,9 @@ namespace MscThesis.Runner.Factories
             };
             _terminations = new Dictionary<string, ITerminationFactory<BitString>>
             {
-                { "Stagnation", new StagnationFactory<BitString>(_parameterFactory) }
+                { "Optimum reached", new GlobalOptimumFactory<BitString>() },
+                { "Stagnation", new StagnationFactory<BitString>(_parameterFactory) },
+                { "Max iterations", new MaxIterationsFactory<BitString>(_parameterFactory) }
             };
         }
     }

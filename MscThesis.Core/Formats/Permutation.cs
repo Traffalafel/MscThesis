@@ -8,23 +8,32 @@ namespace MscThesis.Core.Formats
 {
     public class Permutation : InstanceFormat, IEnumerable<int>
     {
-        private IEnumerable<int> _tour;
+        private int[] _values;
 
-        public Permutation(IEnumerable<int> tour)
+        public Permutation(int[] values)
         {
-            _tour = tour;
+            _values = values;
         }
 
-        public override int Size => _tour.Count();
+        public int[] Values => _values;
+
+        public static Permutation CreateUniform(Random random, int size)
+        {
+            var indices = Enumerable.Range(0, size).ToArray();
+            var shuffled = RandomUtils.Shuffle(random, indices).ToArray();
+            return new Permutation(shuffled);
+        }
+
+        public override int Size => _values.Count();
 
         public override string ToString()
         {
-            return string.Join(',', _tour);
+            return string.Join(',', _values);
         }
 
         public IEnumerator<int> GetEnumerator()
         {
-            return _tour.GetEnumerator();
+            return _values.Cast<int>().GetEnumerator();
         }
         IEnumerator IEnumerable.GetEnumerator()
         {

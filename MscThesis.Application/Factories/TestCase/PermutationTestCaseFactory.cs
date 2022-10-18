@@ -12,6 +12,7 @@ namespace MscThesis.Runner.Factories
         {
             _optimizers = new Dictionary<string, OptimizerFactory<Permutation>>
             {
+                { "MIMICTSP", new MIMICTSPFactory(_parameterFactory) }
             };
             _problems = new Dictionary<string, IProblemFactory<Permutation>>
             {
@@ -19,7 +20,9 @@ namespace MscThesis.Runner.Factories
             };
             _terminations = new Dictionary<string, ITerminationFactory<Permutation>>
             {
-                { "Stagnation", new StagnationFactory<Permutation>(_parameterFactory) }
+                { "Optimum reached", new GlobalOptimumFactory<Permutation>() },
+                { "Stagnation", new StagnationFactory<Permutation>(_parameterFactory) },
+                { "Max iterations", new MaxIterationsFactory<Permutation>(_parameterFactory) }
             };
         }
     }

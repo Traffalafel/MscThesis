@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Results;
 using MscThesis.UI.Loading;
+using MscThesis.Runner;
 using MscThesis.UI.ViewModels;
 using SkiaSharp;
 
@@ -18,13 +19,20 @@ public partial class ResultPage : ContentPage
     private ITest<InstanceFormat> _test;
     private string _resultsDir;
 
-	public ResultPage(ResultVM vm, IConfiguration config)
+	public ResultPage(IConfiguration config)
 	{
-		InitializeComponent();
-		BindingContext = vm;
-		_vm = vm;
+        var settings = new Settings
+        {
+            TSPLibDirectoryPath = config["TSPLibDirectoryPath"]
+        };
+
+        _vm = new ResultVM(settings);
+
+		BindingContext = _vm;
 
         _resultsDir = config["ResultsDirectory"];
+        
+        InitializeComponent();
 	}
 
     protected override void OnNavigatedFrom(NavigatedFromEventArgs args)

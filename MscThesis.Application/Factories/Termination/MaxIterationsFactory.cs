@@ -9,19 +9,18 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories.Termination
 {
-    public class StagnationFactory<T> : ITerminationFactory<T> where T : InstanceFormat
+    public class MaxIterationsFactory<T> : ITerminationFactory<T> where T : InstanceFormat
     {
         private IParameterFactory _parameterFactory;
 
-        public StagnationFactory(IParameterFactory parameterFactory)
+        public MaxIterationsFactory(IParameterFactory parameterFactory)
         {
             _parameterFactory = parameterFactory;
         }
 
         public IEnumerable<Parameter> Parameters => new List<Parameter>
         {
-            Parameter.MaxIterations,
-            Parameter.Epsilon
+            Parameter.MaxIterations
         };
 
         public Func<int, TerminationCriterion<T>> BuildCriterion(TerminationSpecification spec, Func<int, FitnessFunction<T>> _)
@@ -30,9 +29,8 @@ namespace MscThesis.Runner.Factories.Termination
 
             return (size) =>
             {
-                var epsilon = parameters(Parameter.Epsilon, size);
-                var maxStagnatedIterations = (int) parameters(Parameter.MaxIterations, size);
-                return new StagnationTermination<T>(epsilon, maxStagnatedIterations);
+                var maxIterations = (int) parameters(Parameter.MaxIterations, size);
+                return new MaxIterationsTermination<T>(maxIterations);
             };
 
         }
