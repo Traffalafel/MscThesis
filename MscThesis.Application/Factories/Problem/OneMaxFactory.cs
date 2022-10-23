@@ -9,12 +9,15 @@ namespace MscThesis.Runner.Factories.Problem
 {
     public class OneMaxFactory : ProblemFactory<BitString>
     {
-        public override ProblemDefinition Definition => new ProblemDefinition
+        public override ProblemDefinition GetDefinition(ProblemSpecification spec)
         {
-            CustomSizesAllowed = true,
-            ExpressionParameters = new List<Parameter>(),
-            OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
-        };
+            return new ProblemDefinition
+            {
+                CustomSizesAllowed = true,
+                ExpressionParameters = new List<Parameter>(),
+                OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
+            };
+        }
 
         public override Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification _)
         {

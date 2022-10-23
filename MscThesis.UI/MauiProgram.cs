@@ -25,18 +25,6 @@ namespace MscThesis.UI
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             builder.Configuration.AddConfiguration(config);
 
-            //var a = Assembly.GetExecutingAssembly();
-            //using var stream = a.GetManifestResourceStream("appsettings.json");
-            //try
-            //{
-            //    var config = new ConfigurationBuilder().AddJsonStream(stream).Build();
-            //    builder.Configuration.AddConfiguration(config);
-            //}
-            //catch (Exception e)
-            //{
-            //    ;
-            //}
-
             builder.Services.AddSingleton<TestProvider>();
             builder.Services.AddTransient<ResultVM>();
             builder.Services.AddTransient<ResultPage>();

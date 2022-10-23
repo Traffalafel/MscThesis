@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories
 {
-    public class MIMICTSPFactory : OptimizerFactory<Permutation>
+    public class MIMICTSPFactory : OptimizerFactory<Tour>
     {
         private static readonly double _selectionQuartile = 0.5d;
 
@@ -25,12 +25,12 @@ namespace MscThesis.Runner.Factories
             Parameter.PopulationSize
         };
 
-        public override Func<int, Optimizer<Permutation>> BuildCreator(OptimizerSpecification spec)
+        public override Func<int, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
             var random = BuildRandom(spec.Seed);
-            var selection = new QuartileSelection<Permutation>(_selectionQuartile);
+            var selection = new QuartileSelection<Tour>(_selectionQuartile, SelectionMethod.Minimize);
 
             return problemSize =>
             {

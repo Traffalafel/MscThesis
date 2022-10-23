@@ -54,19 +54,7 @@ namespace MscThesis.Runner.Factories
                     return terminations;
                 });
 
-                string name;
-                if (!string.IsNullOrWhiteSpace(optimizerSpec.Name))
-                {
-                    name = optimizerSpec.Name;
-                }
-                else
-                {
-                    var paramStrings = optimizerSpec.Parameters.Select(kv => $"{kv.Key}:{kv.Value}");
-                    var algoName = optimizerSpec.Algorithm;
-                    name = $"{algoName}_{string.Join('_', paramStrings)}";
-                }
-
-                yield return new TestCase<T>(name, buildOptimizerFunc, buildProblemFunc, buildTerminationsFunc);
+                yield return new TestCase<T>(optimizerSpec.Name, buildOptimizerFunc, buildProblemFunc, buildTerminationsFunc);
             }
         }
 
@@ -97,12 +85,13 @@ namespace MscThesis.Runner.Factories
             }
         }
 
-        public ProblemDefinition GetProblemDefinition(string problemName)
+        public ProblemDefinition GetProblemDefinition(ProblemSpecification spec)
         {
+            var problemName = spec.Name;
             if (_problems.ContainsKey(problemName))
             {
                 var factory = _problems[problemName];
-                return factory.Definition;
+                return factory.GetDefinition(spec);
             }
             else
             {

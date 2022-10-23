@@ -77,7 +77,8 @@ namespace MscThesis.Core.Algorithms
 
             while (tried.Count < problemSize)
             {
-                foreach (var index in RandomUtils.Shuffle(random, options))
+                RandomUtils.Shuffle(random, options);
+                foreach (var index in options)
                 {
                     if (tried.Contains(index))
                     {

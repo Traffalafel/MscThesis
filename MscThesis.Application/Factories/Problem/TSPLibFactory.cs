@@ -10,20 +10,33 @@ using TspLibNet;
 
 namespace MscThesis.Runner.Factories.Problem
 {
-    public class TSPLibFactory : ProblemFactory<Permutation>
+    public class TSPLibFactory : ProblemFactory<Tour>
     {
         private IEnumerable<string> _tspNames;
         private TspLib95 _tspLib;
 
         public bool AllowsMultipleSizes => false;
-        public override ProblemDefinition Definition => new ProblemDefinition
+        public override ProblemDefinition GetDefinition(ProblemSpecification spec)
         {
-            ExpressionParameters = new List<Parameter>(),
-            OptionParameters = new Dictionary<Parameter, IEnumerable<string>>
+            int? size = null;
+            if (spec.Parameters.ContainsKey(Parameter.ProblemName))
             {
-                [Parameter.ProblemName] = _tspNames
+                var problemName = spec.Parameters[Parameter.ProblemName];
+                var item = _tspLib.GetItemByName(problemName, ProblemType.TSP);
+                size = GetSize(item.Problem);
             }
-        };
+
+            return new ProblemDefinition
+            {
+                CustomSizesAllowed = false,
+                ProblemSize = size,
+                ExpressionParameters = new List<Parameter>(),
+                OptionParameters = new Dictionary<Parameter, IEnumerable<string>>
+                {
+                    [Parameter.ProblemName] = _tspNames
+                }
+            };
+        }
 
         public TSPLibFactory(TspLib95 tspLib)
         {
@@ -32,7 +45,7 @@ namespace MscThesis.Runner.Factories.Problem
             _tspNames = tsps.Select(tsp => tsp.Problem.Name).ToList();
         }
 
-        public override Func<int, FitnessFunction<Permutation>> BuildProblem(ProblemSpecification spec)
+        public override Func<int, FitnessFunction<Tour>> BuildProblem(ProblemSpecification spec)
         {
             var name = spec.Parameters[Parameter.ProblemName];
             var item = _tspLib.TSPItems().Where(item => item.Problem.Name == name).FirstOrDefault();
@@ -50,9 +63,7 @@ namespace MscThesis.Runner.Factories.Problem
             var problemName = spec.Parameters[Parameter.ProblemName];
             var item = _tspLib.TSPItems().Where(item => item.Problem.Name == problemName).FirstOrDefault();
             var problem = item.Problem;
-
-            var nodes = problem.NodeProvider.GetNodes();
-            var problemSize = nodes.Count;
+            var problemSize = GetSize(problem);
 
             var description = problem.Comment + $"\nProblem size:{problemSize}";
             
@@ -66,6 +77,12 @@ namespace MscThesis.Runner.Factories.Problem
             }
 
             return new ProblemInformation(problem.Name, description);
+        }
+
+        private int GetSize(IProblem problem)
+        {
+            var nodes = problem.NodeProvider.GetNodes();
+            return nodes.Count;
         }
     }
 }

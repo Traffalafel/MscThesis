@@ -2,17 +2,48 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MscThesis.UI.Pages.ResultPage"
-             Title="ResultPage"
              xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
+             xmlns:conv="clr-namespace:MscThesis.UI.Converters"
              x:DataType="vm:ResultVM">
 
-    <ScrollView>
-        <VerticalStackLayout>
-            <VerticalStackLayout x:Name="Layout"/>
-            <Button Text="Save"
-                    Clicked="Save"/> 
-        </VerticalStackLayout>
+    <ContentPage.Resources>
+        <conv:BoolNotConverter x:Key="BoolNotConverter"/>
+    </ContentPage.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    </ScrollView>
+        <HorizontalStackLayout Grid.Column="0" HorizontalOptions="Start">
+            <Label Text="Results" 
+                   VerticalOptions="Center" 
+                   FontSize="30"
+                   Margin="10,0,0,0"/>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
+            <Label Text="Running" IsVisible="{Binding IsRunning}"
+                   VerticalOptions="Center"
+                   Margin="10,0,0,0"/>
+            <ActivityIndicator IsRunning="{Binding IsRunning}" />
+            <Button Text="Save"
+                    Clicked="Save"
+                    HorizontalOptions="End"
+                    Padding="4"
+                    Margin="10,0,0,0"
+                    IsEnabled="{Binding IsRunning, Converter={StaticResource BoolNotConverter}}"/>
+        </HorizontalStackLayout>
+        
+        <ScrollView Grid.Row="1" Grid.ColumnSpan="2">
+            <VerticalStackLayout x:Name="Layout"/>
+        </ScrollView>
+
+    </Grid>
 
 </ContentPage>

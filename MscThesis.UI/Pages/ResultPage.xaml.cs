@@ -8,6 +8,9 @@ using MscThesis.UI.Loading;
 using MscThesis.Runner;
 using MscThesis.UI.ViewModels;
 using SkiaSharp;
+using Microsoft.VisualBasic.FileIO;
+using Microsoft.Maui;
+using System.Collections.Generic;
 
 namespace MscThesis.UI.Pages;
 
@@ -16,7 +19,6 @@ public partial class ResultPage : ContentPage
 	private ResultVM _vm;
     private CancellationTokenSource _cancellationTokenSource;
 
-    private ITest<InstanceFormat> _test;
     private string _resultsDir;
 
 	public ResultPage(IConfiguration config)
@@ -28,7 +30,7 @@ public partial class ResultPage : ContentPage
 
         _vm = new ResultVM(settings);
 
-		BindingContext = _vm;
+        BindingContext = _vm;
 
         _resultsDir = config["ResultsDirectory"];
         
@@ -43,31 +45,203 @@ public partial class ResultPage : ContentPage
         _cancellationTokenSource.Dispose();
     }
 
+    private static int TitleSize = 22;
+    private static int SubTitleSize = 18;
+    private static Thickness BoxMargin => new Thickness(20, 10, 0, 10);
+    private static Thickness BoxTitleMargin => new Thickness(0, 0, 0, 5);
+    private static Thickness LeftMargin => new Thickness(0, 5, 0, 0);
+    private static Thickness RightMargin => new Thickness(20, 5, 0, 0);
+    private static Thickness LineMargin => new Thickness(20, 0, 20, 0);
+
+    private static BoxView BuildHorizontalLine()
+    {
+        return new BoxView
+        {
+            Margin = LineMargin,
+            HeightRequest = 2,
+            HorizontalOptions = LayoutOptions.Fill,
+            BackgroundColor = Colors.White
+        };
+    }
+
+    private static Grid BuildGrid(List<(string left, IObservableValue<string> right)> rows)
+    {
+        var numRows = rows.Count;
+        var grid = new Grid
+        {
+            HorizontalOptions = LayoutOptions.Fill,
+            ColumnDefinitions = new ColumnDefinitionCollection(new ColumnDefinition[]
+            {
+                new ColumnDefinition(GridLength.Auto),
+                new ColumnDefinition(GridLength.Auto),
+            }),
+            RowDefinitions = new RowDefinitionCollection(
+                Enumerable.Range(0, numRows).Select(_ => new RowDefinition()).ToArray()
+            )
+        };
+
+        var c = 0;
+        foreach (var row in rows)
+        {
+            grid.Add(new Label
+            {
+                Text = row.left,
+                Margin = LeftMargin
+            }, column: 0, row: c);
+
+            var rightLabel = new Label
+            {
+                BindingContext = row.right,
+                Margin = RightMargin
+            };
+            rightLabel.SetBinding(Label.TextProperty, "Value");
+            grid.Add(rightLabel, column: 1, row: c);
+            c++;
+        }
+        return grid;
+    }
+
+    private static List<(string, IObservableValue<string>)> ToObservable(List<(string left, string right)> pairs)
+    {
+        try
+        {
+            return pairs.Select(pair => (pair.left, (IObservableValue<string>)(new ObservableValue<string>(pair.right)))).ToList();
+        }
+        catch (Exception e)
+        {
+            ;
+            throw new Exception();
+        }
+    }
+
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
 
-		_test = _vm.BuildTest();
+        _vm.BuildTest();
 
-        var label = new Label
+        var spec = _vm.Specification;
+        var problemSpec = spec.Problem;
+        var problemDef = _vm.Provider.GetProblemDefinition(problemSpec);
+        var problemInformation = _vm.Provider.GetProblemInformation(problemSpec);
+
+        // Problem spec
+        var problemRows = new List<(string left, string right)>();
+        problemRows.Add(("Name:", problemSpec.Name));
+        problemRows.Add(("Number of runs:", $"{spec.NumRuns}"));
+        if (spec.ProblemSizes.Count == 1)
         {
-            BindingContext = _test.Fittest
+            problemRows.Add(("Problem size:", $"{spec.ProblemSizes[0]}"));
+        }
+        if (spec.ProblemSizes.Count > 1)
+        {
+            var start = spec.ProblemSizes.First();
+            var stop = spec.ProblemSizes.Last();
+            var snd = spec.ProblemSizes[1];
+            var step = snd - start;
+            problemRows.Add(("Problem size start:", $"{start}"));
+            problemRows.Add(("Problem size stop:", $"{stop}"));
+            problemRows.Add(("Problem size step:", $"{step}"));
+        }
+        foreach (var kv in problemSpec.Parameters)
+        {
+            problemRows.Add(($"{kv.Key}:", $"{kv.Value}"));
+        }
+        var problemGrid = BuildGrid(ToObservable(problemRows));
+        var problemLayout = new VerticalStackLayout
+        {
+            Margin = BoxMargin
         };
-        label.SetBinding(Label.TextProperty, "Value.Fitness", stringFormat: "Best fitness: {0}");
-        Layout.Add(label);
-
-        foreach (var item in _test.Items)
+        problemLayout.Add(new Label
         {
-            var propName = item.Property.ToString();
-            var itemLabel = new Label
+            Text = "Problem",
+            Margin = BoxTitleMargin,
+            FontSize = TitleSize
+        });
+        problemLayout.Add(problemGrid);
+        if (!string.IsNullOrWhiteSpace(problemInformation.Description))
+        {
+            problemLayout.Add(new Label
             {
-                BindingContext = item.Observable
-            };
-            itemLabel.SetBinding(Label.TextProperty, "Value", stringFormat: $"{propName}: {{0}}");
-            Layout.Add(itemLabel);
+                Text = problemInformation.Description,
+                FontSize = 12,
+                Margin = new Thickness(0, 10, 0, 0)
+            });
+        }
+        Layout.Add(problemLayout);
+
+        // Optimizers
+        foreach (var optimizerSpec in spec.Optimizers)
+        {
+            try
+            {
+
+                Layout.Add(BuildHorizontalLine());
+
+                var optimizerName = optimizerSpec.Name;
+                var optLayout = new VerticalStackLayout
+                {
+                    Margin = BoxMargin
+                };
+                optLayout.Add(new Label
+                {
+                    Text = optimizerName,
+                    Margin = BoxTitleMargin,
+                    FontSize = TitleSize
+                });
+                var leftRows = new List<(string left, string right)>();
+                leftRows.Add(("Algorithm:", optimizerSpec.Algorithm));
+                if (optimizerSpec.Seed != null)
+                {
+                    leftRows.Add(("Seed:", $"{optimizerSpec.Seed.Value}"));
+                }
+                foreach (var kv in optimizerSpec.Parameters)
+                {
+                    leftRows.Add(($"{kv.Key}:", $"{kv.Value}"));
+                }
+                var leftStats = BuildGrid(ToObservable(leftRows));
+                var leftCol = new VerticalStackLayout
+                {
+                    Margin = new Thickness(0, 5, 15, 0)
+                };
+                leftCol.Add(new Label
+                {
+                    Text = "Parameters",
+                    FontSize = SubTitleSize
+                });
+                leftCol.Add(leftStats);
+
+                var items = _vm.Test.Items.Where(item => item.OptimizerName == optimizerName);
+                var rightRows = items.Select(item => ($"{item.Property.ToString()}:", item.Observable.ToStringObservable())).ToList();
+                var rightStats = BuildGrid(rightRows);
+                var rightCol = new VerticalStackLayout
+                {
+                    Margin = new Thickness(15, 5, 15, 0)
+                };
+                rightCol.Add(new Label
+                {
+                    Text = "Statistics",
+                    FontSize = SubTitleSize
+                });
+                rightCol.Add(rightStats);
+
+                var horizontal = new HorizontalStackLayout();
+                horizontal.Add(leftCol);
+                horizontal.Add(rightCol);
+
+                optLayout.Add(horizontal);
+                Layout.Add(optLayout);
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
         }
 
-        var propertyGroups = _test.Series.GroupBy(series => series.Property);
+        Layout.Add(BuildHorizontalLine());
+
+        var propertyGroups = _vm.Test.Series.GroupBy(series => series.Property);
         foreach (var propertyGroup in propertyGroups)
         {
             var propName = propertyGroup.Key.ToString();
@@ -112,31 +286,10 @@ public partial class ResultPage : ContentPage
 
         }
 
-        //foreach (var histogram in result.Histograms)
-        //{
-        //    var propName = histogram.Property.ToString();
-        //    Layout.Add(new Label
-        //    {
-        //        Text = $"{propName}:"
-        //    });
-        //    Layout.Add(new CartesianChart
-        //    {
-        //        Series = new List<ISeries> {
-        //                new ColumnSeries<double>
-        //                {
-        //                    Values = histogram.Values,
-        //                    Fill = null
-        //                }
-        //            },
-        //        HeightRequest = 400,
-        //        WidthRequest = 600
-        //    });
-        //}
-
         try
         {
             _cancellationTokenSource = new CancellationTokenSource();
-    		await _test.Execute(_cancellationTokenSource.Token);
+            await _vm.RunTest(_cancellationTokenSource.Token);
         }
         catch (Exception e)
         {
@@ -178,6 +331,7 @@ public partial class ResultPage : ContentPage
                         point.SecondaryValue = value.Item1;
                     },
                     Fill = null,
+                    GeometrySize = 0,
                     Name = group.Key,
                     LineSmoothness = 0
                 };
@@ -201,7 +355,7 @@ public partial class ResultPage : ContentPage
 
         try
         {
-            var content = ResultExporter.Export(_test);
+            var content = ResultExporter.Export(_vm.Test, _vm.Specification);
             var fileName = DateTime.Now.ToString("dd MMM HHmmss");
             var filePath = Path.Combine(_resultsDir, $"{fileName}.txt");
             File.WriteAllText(filePath, content);

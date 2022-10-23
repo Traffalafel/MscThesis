@@ -7,28 +7,28 @@ using System.Linq;
 
 namespace MscThesis.Core.Algorithms
 {
-    public class MIMICTSP : Optimizer<Permutation>
+    public class MIMICTSP : Optimizer<Tour>
     {
-        private readonly ISelectionOperator<Permutation> _selectionOperator;
+        private readonly ISelectionOperator<Tour> _selectionOperator;
         private readonly int _populationSize;
 
-        private Population<Permutation> _population;
+        private Population<Tour> _population;
 
         public MIMICTSP(
             Random random,
             int problemSize,
             int populationSize,
-            ISelectionOperator<Permutation> selectionOperator) : base(random, problemSize)
+            ISelectionOperator<Tour> selectionOperator) : base(random, problemSize)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
 
             // Initialize population uniformly
-            _population = new Population<Permutation>();
+            _population = new Population<Tour>();
             for (int i = 0; i < _populationSize; i++)
             {
-                var permutation = Permutation.CreateUniform(random, problemSize);
-                _population.Add(new IndividualImpl<Permutation>(permutation));
+                var permutation = Tour.CreateUniform(random, problemSize);
+                _population.Add(new IndividualImpl<Tour>(permutation));
             }
         }
 
@@ -37,7 +37,7 @@ namespace MscThesis.Core.Algorithms
             Property.AvgEntropy
         };
 
-        protected override RunIteration<Permutation> NextIteration(FitnessFunction<Permutation> fitnessFunction)
+        protected override RunIteration<Tour> NextIteration(FitnessFunction<Tour> fitnessFunction)
         {
             var problemSize = _population.ProblemSize;
 
@@ -51,7 +51,7 @@ namespace MscThesis.Core.Algorithms
             var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, jointEntropies);
 
             // Sample solutions from model
-            var minProb = 1.0d / problemSize;
+            var minProb = 1.0d / (problemSize*problemSize);
             var maxProb = 1.0d - minProb;
             for (int i = 0; i < _populationSize; i++)
             {
@@ -73,7 +73,7 @@ namespace MscThesis.Core.Algorithms
                     var positionPrev = ordering[k - 1];
                     var valuePrev = values[positionPrev];
 
-                    var distribution = jointCounts.GetLastDimension(positionPrev, valuePrev, position);
+                    var distribution = jointCounts.GetLastDimension(positionPrev, position, valuePrev);
                     ToDistribution(distribution, _populationSize);
                     MarginalizeRemaining(distribution, chosen);
                     ApplyMargins(distribution, minProb, maxProb);
@@ -82,8 +82,8 @@ namespace MscThesis.Core.Algorithms
                     chosen.Add(valueNew);
                 }
 
-                var instance = new Permutation(values);
-                _population.Add(new IndividualImpl<Permutation>(instance));
+                var instance = new Tour(values);
+                _population.Add(new IndividualImpl<Tour>(instance));
             }
 
             foreach (var individual in _population)
@@ -106,7 +106,7 @@ namespace MscThesis.Core.Algorithms
                 { Property.AvgEntropy, avgJointEntropy }
             };
 
-            return new RunIteration<Permutation>
+            return new RunIteration<Tour>
             {
                 Population = _population,
                 Statistics = stats
@@ -135,35 +135,55 @@ namespace MscThesis.Core.Algorithms
             Normalize(distribution, remaining);
         }
 
+        // Set all above or below to min or max and normalize afterwards
         private void ApplyMargins(double[] distribution, double min, double max)
         {
             var size = distribution.Length;
 
-            // Set all above or below to min or max
+            var nan = new HashSet<int>();
             var modified = new HashSet<int>();
+            var notModified = new HashSet<int>();
             for (int i = 0; i < size; i++)
             {
                 var p = distribution[i];
-                if (p < min || p > max)
+                if (double.IsNaN(p))
+                {
+                    nan.Add(i);
+                }
+                else if (p < min || p > max)
                 {
                     distribution[i] = Math.Min(max, Math.Max(min, p));
                     modified.Add(i);
                 }
+                else
+                {
+                    notModified.Add(i);
+                }
             }
 
-            var remaining = Enumerable.Range(0, size).ToHashSet();
-            remaining.ExceptWith(modified);
-            Normalize(distribution, remaining);
+            if (notModified.Count > 0)
+            {
+                Normalize(distribution, notModified);
+            }
+            else
+            {
+                Normalize(distribution, modified);
+            }
         }
 
         private void Normalize(double[] distribution, HashSet<int> positions)
         {
             var ps = Take(distribution, positions);
-            if (ps.Any(p => p == double.NaN))
+            if (ps.Any(p => double.IsNaN(p)))
             {
                 throw new Exception();
             }
             var sum = ps.Sum();
+
+            if (sum == 0)
+            {
+                return;
+            }
 
             foreach (var position in positions)
             {

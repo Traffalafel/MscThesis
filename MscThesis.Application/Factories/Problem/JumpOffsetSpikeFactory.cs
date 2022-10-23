@@ -17,15 +17,18 @@ namespace MscThesis.Runner.Factories.Problem
             _parameterFactory = parameterFactory;
         }
 
-        public override ProblemDefinition Definition => new ProblemDefinition
+        public override ProblemDefinition GetDefinition(ProblemSpecification spec)
         {
-            CustomSizesAllowed = true,
-            ExpressionParameters = new List<Parameter>
+            return new ProblemDefinition
             {
-                Parameter.GapSize
-            },
-            OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
-        };
+                CustomSizesAllowed = true,
+                ExpressionParameters = new List<Parameter>
+                {
+                    Parameter.GapSize
+                },
+                OptionParameters = new Dictionary<Parameter, IEnumerable<string>>()
+            };
+        } 
 
         public override Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification spec)
         {

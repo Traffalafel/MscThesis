@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MscThesis.Core
 {
@@ -31,12 +32,13 @@ namespace MscThesis.Core
             var acc = 0.0d;
             for (int i = 0; i < distribution.Length; i++)
             {
-                if (distribution[i] == double.NaN)
+                var p = distribution[i];
+
+                if (double.IsNaN(p))
                 {
                     continue;
                 }
 
-                var p = distribution[i];
                 if (d <= p + acc)
                 {
                     return i;
@@ -55,14 +57,18 @@ namespace MscThesis.Core
             return items[i];
         }
 
-        public static IEnumerable<T> Shuffle<T>(Random random, T[] items)
+        // Fisher-Yates shuffle, inspired by SO answer at 
+        // https://stackoverflow.com/questions/273313/randomize-a-listt
+        public static void Shuffle<T>(Random random, T[] items)
         {
-            var remaining = items.Length;
-            while (remaining > 0)
+            var c = items.Length;
+            while (c > 1)
             {
-                var i = random.Next(remaining);
-                yield return items[i];
-                remaining--;
+                c--;
+                var i = random.Next(c + 1);
+                var tmp = items[i];
+                items[i] = items[c];
+                items[c] = tmp;
             }
         }
 

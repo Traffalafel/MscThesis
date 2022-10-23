@@ -22,7 +22,7 @@ namespace MscThesis.Runner
             _factories = new List<ITestCaseFactory<InstanceFormat>>
             {
                 new BitStringTestCaseFactory(),
-                new PermutationTestCaseFactory(tspLib)
+                new TourTestCaseFactory(tspLib)
             };
         }
 
@@ -31,7 +31,19 @@ namespace MscThesis.Runner
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);
             var tests = factory.BuildTestCases(spec);
-            return GatherResults(tests, spec.ProblemSizes, spec.NumRuns, spec.MaxParallelization);
+
+            var problemDef = factory.GetProblemDefinition(spec.Problem);
+            List<int> problemSizes;
+            if (problemDef.CustomSizesAllowed)
+            {
+                problemSizes = spec.ProblemSizes;
+            }
+            else
+            {
+                problemSizes = new List<int> { problemDef.ProblemSize.Value };
+            }
+
+            return GatherResults(tests, problemSizes, spec.NumRuns, spec.MaxParallelization);
         }
 
         public List<string> GetProblemNames()
@@ -44,13 +56,14 @@ namespace MscThesis.Runner
             return names;
         }
 
-        public ProblemDefinition GetProblemDefinition(string problemName)
+        public ProblemDefinition GetProblemDefinition(ProblemSpecification spec)
         {
+            var problemName = spec.Name;
             foreach (var factory in _factories)
             {
                 if (factory.Problems.Contains(problemName))
                 {
-                    return factory.GetProblemDefinition(problemName);
+                    return factory.GetProblemDefinition(spec);
                 }
             }
             return new ProblemDefinition

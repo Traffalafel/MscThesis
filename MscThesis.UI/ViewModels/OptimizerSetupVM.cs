@@ -44,6 +44,12 @@ namespace MscThesis.UI.ViewModels
             }
         }
 
+        private string GetName()
+        {
+            var paramStrings = Parameters.Select(vm => $"{vm.Name}:{vm.Value}");
+            return $"{Algorithm}_{string.Join('_', paramStrings)}";
+        }
+
         public OptimizerSpecification ToSpecification()
         {
             if (string.IsNullOrWhiteSpace(_algorithm))
@@ -53,7 +59,7 @@ namespace MscThesis.UI.ViewModels
             return new OptimizerSpecification
             {
                 Seed = string.IsNullOrWhiteSpace(Seed) ? null : Convert.ToInt32(Seed),
-                Name = Name,
+                Name = GetName(),
                 Algorithm = _algorithm,
                 Parameters = Utils.ToSpecification(Parameters)
             };

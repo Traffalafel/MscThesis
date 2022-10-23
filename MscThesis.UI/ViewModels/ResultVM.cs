@@ -3,7 +3,9 @@ using MscThesis.Core.Formats;
 using MscThesis.Runner;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
+using MscThesis.UI.Loading;
 using MscThesis.UI.Models;
+using System.Threading;
 
 namespace MscThesis.UI.ViewModels
 {
@@ -19,28 +21,48 @@ namespace MscThesis.UI.ViewModels
 
         [ObservableProperty]
         double bestFitness;
-        
-        private TestProvider _runner;
+
+        [ObservableProperty]
+        bool isRunning;
+
+        private TestProvider _provider;
+        private ITest<InstanceFormat> _test;
+
+        public TestProvider Provider => _provider;
+        public ITest<InstanceFormat> Test => _test;
 
         public ResultVM(Settings settings)
         {
-            _runner = new TestProvider(settings);
+            _provider = new TestProvider(settings);
         }
 
-        public ITest<InstanceFormat> BuildTest()
+        public void BuildTest()
         {
-            if (specification != null)
+            try
             {
-                return _runner.Run(specification);
+                if (specification != null)
+                {
+                    _test = _provider.Run(specification);
+                }
+                else
+                {
+                    var content = File.ReadAllText(resultsFilePath);
+                    var loader = new Loader(content);
+                    _test = loader.Test;
+                    Specification = loader.Specification;
+                }
             }
-
-            if (resultsFilePath != null)
+            catch (Exception ex)
             {
-                var content = File.ReadAllText(resultsFilePath);
-                return new LoadedTest(content);
+                ;
             }
+        }
 
-            throw new Exception();
+        public async Task RunTest(CancellationToken cancellationToken)
+        {
+            IsRunning = true;
+            await _test.Execute(cancellationToken);
+            IsRunning = false;
         }
 
     }

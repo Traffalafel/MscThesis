@@ -1,10 +1,10 @@
-﻿using MscThesis.Core.Formats;
+﻿using Microsoft.VisualBasic;
+using MscThesis.Core.Formats;
 using TspLibNet;
-using TspLibNet.Tours;
 
 namespace MscThesis.Core.FitnessFunctions.TSP
 {
-    public class TSP : FitnessFunction<Permutation>
+    public class TSP : FitnessFunction<Formats.Tour>
     {
         private TspLib95Item _item;
 
@@ -15,10 +15,9 @@ namespace MscThesis.Core.FitnessFunctions.TSP
 
         public override double? Optimum => _item.OptimalTourDistance;
 
-        protected override double Compute(Permutation instance)
+        protected override double Compute(Tour instance)
         {
-            var tour = new Tour(string.Empty, string.Empty, instance.Size, instance);
-            return _item.Problem.TourDistance(tour);
+            return _item.Problem.TourDistance(instance);
         }
     }
 }

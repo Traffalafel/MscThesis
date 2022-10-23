@@ -7,7 +7,7 @@ namespace MscThesis.Core.Algorithms
 {
     internal static class PermutationUtils
     {
-        internal static double[] ComputeUniEntropies(Population<Permutation> population)
+        internal static double[] ComputeUniEntropies(Population<Tour> population)
         {
             if (population.Size == 0)
             {
@@ -40,7 +40,7 @@ namespace MscThesis.Core.Algorithms
             return entropies;
         }
 
-        internal static double[,] ComputeJointEntropies(Population<Permutation> population)
+        internal static double[,] ComputeJointEntropies(Population<Tour> population)
         {
             if (population.Size == 0)
             {
@@ -57,11 +57,11 @@ namespace MscThesis.Core.Algorithms
             var entropies = new double[problemSize, problemSize];
             for (int pos1 = 0; pos1 < problemSize; pos1++)
             {
-                for (int pos2 = 1; pos1 < problemSize; pos1++)
+                for (int pos2 = pos1 + 1; pos2 < problemSize; pos2++)
                 {
-                    for (int val1 = 0; pos1 < problemSize; pos1++)
+                    for (int val1 = 0; val1 < problemSize; val1++)
                     {
-                        for (int val2 = 0; pos1 < problemSize; pos1++)
+                        for (int val2 = 0; val2 < problemSize; val2++)
                         {
                             var count = counts[pos1, pos2, val1, val2];
                             if (count <= 0 || count >= populationSize)
@@ -102,7 +102,7 @@ namespace MscThesis.Core.Algorithms
             return freqs;
         }
 
-        internal static double[,] GetUniCounts(Population<Permutation> population)
+        internal static double[,] GetUniCounts(Population<Tour> population)
         {
             var problemSize = population.ProblemSize;
             var counts = new double[problemSize,problemSize];
@@ -113,7 +113,7 @@ namespace MscThesis.Core.Algorithms
             return counts;
         }
 
-        internal static double[,,,] GetJointCounts(Population<Permutation> population)
+        internal static double[,,,] GetJointCounts(Population<Tour> population)
         {
             var problemSize = population.ProblemSize;
             var counts = new double[problemSize, problemSize, problemSize, problemSize];
@@ -124,7 +124,7 @@ namespace MscThesis.Core.Algorithms
             return counts;
         }
 
-        internal static void AddToUniCounts(double[,] counts, Permutation instance)
+        internal static void AddToUniCounts(double[,] counts, Tour instance)
         {
             var position = 0;
             foreach (var value in instance.Values)
@@ -133,7 +133,7 @@ namespace MscThesis.Core.Algorithms
             }
         }
 
-        internal static void AddToJointCounts(double[,,,] counts, Permutation instance)
+        internal static void AddToJointCounts(double[,,,] counts, Tour instance)
         {
             var problemSize = counts.GetLength(0);
 
@@ -143,6 +143,7 @@ namespace MscThesis.Core.Algorithms
                 for (int j = i + 1; j < problemSize; j++)
                 {
                     counts[i, j, values[i], values[j]]++;
+                    counts[j, i, values[j], values[i]]++;
                 }
             }
         }

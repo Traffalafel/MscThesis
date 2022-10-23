@@ -8,7 +8,7 @@ namespace MscThesis.Runner.Factories
 {
     public interface IProblemFactory<T> where T : InstanceFormat
     {
-        public ProblemDefinition Definition { get; }
+        public ProblemDefinition GetDefinition(ProblemSpecification spec);
         public ProblemInformation GetInformation(ProblemSpecification spec);
         public Func<int, FitnessFunction<T>> BuildProblem(ProblemSpecification spec);
     }

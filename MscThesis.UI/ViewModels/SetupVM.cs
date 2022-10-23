@@ -63,7 +63,8 @@ namespace MscThesis.UI.ViewModels
 
                 try
                 {
-                    var definition = _provider.GetProblemDefinition(_problemName);
+                    var problemSpec = CreateProblemSpec();
+                    var definition = _provider.GetProblemDefinition(problemSpec);
 
                     CustomProblemSizesAllowed = definition.CustomSizesAllowed;
 
@@ -159,7 +160,14 @@ namespace MscThesis.UI.ViewModels
             var problemSizes = new List<int>();
             if (CustomProblemSizesAllowed)
             {
-                problemSizes = ParseProblemSizes(ProblemSizeStart, ProblemSizeStop, ProblemSizeStep).ToList();
+                if (MultipleSizes)
+                {
+                    problemSizes = ParseProblemSizes(ProblemSizeStart, ProblemSizeStop, ProblemSizeStep).ToList();
+                }
+                else
+                {
+                    problemSizes = new List<int> { Convert.ToInt32(ProblemSizeStart) };
+                }
             }
 
             return new TestSpecification

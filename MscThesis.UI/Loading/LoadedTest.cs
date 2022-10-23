@@ -15,15 +15,11 @@ namespace MscThesis.UI.Models
 
         public bool IsTerminated => true;
 
-        public LoadedTest(string content)
+        public LoadedTest(List<string> lines)
         {
             _optimizerNames = new();
             _items = new();
             _series = new();
-
-            content = content.Replace(" ", "");
-            content = content.Replace("\r", "");
-            var lines = content.Split('\n');
 
             var c = 0;
             var line = lines[c++];
@@ -50,7 +46,7 @@ namespace MscThesis.UI.Models
             }
 
             c++;
-            while (c < lines.Length)
+            while (c < lines.Count)
             {
                 // Parse series
                 try
@@ -75,7 +71,7 @@ namespace MscThesis.UI.Models
             var valueStr = split[1];
             var value = Convert.ToDouble(valueStr, CultureInfo.InvariantCulture);
 
-            var defSplit = def.Split('.');
+            var defSplit = def.Split(';');
             var optimizerName = defSplit[0];
             var propertyName = defSplit[1];
             _ = Enum.TryParse(propertyName, out Property property);
@@ -105,7 +101,7 @@ namespace MscThesis.UI.Models
                 return (x, y);
             }).ToList();
 
-            var defSplit = def.Split('.');
+            var defSplit = def.Split(';');
             var optimizerName = defSplit[0];
             var yPropertyName = defSplit[1];
             var xPropertyName = defSplit[2];

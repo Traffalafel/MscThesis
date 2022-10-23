@@ -3,28 +3,37 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TspLibNet.Tours;
 
 namespace MscThesis.Core.Formats
 {
-    public class Permutation : InstanceFormat, IEnumerable<int>
+    public class Tour : InstanceFormat, IEnumerable<int>, ITour
     {
         private int[] _values;
 
-        public Permutation(int[] values)
+        public Tour(int[] values)
         {
             _values = values;
         }
 
         public int[] Values => _values;
 
-        public static Permutation CreateUniform(Random random, int size)
+        public static Tour CreateUniform(Random random, int size)
         {
-            var indices = Enumerable.Range(0, size).ToArray();
-            var shuffled = RandomUtils.Shuffle(random, indices).ToArray();
-            return new Permutation(shuffled);
+            var indices = Enumerable.Range(0, size - 1).ToArray();
+            RandomUtils.Shuffle(random, indices);
+            return new Tour(indices);
         }
 
         public override int Size => _values.Count();
+
+        public string Name => "name";
+
+        public string Comment => "comment";
+
+        public int Dimension => Size + 1;
+
+        public List<int> Nodes => _values.Select(val => val+2).Prepend(1).ToList(); 
 
         public override string ToString()
         {

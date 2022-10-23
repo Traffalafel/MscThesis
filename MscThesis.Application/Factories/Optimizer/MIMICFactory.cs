@@ -30,7 +30,7 @@ namespace MscThesis.Runner.Factories
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
             var random = BuildRandom(spec.Seed);
-            var selection = new QuartileSelection<BitString>(_selectionQuartile);
+            var selection = new QuartileSelection<BitString>(_selectionQuartile, SelectionMethod.Maximize);
 
             return problemSize =>
             {

@@ -13,7 +13,7 @@ namespace MscThesis.Core.TerminationCriteria
 
         protected override bool ShouldTerminate(Population<T> pop)
         {
-            return pop.Fittest.Fitness >= _optimum;
+            return pop.Fittest.Fitness <= _optimum;
         }
     }
 }

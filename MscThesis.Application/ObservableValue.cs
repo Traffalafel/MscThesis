@@ -26,5 +26,11 @@ namespace MscThesis.Runner
             _value = value;
         }
 
+        public IObservableValue<string> ToStringObservable()
+        {
+            var newObs = new ObservableValue<string>(Value.ToString());
+            PropertyChanged += (s,e) => newObs.Value = Value.ToString();
+            return newObs;
+        }
     }
 }
