@@ -11,7 +11,7 @@ using System.Threading;
 namespace MscThesis.Runner.Results
 {
     // 1 run of 1 optimizer on 1 problem of 1 size
-    public class SingleRun<T> : Test<T>, ITest<T> where T : InstanceFormat
+    public class SingleRun<T> : Test<T> where T : InstanceFormat
     {
         private string _optimizerName;
         private Dictionary<Property, ObservableValue<double>> _itemData;
@@ -19,11 +19,18 @@ namespace MscThesis.Runner.Results
         private IEnumerable<RunIteration<T>> _iterations;
         private FitnessFunction<T> _fitnessFunction;
 
-        public SingleRun(IEnumerable<RunIteration<T>> iterations, FitnessFunction<T> fitnessFunction, string optimizerName, ISet<Property> statisticsProperties, int problemSize)
+        public SingleRun(
+            IEnumerable<RunIteration<T>> iterations, 
+            FitnessFunction<T> fitnessFunction, 
+            string optimizerName, 
+            ISet<Property> statisticsProperties, 
+            int problemSize)
         {
             _iterations = iterations;
             _fitnessFunction = fitnessFunction;
             _optimizerName = optimizerName;
+            _instanceType = fitnessFunction.InstanceType;
+            _comparisonStrategy = fitnessFunction.ComparisonStrategy;
 
             _itemData = new Dictionary<Property, ObservableValue<double>>();
             _seriesData = new Dictionary<Property, ObservableCollection<(double, double)>>();
@@ -40,12 +47,14 @@ namespace MscThesis.Runner.Results
             _itemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
             _itemData[Property.AvgFitness] = new ObservableValue<double>();
             _itemData[Property.ProblemSize] = new ObservableValue<double>(problemSize);
+
+            Initialize(new List<string> { optimizerName });
         }
 
-        public async Task Execute(CancellationToken cancellationToken)
+        public override async Task Execute(CancellationToken cancellationToken)
         {
-            var numIterations = 0;
-            await Task.Run(() =>
+            var numIterations = 1;
+            var task = Task.Run(() =>
             {
                 foreach (var iteration in _iterations)
                 {
@@ -59,47 +68,59 @@ namespace MscThesis.Runner.Results
                         _seriesData[key].Add((numIterations, value));
                     }
 
-                    var fittest = iteration.Population.Fittest;
-                    if (fittest == null || fittest.Fitness == null)
+                    var iterationFittest = iteration.Population.Fittest;
+                    if (iterationFittest == null || iterationFittest.Fitness == null)
                     {
                         throw new Exception();
                     }
-                    _seriesData[Property.BestFitness].Add((numIterations, fittest.Fitness.Value));
-                    TryUpdateFittest(fittest);
+                    TryUpdateFittest(_optimizerName, iterationFittest);
 
                     var avgFitness = iteration.Population.GetAverageFitness();
 
-                    _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.Size));
-                    _seriesData[Property.AvgFitness].Add((numIterations, avgFitness));
+                    var bestFitness = Fittest(_optimizerName).Value.Fitness.Value;
 
-                    _itemData[Property.BestFitness].Value = fittest.Fitness.Value;
+                    lock (SeriesLock)
+                    {
+                        _seriesData[Property.BestFitness].Add((numIterations, bestFitness));
+                        _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.Size));
+                        _seriesData[Property.AvgFitness].Add((numIterations, avgFitness));
+                    }
+
+                    if (_fittest[_optimizerName].Value != null)
+                    {
+                        _itemData[Property.BestFitness].Value = _fittest[_optimizerName].Value.Fitness.Value;
+                    }
                     _itemData[Property.NumberIterations].Value = numIterations;
                     _itemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
-                    _itemData[Property.AvgFitness].Value = avgFitness;
+                    _itemData[Property.AvgFitness].Value = Math.Round(avgFitness, 2);
 
                     numIterations++;
                 }
             });
+            try
+            {
+                await task;
+            }
+            catch (Exception e)
+            {
+                ;
+            }
         }
 
 
-        public ISet<string> OptimizerNames => new HashSet<string> { _optimizerName };
-
-        public IEnumerable<ItemResult> Items => _itemData.Select(item => new ItemResult
+        public override ISet<string> OptimizerNames => new HashSet<string> { _optimizerName };
+        public override IEnumerable<ItemResult> Items => _itemData.Select(item => new ItemResult
         {
             OptimizerName = _optimizerName,
             Property = item.Key,
             Observable = item.Value
         });
-
-        public IEnumerable<SeriesResult> Series => _seriesData.Select(series => new SeriesResult
+        public override IEnumerable<SeriesResult> Series => _seriesData.Select(series => new SeriesResult
         {
             OptimizerName = _optimizerName,
             XAxis = Property.NumberIterations,
             Property = series.Key,
             Points = series.Value
         });
-
-        public IEnumerable<HistogramResult> Histograms => new List<HistogramResult>();
     }
 }

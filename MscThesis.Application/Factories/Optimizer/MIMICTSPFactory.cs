@@ -1,5 +1,6 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Algorithms;
+using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
 using MscThesis.Runner.Factories.Parameters;
@@ -25,17 +26,16 @@ namespace MscThesis.Runner.Factories
             Parameter.PopulationSize
         };
 
-        public override Func<int, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
+        public override Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
-
             var random = BuildRandom(spec.Seed);
             var selection = new QuartileSelection<Tour>(_selectionQuartile, SelectionMethod.Minimize);
 
-            return problemSize =>
+            return problem =>
             {
-                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problemSize);
-                return new MIMICTSP(random, problemSize, populationSize, selection);
+                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
+                return new MIMICTSP(random, problem.Size, problem.ComparisonStrategy, populationSize, selection);
             };
         }
     }

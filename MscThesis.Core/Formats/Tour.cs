@@ -25,6 +25,16 @@ namespace MscThesis.Core.Formats
             return new Tour(indices);
         }
 
+        public static Tour FromNodesString(string str)
+        {
+            var split = str.Split(',');
+            var values = split.Select(s => Convert.ToInt32(s))
+                              .Where(i => i != 1)
+                              .Select(i => i-2)
+                              .ToArray();
+            return new Tour(values);
+        }
+
         public override int Size => _values.Count();
 
         public string Name => "name";
@@ -37,7 +47,7 @@ namespace MscThesis.Core.Formats
 
         public override string ToString()
         {
-            return string.Join(',', _values);
+            return string.Join(',', Nodes);
         }
 
         public IEnumerator<int> GetEnumerator()

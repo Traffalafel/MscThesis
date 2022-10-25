@@ -9,35 +9,78 @@ namespace MscThesis.UI.Models
 {
     internal class LoadedTest : ITest<InstanceFormat>
     {
+        private object _seriesLock = new object { };
         private HashSet<string> _optimizerNames;
         private List<ItemResult> _items;
         private List<SeriesResult> _series;
+        private Dictionary<string, Individual<InstanceFormat>> _fittest;
+        private Type _instanceType = typeof(InstanceFormat);
 
         public bool IsTerminated => true;
+        public object SeriesLock => _seriesLock;
 
-        public LoadedTest(List<string> lines)
+        public LoadedTest(List<string> lines, ITest<InstanceFormat> emptyTest)
         {
             _optimizerNames = new();
             _items = new();
             _series = new();
+            _fittest = new();
 
             var c = 0;
-            var line = lines[c++];
 
-            if (line != "Items:")
+            if (lines[c] != "Type:")
             {
                 throw new Exception();
             }
-            
+            c++;
+
+            Func<string, InstanceFormat> createInstanceFunc;
+            if (lines[c] == "BitString")
+            {
+                _instanceType = typeof(BitString);
+                createInstanceFunc = BitString.FromString;
+            }
+            else if (lines[c] == "Tour")
+            {
+                _instanceType = typeof(Tour);
+                createInstanceFunc = Tour.FromNodesString;
+            } 
+            else
+            {
+                throw new Exception();
+            }
+
+            c++;
+            if (lines[c] != "Fittest:")
+            {
+                throw new Exception();
+            }
+
+            c++;
+            while (lines[c] != "Items:")
+            {
+                try
+                {
+                    var parsed = ParseFittestLine(lines[c], createInstanceFunc);
+                    _fittest.Add(parsed.optimizerName, parsed.individual);
+                    c++;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception();
+                }
+            }
+
+            c++;
             while (lines[c] != "Series:")
             {
                 // Parse items
                 try
                 {
-                    line = lines[c++];
-                    var item = ParseItemLine(line);
+                    var item = ParseItemLine(lines[c]);
                     _optimizerNames.Add(item.OptimizerName);
                     _items.Add(item);
+                    c++;
                 }
                 catch
                 {
@@ -51,10 +94,10 @@ namespace MscThesis.UI.Models
                 // Parse series
                 try
                 {
-                    line = lines[c++];
-                    var series = ParseSeriesLine(line);
+                    var series = ParseSeriesLine(lines[c]);
                     _optimizerNames.Add(series.OptimizerName);
                     _series.Add(series);
+                    c++;
                 }
                 catch
                 {
@@ -62,6 +105,19 @@ namespace MscThesis.UI.Models
                 }
             }
 
+        }
+
+        private (string optimizerName, Individual<InstanceFormat> individual) ParseFittestLine(string line, Func<string, InstanceFormat> createInstanceFunc)
+        {
+            var split = line.Split(';');
+            var optimizerName = split[0];
+            var valueStr = split[1];
+            var fitnessStr = split[2];
+
+            var instance = createInstanceFunc(valueStr);
+            var fitness = Convert.ToInt32(fitnessStr);
+            var individual = new IndividualImpl<InstanceFormat>(instance, fitness);
+            return (optimizerName, individual);
         }
 
         private ItemResult ParseItemLine(string line)
@@ -118,18 +174,29 @@ namespace MscThesis.UI.Models
         }
 
         public ISet<string> OptimizerNames => _optimizerNames;
-
-        public IObservableValue<Individual<InstanceFormat>> Fittest => new ObservableValue<Individual<InstanceFormat>>();
-
         public IEnumerable<ItemResult> Items => _items;
-
         public IEnumerable<SeriesResult> Series => _series;
-
-        public IEnumerable<HistogramResult> Histograms => throw new NotImplementedException();
+        public Type InstanceType => _instanceType;
+        public FitnessComparisonStrategy ComparisonStrategy => FitnessComparison.Maximization; // not used, so arbitrary value is chosen
 
         public Task Execute(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
+        }
+
+        public IObservableValue<Individual<InstanceFormat>> Fittest(string optimizerName)
+        {
+            if (!_fittest.ContainsKey(optimizerName))
+            {
+                return null;
+            }
+
+            return new ObservableValue<Individual<InstanceFormat>>(_fittest[optimizerName]);
+        }
+
+        public void SetLock(object newLock)
+        {
+            _seriesLock = newLock;
         }
     }
 }

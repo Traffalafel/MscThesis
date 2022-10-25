@@ -11,6 +11,8 @@ using SkiaSharp;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Maui;
 using System.Collections.Generic;
+using MscThesis.Core;
+using LiveChartsCore.Measure;
 
 namespace MscThesis.UI.Pages;
 
@@ -120,6 +122,7 @@ public partial class ResultPage : ContentPage
 
         _vm.BuildTest();
 
+        var test = _vm.Test;
         var spec = _vm.Specification;
         var problemSpec = spec.Problem;
         var problemDef = _vm.Provider.GetProblemDefinition(problemSpec);
@@ -175,7 +178,6 @@ public partial class ResultPage : ContentPage
         {
             try
             {
-
                 Layout.Add(BuildHorizontalLine());
 
                 var optimizerName = optimizerSpec.Name;
@@ -189,45 +191,58 @@ public partial class ResultPage : ContentPage
                     Margin = BoxTitleMargin,
                     FontSize = TitleSize
                 });
-                var leftRows = new List<(string left, string right)>();
-                leftRows.Add(("Algorithm:", optimizerSpec.Algorithm));
+                var paramsRows = new List<(string left, string right)>();
+                paramsRows.Add(("Algorithm:", optimizerSpec.Algorithm));
                 if (optimizerSpec.Seed != null)
                 {
-                    leftRows.Add(("Seed:", $"{optimizerSpec.Seed.Value}"));
+                    paramsRows.Add(("Seed:", $"{optimizerSpec.Seed.Value}"));
                 }
                 foreach (var kv in optimizerSpec.Parameters)
                 {
-                    leftRows.Add(($"{kv.Key}:", $"{kv.Value}"));
+                    paramsRows.Add(($"{kv.Key}:", $"{kv.Value}"));
                 }
-                var leftStats = BuildGrid(ToObservable(leftRows));
-                var leftCol = new VerticalStackLayout
+                var paramsGrid = BuildGrid(ToObservable(paramsRows));
+                var paramsColumn = new VerticalStackLayout
                 {
                     Margin = new Thickness(0, 5, 15, 0)
                 };
-                leftCol.Add(new Label
+                paramsColumn.Add(new Label
                 {
                     Text = "Parameters",
                     FontSize = SubTitleSize
                 });
-                leftCol.Add(leftStats);
+                paramsColumn.Add(paramsGrid);
 
                 var items = _vm.Test.Items.Where(item => item.OptimizerName == optimizerName);
-                var rightRows = items.Select(item => ($"{item.Property.ToString()}:", item.Observable.ToStringObservable())).ToList();
-                var rightStats = BuildGrid(rightRows);
-                var rightCol = new VerticalStackLayout
+                var statRows = items.Select(item => ($"{item.Property.ToString()}:", item.Observable.ToStringObservable())).ToList();
+                var statGrid = BuildGrid(statRows);
+                var statColumn = new VerticalStackLayout
                 {
                     Margin = new Thickness(15, 5, 15, 0)
                 };
-                rightCol.Add(new Label
+                statColumn.Add(new Label
                 {
                     Text = "Statistics",
                     FontSize = SubTitleSize
                 });
-                rightCol.Add(rightStats);
+                statColumn.Add(statGrid);
 
                 var horizontal = new HorizontalStackLayout();
-                horizontal.Add(leftCol);
-                horizontal.Add(rightCol);
+                horizontal.Add(paramsColumn);
+                horizontal.Add(statColumn);
+
+                // Best solution view
+                var fittest = test.Fittest(optimizerName);
+                if (test.InstanceType == typeof(BitString))
+                {
+                    var view = BuildBitStringView(fittest);
+                    horizontal.Add(view);
+                }
+                if (test.InstanceType == typeof(Tour))
+                {
+                    var view = BuildTourView(fittest);
+                    horizontal.Add(view);
+                }
 
                 optLayout.Add(horizontal);
                 Layout.Add(optLayout);
@@ -241,6 +256,7 @@ public partial class ResultPage : ContentPage
 
         Layout.Add(BuildHorizontalLine());
 
+        // Series
         var propertyGroups = _vm.Test.Series.GroupBy(series => series.Property);
         foreach (var propertyGroup in propertyGroups)
         {
@@ -280,7 +296,8 @@ public partial class ResultPage : ContentPage
                 LegendBackground = Color.FromRgb(0, 0, 0),
                 LegendOrientation = LiveChartsCore.Measure.LegendOrientation.Vertical,
                 HeightRequest = 500,
-                WidthRequest = 700
+                WidthRequest = 700,
+                SyncContext = _vm.Test.SeriesLock
             };
             Layout.Add(chart);
 
@@ -296,6 +313,128 @@ public partial class ResultPage : ContentPage
             var msg = $"An exception was thrown with the message:\n{e.Message}";
             await DisplayAlert("Exception occured", msg, "Close");
         }
+    }
+
+    private View BuildBitStringView(IObservableValue<Individual<InstanceFormat>> observable)
+    {
+        var layout = BuildIndividualLayout();
+        layout.WidthRequest = 300;
+
+        double fitness = default;
+        string value = string.Empty;
+        if (observable != null)
+        {
+            fitness = observable.Value.Fitness.Value;
+            value = observable.Value.Value.ToString();
+        }
+        var fitnessObservable = new ObservableValue<double>(fitness);
+        observable.PropertyChanged += (s, e) =>
+        {
+            fitnessObservable.Value = observable.Value.Fitness.Value;
+        };
+        var fitnessHorizontal = new HorizontalStackLayout();
+        fitnessHorizontal.Add(new Label
+        {
+            Text = "Fitness:",
+            Margin = new Thickness(0, 0, 10, 5)
+        });
+        var fitnessLabel = new Label
+        {
+            BindingContext = fitnessObservable
+        };
+        fitnessLabel.SetBinding(Label.TextProperty, "Value");
+        fitnessHorizontal.Add(fitnessLabel);
+        layout.Add(fitnessHorizontal);
+
+        layout.Add(new Label
+        {
+            Text = "Value:",
+            Margin = new Thickness(0, 0, 0, 2)
+        });
+
+        var valueObservable = new ObservableValue<string>(value);
+        observable.PropertyChanged += (s, e) =>
+        {
+            valueObservable.Value = observable.Value.Value.ToString();
+        };
+        var valueLabel = new Label
+        {
+            BindingContext = valueObservable,
+            LineBreakMode = LineBreakMode.CharacterWrap
+        };
+        valueLabel.SetBinding(Label.TextProperty, "Value");
+        layout.Add(valueLabel);
+
+        return layout;
+    }
+
+    private View BuildTourView(IObservableValue<Individual<InstanceFormat>> observable)
+    {
+        var layout = BuildIndividualLayout();
+        layout.WidthRequest = 300;
+
+        double fitness = default;
+        string value = string.Empty;
+        if (observable != null && observable.Value != null)
+        {
+            fitness = observable.Value.Fitness.Value;
+            value = observable.Value.Value.ToString();
+        }
+        var fitnessObservable = new ObservableValue<double>(fitness);
+        observable.PropertyChanged += (s, e) =>
+        {
+            fitnessObservable.Value = observable.Value.Fitness.Value;
+        };
+        var fitnessHorizontal = new HorizontalStackLayout();
+        fitnessHorizontal.Add(new Label
+        {
+            Text = "Fitness:",
+            Margin = new Thickness(0, 0, 10, 5)
+        });
+        var fitnessLabel = new Label
+        {
+            BindingContext = fitnessObservable
+        };
+        fitnessLabel.SetBinding(Label.TextProperty, "Value");
+        fitnessHorizontal.Add(fitnessLabel);
+        layout.Add(fitnessHorizontal);
+
+        layout.Add(new Label
+        {
+            Text = "Value:",
+            Margin = new Thickness(0, 0, 0, 2)
+        });
+
+        var valueObservable = new ObservableValue<string>(value);
+        observable.PropertyChanged += (s, e) =>
+        {
+            valueObservable.Value = observable.Value.Value.ToString();
+        };
+        var valueLabel = new Label
+        {
+            BindingContext = valueObservable,
+            LineBreakMode = LineBreakMode.CharacterWrap
+        };
+        valueLabel.SetBinding(Label.TextProperty, "Value");
+        layout.Add(valueLabel);
+
+        return layout;
+    }
+
+    private VerticalStackLayout BuildIndividualLayout()
+    {
+        var layout = new VerticalStackLayout
+        {
+            Margin = new Thickness(15, 5, 15, 0)
+        };
+        var label = new Label
+        {
+            Text = "Best individual",
+            FontSize = SubTitleSize,
+            Margin = new Thickness(0, 0, 0, 5)
+        };
+        layout.Add(label);
+        return layout;
     }
 
     private List<LineSeries<(double,double)>> BuildSeries(IEnumerable<IGrouping<string, SeriesResult>> groups)
@@ -315,6 +454,7 @@ public partial class ResultPage : ContentPage
                     },
                     Stroke = new SolidColorPaint { Color = SKColors.Transparent },
                     Fill = null,
+                    GeometrySize = 5,
                     Name = group.Key,
                     LineSmoothness = 0
                 };

@@ -1,5 +1,6 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Algorithms;
+using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
 using MscThesis.Runner.Factories.Parameters;
@@ -24,17 +25,17 @@ namespace MscThesis.Runner.Factories.Optimizer
             Parameter.PopulationSize
         };
 
-        public override Func<int, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public override Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
             var random = BuildRandom(spec.Seed);
 
-            return problemSize =>
+            return problem =>
             {
-                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problemSize);
+                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
                 var selection = new TournamentSelection<BitString>(random, populationSize, _tournamentSize);
-                return new GOMEA(random, problemSize, populationSize, selection);
+                return new GOMEA(random, problem.Size, problem.ComparisonStrategy, populationSize, selection);
             };
         }
     }

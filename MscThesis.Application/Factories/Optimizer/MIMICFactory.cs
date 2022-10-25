@@ -1,5 +1,6 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Algorithms;
+using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
 using MscThesis.Runner.Factories.Parameters;
@@ -25,17 +26,17 @@ namespace MscThesis.Runner.Factories
             Parameter.PopulationSize
         };
 
-        public override Func<int, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public override Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
             var random = BuildRandom(spec.Seed);
             var selection = new QuartileSelection<BitString>(_selectionQuartile, SelectionMethod.Maximize);
 
-            return problemSize =>
+            return problem =>
             {
-                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problemSize);
-                return new MIMIC(random, problemSize, populationSize, selection);
+                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
+                return new MIMIC(random, problem.Size, problem.ComparisonStrategy, populationSize, selection);
             };
         }
     }

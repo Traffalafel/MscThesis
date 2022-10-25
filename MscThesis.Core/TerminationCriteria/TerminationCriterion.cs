@@ -1,5 +1,4 @@
-﻿using MscThesis.Core.Algorithms;
-using MscThesis.Core.Formats;
+﻿using MscThesis.Core.Formats;
 using System.Collections.Generic;
 
 namespace MscThesis.Core.TerminationCriteria

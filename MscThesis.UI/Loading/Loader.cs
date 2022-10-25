@@ -1,4 +1,5 @@
 ﻿using MscThesis.Core.Formats;
+using MscThesis.Runner;
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using MscThesis.UI.Models;
@@ -11,14 +12,17 @@ namespace MscThesis.UI.Loading
     {
         private TestSpecification _specification;
         private LoadedTest _test;
+        private TestProvider _provider;
 
         public TestSpecification Specification => _specification;
         public ITest<InstanceFormat> Test => _test;
 
-        public Loader(string content)
+        public Loader(string content, TestProvider provider)
         {
-            content = content.Replace(" ", "");
+            _provider = provider;
+
             content = content.Replace("\r", "");
+
             var lines = content.Split('\n');
 
             var c = 0;
@@ -29,7 +33,7 @@ namespace MscThesis.UI.Loading
             }
 
             var jsonStr = string.Empty;
-            while (lines[c] != "Items:")
+            while (lines[c] != "Type:")
             {
                 // Parse items
                 try
@@ -52,8 +56,13 @@ namespace MscThesis.UI.Loading
                 ;
             }
 
-            var resultsContent = lines.Skip(c).ToList();
-            _test = new LoadedTest(resultsContent);
+            var emptyTest = _provider.Run(_specification);
+
+            var resultsContent = content.Replace(" ", "")
+                                        .Split('\n')
+                                        .Skip(c)
+                                        .ToList();
+            _test = new LoadedTest(resultsContent, emptyTest);
         }
     }
 }

@@ -10,13 +10,15 @@ namespace MscThesis.Core.Algorithms
     {
         protected readonly Random _random;
         protected readonly int _problemSize;
+        protected readonly FitnessComparisonStrategy _comparisonStrategy;
 
         public abstract ISet<Property> StatisticsProperties { get; }
 
-        protected Optimizer(Random random, int problemSize)
+        protected Optimizer(Random random, int problemSize, FitnessComparisonStrategy comparisonStrategy)
         {
             _random = random;
             _problemSize = problemSize;
+            _comparisonStrategy = comparisonStrategy;
         }
 
         protected virtual void Initialize(FitnessFunction<T> fitnessFunction) { }

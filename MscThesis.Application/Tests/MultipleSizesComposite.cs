@@ -13,9 +13,9 @@ namespace MscThesis.Runner.Results
         private HashSet<string> _optimizerNames;
         private Dictionary<string, Dictionary<Property, ObservableCollection<(double,double)>>> _points { get; }
 
-        public ISet<string> OptimizerNames => _optimizerNames;
-        public IEnumerable<ItemResult> Items => new List<ItemResult>();
-        public IEnumerable<SeriesResult> Series => _points.Select(opt =>
+        public override ISet<string> OptimizerNames => _optimizerNames;
+        public override IEnumerable<ItemResult> Items => new List<ItemResult>();
+        public override IEnumerable<SeriesResult> Series => _points.Select(opt =>
         {
             return opt.Value.Select(v => new SeriesResult
             {
@@ -25,7 +25,6 @@ namespace MscThesis.Runner.Results
                 Points = v.Value
             });
         }).SelectMany(x => x);
-        public IEnumerable<HistogramResult> Histograms => new List<HistogramResult>();
 
         public MultipleSizesComposite(List<ITest<T>> tests, int maxParallel, Property xAxis) : base(tests, maxParallel)
         {
@@ -56,7 +55,11 @@ namespace MscThesis.Runner.Results
                 _optimizerNames.Add(item.OptimizerName);
 
                 var observable = item.Observable;
-                _points[item.OptimizerName][item.Property].Add((xValue, observable.Value));
+
+                lock (SeriesLock)
+                {
+                    _points[item.OptimizerName][item.Property].Add((xValue, observable.Value));
+                }
             }
         }
 

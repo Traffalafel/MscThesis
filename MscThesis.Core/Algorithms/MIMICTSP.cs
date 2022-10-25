@@ -17,14 +17,15 @@ namespace MscThesis.Core.Algorithms
         public MIMICTSP(
             Random random,
             int problemSize,
+            FitnessComparisonStrategy comparisonStrategy,
             int populationSize,
-            ISelectionOperator<Tour> selectionOperator) : base(random, problemSize)
+            ISelectionOperator<Tour> selectionOperator) : base(random, problemSize, comparisonStrategy)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
 
             // Initialize population uniformly
-            _population = new Population<Tour>();
+            _population = new Population<Tour>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
             {
                 var permutation = Tour.CreateUniform(random, problemSize);

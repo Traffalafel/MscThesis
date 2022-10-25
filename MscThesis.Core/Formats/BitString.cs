@@ -28,6 +28,15 @@ namespace MscThesis.Core.Formats
             var s = Values.Select(b => Convert.ToInt32(b)).Select(i => i.ToString()).ToArray();
             return string.Join("", s);
         }
+
+        public static InstanceFormat FromString(string str)
+        {
+            var values = str.Select(c => c == '1').ToArray();
+            return new BitString
+            {
+                Values = values
+            };
+        }
     }
 
 }

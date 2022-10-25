@@ -45,7 +45,7 @@ namespace MscThesis.Runner.Test
                 }
             };
 
-            var provider = new TestProvider(SettingsProvider.Empty);
+            var provider = new TestProvider(SettingsProvider.Default);
             var test = provider.Run(spec);
 
             using var source = new CancellationTokenSource();
@@ -91,7 +91,7 @@ namespace MscThesis.Runner.Test
                 }
             };
 
-            var provider = new TestProvider(SettingsProvider.Empty);
+            var provider = new TestProvider(SettingsProvider.Default);
             var test = provider.Run(spec);
 
             using var source = new CancellationTokenSource();

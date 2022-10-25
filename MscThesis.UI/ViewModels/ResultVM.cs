@@ -47,7 +47,7 @@ namespace MscThesis.UI.ViewModels
                 else
                 {
                     var content = File.ReadAllText(resultsFilePath);
-                    var loader = new Loader(content);
+                    var loader = new Loader(content, _provider);
                     _test = loader.Test;
                     Specification = loader.Specification;
                 }

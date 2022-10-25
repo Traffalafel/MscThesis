@@ -7,12 +7,17 @@ namespace MscThesis.Core.FitnessFunctions
     {
         private int _m; // = width of "gap"
 
-        public JumpOffsetSpike(int m)
+        public JumpOffsetSpike(int size, int m) : base(size)
         {
             _m = m;
         }
 
-        public override double? Optimum => throw new System.NotImplementedException();
+        public override FitnessComparisonStrategy ComparisonStrategy => FitnessComparison.Maximization;
+
+        public override double? Optimum(int problemSize)
+        {
+            return problemSize + _m + 1;
+        }
 
         protected override double Compute(BitString instance)
         {

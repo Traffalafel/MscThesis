@@ -7,18 +7,18 @@ using System.Linq;
 
 namespace MscThesis.Runner.Results
 {
-    internal class MultipleRunsComposite<T> : TestComposite<T>, ITest<T> where T : InstanceFormat
+    internal class MultipleRunsComposite<T> : TestComposite<T> where T : InstanceFormat
     {
-        private ObservableValue<int> _numRuns;
-        private HashSet<string> _optimizerNames;
+        private readonly ObservableValue<int> _numRuns;
+        private readonly HashSet<string> _optimizerNames;
         private Dictionary<string, Dictionary<Property, ObservableCollection<double>>> _itemValues { get; }
         private Dictionary<string, Dictionary<Property, List<SeriesResult>>> _seriesValues { get; }
         private Dictionary<string, Dictionary<Property, double>> _sums { get; }
         private Dictionary<string, Dictionary<Property, ObservableValue<double>>> _averages { get; }
 
-        public ISet<string> OptimizerNames => _optimizerNames;
 
-        public IEnumerable<ItemResult> Items => _averages.Select(opt =>
+        public override ISet<string> OptimizerNames => _optimizerNames;
+        public override IEnumerable<ItemResult> Items => _averages.Select(opt =>
         {
             return opt.Value.Select(v => new ItemResult
             {
@@ -28,17 +28,7 @@ namespace MscThesis.Runner.Results
             });
         }).SelectMany(x => x);
 
-        public IEnumerable<SeriesResult> Series => _seriesValues.SelectMany(x => x.Value).SelectMany(x => x.Value);
-
-        public IEnumerable<HistogramResult> Histograms => _itemValues.Select(opt =>
-        {
-            return opt.Value.Select(v => new HistogramResult
-            {
-                OptimizerName = opt.Key,
-                Property = v.Key,
-                Values = v.Value
-            });
-        }).SelectMany(x => x);
+        public override IEnumerable<SeriesResult> Series => _seriesValues.SelectMany(x => x.Value).SelectMany(x => x.Value);
 
         public MultipleRunsComposite(List<ITest<T>> results, int maxParallel) : base(results, maxParallel)
         {

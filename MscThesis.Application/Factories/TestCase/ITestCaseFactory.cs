@@ -1,4 +1,5 @@
 ﻿using MscThesis.Core;
+using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Factories.Problem;
 using MscThesis.Runner.Specification;

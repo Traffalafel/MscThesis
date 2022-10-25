@@ -10,6 +10,7 @@ namespace MscThesis.Core
     {
         private List<Individual<T>> _individuals;
         private Individual<T> _fittest;
+        private FitnessComparisonStrategy _comparisonStrategy;
 
         public List<Individual<T>> Individuals => _individuals;
         public Individual<T> Fittest => _fittest;
@@ -27,16 +28,18 @@ namespace MscThesis.Core
             } 
         }
 
-        public Population()
+        public Population(FitnessComparisonStrategy comparisonStrategy)
         {
             _individuals = new List<Individual<T>>();
+            _comparisonStrategy = comparisonStrategy;
         }
 
-        public Population(IEnumerable<Individual<T>> individuals)
+        public Population(IEnumerable<Individual<T>> individuals, FitnessComparisonStrategy comparisonStrategy)
         {
             _individuals = individuals.ToList();
+            _comparisonStrategy = comparisonStrategy;
 
-            var fittest = individuals.Aggregate((i1, i2) => (i1.Fitness ?? double.MinValue) > (i2.Fitness ?? double.MinValue) ? i1 : i2);
+            var fittest = individuals.Aggregate((i1, i2) => comparisonStrategy.IsFitter(i1, i2) ? i1 : i2);
             _fittest = fittest;
         }
 
@@ -49,7 +52,7 @@ namespace MscThesis.Core
                 _fittest = individual;
                 return;
             }
-            if (individual.Fitness != null && individual.Fitness > _fittest.Fitness)
+            if (_comparisonStrategy.IsFitter(individual, _fittest))
             {
                 _fittest = individual;
                 return;

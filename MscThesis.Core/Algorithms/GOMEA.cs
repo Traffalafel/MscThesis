@@ -17,15 +17,16 @@ namespace MscThesis.Core.Algorithms
         public GOMEA(
             Random random, 
             int problemSize, 
+            FitnessComparisonStrategy comparisonStrategy,
             int populationSize,
             ISelectionOperator<BitString> selectionOperator
-            ) : base(random, problemSize)
+            ) : base(random, problemSize, comparisonStrategy)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
 
             // Initialize population uniformly
-            _population = new Population<BitString>();
+            _population = new Population<BitString>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
             {
                 var bs = BitString.CreateUniform(_random, problemSize);
@@ -50,7 +51,7 @@ namespace MscThesis.Core.Algorithms
             var jointEntropies = Utils.ComputeJointEntropies(_population);
             var clusters = Utils.BuildClusters(uniEntropies, jointEntropies);
 
-            var output = new Population<BitString>();
+            var output = new Population<BitString>(_comparisonStrategy);
 
             foreach (var individual in _population)
             {

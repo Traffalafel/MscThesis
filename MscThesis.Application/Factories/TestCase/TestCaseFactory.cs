@@ -1,6 +1,4 @@
 ﻿using MscThesis.Core;
-using MscThesis.Core.Algorithms;
-using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.TerminationCriteria;
 using MscThesis.Runner.Factories.Expression;
@@ -33,13 +31,13 @@ namespace MscThesis.Runner.Factories
 
         public IEnumerable<ITestCase<InstanceFormat>> BuildTestCases(TestSpecification spec)
         {
+            var problemFactory = GetProblemFactory(spec.Problem);
+            var buildProblemFunc = problemFactory.BuildProblem(spec.Problem);
+
             foreach (var optimizerSpec in spec.Optimizers)
             {
                 var optimizerFactory = GetOptimizerFactory(optimizerSpec);
                 var buildOptimizerFunc = optimizerFactory.BuildCreator(optimizerSpec);
-
-                var problemFactory = GetProblemFactory(spec.Problem);
-                var buildProblemFunc = problemFactory.BuildProblem(spec.Problem);
 
                 var buildTerminationsFunc = new Func<int, IEnumerable<TerminationCriterion<T>>>((size) =>
                 {

@@ -18,9 +18,9 @@ namespace MscThesis.Core.Selection
             _tournamentSize = tournamentSize;
         }
 
-        public Population<T> Select(Population<T> population, FitnessFunction<T> fitnessFunction)
+        public Population<T> Select(Population<T> population, FitnessFunction<T> problem)
         {
-            var output = new Population<T>();
+            var output = new Population<T>(problem.ComparisonStrategy);
 
             for (int i = 0; i < _numTournaments; i++)
             {

@@ -13,12 +13,13 @@ namespace MscThesis.Core.Algorithms
 
         public P3(
             Random random,
-            int problemSize
-            ) : base(random, problemSize)
+            int problemSize,
+            FitnessComparisonStrategy comparisonStrategy
+            ) : base(random, problemSize, comparisonStrategy)
         {
             _hashset = new HashSet<string>();
             _pyramid = new List<P3Level>();
-            _pyramid.Add(new P3Level(problemSize, random));
+            _pyramid.Add(new P3Level(problemSize, random, _comparisonStrategy));
         }
 
         public override ISet<Property> StatisticsProperties => new HashSet<Property>();
@@ -51,7 +52,7 @@ namespace MscThesis.Core.Algorithms
 
                 if (i == _pyramid.Count - 1)
                 {
-                    var levelNew = new P3Level(_problemSize, _random);
+                    var levelNew = new P3Level(_problemSize, _random, _comparisonStrategy);
                     _pyramid.Add(levelNew);
                 }
                 _pyramid[i+1].Add(individual);
@@ -68,7 +69,6 @@ namespace MscThesis.Core.Algorithms
         private Individual<BitString> HillClimb(Random random, BitString solution, FitnessFunction<BitString> fitnessFunction)
         {
             var fitness = fitnessFunction.ComputeFitness(solution);
-            var individual = new IndividualImpl<BitString>(solution, fitness);
 
             var problemSize = solution.Values.Length;
             var options = Enumerable.Range(0, problemSize).ToArray();
@@ -101,7 +101,7 @@ namespace MscThesis.Core.Algorithms
                 }
             }
 
-            return individual;
+            return new IndividualImpl<BitString>(solution, fitness);
         }
 
         private void AddToHashset(Individual<BitString> individual)
@@ -117,7 +117,7 @@ namespace MscThesis.Core.Algorithms
         private Population<BitString> GetPopulation()
         {
             var individuals = _pyramid.Select(level => level.Population.Individuals).SelectMany(x => x);
-            return new Population<BitString>(individuals);
+            return new Population<BitString>(individuals, _comparisonStrategy);
         }
 
     }
@@ -133,11 +133,11 @@ namespace MscThesis.Core.Algorithms
         private int _problemSize;
         private List<HashSet<int>> _clusters;
 
-        public P3Level(int problemSize, Random random)
+        public P3Level(int problemSize, Random random, FitnessComparisonStrategy comparisonStrategy)
         {
             _problemSize = problemSize;
             _random = random;
-            _population = new Population<BitString>();
+            _population = new Population<BitString>(comparisonStrategy);
             _uniCounts = new double[problemSize];
             _jointCounts = new double[problemSize, problemSize,4];
         }

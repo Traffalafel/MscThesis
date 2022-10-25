@@ -1,5 +1,6 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Algorithms;
+using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Specification;
 using System;
@@ -11,13 +12,13 @@ namespace MscThesis.Runner.Factories.Optimizer
     {
         public override IEnumerable<Parameter> Parameters => new List<Parameter>();
 
-        public override Func<int, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public override Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var random = BuildRandom(spec.Seed);
 
-            return problemSize =>
+            return problem =>
             {
-                return new P3(random, problemSize);
+                return new P3(random, problem.Size, problem.ComparisonStrategy);
             };
         }
     }

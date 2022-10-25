@@ -17,12 +17,12 @@ namespace MscThesis.Runner.Factories.Termination
             return (size) =>
             {
                 var fitnessFunction = buildProblemFunc(size);
-                if (!fitnessFunction.Optimum.HasValue)
+                if (!fitnessFunction.Optimum(size).HasValue)
                 {
                     throw new Exception("Fitness function must have known global optimum");
                 }
 
-                return new OptimumReached<T>(fitnessFunction.Optimum.Value);
+                return new OptimumReached<T>(fitnessFunction.Optimum(size).Value);
             };
 
         }

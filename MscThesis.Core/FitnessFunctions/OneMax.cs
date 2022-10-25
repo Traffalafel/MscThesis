@@ -8,7 +8,17 @@ namespace MscThesis.Core.FitnessFunctions
 {
     public class OneMax : FitnessFunction<BitString>
     {
-        public override double? Optimum => throw new NotImplementedException();
+        public override FitnessComparisonStrategy ComparisonStrategy => FitnessComparison.Maximization;
+
+        public OneMax(int size) : base(size)
+        {
+
+        }
+
+        public override double? Optimum(int problemSize)
+        {
+            return problemSize;
+        }
 
         protected override double Compute(BitString instance)
         {

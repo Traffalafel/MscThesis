@@ -1,5 +1,6 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Algorithms;
+using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Specification;
 using System;
@@ -10,7 +11,7 @@ namespace MscThesis.Runner.Factories
     public abstract class OptimizerFactory<T> where T : InstanceFormat
     {
         public abstract IEnumerable<Parameter> Parameters { get; }
-        public abstract Func<int, Optimizer<T>> BuildCreator(OptimizerSpecification spec);
+        public abstract Func<FitnessFunction<T>, Optimizer<T>> BuildCreator(OptimizerSpecification spec);
 
         protected Random BuildRandom(int? seed)
         {

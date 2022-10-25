@@ -1,13 +1,25 @@
 ﻿using MscThesis.Core.Formats;
+using System;
 
 namespace MscThesis.Core.FitnessFunctions
 {
     public abstract class FitnessFunction<T> where T : InstanceFormat
     {
         private int _numCalls = 0;
-        protected abstract double Compute(T instance);
 
-        public abstract double? Optimum { get; }
+        private int _size;
+
+        public FitnessFunction(int size)
+        {
+            _size = size;
+        }
+
+        protected abstract double Compute(T instance);
+        public abstract double? Optimum(int problemSize);
+        public abstract FitnessComparisonStrategy ComparisonStrategy { get; }
+
+        public int Size => _size;
+        public Type InstanceType => typeof(T);
 
         public double ComputeFitness(T instance)
         {

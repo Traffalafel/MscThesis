@@ -93,7 +93,7 @@ namespace MscThesis.CLI
 
             Console.WriteLine($"Time elapsed: {time.TotalSeconds} seconds");
             
-            Console.WriteLine($"Fittest: {test.Fittest.Value}");
+            //Console.WriteLine($"Fittest: {test.Fittest.Value}");
 
             foreach (var item in test.Items)
             {

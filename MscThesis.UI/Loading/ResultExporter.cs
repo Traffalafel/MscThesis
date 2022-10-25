@@ -22,6 +22,20 @@ namespace MscThesis.UI.Loading
             var specStr = JsonConvert.SerializeObject(specification, Formatting.Indented);
             lines.Add(specStr);
 
+            // Export type
+            lines.Add("Type:");
+            lines.Add(test.InstanceType.Name);
+
+            // Export fittest
+            lines.Add("Fittest:");
+            foreach (var optimizerName in test.OptimizerNames)
+            {
+                var observable = test.Fittest(optimizerName);
+                var value = observable.Value.Value;
+                var fitness = observable.Value.Fitness;
+                lines.Add($"{optimizerName};{value};{fitness}");
+            }
+
             // Export items
             lines.Add("Items:");
             foreach (var item in test.Items)

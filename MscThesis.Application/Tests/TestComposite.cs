@@ -1,9 +1,8 @@
-﻿using MscThesis.Core.Formats;
+﻿using MscThesis.Core;
+using MscThesis.Core.Formats;
 using MscThesis.Runner.Results;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,19 +10,40 @@ namespace MscThesis.Runner.Tests
 {
     public abstract class TestComposite<T> : Test<T> where T : InstanceFormat
     {
-        private List<ITest<T>> _results;
+        private List<ITest<T>> _subTests;
         private int _maxParallel;
 
-        public TestComposite(List<ITest<T>> results, int maxParallel)
+        public TestComposite(List<ITest<T>> subTests, int maxParallel)
         {
-            _results = results;
+            _subTests = subTests;
             _maxParallel = maxParallel;
+            _instanceType = subTests.First().InstanceType;
+            _comparisonStrategy = subTests.First().ComparisonStrategy;
+
+            foreach (var test in subTests)
+            {
+                var optimizerNames = test.OptimizerNames;
+                Initialize(optimizerNames);
+                foreach (var name in optimizerNames)
+                {
+                    var observable = test.Fittest(name);
+                    observable.PropertyChanged += (s, e) =>
+                    {
+                        if (_comparisonStrategy.IsFitter(observable.Value, _fittest[name].Value))
+                        {
+                            _fittest[name].Value = observable.Value;
+                        }
+                    };
+                }
+
+                test.SetLock(SeriesLock);
+            }
         }
 
-        public async Task Execute(CancellationToken cancellationToken)
+        public override async Task Execute(CancellationToken cancellationToken)
         {
-            var initial = _results.Take(_maxParallel);
-            var remaining = _results.Skip(_maxParallel).ToList();
+            var initial = _subTests.Take(_maxParallel);
+            var remaining = _subTests.Skip(_maxParallel).ToList();
 
             var tasks = initial.Select(async result =>
             {
@@ -41,8 +61,7 @@ namespace MscThesis.Runner.Tests
                     return; // stop execution
                 }
 
-                TryUpdateFittest(result.Fittest?.Value);
-
+                TryUpdateFittest(result);
                 ConsumeResult(result);
 
                 tasks.Remove(completedTask);

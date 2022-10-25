@@ -22,14 +22,15 @@ namespace MscThesis.Core.Algorithms
         public MIMIC(
             Random random,
             int problemSize,
+            FitnessComparisonStrategy comparisonStrategy,
             int populationSize, 
-            ISelectionOperator<BitString> selectionOperator) : base(random, problemSize)
+            ISelectionOperator<BitString> selectionOperator) : base(random, problemSize, comparisonStrategy)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
 
             // Initialize population uniformly
-            _population = new Population<BitString>();
+            _population = new Population<BitString>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
             {
                 var bs = BitString.CreateUniform(_random, problemSize);
