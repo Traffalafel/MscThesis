@@ -13,6 +13,7 @@ using Microsoft.Maui;
 using System.Collections.Generic;
 using MscThesis.Core;
 using LiveChartsCore.Measure;
+using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.Pages;
 
@@ -444,9 +445,10 @@ public partial class ResultPage : ContentPage
             if (group.Count() > 1)
             {
                 // Points are not connected
+                var values = Combine(group.Select(x => x.Points));
                 return new LineSeries<(double, double)>
                 {
-                    Values = group.SelectMany(x => x.Points),
+                    Values = values,
                     Mapping = (value, point) =>
                     {
                         point.PrimaryValue = value.Item2;
@@ -477,6 +479,21 @@ public partial class ResultPage : ContentPage
                 };
             }
         }).ToList();
+    }
+
+    private ObservableCollection<T> Combine<T>(IEnumerable<ObservableCollection<T>> collections)
+    {
+        var combined = new ObservableCollection<T>(collections.SelectMany(x => x));
+        foreach (var col in collections)
+        {
+            col.CollectionChanged += (s, e) => { 
+                foreach (var newItem in e.NewItems)
+                {
+                    combined.Add((T)newItem);
+                }
+            };
+        }
+        return combined;
     }
 
     public void Save(object sender, EventArgs e)

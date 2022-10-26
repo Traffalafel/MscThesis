@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -18,12 +19,12 @@ namespace MscThesis.Core.Formats
 
         public static new RandomKeysTour CreateUniform(Random random, int size)
         {
-            var keys = Enumerable.Range(0, size - 1).Select(_ => random.NextDouble()).ToArray();
+            var keys = GenerateRandomKeys(random, size-1);
             return new RandomKeysTour(keys);
         }
 
         // Create permutation from keys sort order
-        private static int[] ToNodes(double[] keys)
+        public static int[] ToNodes(double[] keys)
         {
             var order = keys.Select((val, idx) => (val, idx))
                             .OrderBy(x => x.val)
@@ -77,5 +78,20 @@ namespace MscThesis.Core.Formats
 
             _values = ToNodes(_keys);
         }
+
+        public void ReEncode(Random random)
+        {
+            var newKeysSorted = GenerateRandomKeys(random, _keys.Length).OrderBy(x => x).ToArray();
+            for (int i = 0; i < _keys.Length; i++)
+            {
+                _keys[i] = newKeysSorted[_values[i]];
+            }
+        }
+
+        private static double[] GenerateRandomKeys(Random random, int size)
+        {
+            return Enumerable.Range(0, size).Select(_ => random.NextDouble()).ToArray();
+        }
+
     }
 }

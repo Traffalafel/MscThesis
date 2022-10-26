@@ -38,6 +38,14 @@ namespace MscThesis.Core.Algorithms.Tours
 
         protected override RunIteration<Tour> NextIteration(FitnessFunction<Tour> fitnessFunction)
         {
+            foreach (var level in _pyramid)
+            {
+                foreach (var ind in level.Population)
+                {
+                    ind.Value.ReEncode(_random);
+                }
+            }
+
             var uniform = RandomKeysTour.CreateUniform(_random, _problemSize);
             var initialFitness = fitnessFunction.ComputeFitness(uniform);
             var individual = new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
