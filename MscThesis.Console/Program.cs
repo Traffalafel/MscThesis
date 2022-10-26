@@ -80,7 +80,7 @@ namespace MscThesis.CLI
             var timer = new Stopwatch();
             timer.Start();
 
-            var test = runner.Run(spec);
+            var test = runner.Build(spec);
 
             using (var source = new CancellationTokenSource())
             {

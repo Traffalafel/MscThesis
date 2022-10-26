@@ -9,7 +9,7 @@ namespace MscThesis.Core
     public abstract class FitnessComparisonStrategy
     {
         // true => val1 is fitter than val2
-        protected abstract bool IsFitter(double val1, double val2);
+        public abstract bool IsFitter(double val1, double val2);
 
         // true => i1 is fitter than i2
         public bool IsFitter(Individual<InstanceFormat> i1, Individual<InstanceFormat> i2)

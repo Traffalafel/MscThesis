@@ -42,7 +42,7 @@ namespace MscThesis.UI.ViewModels
             {
                 if (specification != null)
                 {
-                    _test = _provider.Run(specification);
+                    _test = _provider.Build(specification);
                 }
                 else
                 {

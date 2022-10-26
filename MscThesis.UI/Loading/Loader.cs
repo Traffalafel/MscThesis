@@ -56,7 +56,7 @@ namespace MscThesis.UI.Loading
                 ;
             }
 
-            var emptyTest = _provider.Run(_specification);
+            var emptyTest = _provider.Build(_specification);
 
             var resultsContent = content.Replace(" ", "")
                                         .Split('\n')

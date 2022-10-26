@@ -8,7 +8,7 @@ using Xunit;
 
 namespace MscThesis.Runner.Test
 {
-    public class TSPMIMICTests
+    public class P4Tests
     {
         [Fact]
         public async void SingleRun()
@@ -29,12 +29,8 @@ namespace MscThesis.Runner.Test
                 {
                     new OptimizerSpecification
                     {
-                        Algorithm = "MIMICTSP",
-                        Seed = 1,
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            [Parameter.PopulationSize] = "10*n"
-                        }
+                        Algorithm = "P4",
+                        Seed = 420
                     },
                 },
                 Terminations = new List<TerminationSpecification>
@@ -51,12 +47,12 @@ namespace MscThesis.Runner.Test
             };
 
             var provider = new TestProvider(SettingsProvider.Default);
-            var test = provider.Run(spec);
+            var test = provider.Build(spec);
 
-            using (var source = new CancellationTokenSource())
-            {
-                await test.Execute(source.Token);
-            }
+            using var source = new CancellationTokenSource();
+            await test.Execute(source.Token);
+
+            Assert.True(test.IsTerminated);
         }
 
     }

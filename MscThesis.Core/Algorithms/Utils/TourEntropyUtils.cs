@@ -1,11 +1,13 @@
-﻿using MscThesis.Core.Formats;
+﻿using MscThesis.Core.FitnessFunctions;
+using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace MscThesis.Core.Algorithms
 {
-    internal static class PermutationUtils
+    internal static class TourEntropyUtils
     {
         internal static double[] ComputeUniEntropies(Population<Tour> population)
         {

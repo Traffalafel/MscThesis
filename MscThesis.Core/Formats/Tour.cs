@@ -9,7 +9,7 @@ namespace MscThesis.Core.Formats
 {
     public class Tour : InstanceFormat, IEnumerable<int>, ITour
     {
-        private int[] _values;
+        protected int[] _values;
 
         public Tour(int[] values)
         {

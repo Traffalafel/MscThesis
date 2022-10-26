@@ -322,7 +322,7 @@ public partial class ResultPage : ContentPage
 
         double fitness = default;
         string value = string.Empty;
-        if (observable != null)
+        if (observable != null && observable.Value != null)
         {
             fitness = observable.Value.Fitness.Value;
             value = observable.Value.Value.ToString();

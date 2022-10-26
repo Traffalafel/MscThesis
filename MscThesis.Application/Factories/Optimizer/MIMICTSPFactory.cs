@@ -10,13 +10,13 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories
 {
-    public class MIMICTSPFactory : OptimizerFactory<Tour>
+    public class TourMIMICFactory : OptimizerFactory<Tour>
     {
         private static readonly double _selectionQuartile = 0.5d;
 
         private readonly IParameterFactory _parameterFactory;
 
-        public MIMICTSPFactory(IParameterFactory parameterFactory)
+        public TourMIMICFactory(IParameterFactory parameterFactory)
         {
             _parameterFactory = parameterFactory;
         }
@@ -35,7 +35,7 @@ namespace MscThesis.Runner.Factories
             return problem =>
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                return new MIMICTSP(random, problem.Size, problem.ComparisonStrategy, populationSize, selection);
+                return new TourMIMIC(random, problem.Size, problem.ComparisonStrategy, populationSize, selection);
             };
         }
     }

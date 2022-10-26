@@ -26,7 +26,7 @@ namespace MscThesis.Runner
             };
         }
 
-        public ITest<InstanceFormat> Run(TestSpecification spec)
+        public ITest<InstanceFormat> Build(TestSpecification spec)
         {
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);

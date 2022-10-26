@@ -8,41 +8,43 @@ using Xunit;
 
 namespace MscThesis.Runner.Test
 {
-    public class MultipleRunsTest
+    public class TourMIMICTests
     {
         [Fact]
-        public async void MultipleRunsOneOptimizer()
+        public async void SingleRun()
         {
             var spec = new TestSpecification
             {
-                NumRuns = 30,
-                ProblemSizes = { 20 },
+                NumRuns = 1,
                 MaxParallelization = 1,
                 Problem = new ProblemSpecification
                 {
-                    Name = "OneMax"
+                    Name = "TSPLib",
+                    Parameters = new Dictionary<Parameter, string>
+                    {
+                        [Parameter.ProblemName] = "burma14"
+                    }
                 },
                 Optimizers = new List<OptimizerSpecification>
                 {
                     new OptimizerSpecification
                     {
-                        Algorithm = "MIMIC",
+                        Algorithm = "TourMIMIC",
                         Seed = 1,
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.PopulationSize] = "n"
+                            [Parameter.PopulationSize] = "10*n"
                         }
-                    }
+                    },
                 },
                 Terminations = new List<TerminationSpecification>
                 {
                     new TerminationSpecification
                     {
-                        Name = "Stagnation",
+                        Name = "Max iterations",
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.MaxIterations] = "10",
-                            [Parameter.Epsilon] = "10E-6"
+                            [Parameter.MaxIterations] = "100"
                         }
                     }
                 }
@@ -51,8 +53,11 @@ namespace MscThesis.Runner.Test
             var provider = new TestProvider(SettingsProvider.Default);
             var test = provider.Build(spec);
 
-            using var source = new CancellationTokenSource();
-            await test.Execute(source.Token);
+            using (var source = new CancellationTokenSource())
+            {
+                await test.Execute(source.Token);
+            }
         }
+
     }
 }

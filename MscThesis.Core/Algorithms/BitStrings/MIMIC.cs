@@ -4,6 +4,7 @@ using System.Linq;
 using MscThesis.Core.Selection;
 using MscThesis.Core.Formats;
 using MscThesis.Core.FitnessFunctions;
+using MscThesis.Core.Algorithms.BitStrings;
 
 namespace MscThesis.Core.Algorithms
 {
@@ -42,13 +43,13 @@ namespace MscThesis.Core.Algorithms
         {
             var problemSize = _population.ProblemSize;
 
-            var uniCounts = Utils.GetUniCounts(_population);
-            var uniFreqs = Utils.ComputeUniFrequencies(uniCounts, _population.Size);
-            var uniEntropies = Utils.ComputeUniEntropies(_population);
+            var uniCounts = BitStringEntropyUtils.GetUniCounts(_population);
+            var uniFreqs = BitStringEntropyUtils.ComputeUniFrequencies(uniCounts, _population.Size);
+            var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(_population);
 
-            var jointCounts = Utils.GetJointCounts(_population);
-            var jointFreqs = Utils.ComputeJointFrequencies(jointCounts, _population.Size);
-            var jointEntropies = Utils.ComputeJointEntropies(jointFreqs);
+            var jointCounts = BitStringEntropyUtils.GetJointCounts(_population);
+            var jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(jointCounts, _population.Size);
+            var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(jointFreqs);
 
             var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, jointEntropies);
 
@@ -63,7 +64,7 @@ namespace MscThesis.Core.Algorithms
                 var first = ordering[0];
                 var probFirst = uniFreqs[first];
                 probFirst = ApplyMargins(probFirst, minProb, maxProb);
-                vals[first] = RandomUtils.SampleBit(_random, probFirst);
+                vals[first] = RandomUtils.SampleBernoulli(_random, probFirst);
 
                 // Sample the rest
                 for (int k = 1; k < problemSize; k++)
@@ -92,7 +93,7 @@ namespace MscThesis.Core.Algorithms
                         p = joint[2] / (1 - uniFreqs[prev]);
                     }
                     p = ApplyMargins(p, minProb, maxProb);
-                    vals[position] = RandomUtils.SampleBit(_random, p);
+                    vals[position] = RandomUtils.SampleBernoulli(_random, p);
                 }
 
                 var bs = new BitString { Values = vals };

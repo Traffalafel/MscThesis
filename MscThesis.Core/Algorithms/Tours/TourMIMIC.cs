@@ -7,14 +7,14 @@ using System.Linq;
 
 namespace MscThesis.Core.Algorithms
 {
-    public class MIMICTSP : Optimizer<Tour>
+    public class TourMIMIC : Optimizer<Tour>
     {
         private readonly ISelectionOperator<Tour> _selectionOperator;
         private readonly int _populationSize;
 
         private Population<Tour> _population;
 
-        public MIMICTSP(
+        public TourMIMIC(
             Random random,
             int problemSize,
             FitnessComparisonStrategy comparisonStrategy,
@@ -42,12 +42,12 @@ namespace MscThesis.Core.Algorithms
         {
             var problemSize = _population.ProblemSize;
 
-            var uniCounts = PermutationUtils.GetUniCounts(_population);
-            var uniFreqs = PermutationUtils.ComputeUniFrequencies(uniCounts, _population.Size);
-            var uniEntropies = PermutationUtils.ComputeUniEntropies(_population);
+            var uniCounts = TourEntropyUtils.GetUniCounts(_population);
+            var uniFreqs = TourEntropyUtils.ComputeUniFrequencies(uniCounts, _population.Size);
+            var uniEntropies = TourEntropyUtils.ComputeUniEntropies(_population);
 
-            var jointCounts = PermutationUtils.GetJointCounts(_population);
-            var jointEntropies = PermutationUtils.ComputeJointEntropies(jointCounts, _population.Size);
+            var jointCounts = TourEntropyUtils.GetJointCounts(_population);
+            var jointEntropies = TourEntropyUtils.ComputeJointEntropies(jointCounts, _population.Size);
 
             var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, jointEntropies);
 

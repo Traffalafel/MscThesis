@@ -1,4 +1,5 @@
 ﻿using MscThesis.Core.Formats;
+using MscThesis.Runner.Factories.Optimizer;
 using MscThesis.Runner.Factories.Problem;
 using MscThesis.Runner.Factories.Termination;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace MscThesis.Runner.Factories
         {
             _optimizers = new Dictionary<string, OptimizerFactory<Tour>>
             {
-                { "MIMICTSP", new MIMICTSPFactory(_parameterFactory) }
+                { "TourMIMIC", new TourMIMICFactory(_parameterFactory) },
+                { "P4", new P4Factory() }
             };
             _problems = new Dictionary<string, IProblemFactory<Tour>>
             {

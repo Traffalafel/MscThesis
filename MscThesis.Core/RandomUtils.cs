@@ -19,7 +19,7 @@ namespace MscThesis.Core
             return values[0..size];
         }
 
-        public static bool SampleBit(Random random, double p)
+        public static bool SampleBernoulli(Random random, double p)
         {
             var d = random.NextDouble();
             return d < p;

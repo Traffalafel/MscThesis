@@ -1,4 +1,5 @@
-﻿using MscThesis.Core.FitnessFunctions;
+﻿using MscThesis.Core.Algorithms.BitStrings;
+using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
 using System;
@@ -47,9 +48,9 @@ namespace MscThesis.Core.Algorithms
 
         protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
-            var uniEntropies = Utils.ComputeUniEntropies(_population);
-            var jointEntropies = Utils.ComputeJointEntropies(_population);
-            var clusters = Utils.BuildClusters(uniEntropies, jointEntropies);
+            var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(_population);
+            var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(_population);
+            var clusters = ClusteringUtils.BuildClusters(uniEntropies, jointEntropies);
 
             var output = new Population<BitString>(_comparisonStrategy);
 

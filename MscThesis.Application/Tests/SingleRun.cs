@@ -96,14 +96,17 @@ namespace MscThesis.Runner.Results
 
                     numIterations++;
                 }
+
+                _isTerminated = true;
             });
+
             try
             {
                 await task;
             }
             catch (Exception e)
             {
-                ;
+                throw e;
             }
         }
 
