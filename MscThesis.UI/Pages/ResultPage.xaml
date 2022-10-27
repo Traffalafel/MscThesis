@@ -37,7 +37,7 @@
                     HorizontalOptions="End"
                     Padding="4"
                     Margin="10,0,0,0"
-                    IsEnabled="{Binding IsRunning, Converter={StaticResource BoolNotConverter}}"/>
+                    IsVisible="{Binding IsRunning, Converter={StaticResource BoolNotConverter}}"/>
         </HorizontalStackLayout>
         
         <ScrollView Grid.Row="1" Grid.ColumnSpan="2">

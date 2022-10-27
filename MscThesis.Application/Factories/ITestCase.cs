@@ -5,6 +5,6 @@ namespace MscThesis.Runner.Factories
 {
     public interface ITestCase<out T> where T : InstanceFormat
     {
-        public ITest<T> CreateRun(int size);
+        public ITest<T> CreateRun(int size, bool saveSeries);
     }
 }

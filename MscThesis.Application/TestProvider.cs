@@ -166,26 +166,21 @@ namespace MscThesis.Runner
             var results = new List<ITest<T>>();
             foreach (var test in tests)
             {
+                var isSingleSize = problemSizes.Count() == 1;
                 var sizeResults = new List<ITest<T>>();
                 foreach (var size in problemSizes)
                 {
-                    var runResults = new List<ITest<T>>();
-                    foreach (var _ in Enumerable.Range(0, numRuns))
+                    var isSingleRun = numRuns == 1;
+                    ITest<T> run;
+                    if (isSingleRun)
                     {
-                        var result = test.CreateRun(size);
-                        runResults.Add(result);
-                    }
-
-                    ITest<T> runResult;
-                    if (numRuns == 1)
-                    {
-                        runResult = runResults.First();
+                        run = test.CreateRun(size, isSingleRun && isSingleSize);
                     }
                     else
                     {
-                        runResult = new MultipleRunsComposite<T>(runResults, runBatchSize);
+                        run = new MultipleRunsComposite<T>(test, size, numRuns, runBatchSize, isSingleSize);
                     }
-                    sizeResults.Add(runResult);
+                    sizeResults.Add(run);
                 }
 
                 ITest<T> sizeResult;

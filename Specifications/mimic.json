@@ -1,0 +1,28 @@
+{
+    "NumRuns": 1,
+    "ProblemSizes": [
+      100
+    ],
+    "Problem": {
+      "Name": "JumpOffsetSpike",
+      "Parameters": {
+        "GapSize": "0.1*n"
+      }
+    },
+    "Optimizers": [
+      {
+        "Seed": null,
+        "Name": "MIMIC_PopulationSize:n",
+        "Algorithm": "MIMIC",
+        "Parameters": {
+          "PopulationSize": "n"
+        }
+      }
+    ],
+    "Terminations": [
+      {
+        "Name": "Optimum reached",
+        "Parameters": {}
+      }
+    ]
+}

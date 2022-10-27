@@ -1,9 +1,12 @@
 ﻿using MscThesis.Core;
 using MscThesis.Runner;
 using MscThesis.Runner.Specification;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,104 +14,71 @@ namespace MscThesis.CLI
 {
     internal class Program
     {
+        private static string _resultExtension = "txt";
+
         static void Main(string[] args)
         {
+            // Load settings
             var settings = new Settings
             {
-                TSPLibDirectoryPath = string.Empty
+                TSPLibDirectoryPath = ConfigurationManager.AppSettings["TSPLibDirectoryPath"],
+                
             };
 
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Usage: <specification file path> <results directory path>");
+                return;
+            }
+
+            // Load arguments
+            var specificationFilePath = args[0];
+            if (!File.Exists(specificationFilePath))
+            {
+                Console.WriteLine($"Could not find specification file: {specificationFilePath}");
+                return;
+            }
+            var resultsDirPath = args[1];            
+            if (!Directory.Exists(resultsDirPath))
+            {
+                Console.WriteLine($"Results directory path does not exist: {resultsDirPath}");
+                return;
+            }
+            var fileName = Path.GetFileNameWithoutExtension(specificationFilePath);
+            var outputFilePath = Path.Join(resultsDirPath, $"{fileName}.{_resultExtension}");
+            if (File.Exists(outputFilePath))
+            {
+                Console.WriteLine($"Results file already exists: {outputFilePath}");
+                return;
+            }
+
+            // Build test
             var runner = new TestProvider(settings);
-
-            var spec = new TestSpecification
+            var specJson = File.ReadAllText(specificationFilePath);
+            var spec = JsonConvert.DeserializeObject<TestSpecification>(specJson);
+            var test = runner.Build(spec);
+            using var source = new CancellationTokenSource();
+            Console.CancelKeyPress += (_, e) =>
             {
-                NumRuns = 100,
-                ProblemSizes = new List<int>
-                {
-                    100
-                },
-                MaxParallelization = 20,
-                Optimizers = new List<OptimizerSpecification>()
-                {
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            { Parameter.PopulationSize, "0.5*n" }
-                        },
-                    },
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            { Parameter.PopulationSize, "1*n" }
-                        },
-                    },
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            { Parameter.PopulationSize, "2*n" }
-                        },
-                    },
-                },
-                Terminations = new List<TerminationSpecification>
-                {
-                    new TerminationSpecification
-                    {
-                        Name = "Stagnation",
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            { Parameter.MaxIterations, "10" },
-                            { Parameter.Epsilon, "10E-6" }
-                        }
-                    }
-                },
-                Problem = new ProblemSpecification
-                {
-                    Name = "JumpOffsetSpike",
-                    Parameters = new Dictionary<Parameter, string>
-                    {
-                        { Parameter.GapSize, "0.1*n" }
-                    }
-                }
+                Console.WriteLine($"Cancelling test execution");
+                source.Cancel();
+                e.Cancel = true;
             };
 
-            var timer = new Stopwatch();
-            timer.Start();
-
-            var test = runner.Build(spec);
-
-            using (var source = new CancellationTokenSource())
+            // Run test
+            Console.WriteLine($"Running test from spec file {fileName}");
+            var task = Task.Run(async () => await test.Execute(source.Token));
+            task.Wait();
+            if (task.IsFaulted)
             {
-                var task = Task.Run(async () => await test.Execute(source.Token));
-                task.Wait();
+                Console.WriteLine($"An error occurred when running the test(s). Exception message:\n{task.Exception.Message}");
+                Console.WriteLine($"Stack trace:\n{task.Exception.StackTrace}");
+                return;
             }
 
-            timer.Stop();
-            var time = timer.Elapsed;
-
-            Console.WriteLine($"Time elapsed: {time.TotalSeconds} seconds");
-            
-            //Console.WriteLine($"Fittest: {test.Fittest.Value}");
-
-            foreach (var item in test.Items)
-            {
-                var value = item.Observable.Value;
-                Console.WriteLine($"{item.Property}: {value}");
-            }
-
-            Console.Write("\n");
-
-            foreach (var series in test.Series)
-            {
-                var points = series.Points;
-                Console.WriteLine($"{series.Property}: {string.Join(", ", points)}");
-            }
-
+            // Save results
+            var resultContent = ResultExporter.Export(test, spec);
+            File.WriteAllText(outputFilePath, resultContent);
         }
 
     }

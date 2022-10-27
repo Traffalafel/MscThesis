@@ -362,7 +362,10 @@
         <ScrollView Grid.Row="0" Grid.Column="2">
 
             <VerticalStackLayout>
-                <Button Text="Run" Clicked="Run" Style="{StaticResource RunButton}" ZIndex="1"/>
+                <HorizontalStackLayout HorizontalOptions="End" ZIndex="1">
+                    <Button Text="Save" Clicked="Save" Style="{StaticResource RunButton}" ZIndex="1"/>
+                    <Button Text="Run" Clicked="Run" Style="{StaticResource RunButton}" ZIndex="1"/>
+                </HorizontalStackLayout>
                 <VerticalStackLayout Margin="0,-40,0,0">
 
                     <Label Text="Termination criteria" Style="{StaticResource TitleLabel}"/>

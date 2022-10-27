@@ -24,7 +24,7 @@ namespace MscThesis.Runner.Factories
             _buildTerminations = buildTerminations;
         }
 
-        public ITest<T> CreateRun(int size)
+        public ITest<T> CreateRun(int size, bool saveSeries)
         {
             var problem = _buildProblem.Invoke(size);
             var optimizer = _buildOptimizer.Invoke(problem);
@@ -35,7 +35,7 @@ namespace MscThesis.Runner.Factories
             {
                 iterations = criterion.AddTerminationCriterion(iterations);
             }
-            return new SingleRun<T>(iterations, problem, _name, optimizer.StatisticsProperties, size);
+            return new SingleRun<T>(iterations, problem, _name, optimizer.StatisticsProperties, size, saveSeries);
         }
     }
 }

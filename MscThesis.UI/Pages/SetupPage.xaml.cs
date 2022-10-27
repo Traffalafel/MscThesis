@@ -1,11 +1,14 @@
 using Microsoft.Extensions.Configuration;
 using MscThesis.Runner;
 using MscThesis.UI.ViewModels;
+using Newtonsoft.Json;
 
 namespace MscThesis.UI.Pages;
 
 public partial class SetupPage : ContentPage
 {
+    private string _specificationsDirPath;
+
     public SetupVM _vm { get; set; }
 
 	public SetupPage(IConfiguration config)
@@ -14,6 +17,8 @@ public partial class SetupPage : ContentPage
         {
             TSPLibDirectoryPath = config["TSPLibDirectoryPath"]
         };
+
+        _specificationsDirPath = config["SpecificationsDirectory"];
 
         _vm = new SetupVM(settings);
 
@@ -74,4 +79,23 @@ public partial class SetupPage : ContentPage
             await DisplayAlert("Error", "Please fix any errors before proceeding.", "Close");
         }
 	}
+
+    public async void Save(object sender, EventArgs e)
+    {
+        try
+        {
+            var specification = _vm.ToSpecification();
+            var content = JsonConvert.SerializeObject(specification, Formatting.Indented);
+            var fileName = DateTime.Now.ToString("dd MMM HHmmss");
+            var filePath = Path.Combine(_specificationsDirPath, $"{fileName}.json");
+            File.WriteAllText(filePath, content);
+
+            var message = $"Saved to file \"{filePath}\"";
+            await DisplayAlert("", message, "Close");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", "Please fix any errors before proceeding.", "Close");
+        }
+    }
 }

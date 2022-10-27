@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MscThesis.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\traff\\src\\repos\\MscThesis\\Specifications\\MIMIC_OneMax_linear.json C:\\Users\\traff\\Desktop\\results\\"
+    }
+  }
+}

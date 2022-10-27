@@ -13,6 +13,7 @@ namespace MscThesis.Runner.Results
     // 1 run of 1 optimizer on 1 problem of 1 size
     public class SingleRun<T> : Test<T> where T : InstanceFormat
     {
+        private bool _saveSeries;
         private string _optimizerName;
         private Dictionary<Property, ObservableValue<double>> _itemData;
         private Dictionary<Property, ObservableCollection<(double, double)>> _seriesData;
@@ -24,8 +25,10 @@ namespace MscThesis.Runner.Results
             FitnessFunction<T> fitnessFunction, 
             string optimizerName, 
             ISet<Property> statisticsProperties, 
-            int problemSize)
+            int problemSize,
+            bool saveSeries)
         {
+            _saveSeries = saveSeries;
             _iterations = iterations;
             _fitnessFunction = fitnessFunction;
             _optimizerName = optimizerName;
@@ -39,9 +42,13 @@ namespace MscThesis.Runner.Results
             {
                 _seriesData.Add(property, new ObservableCollection<(double, double)>());
             }
-            _seriesData[Property.BestFitness] = new ObservableCollection<(double, double)>();
-            _seriesData[Property.PopulationSize] = new ObservableCollection<(double, double)>();
-            _seriesData[Property.AvgFitness] = new ObservableCollection<(double, double)>();
+
+            if (_saveSeries)
+            {
+                _seriesData[Property.BestFitness] = new ObservableCollection<(double, double)>();
+                _seriesData[Property.PopulationSize] = new ObservableCollection<(double, double)>();
+                _seriesData[Property.AvgFitness] = new ObservableCollection<(double, double)>();
+            }
             _itemData[Property.BestFitness] = new ObservableValue<double>();
             _itemData[Property.NumberIterations] = new ObservableValue<double>();
             _itemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
@@ -63,9 +70,12 @@ namespace MscThesis.Runner.Results
                         return; // stop execution
                     }
 
-                    foreach (var (key, value) in iteration.Statistics)
+                    if (_saveSeries)
                     {
-                        _seriesData[key].Add((numIterations, value));
+                        foreach (var (key, value) in iteration.Statistics)
+                        {
+                            _seriesData[key].Add((numIterations, value));
+                        }
                     }
 
                     var iterationFittest = iteration.Population.Fittest;
@@ -79,11 +89,14 @@ namespace MscThesis.Runner.Results
 
                     var bestFitness = Fittest(_optimizerName).Value.Fitness.Value;
 
-                    lock (SeriesLock)
+                    if (_saveSeries)
                     {
-                        _seriesData[Property.BestFitness].Add((numIterations, bestFitness));
-                        _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.Size));
-                        _seriesData[Property.AvgFitness].Add((numIterations, avgFitness));
+                        lock (SeriesLock)
+                        {
+                            _seriesData[Property.BestFitness].Add((numIterations, bestFitness));
+                            _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.Size));
+                            _seriesData[Property.AvgFitness].Add((numIterations, avgFitness));
+                        }
                     }
 
                     if (_fittest[_optimizerName].Value != null)
@@ -118,12 +131,12 @@ namespace MscThesis.Runner.Results
             Property = item.Key,
             Observable = item.Value
         });
-        public override IEnumerable<SeriesResult> Series => _seriesData.Select(series => new SeriesResult
+        public override IEnumerable<SeriesResult> Series => _seriesData.Select(data => new SeriesResult
         {
             OptimizerName = _optimizerName,
             XAxis = Property.NumberIterations,
-            Property = series.Key,
-            Points = series.Value
+            Property = data.Key,
+            Points = data.Value
         });
     }
 }

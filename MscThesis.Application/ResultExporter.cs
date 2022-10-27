@@ -2,15 +2,11 @@
 using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace MscThesis.UI.Loading
+namespace MscThesis.Runner
 {
     public class ResultExporter
     {

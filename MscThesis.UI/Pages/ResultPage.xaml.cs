@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using MscThesis.Core;
 using LiveChartsCore.Measure;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Layouts;
 
 namespace MscThesis.UI.Pages;
 
@@ -255,9 +256,10 @@ public partial class ResultPage : ContentPage
 
         }
 
-        Layout.Add(BuildHorizontalLine());
-
         // Series
+        var seriesLayout = new VerticalStackLayout();
+        Layout.Add(seriesLayout);
+
         var propertyGroups = _vm.Test.Series.GroupBy(series => series.Property);
         foreach (var propertyGroup in propertyGroups)
         {
@@ -266,10 +268,6 @@ public partial class ResultPage : ContentPage
             var optimizerGroups = propertyGroup.GroupBy(group => group.OptimizerName);
             var series = BuildSeries(optimizerGroups);
 
-            Layout.Add(new Label
-            {
-                Text = $"{propName}:"
-            });
             var chart = new CartesianChart
             {
                 Series = series,
@@ -298,10 +296,26 @@ public partial class ResultPage : ContentPage
                 LegendOrientation = LiveChartsCore.Measure.LegendOrientation.Vertical,
                 HeightRequest = 500,
                 WidthRequest = 700,
+                Margin = new Thickness(5),
                 SyncContext = _vm.Test.SeriesLock
             };
-            Layout.Add(chart);
 
+            var layout = new VerticalStackLayout
+            {
+                HorizontalOptions = LayoutOptions.Start,
+                Margin = BoxMargin
+            };
+            layout.Add(new Label
+            {
+                Text = $"{propName}:",
+                FontSize = TitleSize,
+                Margin = BoxTitleMargin,
+                HorizontalOptions = LayoutOptions.Start
+            });
+            layout.Add(chart);
+
+            seriesLayout.Add(BuildHorizontalLine());
+            seriesLayout.Add(layout);
         }
 
         try
@@ -319,7 +333,7 @@ public partial class ResultPage : ContentPage
     private View BuildBitStringView(IObservableValue<Individual<InstanceFormat>> observable)
     {
         var layout = BuildIndividualLayout();
-        layout.WidthRequest = 300;
+        layout.WidthRequest = 600;
 
         double fitness = default;
         string value = string.Empty;
@@ -372,7 +386,7 @@ public partial class ResultPage : ContentPage
     private View BuildTourView(IObservableValue<Individual<InstanceFormat>> observable)
     {
         var layout = BuildIndividualLayout();
-        layout.WidthRequest = 300;
+        layout.WidthRequest = 600;
 
         double fitness = default;
         string value = string.Empty;
