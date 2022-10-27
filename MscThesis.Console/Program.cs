@@ -16,7 +16,7 @@ namespace MscThesis.CLI
     {
         private static string _resultExtension = "txt";
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // Load settings
             var settings = new Settings
@@ -63,22 +63,27 @@ namespace MscThesis.CLI
                 Console.WriteLine($"Cancelling test execution");
                 source.Cancel();
                 e.Cancel = true;
+                Environment.Exit(-1);
             };
 
             // Run test
             Console.WriteLine($"Running test from spec file {fileName}");
-            var task = Task.Run(async () => await test.Execute(source.Token));
-            task.Wait();
-            if (task.IsFaulted)
+            try
             {
-                Console.WriteLine($"An error occurred when running the test(s). Exception message:\n{task.Exception.Message}");
-                Console.WriteLine($"Stack trace:\n{task.Exception.StackTrace}");
+                await test.Execute(source.Token);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"An error occurred when running the test(s). Exception message:\n{e.Message}");
+                Console.WriteLine($"Stack trace:\n{e.StackTrace}");
                 return;
             }
 
             // Save results
             var resultContent = ResultExporter.Export(test, spec);
             File.WriteAllText(outputFilePath, resultContent);
+
+            Environment.Exit(0);
         }
 
     }

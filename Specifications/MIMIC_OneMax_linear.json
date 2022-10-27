@@ -1,28 +1,9 @@
 {
   "NumRuns": 100,
   "ProblemSizes": [
-    50,
-    100,
-    150,
-    200,
-    250,
-    300,
-    350,
-    400,
-    450,
-    500,
-    550,
-    600,
-    650,
-    700,
-    750,
-    800,
-    850,
-    900,
-    950,
-    1000
+    200
   ],
-  "MaxParallelization": 10.0,
+  "MaxParallelization": 20,
   "Problem": {
     "Name": "OneMax",
     "Parameters": {}
@@ -30,82 +11,10 @@
   "Optimizers": [
     {
       "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
+      "Name": "MIMIC_PopulationSize:100",
       "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "1*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "2*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "3*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "4*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "5*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "6*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "7*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "8*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "9*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "10*n"
+        "PopulationSize": "100"
       }
     }
   ],
@@ -113,6 +22,13 @@
     {
       "Name": "Optimum reached",
       "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "100",
+        "Epsilon": "10E-5"
+      }
     }
   ]
 }

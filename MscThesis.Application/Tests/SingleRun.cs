@@ -58,69 +58,59 @@ namespace MscThesis.Runner.Results
             Initialize(new List<string> { optimizerName });
         }
 
-        public override async Task Execute(CancellationToken cancellationToken)
+        public override Task Execute(CancellationToken cancellationToken)
         {
             var numIterations = 1;
-            var task = Task.Run(() =>
+
+            foreach (var iteration in _iterations)
             {
-                foreach (var iteration in _iterations)
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return; // stop execution
-                    }
-
-                    if (_saveSeries)
-                    {
-                        foreach (var (key, value) in iteration.Statistics)
-                        {
-                            _seriesData[key].Add((numIterations, value));
-                        }
-                    }
-
-                    var iterationFittest = iteration.Population.Fittest;
-                    if (iterationFittest == null || iterationFittest.Fitness == null)
-                    {
-                        throw new Exception();
-                    }
-                    TryUpdateFittest(_optimizerName, iterationFittest);
-
-                    var avgFitness = iteration.Population.GetAverageFitness();
-
-                    var bestFitness = Fittest(_optimizerName).Value.Fitness.Value;
-
-                    if (_saveSeries)
-                    {
-                        lock (SeriesLock)
-                        {
-                            _seriesData[Property.BestFitness].Add((numIterations, bestFitness));
-                            _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.Size));
-                            _seriesData[Property.AvgFitness].Add((numIterations, avgFitness));
-                        }
-                    }
-
-                    if (_fittest[_optimizerName].Value != null)
-                    {
-                        _itemData[Property.BestFitness].Value = _fittest[_optimizerName].Value.Fitness.Value;
-                    }
-                    _itemData[Property.NumberIterations].Value = numIterations;
-                    _itemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
-                    _itemData[Property.AvgFitness].Value = Math.Round(avgFitness, 2);
-
-                    numIterations++;
+                    return Task.CompletedTask; // stop execution
                 }
 
-                _isTerminated = true;
-            });
+                if (_saveSeries)
+                {
+                    foreach (var (key, value) in iteration.Statistics)
+                    {
+                        _seriesData[key].Add((numIterations, value));
+                    }
+                }
 
-            try
-            {
-                await task;
+                var iterationFittest = iteration.Population.Fittest;
+                if (iterationFittest == null || iterationFittest.Fitness == null)
+                {
+                    throw new Exception();
+                }
+                TryUpdateFittest(_optimizerName, iterationFittest);
+
+                var avgFitness = iteration.Population.GetAverageFitness();
+
+                var bestFitness = Fittest(_optimizerName).Value.Fitness.Value;
+
+                if (_saveSeries)
+                {
+                    lock (SeriesLock)
+                    {
+                        _seriesData[Property.BestFitness].Add((numIterations, bestFitness));
+                        _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.Size));
+                        _seriesData[Property.AvgFitness].Add((numIterations, avgFitness));
+                    }
+                }
+
+                if (_fittest[_optimizerName].Value != null)
+                {
+                    _itemData[Property.BestFitness].Value = _fittest[_optimizerName].Value.Fitness.Value;
+                }
+                _itemData[Property.NumberIterations].Value = numIterations;
+                _itemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
+                _itemData[Property.AvgFitness].Value = Math.Round(avgFitness, 2);
+
+                numIterations++;
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
+
+            _isTerminated = true;
+            return Task.CompletedTask;
         }
 
 
