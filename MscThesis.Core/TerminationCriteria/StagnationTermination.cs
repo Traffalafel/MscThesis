@@ -10,7 +10,7 @@ namespace MscThesis.Core.TerminationCriteria
         private double _bestFitnessPrev;
         private int _stagnatedIterations;
 
-        protected override string Message => "stagnation";
+        public override string TerminationMessage => "stagnation";
 
         public StagnationTermination(double epsilon, int maxIterations)
         {
@@ -20,7 +20,7 @@ namespace MscThesis.Core.TerminationCriteria
             _stagnatedIterations = 0;
         }
 
-        protected override bool ShouldTerminate(Population<T> pop)
+        public override bool ShouldTerminate(Population<T> pop)
         {
             var fittest = pop.Fittest;
             if (fittest == null)

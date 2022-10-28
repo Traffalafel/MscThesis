@@ -9,6 +9,7 @@ namespace MscThesis.Core
         AvgFitness,
         BestFitness,
         PopulationSize,
-        ProblemSize
+        ProblemSize,
+        CpuTimeSeconds
     }
 }

@@ -33,7 +33,7 @@ namespace MscThesis.Runner.Factories
             var iterations = optimizer.Run(problem);
             foreach (var criterion in terminations)
             {
-                iterations = criterion.AddTerminationCriterion(iterations);
+                iterations.AddTerminationCriterion(criterion);
             }
             return new SingleRun<T>(iterations, problem, _name, optimizer.StatisticsProperties, size, saveSeries);
         }

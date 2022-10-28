@@ -17,11 +17,11 @@ namespace MscThesis.Runner.Results
         private string _optimizerName;
         private Dictionary<Property, ObservableValue<double>> _itemData;
         private Dictionary<Property, ObservableCollection<(double, double)>> _seriesData;
-        private IEnumerable<RunIteration<T>> _iterations;
+        private IterationEnumerator<T> _iterations;
         private FitnessFunction<T> _fitnessFunction;
 
         public SingleRun(
-            IEnumerable<RunIteration<T>> iterations, 
+            IterationEnumerator<T> iterations, 
             FitnessFunction<T> fitnessFunction, 
             string optimizerName, 
             ISet<Property> statisticsProperties, 
@@ -54,6 +54,7 @@ namespace MscThesis.Runner.Results
             _itemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
             _itemData[Property.AvgFitness] = new ObservableValue<double>();
             _itemData[Property.ProblemSize] = new ObservableValue<double>(problemSize);
+            _itemData[Property.CpuTimeSeconds] = new ObservableValue<double>(0.0d);
 
             Initialize(new List<string> { optimizerName });
         }
@@ -105,9 +106,12 @@ namespace MscThesis.Runner.Results
                 _itemData[Property.NumberIterations].Value = numIterations;
                 _itemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
                 _itemData[Property.AvgFitness].Value = Math.Round(avgFitness, 2);
+                _itemData[Property.CpuTimeSeconds].Value += iteration.CpuTime.TotalSeconds;
 
                 numIterations++;
             }
+
+            Console.WriteLine($"Optimizer: {_optimizerName}; Size: {_fitnessFunction.Size}; Termination: {_iterations.TerminationMessage}");
 
             _isTerminated = true;
             return Task.CompletedTask;

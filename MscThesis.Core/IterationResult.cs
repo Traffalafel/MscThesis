@@ -1,4 +1,5 @@
 ﻿using MscThesis.Core.Formats;
+using System;
 using System.Collections.Generic;
 
 namespace MscThesis.Core
@@ -14,5 +15,6 @@ namespace MscThesis.Core
 
         public Population<T> Population;
         public IDictionary<Property, double> Statistics;
+        public TimeSpan CpuTime;
     }
 }

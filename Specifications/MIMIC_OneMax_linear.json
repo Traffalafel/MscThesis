@@ -18,7 +18,7 @@
     750,
     800
   ],
-  "MaxParallelization": 1,
+  "MaxParallelization": 10,
   "Problem": {
     "Name": "OneMax",
     "Parameters": {}
@@ -29,7 +29,7 @@
       "Name": "MIMIC_PopulationSize:100",
       "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "100"
+        "PopulationSize": "n"
       }
     }
   ],

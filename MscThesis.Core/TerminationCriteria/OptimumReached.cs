@@ -6,14 +6,14 @@ namespace MscThesis.Core.TerminationCriteria
     {
         private double _optimum;
 
-        protected override string Message => "optimum reached";
+        public override string TerminationMessage => "optimum reached";
 
         public OptimumReached(double optimum)
         {
             _optimum = optimum;
         }
 
-        protected override bool ShouldTerminate(Population<T> pop)
+        public override bool ShouldTerminate(Population<T> pop)
         {
             return pop.Fittest.Fitness == _optimum;
         }

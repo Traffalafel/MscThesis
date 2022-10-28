@@ -7,7 +7,7 @@ namespace MscThesis.Core.TerminationCriteria
         private int _numPrevIterations;
         private int _maxIterations;
 
-        protected override string Message => "max number of iterations reached";
+        public override string TerminationMessage => "max number of iterations reached";
 
         public MaxIterationsTermination(int maxIterations)
         {
@@ -15,7 +15,7 @@ namespace MscThesis.Core.TerminationCriteria
             _maxIterations = maxIterations;
         }
 
-        protected override bool ShouldTerminate(Population<T> pop)
+        public override bool ShouldTerminate(Population<T> pop)
         {
             if (_numPrevIterations >= _maxIterations)
             {
