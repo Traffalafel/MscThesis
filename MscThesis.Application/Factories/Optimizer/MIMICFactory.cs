@@ -30,13 +30,12 @@ namespace MscThesis.Runner.Factories
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            var random = BuildRandom(spec.Seed);
             var selection = new QuartileSelection<BitString>(_selectionQuartile, SelectionMethod.Maximize);
 
             return problem =>
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                return new MIMIC(random, problem.Size, problem.ComparisonStrategy, populationSize, selection);
+                return new MIMIC(problem.Size, problem.ComparisonStrategy, populationSize, selection);
             };
         }
     }

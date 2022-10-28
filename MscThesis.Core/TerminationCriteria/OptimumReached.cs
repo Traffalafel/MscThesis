@@ -6,6 +6,8 @@ namespace MscThesis.Core.TerminationCriteria
     {
         private double _optimum;
 
+        protected override string Message => "optimum reached";
+
         public OptimumReached(double optimum)
         {
             _optimum = optimum;

@@ -2,11 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace MscThesis.Core
 {
     public static class RandomUtils
     {
+        public static ThreadLocal<Random> BuildRandom()
+        {
+            return new ThreadLocal<Random>(() => new Random());
+        }
+
         public static bool[] SampleBitStringUniformly(Random random, int size)
         {
             var numBytes = (size / 8) + 1;

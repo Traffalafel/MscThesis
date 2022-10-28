@@ -32,13 +32,14 @@ namespace MscThesis.CLI
             }
 
             // Load arguments
-            var specificationFilePath = args[0];
+            var resultsDirPath = args[0];            
+            var specificationFilePath = args[1];
+
             if (!File.Exists(specificationFilePath))
             {
                 Console.WriteLine($"Could not find specification file: {specificationFilePath}");
                 return;
             }
-            var resultsDirPath = args[1];            
             if (!Directory.Exists(resultsDirPath))
             {
                 Console.WriteLine($"Results directory path does not exist: {resultsDirPath}");

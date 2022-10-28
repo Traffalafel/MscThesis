@@ -21,14 +21,20 @@ namespace MscThesis.Core.Algorithms.Tours
             }
         }
 
-        public P4(Random random, int problemSize, FitnessFunction<Tour> fitnessFunction) : base(random, problemSize, fitnessFunction.ComparisonStrategy)
+        public P4(int problemSize, FitnessFunction<Tour> fitnessFunction) : base(problemSize, fitnessFunction.ComparisonStrategy)
         {
             _fitnessFunction = fitnessFunction;
             _numFreeNodes = _problemSize - 1;
             _rescalingIntervals = ComputeRescalingIntervals(_numFreeNodes);
-            _pyramid.Add(new P4Level(random, _numFreeNodes, fitnessFunction, _rescalingIntervals));
+        }
 
-            var uniform = RandomKeysTour.CreateUniform(_random, _problemSize);
+        protected override void Initialize(FitnessFunction<Tour> fitnessFunction)
+        {
+            base.Initialize(fitnessFunction);
+
+            _pyramid.Add(new P4Level(_random.Value, _numFreeNodes, fitnessFunction, _rescalingIntervals));
+
+            var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
             var initialFitness = fitnessFunction.ComputeFitness(uniform);
             var individual = new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
             _pyramid[0].Add(individual);
@@ -42,11 +48,11 @@ namespace MscThesis.Core.Algorithms.Tours
             {
                 foreach (var ind in level.Population)
                 {
-                    ind.Value.ReEncode(_random);
+                    ind.Value.ReEncode(_random.Value);
                 }
             }
 
-            var uniform = RandomKeysTour.CreateUniform(_random, _problemSize);
+            var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
             var initialFitness = fitnessFunction.ComputeFitness(uniform);
             var individual = new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
 
@@ -64,7 +70,7 @@ namespace MscThesis.Core.Algorithms.Tours
                 // Add to next level of pyramid
                 if (i == _pyramid.Count - 1)
                 {
-                    var levelNew = new P4Level(_random, _numFreeNodes, fitnessFunction, _rescalingIntervals);
+                    var levelNew = new P4Level(_random.Value, _numFreeNodes, fitnessFunction, _rescalingIntervals);
                     _pyramid.Add(levelNew);
                 }
                 _pyramid[i + 1].Add(individual);

@@ -1,13 +1,11 @@
 {
-    "NumRuns": 1,
+    "NumRuns": 100,
     "ProblemSizes": [
       100
     ],
+    "MaxParallelization": 1,
     "Problem": {
-      "Name": "JumpOffsetSpike",
-      "Parameters": {
-        "GapSize": "0.1*n"
-      }
+      "Name": "OneMax"
     },
     "Optimizers": [
       {
@@ -15,7 +13,7 @@
         "Name": "MIMIC_PopulationSize:n",
         "Algorithm": "MIMIC",
         "Parameters": {
-          "PopulationSize": "n"
+          "PopulationSize": "100"
         }
       }
     ],

@@ -14,11 +14,9 @@ namespace MscThesis.Runner.Factories.Optimizer
 
         public override Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
-            var random = BuildRandom(spec.Seed);
-
             return problem =>
             {
-                return new P3(random, problem.Size, problem);
+                return new P3(problem.Size, problem);
             };
         }
     }

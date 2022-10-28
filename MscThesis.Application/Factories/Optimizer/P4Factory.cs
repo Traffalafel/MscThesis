@@ -15,11 +15,9 @@ namespace MscThesis.Runner.Factories.Optimizer
 
         public override Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
-            var random = BuildRandom(spec.Seed);
-
             return problem =>
             {
-                return new P4(random, problem.Size, problem);
+                return new P4(problem.Size, problem);
             };
         }
     }

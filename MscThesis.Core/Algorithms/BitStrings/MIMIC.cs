@@ -21,20 +21,24 @@ namespace MscThesis.Core.Algorithms
         };
 
         public MIMIC(
-            Random random,
             int problemSize,
             FitnessComparisonStrategy comparisonStrategy,
             int populationSize, 
-            ISelectionOperator<BitString> selectionOperator) : base(random, problemSize, comparisonStrategy)
+            ISelectionOperator<BitString> selectionOperator) : base(problemSize, comparisonStrategy)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
+        }
+
+        protected override void Initialize(FitnessFunction<BitString> fitnessFunction)
+        {
+            base.Initialize(fitnessFunction);
 
             // Initialize population uniformly
             _population = new Population<BitString>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
             {
-                var bs = BitString.CreateUniform(_random, problemSize);
+                var bs = BitString.CreateUniform(_random.Value, _problemSize);
                 _population.Add(new IndividualImpl<BitString>(bs));
             }
         }
@@ -64,7 +68,7 @@ namespace MscThesis.Core.Algorithms
                 var first = ordering[0];
                 var probFirst = uniFreqs[first];
                 probFirst = ApplyMargins(probFirst, minProb, maxProb);
-                vals[first] = RandomUtils.SampleBernoulli(_random, probFirst);
+                vals[first] = RandomUtils.SampleBernoulli(_random.Value, probFirst);
 
                 // Sample the rest
                 for (int k = 1; k < problemSize; k++)
@@ -93,7 +97,7 @@ namespace MscThesis.Core.Algorithms
                         p = joint[2] / (1 - uniFreqs[prev]);
                     }
                     p = ApplyMargins(p, minProb, maxProb);
-                    vals[position] = RandomUtils.SampleBernoulli(_random, p);
+                    vals[position] = RandomUtils.SampleBernoulli(_random.Value, p);
                 }
 
                 var bs = new BitString { Values = vals };

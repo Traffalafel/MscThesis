@@ -29,13 +29,12 @@ namespace MscThesis.Runner.Factories
         public override Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
-            var random = BuildRandom(spec.Seed);
             var selection = new QuartileSelection<Tour>(_selectionQuartile, SelectionMethod.Minimize);
 
             return problem =>
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                return new TourMIMIC(random, problem.Size, problem.ComparisonStrategy, populationSize, selection);
+                return new TourMIMIC(problem.Size, problem.ComparisonStrategy, populationSize, selection);
             };
         }
     }

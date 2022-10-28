@@ -15,20 +15,23 @@ namespace MscThesis.Core.Algorithms
         private Population<Tour> _population;
 
         public TourMIMIC(
-            Random random,
             int problemSize,
             FitnessComparisonStrategy comparisonStrategy,
             int populationSize,
-            ISelectionOperator<Tour> selectionOperator) : base(random, problemSize, comparisonStrategy)
+            ISelectionOperator<Tour> selectionOperator) : base(problemSize, comparisonStrategy)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
+        }
 
+        protected override void Initialize(FitnessFunction<Tour> fitnessFunction)
+        {
+            base.Initialize(fitnessFunction);
             // Initialize population uniformly
             _population = new Population<Tour>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
             {
-                var permutation = Tour.CreateUniform(random, problemSize);
+                var permutation = Tour.CreateUniform(_random.Value, _problemSize);
                 _population.Add(new IndividualImpl<Tour>(permutation));
             }
         }
@@ -63,7 +66,7 @@ namespace MscThesis.Core.Algorithms
                 var first = ordering[0];
                 var distributionFirst = uniFreqs.GetRow(first);
                 ApplyMargins(distributionFirst, minProb, maxProb);
-                var valueFirst = RandomUtils.SampleDistribution(_random, distributionFirst);
+                var valueFirst = RandomUtils.SampleDistribution(_random.Value, distributionFirst);
                 values[first] = valueFirst;
                 chosen.Add(valueFirst);
 
@@ -78,7 +81,7 @@ namespace MscThesis.Core.Algorithms
                     ToDistribution(distribution, _populationSize);
                     MarginalizeRemaining(distribution, chosen);
                     ApplyMargins(distribution, minProb, maxProb);
-                    var valueNew = RandomUtils.SampleDistribution(_random, distribution);
+                    var valueNew = RandomUtils.SampleDistribution(_random.Value, distribution);
                     values[position] = valueNew;
                     chosen.Add(valueNew);
                 }

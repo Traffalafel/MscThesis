@@ -5,6 +5,7 @@ using MscThesis.Core.Formats;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace MscThesis.Runner.Factories
 {
@@ -12,18 +13,6 @@ namespace MscThesis.Runner.Factories
     {
         public abstract IEnumerable<Parameter> Parameters { get; }
         public abstract Func<FitnessFunction<T>, Optimizer<T>> BuildCreator(OptimizerSpecification spec);
-
-        protected Random BuildRandom(int? seed)
-        {
-            if (seed == null)
-            {
-                return new Random();
-            }
-            else
-            {
-                return new Random(seed.Value);
-            }
-        }
     }
 
 }

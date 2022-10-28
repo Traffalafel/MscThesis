@@ -2,9 +2,7 @@
 using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace MscThesis.Core.Algorithms
 {
@@ -16,12 +14,11 @@ namespace MscThesis.Core.Algorithms
         private Population<BitString> _population;
 
         public GOMEA(
-            Random random, 
             int problemSize, 
             FitnessComparisonStrategy comparisonStrategy,
             int populationSize,
             ISelectionOperator<BitString> selectionOperator
-            ) : base(random, problemSize, comparisonStrategy)
+            ) : base(problemSize, comparisonStrategy)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
@@ -30,7 +27,7 @@ namespace MscThesis.Core.Algorithms
             _population = new Population<BitString>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
             {
-                var bs = BitString.CreateUniform(_random, problemSize);
+                var bs = BitString.CreateUniform(_random.Value, problemSize);
                 _population.Add(new IndividualImpl<BitString>(bs));
             }
         }
@@ -64,7 +61,7 @@ namespace MscThesis.Core.Algorithms
 
                 foreach (var cluster in clusters)
                 {
-                    var p = RandomUtils.Choose(_random, _population.Individuals).Value;
+                    var p = RandomUtils.Choose(_random.Value, _population.Individuals).Value;
 
                     Copy(p, o, cluster);
 

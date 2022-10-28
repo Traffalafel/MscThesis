@@ -13,23 +13,28 @@ namespace MscThesis.Core.Algorithms
         private HashSet<string> _hashset;
 
         public P3(
-            Random random,
             int problemSize,
             FitnessFunction<BitString> fitnessFunction
-            ) : base(random, problemSize, fitnessFunction.ComparisonStrategy)
+            ) : base(problemSize, fitnessFunction.ComparisonStrategy)
         {
             _fitnessFunction = fitnessFunction;
             _hashset = new HashSet<string>();
             _pyramid = new List<P3Level>();
-            _pyramid.Add(new P3Level(random, problemSize, _fitnessFunction));
+        }
+
+        protected override void Initialize(FitnessFunction<BitString> fitnessFunction)
+        {
+            base.Initialize(fitnessFunction);
+
+            _pyramid.Add(new P3Level(_random.Value, _problemSize, _fitnessFunction));
         }
 
         public override ISet<Property> StatisticsProperties => new HashSet<Property>();
 
         protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
-            var uniform = BitString.CreateUniform(_random, _problemSize);
-            var individual = HillClimb(_random, uniform, fitnessFunction);
+            var uniform = BitString.CreateUniform(_random.Value, _problemSize);
+            var individual = HillClimb(_random.Value, uniform, fitnessFunction);
 
             if (!Exists(individual))
             {
@@ -54,7 +59,7 @@ namespace MscThesis.Core.Algorithms
 
                 if (i == _pyramid.Count - 1)
                 {
-                    var levelNew = new P3Level(_random, _problemSize, _fitnessFunction);
+                    var levelNew = new P3Level(_random.Value, _problemSize, _fitnessFunction);
                     _pyramid.Add(levelNew);
                 }
                 _pyramid[i+1].Add(individual);

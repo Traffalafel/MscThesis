@@ -29,13 +29,11 @@ namespace MscThesis.Runner.Factories.Optimizer
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            var random = BuildRandom(spec.Seed);
-
             return problem =>
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                var selection = new TournamentSelection<BitString>(random, populationSize, _tournamentSize);
-                return new GOMEA(random, problem.Size, problem.ComparisonStrategy, populationSize, selection);
+                var selection = new TournamentSelection<BitString>(populationSize, _tournamentSize);
+                return new GOMEA(problem.Size, problem.ComparisonStrategy, populationSize, selection);
             };
         }
     }

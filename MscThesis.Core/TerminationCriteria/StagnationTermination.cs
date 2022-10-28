@@ -10,6 +10,8 @@ namespace MscThesis.Core.TerminationCriteria
         private double _bestFitnessPrev;
         private int _stagnatedIterations;
 
+        protected override string Message => "stagnation";
+
         public StagnationTermination(double epsilon, int maxIterations)
         {
             _epsilon = epsilon;

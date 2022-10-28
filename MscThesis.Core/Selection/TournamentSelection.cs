@@ -11,9 +11,8 @@ namespace MscThesis.Core.Selection
         private readonly int _numTournaments;
         private readonly int _tournamentSize;
 
-        public TournamentSelection(Random random, int numTournaments, int tournamentSize)
+        public TournamentSelection(int numTournaments, int tournamentSize)
         {
-            _random = random;
             _numTournaments = numTournaments;
             _tournamentSize = tournamentSize;
         }

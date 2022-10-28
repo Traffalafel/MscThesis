@@ -7,6 +7,8 @@ namespace MscThesis.Core.TerminationCriteria
         private int _numPrevIterations;
         private int _maxIterations;
 
+        protected override string Message => "max number of iterations reached";
+
         public MaxIterationsTermination(int maxIterations)
         {
             _numPrevIterations = 0;
