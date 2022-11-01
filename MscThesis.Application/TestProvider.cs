@@ -6,6 +6,7 @@ using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TspLibNet;
 
@@ -17,6 +18,9 @@ namespace MscThesis.Runner
 
         public TestProvider(Settings settings)
         {
+            Console.WriteLine($"CWD: {Directory.GetCurrentDirectory()}");// todo: RM
+            Console.WriteLine($"TSPdirpath: {settings.TSPLibDirectoryPath}");
+
             var tspLib = new TspLib95(settings.TSPLibDirectoryPath);
 
             _factories = new List<ITestCaseFactory<InstanceFormat>>
