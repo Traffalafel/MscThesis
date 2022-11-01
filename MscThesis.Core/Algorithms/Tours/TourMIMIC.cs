@@ -100,7 +100,7 @@ namespace MscThesis.Core.Algorithms
                 individual.Fitness = fitnessFunction.ComputeFitness(individual.Value);
             }
 
-            _population = _selectionOperator.Select(_population, fitnessFunction);
+            _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);
 
             var jointIndices = Enumerable.Range(0, problemSize).Select(i => Enumerable.Range(i + 1, problemSize - i - 1).Select(j => (i, j))).SelectMany(x => x);
             var avgJointEntropy = jointIndices.Select(idxs => jointEntropies[idxs.i, idxs.j]).Sum() / (problemSize * (problemSize + 1)) / 2;

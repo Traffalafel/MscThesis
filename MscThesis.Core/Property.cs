@@ -10,6 +10,9 @@ namespace MscThesis.Core
         BestFitness,
         PopulationSize,
         ProblemSize,
-        CpuTimeSeconds
+        CpuTimeSeconds,
+        OptimumReached,
+        MaxIterations,
+        Stagnation
     }
 }

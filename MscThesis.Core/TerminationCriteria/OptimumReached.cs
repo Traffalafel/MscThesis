@@ -6,7 +6,7 @@ namespace MscThesis.Core.TerminationCriteria
     {
         private double _optimum;
 
-        public override string TerminationMessage => "optimum reached";
+        public override Property Reason => Property.OptimumReached;
 
         public OptimumReached(double optimum)
         {

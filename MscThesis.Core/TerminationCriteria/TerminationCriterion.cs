@@ -8,6 +8,6 @@ namespace MscThesis.Core.TerminationCriteria
     public abstract class TerminationCriterion<T> where T : InstanceFormat
     {
         public abstract bool ShouldTerminate(Population<T> pop);
-        public abstract string TerminationMessage { get; }
+        public abstract Property Reason { get; }
     }
 }

@@ -22,25 +22,27 @@ namespace MscThesis.Core.Algorithms
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
-
-            // Initialize population uniformly
-            _population = new Population<BitString>(_comparisonStrategy);
-            for (int i = 0; i < _populationSize; i++)
-            {
-                var bs = BitString.CreateUniform(_random.Value, problemSize);
-                _population.Add(new IndividualImpl<BitString>(bs));
-            }
         }
 
         public override ISet<Property> StatisticsProperties => new HashSet<Property>();
 
         protected override void Initialize(FitnessFunction<BitString> fitnessFunction)
         {
+            base.Initialize(fitnessFunction);
+
+            // Initialize population uniformly
+            _population = new Population<BitString>(_comparisonStrategy);
+            for (int i = 0; i < _populationSize; i++)
+            {
+                var bs = BitString.CreateUniform(_random.Value, _problemSize);
+                _population.Add(new IndividualImpl<BitString>(bs));
+            }
+
             foreach (var individual in _population)
             {
                 individual.Fitness = fitnessFunction.ComputeFitness(individual.Value);
             }
-            _population = _selectionOperator.Select(_population, fitnessFunction);
+            _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);
         }
 
         protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
@@ -88,7 +90,7 @@ namespace MscThesis.Core.Algorithms
                 output.Add(mixed);
             }
 
-            _population = _selectionOperator.Select(output, fitnessFunction);
+            _population = _selectionOperator.Select(_random.Value, output, fitnessFunction);
             return new RunIteration<BitString>(_population);
         }
 

@@ -19,7 +19,7 @@ namespace MscThesis.Core.Selection
             _method = method;
         }
 
-        public Population<T> Select(Population<T> population, FitnessFunction<T> fitnessFunction)
+        public Population<T> Select(Random _, Population<T> population, FitnessFunction<T> fitnessFunction)
         {
             var targetSize = Convert.ToInt32(Math.Ceiling(population.Size * _quartile));
 

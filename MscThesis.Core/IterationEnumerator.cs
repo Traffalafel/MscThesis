@@ -9,8 +9,9 @@ namespace MscThesis.Core
     {
         private IEnumerable<RunIteration<T>> _iterator;
         private List<TerminationCriterion<T>> _terminations;
+        private Property _terminationReason;
 
-        public string TerminationMessage { get; set; }
+        public Property TerminationReason => _terminationReason;
 
         public IterationEnumerator(IEnumerable<RunIteration<T>> iterator)
         {
@@ -41,7 +42,7 @@ namespace MscThesis.Core
                 {
                     if (termination.ShouldTerminate(iteration.Population))
                     {
-                        TerminationMessage = termination.TerminationMessage;
+                        _terminationReason = termination.Reason;
                         yield break;
                     }
                 }

@@ -56,6 +56,11 @@ namespace MscThesis.Runner.Results
             _itemData[Property.ProblemSize] = new ObservableValue<double>(problemSize);
             _itemData[Property.CpuTimeSeconds] = new ObservableValue<double>(0.0d);
 
+            // Terminations
+            _itemData[Property.OptimumReached] = new ObservableValue<double>(0.0d);
+            _itemData[Property.Stagnation] = new ObservableValue<double>(0.0d);
+            _itemData[Property.MaxIterations] = new ObservableValue<double>(0.0d);
+
             Initialize(new List<string> { optimizerName });
         }
 
@@ -111,7 +116,11 @@ namespace MscThesis.Runner.Results
                 numIterations++;
             }
 
-            Console.WriteLine($"Optimizer: {_optimizerName}; Size: {_fitnessFunction.Size}; Termination: {_iterations.TerminationMessage}");
+            _itemData[_iterations.TerminationReason].Value++;
+
+            var problemSize = _fitnessFunction.Size;
+            var cpuTime = _itemData[Property.CpuTimeSeconds].Value;
+            Console.WriteLine($"Optimizer: {_optimizerName}; Size: {problemSize}; CPU time: {cpuTime}; Termination: {_iterations.TerminationReason}");
 
             _isTerminated = true;
             return Task.CompletedTask;

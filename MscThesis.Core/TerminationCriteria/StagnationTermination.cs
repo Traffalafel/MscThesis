@@ -10,7 +10,7 @@ namespace MscThesis.Core.TerminationCriteria
         private double _bestFitnessPrev;
         private int _stagnatedIterations;
 
-        public override string TerminationMessage => "stagnation";
+        public override Property Reason => Property.Stagnation;
 
         public StagnationTermination(double epsilon, int maxIterations)
         {

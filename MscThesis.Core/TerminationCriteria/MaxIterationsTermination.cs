@@ -7,7 +7,7 @@ namespace MscThesis.Core.TerminationCriteria
         private int _numPrevIterations;
         private int _maxIterations;
 
-        public override string TerminationMessage => "max number of iterations reached";
+        public override Property Reason => Property.MaxIterations;
 
         public MaxIterationsTermination(int maxIterations)
         {

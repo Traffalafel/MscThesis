@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Transactions;
 
 namespace MscThesis.Core.Algorithms
 {

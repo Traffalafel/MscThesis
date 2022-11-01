@@ -7,7 +7,6 @@ namespace MscThesis.Core.Selection
 {
     public class TournamentSelection<T> : ISelectionOperator<T> where T : InstanceFormat
     {
-        private readonly Random _random;
         private readonly int _numTournaments;
         private readonly int _tournamentSize;
 
@@ -17,7 +16,7 @@ namespace MscThesis.Core.Selection
             _tournamentSize = tournamentSize;
         }
 
-        public Population<T> Select(Population<T> population, FitnessFunction<T> problem)
+        public Population<T> Select(Random random, Population<T> population, FitnessFunction<T> problem)
         {
             var output = new Population<T>(problem.ComparisonStrategy);
 
@@ -25,7 +24,7 @@ namespace MscThesis.Core.Selection
             {
                 var sample = Enumerable.Range(0, _tournamentSize).Select(_ =>
                 {
-                    return RandomUtils.Choose(_random, population.Individuals);
+                    return RandomUtils.Choose(random, population.Individuals);
                 });
                 var fittest = sample.Aggregate((i1, i2) => (i1.Fitness ?? double.MinValue) > (i2.Fitness ?? double.MinValue) ? i1 : i2);
                 output.Add(fittest);
