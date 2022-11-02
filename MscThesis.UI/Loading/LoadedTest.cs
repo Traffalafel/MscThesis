@@ -177,7 +177,7 @@ namespace MscThesis.UI.Models
         public IEnumerable<ItemResult> Items => _items;
         public IEnumerable<SeriesResult> Series => _series;
         public Type InstanceType => _instanceType;
-        public FitnessComparisonStrategy ComparisonStrategy => FitnessComparison.Maximization; // not used, so arbitrary value is chosen
+        public FitnessComparison Comparison => FitnessComparison.Maximization; // not used, so arbitrary value is chosen
 
         public Task Execute(CancellationToken cancellationToken)
         {

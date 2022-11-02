@@ -17,11 +17,11 @@ namespace MscThesis.Runner.Results
         private string _optimizerName;
         private Dictionary<Property, ObservableValue<double>> _itemData;
         private Dictionary<Property, ObservableCollection<(double, double)>> _seriesData;
-        private IterationEnumerator<T> _iterations;
+        private Run<T> _iterations;
         private FitnessFunction<T> _fitnessFunction;
 
         public SingleRun(
-            IterationEnumerator<T> iterations, 
+            Run<T> iterations, 
             FitnessFunction<T> fitnessFunction, 
             string optimizerName, 
             ISet<Property> statisticsProperties, 
@@ -33,7 +33,7 @@ namespace MscThesis.Runner.Results
             _fitnessFunction = fitnessFunction;
             _optimizerName = optimizerName;
             _instanceType = fitnessFunction.InstanceType;
-            _comparisonStrategy = fitnessFunction.ComparisonStrategy;
+            _comparisonStrategy = fitnessFunction.Comparison;
 
             _itemData = new Dictionary<Property, ObservableValue<double>>();
             _seriesData = new Dictionary<Property, ObservableCollection<(double, double)>>();

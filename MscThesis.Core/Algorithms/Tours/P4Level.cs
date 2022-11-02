@@ -15,12 +15,12 @@ namespace MscThesis.Core.Algorithms.Tours
         private double[,] _delta1Sums;
         private double[,] _delta2Sums;
 
-        internal P4Level(Random random, int problemSize, FitnessFunction<Tour> fitnessFunction, (double, double)[] rescalingIntervals) : base(random, fitnessFunction.ComparisonStrategy)
+        internal P4Level(Random random, int problemSize, FitnessFunction<Tour> fitnessFunction, (double, double)[] rescalingIntervals) : base(random, fitnessFunction.Comparison)
         {
             _random = random;
             _fitnessFunction = fitnessFunction;
             _problemSize = problemSize;
-            _population = new Population<RandomKeysTour>(fitnessFunction.ComparisonStrategy);
+            _population = new Population<RandomKeysTour>(fitnessFunction.Comparison);
             _delta1Sums = new double[problemSize, problemSize];
             _delta2Sums = new double[problemSize, problemSize];
             _rescalingIntervals = rescalingIntervals;

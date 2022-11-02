@@ -7,6 +7,7 @@ namespace MscThesis.Core
         Epsilon,
         MaxIterations,
         GapSize,
-        ProblemName
+        ProblemName,
+        NumSampledPositions
     }
 }

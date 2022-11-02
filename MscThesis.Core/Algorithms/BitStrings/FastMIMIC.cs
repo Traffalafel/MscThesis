@@ -8,26 +8,32 @@ using MscThesis.Core.Algorithms.BitStrings;
 
 namespace MscThesis.Core.Algorithms
 {
-    public class MIMIC : Optimizer<BitString>
+    public class FastMIMIC : Optimizer<BitString>
     {
         private readonly ISelectionOperator<BitString> _selectionOperator;
         private readonly int _populationSize;
+        private readonly int _numSampledPositions;
 
         private Population<BitString> _population;
+
+        private double[,][] _jointFreqs;
+        private double[,] _jointEntropies;
 
         public override ISet<Property> StatisticsProperties => new HashSet<Property>
         {
             Property.AvgEntropy
         };
 
-        public MIMIC(
+        public FastMIMIC(
             int problemSize,
             FitnessComparison comparisonStrategy,
             int populationSize,
+            int numSampledPositions,
             ISelectionOperator<BitString> selectionOperator) : base(problemSize, comparisonStrategy)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
+            _numSampledPositions = numSampledPositions;
         }
 
         protected override void Initialize(FitnessFunction<BitString> fitnessFunction)
@@ -41,6 +47,11 @@ namespace MscThesis.Core.Algorithms
                 var bs = BitString.CreateUniform(_random.Value, _problemSize);
                 _population.Add(new IndividualImpl<BitString>(bs));
             }
+
+
+            var jointCounts = BitStringEntropyUtils.GetJointCounts(_population);
+            _jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(jointCounts, _population.Size);
+            _jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(_jointFreqs);
         }
 
         protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
@@ -51,11 +62,31 @@ namespace MscThesis.Core.Algorithms
             var uniFreqs = BitStringEntropyUtils.ComputeUniFrequencies(uniCounts, _population.Size);
             var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(_population);
 
-            var jointCounts = BitStringEntropyUtils.GetJointCounts(_population);
-            var jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(jointCounts, _population.Size);
-            var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(jointFreqs);
+            var samplePositions = RandomUtils.SampleUnique(_random.Value, _numSampledPositions, problemSize);
+            var jointCountsSample = BitStringEntropyUtils.GetJointCounts(_population, samplePositions);
+            var jointFreqsSample = BitStringEntropyUtils.ComputeJointFrequencies(jointCountsSample, _populationSize);
+            var jointEntropySample = BitStringEntropyUtils.ComputeJointEntropies(jointFreqsSample);
+            for (int i = 0; i < samplePositions.Length; i++)
+            {
+                for (int j = i+1; j < samplePositions.Length; j++)
+                {
+                    var iPos = samplePositions[i];
+                    var jPos = samplePositions[j];
 
-            var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, jointEntropies);
+                    if (iPos < jPos)
+                    {
+                        _jointFreqs[iPos, jPos] = jointFreqsSample[i, j];
+                        _jointEntropies[iPos, jPos] = jointEntropySample[i, j];
+                    }
+                    else
+                    {
+                        _jointFreqs[jPos, iPos] = jointFreqsSample[i, j];
+                        _jointEntropies[jPos, iPos] = jointEntropySample[i, j];
+                    }
+                }
+            }
+
+            var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, _jointEntropies);
 
             // Sample solutions from model
             var minProb = 1.0d / problemSize;
@@ -80,11 +111,11 @@ namespace MscThesis.Core.Algorithms
                     double[] joint;
                     if (position < prev)
                     {
-                        joint = jointFreqs[position, prev];
+                        joint = _jointFreqs[position, prev];
                     }
                     else
                     {
-                        joint = jointFreqs[prev, position];
+                        joint = _jointFreqs[prev, position];
                     }
 
                     double p;
@@ -100,8 +131,9 @@ namespace MscThesis.Core.Algorithms
                     vals[position] = RandomUtils.SampleBernoulli(_random.Value, p);
                 }
 
-                var bs = new BitString { Values = vals };
-                _population.Add(new IndividualImpl<BitString>(bs));
+                var bitstring = new BitString { Values = vals };
+                var individual = new IndividualImpl<BitString>(bitstring);
+                _population.Add(individual);
             }
 
             foreach (var individual in _population)
@@ -117,7 +149,7 @@ namespace MscThesis.Core.Algorithms
             _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);
 
             var jointIndices = Enumerable.Range(0, problemSize).Select(i => Enumerable.Range(i + 1, problemSize - i - 1).Select(j => (i, j))).SelectMany(x => x);
-            var avgJointEntropy = jointIndices.Select(idxs => jointEntropies[idxs.i, idxs.j]).Sum() / (problemSize * (problemSize + 1)) / 2;
+            var avgJointEntropy = jointIndices.Select(idxs => _jointEntropies[idxs.i, idxs.j]).Sum() / (problemSize * (problemSize + 1)) / 2;
 
             var stats = new Dictionary<Property, double>()
             {

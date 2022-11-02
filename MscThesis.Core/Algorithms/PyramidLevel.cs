@@ -13,7 +13,7 @@ namespace MscThesis.Core.Algorithms
 
         public Population<T> Population => _population;
 
-        public PyramidLevel(Random random, FitnessComparisonStrategy comparisonStrategy)
+        public PyramidLevel(Random random, FitnessComparison comparisonStrategy)
         {
             _random = random;
             _population = new Population<T>(comparisonStrategy);

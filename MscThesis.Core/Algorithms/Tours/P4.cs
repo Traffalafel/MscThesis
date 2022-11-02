@@ -21,7 +21,7 @@ namespace MscThesis.Core.Algorithms.Tours
             }
         }
 
-        public P4(int problemSize, FitnessFunction<Tour> fitnessFunction) : base(problemSize, fitnessFunction.ComparisonStrategy)
+        public P4(int problemSize, FitnessFunction<Tour> fitnessFunction) : base(problemSize, fitnessFunction.Comparison)
         {
             _fitnessFunction = fitnessFunction;
             _numFreeNodes = _problemSize - 1;
@@ -62,7 +62,7 @@ namespace MscThesis.Core.Algorithms.Tours
                 _pyramid[i].Mix(individual);
                 var fitnessNew = individual.Fitness.Value;
 
-                if (!_fitnessFunction.ComparisonStrategy.IsFitter(fitnessNew, fitnessPrev))
+                if (!_fitnessFunction.Comparison.IsFitter(fitnessNew, fitnessPrev))
                 {
                     continue;
                 }

@@ -1,8 +1,6 @@
 ﻿using MscThesis.Core.Formats;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MscThesis.Core.Algorithms.BitStrings
 {
@@ -117,6 +115,19 @@ namespace MscThesis.Core.Algorithms.BitStrings
             return counts;
         }
 
+        internal static double[,,] GetJointCounts(Population<BitString> population, int[] positions)
+        {
+            var values = population.GetValues();
+            var numPositions = positions.Length;
+
+            var counts = new double[numPositions, numPositions, 4];
+            foreach (var instance in values)
+            {
+                AddToJointCounts(counts, instance, positions);
+            }
+            return counts;
+        }
+
         internal static void AddToJointCounts(double[,,] counts, BitString instance)
         {
             var problemSize = counts.GetLength(0);
@@ -134,6 +145,23 @@ namespace MscThesis.Core.Algorithms.BitStrings
             }
         }
 
+        internal static void AddToJointCounts(double[,,] counts, BitString instance, int[] positions)
+        {
+            var vals = instance.Values;
+            for (int i = 0; i < positions.Length; i++)
+            {
+                for (int j = i+1; j < positions.Length; j++)
+                {
+                    var iPos = positions[i];
+                    var jPos = positions[j];
+
+                    if (!vals[iPos] && !vals[jPos]) counts[i, j, 0]++;
+                    if (!vals[iPos] && vals[jPos]) counts[i, j, 1]++;
+                    if (vals[iPos] && !vals[jPos]) counts[i, j, 2]++;
+                    if (vals[iPos] && vals[jPos]) counts[i, j, 3]++;
+                }
+            }
+        }
 
         internal static double[] ComputeUniFrequencies(double[] counts, int populationSize)
         {
@@ -169,5 +197,6 @@ namespace MscThesis.Core.Algorithms.BitStrings
 
             return freqs;
         }
+
     }
 }

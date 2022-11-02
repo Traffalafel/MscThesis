@@ -13,6 +13,7 @@ namespace MscThesis.Runner.Factories
             _optimizers = new Dictionary<string, OptimizerFactory<BitString>>
             {
                 { "MIMIC", new MIMICFactory(_parameterFactory) },
+                { "FastMIMIC", new FastMIMICFactory(_parameterFactory) },
                 { "GOMEA", new GOMEAFactory(_parameterFactory) },
                 { "P3", new P3Factory() },
             };

@@ -15,7 +15,7 @@ namespace MscThesis.Core.Algorithms
         public P3(
             int problemSize,
             FitnessFunction<BitString> fitnessFunction
-            ) : base(problemSize, fitnessFunction.ComparisonStrategy)
+            ) : base(problemSize, fitnessFunction.Comparison)
         {
             _fitnessFunction = fitnessFunction;
             _hashset = new HashSet<string>();

@@ -8,7 +8,7 @@ namespace MscThesis.Core.FitnessFunctions
 {
     public class OneMax : FitnessFunction<BitString>
     {
-        public override FitnessComparisonStrategy ComparisonStrategy => FitnessComparison.Maximization;
+        public override FitnessComparison Comparison => FitnessComparison.Maximization;
 
         public OneMax(int size) : base(size)
         {

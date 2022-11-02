@@ -18,7 +18,7 @@ namespace MscThesis.Core.Selection
 
         public Population<T> Select(Random random, Population<T> population, FitnessFunction<T> problem)
         {
-            var output = new Population<T>(problem.ComparisonStrategy);
+            var output = new Population<T>(problem.Comparison);
 
             for (int i = 0; i < _numTournaments; i++)
             {

@@ -35,7 +35,7 @@ namespace MscThesis.Runner.Factories
             return problem =>
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                return new MIMIC(problem.Size, problem.ComparisonStrategy, populationSize, selection);
+                return new MIMIC(problem.Size, problem.Comparison, populationSize, selection);
             };
         }
     }

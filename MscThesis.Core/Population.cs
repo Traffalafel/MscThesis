@@ -10,7 +10,7 @@ namespace MscThesis.Core
     {
         private List<Individual<T>> _individuals;
         private Individual<T> _fittest;
-        private FitnessComparisonStrategy _comparisonStrategy;
+        private FitnessComparison _comparisonStrategy;
 
         public List<Individual<T>> Individuals => _individuals;
         public Individual<T> Fittest => _fittest;
@@ -28,13 +28,13 @@ namespace MscThesis.Core
             } 
         }
 
-        public Population(FitnessComparisonStrategy comparisonStrategy)
+        public Population(FitnessComparison comparisonStrategy)
         {
             _individuals = new List<Individual<T>>();
             _comparisonStrategy = comparisonStrategy;
         }
 
-        public Population(IEnumerable<Individual<T>> individuals, FitnessComparisonStrategy comparisonStrategy)
+        public Population(IEnumerable<Individual<T>> individuals, FitnessComparison comparisonStrategy)
         {
             _individuals = individuals.ToList();
             _comparisonStrategy = comparisonStrategy;

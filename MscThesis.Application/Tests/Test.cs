@@ -15,7 +15,7 @@ namespace MscThesis.Runner.Results
         protected bool _isTerminated;
         protected Dictionary<string, ObservableValue<Individual<T>>> _fittest = new Dictionary<string, ObservableValue<Individual<T>>>();
         protected Type _instanceType = typeof(InstanceFormat);
-        protected FitnessComparisonStrategy _comparisonStrategy;
+        protected FitnessComparison _comparisonStrategy;
 
         public void Initialize(IEnumerable<string> optimizerNames)
         {
@@ -31,7 +31,7 @@ namespace MscThesis.Runner.Results
         public object SeriesLock => _lock;
         public Type InstanceType => _instanceType;
         public bool IsTerminated => _isTerminated;
-        public FitnessComparisonStrategy ComparisonStrategy => _comparisonStrategy;
+        public FitnessComparison Comparison => _comparisonStrategy;
         public abstract ISet<string> OptimizerNames { get; }
         public abstract IEnumerable<ItemResult> Items {get;}
         public abstract IEnumerable<SeriesResult> Series {get;}

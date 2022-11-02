@@ -1,6 +1,6 @@
-﻿using MscThesis.Core;
-using MscThesis.Core.Formats;
+﻿using MscThesis.Core.Formats;
 using MscThesis.Runner.Results;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,7 +10,7 @@ namespace MscThesis.Runner.Tests
 {
     public abstract class TestComposite<T> : Test<T> where T : InstanceFormat
     {
-        private List<ITest<T>> _subTests;
+        private IEnumerable<ITest<T>> _subTests;
         private int _maxParallel;
 
         public TestComposite(List<ITest<T>> subTests, int maxParallel)
@@ -18,7 +18,7 @@ namespace MscThesis.Runner.Tests
             _subTests = subTests;
             _maxParallel = maxParallel;
             _instanceType = subTests.First().InstanceType;
-            _comparisonStrategy = subTests.First().ComparisonStrategy;
+            _comparisonStrategy = subTests.First().Comparison;
 
             foreach (var test in subTests)
             {
@@ -40,10 +40,29 @@ namespace MscThesis.Runner.Tests
             }
         }
 
+        public TestComposite(Func<ITest<T>> generateFunc, int numTests, int maxParallel)
+        {
+            _maxParallel = maxParallel;
+
+            var empty = generateFunc();
+            _instanceType = empty.InstanceType;
+            _comparisonStrategy = empty.Comparison;
+            Initialize(empty.OptimizerNames);
+
+            _subTests = CreateEnumerable(generateFunc, numTests);
+        }
+
+
         public override async Task Execute(CancellationToken cancellationToken)
         {
-            var initial = _subTests.Take(_maxParallel);
-            var remaining = _subTests.Skip(_maxParallel).ToList();
+            var enumerator = _subTests.GetEnumerator();
+
+            var initial = new List<ITest<T>>();
+            for (int i = 0; i < _maxParallel; i++)
+            {
+                enumerator.MoveNext();
+                initial.Add(enumerator.Current);
+            }
 
             var tasks = initial.Select(async result =>
             {
@@ -65,14 +84,13 @@ namespace MscThesis.Runner.Tests
                 ConsumeResult(result);
 
                 tasks.Remove(completedTask);
-                if (remaining.Any())
+                if (enumerator.MoveNext())
                 {
-                    var first = remaining.First();
-                    remaining.Remove(first);
+                    var test = enumerator.Current;
                     tasks.Add(Task.Run(async () =>
                     {
-                        await first.Execute(cancellationToken);
-                        return first;
+                        await test.Execute(cancellationToken);
+                        return test;
                     }));
                 }
             }
@@ -81,5 +99,35 @@ namespace MscThesis.Runner.Tests
         }
 
         protected abstract void ConsumeResult(ITest<T> result);
+
+        private IEnumerable<ITest<T>> CreateEnumerable(Func<ITest<T>> generate, int numTests)
+        {
+            var c = 0;
+            while (c < numTests)
+            {
+                yield return CreateTest(generate);
+                c++;
+            }
+            yield break;
+        }
+
+        private ITest<T> CreateTest(Func<ITest<T>> generate)
+        {
+            var test = generate();
+            foreach (var name in test.OptimizerNames)
+            {
+                var observable = test.Fittest(name);
+                observable.PropertyChanged += (s, e) =>
+                {
+                    if (_comparisonStrategy.IsFitter(observable.Value, _fittest[name].Value))
+                    {
+                        _fittest[name].Value = observable.Value;
+                    }
+                };
+            }
+            test.SetLock(SeriesLock);
+            return test;
+        }
+
     }
 }

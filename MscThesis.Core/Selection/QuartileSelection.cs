@@ -34,7 +34,7 @@ namespace MscThesis.Core.Selection
             }
             var newIndividuals = ordered.Take(targetSize);
 
-            return new Population<T>(newIndividuals, fitnessFunction.ComparisonStrategy);
+            return new Population<T>(newIndividuals, fitnessFunction.Comparison);
         }
     }
 }

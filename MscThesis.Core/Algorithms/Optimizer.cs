@@ -18,14 +18,13 @@ namespace MscThesis.Core.Algorithms
     // 1 configuration of 1 algorithm
     public abstract class Optimizer<T> where T : InstanceFormat
     {
-
         protected readonly int _problemSize;
-        protected readonly FitnessComparisonStrategy _comparisonStrategy;
+        protected readonly FitnessComparison _comparisonStrategy;
         protected ThreadLocal<Random> _random;
 
         public abstract ISet<Property> StatisticsProperties { get; }
 
-        protected Optimizer(int problemSize, FitnessComparisonStrategy comparisonStrategy)
+        protected Optimizer(int problemSize, FitnessComparison comparisonStrategy)
         {
             _problemSize = problemSize;
             _comparisonStrategy = comparisonStrategy;
@@ -38,11 +37,11 @@ namespace MscThesis.Core.Algorithms
 
         protected abstract RunIteration<T> NextIteration(FitnessFunction<T> fitnessFunction);
 
-        public IterationEnumerator<T> Run(FitnessFunction<T> fitnessFunction)
+        public Run<T> Run(FitnessFunction<T> fitnessFunction)
         {
             Initialize(fitnessFunction);
             var enumerator = BuildEnumerator(fitnessFunction);
-            return new IterationEnumerator<T>(enumerator);
+            return new Run<T>(enumerator);
         }
 
         private IEnumerable<RunIteration<T>> BuildEnumerator(FitnessFunction<T> fitnessFunction)
@@ -58,7 +57,7 @@ namespace MscThesis.Core.Algorithms
             }
         }
 
-        public ProcessThread GetCurrentProcessThread()
+        private ProcessThread GetCurrentProcessThread()
         {
             var currentThreadId = ThreadIdProvider.GetCurrentThreadId();
 

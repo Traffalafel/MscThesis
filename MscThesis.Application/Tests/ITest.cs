@@ -18,7 +18,7 @@ namespace MscThesis.Runner.Results
         public IEnumerable<ItemResult> Items { get; }
         public IEnumerable<SeriesResult> Series { get; }
         public Type InstanceType { get; }
-        public FitnessComparisonStrategy ComparisonStrategy { get; }
+        public FitnessComparison Comparison { get; }
         public object SeriesLock { get; }
         public void SetLock(object newLock);
     }

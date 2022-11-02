@@ -6,7 +6,11 @@
     300,
     400,
     500,
-    600
+    600,
+    700,
+    800,
+    900,
+    1000
   ],
   "MaxParallelization": 30,
   "Problem": {
@@ -16,26 +20,18 @@
   "Optimizers": [
     {
       "Seed": null,
-      "Name": "MIMIC_PopulationSize:n",
+      "Name": "MIMIC_PopulationSize:100",
       "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "n"
+        "PopulationSize": "100"
       }
     },
     {
       "Seed": null,
-      "Name": "MIMIC_PopulationSize:5*n",
+      "Name": "MIMIC_PopulationSize:200",
       "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "5*n"
-      }
-    },
-    {
-      "Seed": null,
-      "Name": "MIMIC_PopulationSize:10*n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "10*n"
+        "PopulationSize": "200"
       }
     }
   ],

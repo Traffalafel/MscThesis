@@ -15,7 +15,7 @@ namespace MscThesis.Core.Algorithms
 
         public GOMEA(
             int problemSize, 
-            FitnessComparisonStrategy comparisonStrategy,
+            FitnessComparison comparisonStrategy,
             int populationSize,
             ISelectionOperator<BitString> selectionOperator
             ) : base(problemSize, comparisonStrategy)

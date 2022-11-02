@@ -16,7 +16,7 @@ namespace MscThesis.Core.Algorithms
 
         public TourMIMIC(
             int problemSize,
-            FitnessComparisonStrategy comparisonStrategy,
+            FitnessComparison comparisonStrategy,
             int populationSize,
             ISelectionOperator<Tour> selectionOperator) : base(problemSize, comparisonStrategy)
         {

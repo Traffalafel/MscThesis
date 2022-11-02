@@ -27,7 +27,7 @@ namespace MscThesis.Core.Algorithms.Tours
             var fitnessPrev = dest.Fitness.Value;
             var fitnessNew = fitnessFunction.ComputeFitness(destInstance);
 
-            if (fitnessFunction.ComparisonStrategy.IsFitter(fitnessNew, fitnessPrev))
+            if (fitnessFunction.Comparison.IsFitter(fitnessNew, fitnessPrev))
             {
                 dest.Fitness = fitnessNew;
                 return true;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Core
 {
-    public class IterationEnumerator<T> : IEnumerable<RunIteration<T>> where T : InstanceFormat
+    public class Run<T> : IEnumerable<RunIteration<T>> where T : InstanceFormat
     {
         private IEnumerable<RunIteration<T>> _iterator;
         private List<TerminationCriterion<T>> _terminations;
@@ -13,7 +13,7 @@ namespace MscThesis.Core
 
         public Property TerminationReason => _terminationReason;
 
-        public IterationEnumerator(IEnumerable<RunIteration<T>> iterator)
+        public Run(IEnumerable<RunIteration<T>> iterator)
         {
             _iterator = iterator;
             _terminations = new List<TerminationCriterion<T>>();

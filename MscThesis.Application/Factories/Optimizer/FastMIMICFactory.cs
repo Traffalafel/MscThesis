@@ -8,33 +8,38 @@ using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
 
-namespace MscThesis.Runner.Factories.Optimizer
+namespace MscThesis.Runner.Factories
 {
-    public class GOMEAFactory : OptimizerFactory<BitString>
+    public class FastMIMICFactory : OptimizerFactory<BitString>
     {
-        private static readonly int _tournamentSize = 2;
+        private static readonly double _selectionQuartile = 0.5d;
+
         private readonly IParameterFactory _parameterFactory;
 
-        public GOMEAFactory(IParameterFactory parameterFactory)
+        public FastMIMICFactory(IParameterFactory parameterFactory)
         {
             _parameterFactory = parameterFactory;
         }
 
-        public override IEnumerable<Parameter> Parameters => new List<Parameter>
-        {
-            Parameter.PopulationSize
+        public override IEnumerable<Parameter> Parameters => new List<Parameter> 
+        { 
+            Parameter.PopulationSize,
+            Parameter.NumSampledPositions
         };
 
         public override Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
+            var selection = new QuartileSelection<BitString>(_selectionQuartile, SelectionMethod.Maximize);
+
             return problem =>
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                var selection = new TournamentSelection<BitString>(populationSize, _tournamentSize);
-                return new GOMEA(problem.Size, problem.Comparison, populationSize, selection);
+                var numSampledPositions = (int)parameters.Invoke(Parameter.NumSampledPositions, problem.Size);
+                return new FastMIMIC(problem.Size, problem.Comparison, populationSize, numSampledPositions, selection);
             };
         }
     }
+
 }

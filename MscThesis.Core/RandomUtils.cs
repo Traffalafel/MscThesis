@@ -78,5 +78,22 @@ namespace MscThesis.Core
             }
         }
 
+        public static int[] SampleUnique(Random random, int numVals, int maxValue)
+        {
+            var options = Enumerable.Range(0, maxValue).ToArray();
+            var output = new int[numVals];
+
+            var c = maxValue;
+            for (int i = 0; i < numVals; i++)
+            {
+                var pos = random.Next(c);
+                output[i] = options[pos];
+                (options[c - 1], options[pos]) = (options[pos], options[c - 1]);
+                c--;
+            }
+
+            return output;
+        }
+
     }
 }

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace MscThesis.Runner.Test
 {
-    public class MIMICTests
+    public class FastMIMICTests
     {
         [Fact]
         public async void SingleRun()
@@ -26,47 +26,11 @@ namespace MscThesis.Runner.Test
                 {
                     new OptimizerSpecification
                     {
-                        Algorithm = "MIMIC",
-                        Seed = 1,
+                        Algorithm = "FastMIMIC",
                         Parameters = new Dictionary<Parameter, string>
                         {
-                            [Parameter.PopulationSize] = "n"
-                        }
-                    },
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Seed = 2,
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            [Parameter.PopulationSize] = "0.5*n"
-                        }
-                    },
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Seed = 3,
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            [Parameter.PopulationSize] = "2*n"
-                        }
-                    },
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Seed = 4,
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            [Parameter.PopulationSize] = "sqrt(n)"
-                        }
-                    },
-                    new OptimizerSpecification
-                    {
-                        Algorithm = "MIMIC",
-                        Seed = 5,
-                        Parameters = new Dictionary<Parameter, string>
-                        {
-                            [Parameter.PopulationSize] = "n*log(n)"
+                            [Parameter.PopulationSize] = "n",
+                            [Parameter.NumSampledPositions] = "sqrt(n)"
                         }
                     }
                 },

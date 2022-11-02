@@ -12,7 +12,7 @@ namespace MscThesis.Core.FitnessFunctions.TSP
             _item = item;
         }
 
-        public override FitnessComparisonStrategy ComparisonStrategy => FitnessComparison.Minimization;
+        public override FitnessComparison Comparison => FitnessComparison.Minimization;
 
         public override double? Optimum(int problemSize)
         {

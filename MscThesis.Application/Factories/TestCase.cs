@@ -30,12 +30,12 @@ namespace MscThesis.Runner.Factories
             var optimizer = _buildOptimizer.Invoke(problem);
             var terminations = _buildTerminations.Invoke(size);
 
-            var iterations = optimizer.Run(problem);
+            var run = optimizer.Run(problem);
             foreach (var criterion in terminations)
             {
-                iterations.AddTerminationCriterion(criterion);
+                run.AddTerminationCriterion(criterion);
             }
-            return new SingleRun<T>(iterations, problem, _name, optimizer.StatisticsProperties, size, saveSeries);
+            return new SingleRun<T>(run, problem, _name, optimizer.StatisticsProperties, size, saveSeries);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace MscThesis.Core.FitnessFunctions
 
         protected abstract double Compute(T instance);
         public abstract double? Optimum(int problemSize);
-        public abstract FitnessComparisonStrategy ComparisonStrategy { get; }
+        public abstract FitnessComparison Comparison { get; }
 
         public int Size => _size;
         public Type InstanceType => typeof(T);

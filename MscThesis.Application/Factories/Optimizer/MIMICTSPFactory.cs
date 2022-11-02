@@ -34,7 +34,7 @@ namespace MscThesis.Runner.Factories
             return problem =>
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                return new TourMIMIC(problem.Size, problem.ComparisonStrategy, populationSize, selection);
+                return new TourMIMIC(problem.Size, problem.Comparison, populationSize, selection);
             };
         }
     }
