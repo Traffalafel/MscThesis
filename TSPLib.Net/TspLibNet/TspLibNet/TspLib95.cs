@@ -274,8 +274,6 @@ namespace TspLibNet
                                    string solutionsFile,
                                    string optTourExtension)
         {
-            Console.WriteLine("HEJSA");
-
             if (string.IsNullOrEmpty(name))
             {
                 throw new ArgumentNullException("name");

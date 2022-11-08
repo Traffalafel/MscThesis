@@ -49,9 +49,13 @@ namespace MscThesis.Core.Algorithms
             var processThread = GetCurrentProcessThread();
             while (true)
             {
-                var prevTime = processThread.UserProcessorTime;
+                var prevTime = processThread?.UserProcessorTime;
                 var iteration = NextIteration(fitnessFunction);
-                iteration.CpuTime = processThread.UserProcessorTime - prevTime;
+
+                if (processThread != null)
+                {
+                    iteration.CpuTime = processThread.UserProcessorTime - prevTime.Value;
+                }
 
                 yield return iteration;
             }
@@ -59,7 +63,15 @@ namespace MscThesis.Core.Algorithms
 
         private ProcessThread GetCurrentProcessThread()
         {
-            var currentThreadId = ThreadIdProvider.GetCurrentThreadId();
+            uint currentThreadId;
+            try
+            {
+                currentThreadId = ThreadIdProvider.GetCurrentThreadId();
+            }
+            catch
+            {
+                return null;
+            }
 
             var processThreads = Process.GetCurrentProcess().Threads.Cast<ProcessThread>();
             var processThread = processThreads.FirstOrDefault(pt => pt.Id == currentThreadId);

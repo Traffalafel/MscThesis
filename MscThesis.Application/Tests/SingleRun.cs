@@ -111,7 +111,11 @@ namespace MscThesis.Runner.Results
                 _itemData[Property.NumberIterations].Value = numIterations;
                 _itemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
                 _itemData[Property.AvgFitness].Value = Math.Round(avgFitness, 2);
-                _itemData[Property.CpuTimeSeconds].Value += iteration.CpuTime.TotalSeconds;
+
+                if (iteration.CpuTime != null)
+                {
+                    _itemData[Property.CpuTimeSeconds].Value += iteration.CpuTime.TotalSeconds;
+                }
 
                 numIterations++;
             }
