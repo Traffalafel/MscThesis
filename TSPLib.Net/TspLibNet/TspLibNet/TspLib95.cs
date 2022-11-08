@@ -203,7 +203,7 @@ namespace TspLibNet
         /// <exception cref="DirectoryNotFoundException">Thrown if TSP lib path (<seealso cref="TspLib95"/>) does not point to TSPLIB95.</exception>
         public void LoadTSP(string name)
         {
-            ProblemLoader(name, "TravelingSalesmanProblem", ".tsp", "TSP", "bestSolutions.txt", ".opt.tour");
+            ProblemLoader(name, "TravelingSalesmanProblem", ".tsp", "tsp", "bestSolutions.txt", ".opt.tour");
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace TspLibNet
         /// <exception cref="DirectoryNotFoundException">Thrown if TSP lib path (<seealso cref="TspLib95"/>) does not point to TSPLIB95.</exception>
         public void LoadATSP(string name)
         {
-            ProblemLoader(name, "TravelingSalesmanProblem", ".atsp", "ATSP", "bestSolutions.txt", ".opt.tour");
+            ProblemLoader(name, "TravelingSalesmanProblem", ".atsp", "atsp", "bestSolutions.txt", ".opt.tour");
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace TspLibNet
         /// <exception cref="DirectoryNotFoundException">Thrown if TSP lib path (<seealso cref="TspLib95"/>) does not point to TSPLIB95.</exception>
         public void LoadHCP(string name)
         {
-            ProblemLoader(name, "HamiltonianCycleProblem", ".hcp", "HCP", "bestSolutions.txt", ".opt.tour");
+            ProblemLoader(name, "HamiltonianCycleProblem", ".hcp", "hcp", "bestSolutions.txt", ".opt.tour");
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace TspLibNet
         public void LoadSOP(string name)
         {
             // do not load best solution, lack of support at the moment
-            ProblemLoader(name, "SequentialOrderingProblem", ".sop", "SOP", "????.txt", ".opt.tour");
+            ProblemLoader(name, "SequentialOrderingProblem", ".sop", "sop", "????.txt", ".opt.tour");
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace TspLibNet
         /// <exception cref="DirectoryNotFoundException">Thrown if TSP lib path (<seealso cref="TspLib95"/>) does not point to TSPLIB95.</exception>
         public void LoadCVRP(string name)
         {
-            ProblemLoader(name, "CapacitatedVehicleRoutingProblem", ".vrp", "VRP", "bestSolutions.txt", ".opt.tour");
+            ProblemLoader(name, "CapacitatedVehicleRoutingProblem", ".vrp", "vrp", "bestSolutions.txt", ".opt.tour");
         }
 
         /// <summary>
