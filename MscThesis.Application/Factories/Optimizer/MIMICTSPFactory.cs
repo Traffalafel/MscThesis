@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories
 {
-    public class TourMIMICFactory : OptimizerFactory<Tour>
+    public class TourMIMICFactory : IOptimizerFactory<Tour>
     {
         private static readonly double _selectionQuartile = 0.5d;
 
@@ -21,12 +21,12 @@ namespace MscThesis.Runner.Factories
             _parameterFactory = parameterFactory;
         }
 
-        public override IEnumerable<Parameter> Parameters => new List<Parameter> 
+        public IEnumerable<Parameter> Parameters => new List<Parameter> 
         { 
             Parameter.PopulationSize
         };
 
-        public override Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
             var selection = new QuartileSelection<Tour>(_selectionQuartile, SelectionMethod.Minimize);

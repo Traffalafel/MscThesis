@@ -1,0 +1,32 @@
+﻿{
+  "NumRuns": 20,
+  "ProblemSizes": [
+    100
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "OneMax"
+  },
+  "Optimizers": [
+    {
+      "Name": "MIMIC_PopulationSize:n",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

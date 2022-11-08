@@ -12,6 +12,8 @@ namespace MscThesis.Runner.Factories.Problem
 {
     public class TSPLibFactory : ProblemFactory<Tour>
     {
+        private static readonly string _tspLibDirectoryPath = "TSPLIB95";
+
         private IEnumerable<string> _tspNames;
         private TspLib95 _tspLib;
 
@@ -41,7 +43,7 @@ namespace MscThesis.Runner.Factories.Problem
         public TSPLibFactory(TspLib95 tspLib)
         {
             _tspLib = tspLib;
-            var tsps = tspLib.LoadAllTSP();
+            var tsps = _tspLib.LoadAllTSP();
             _tspNames = tsps.Select(tsp => tsp.Problem.Name).ToList();
         }
 

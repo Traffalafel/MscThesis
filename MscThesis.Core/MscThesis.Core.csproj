@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TSPLib.Net" Version="1.1.6" />
+    <ProjectReference Include="..\TSPLib.Net\TspLibNet\TspLibNet\TspLibNet.csproj" />
   </ItemGroup>
 
 </Project>

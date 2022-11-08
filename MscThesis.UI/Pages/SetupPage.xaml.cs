@@ -13,14 +13,10 @@ public partial class SetupPage : ContentPage
 
 	public SetupPage(IConfiguration config)
 	{
-        var settings = new Settings
-        {
-            TSPLibDirectoryPath = config["TSPLibDirectoryPath"]
-        };
-
+        var tspLibPath = config["TSPLibDirectoryPath"];
         _specificationsDirPath = config["SpecificationsDirectory"];
 
-        _vm = new SetupVM(settings);
+        _vm = new SetupVM(tspLibPath);
 
 		BindingContext = _vm;
 

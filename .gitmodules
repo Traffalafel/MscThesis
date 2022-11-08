@@ -1,0 +1,3 @@
+[submodule "TSPLib.Net"]
+	path = TSPLib.Net
+	url = https://github.com/pdrozdowski/TSPLib.Net.git

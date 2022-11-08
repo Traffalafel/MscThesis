@@ -31,9 +31,9 @@ namespace MscThesis.UI.ViewModels
         public TestProvider Provider => _provider;
         public ITest<InstanceFormat> Test => _test;
 
-        public ResultVM(Settings settings)
+        public ResultVM(string tspLibPath)
         {
-            _provider = new TestProvider(settings);
+            _provider = new TestProvider(tspLibPath);
         }
 
         public void BuildTest()

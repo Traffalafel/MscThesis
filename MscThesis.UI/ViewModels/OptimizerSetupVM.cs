@@ -58,7 +58,6 @@ namespace MscThesis.UI.ViewModels
             }
             return new OptimizerSpecification
             {
-                Seed = string.IsNullOrWhiteSpace(Seed) ? null : Convert.ToInt32(Seed),
                 Name = GetName(),
                 Algorithm = _algorithm,
                 Parameters = Utils.ToSpecification(Parameters)

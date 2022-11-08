@@ -36,9 +36,9 @@ namespace MscThesis.UI.ViewModels
 
         private TestProvider _provider { get; set; }
 
-        public SetupVM(Settings settings)
+        public SetupVM(string tspLibPath)
         {
-            _provider = new TestProvider(settings);
+            _provider = new TestProvider(tspLibPath);
         }
 
         public string ProblemName {

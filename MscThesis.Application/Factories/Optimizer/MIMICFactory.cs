@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories
 {
-    public class MIMICFactory : OptimizerFactory<BitString>
+    public class MIMICFactory : IOptimizerFactory<BitString>
     {
         private static readonly double _selectionQuartile = 0.5d;
 
@@ -21,12 +21,12 @@ namespace MscThesis.Runner.Factories
             _parameterFactory = parameterFactory;
         }
 
-        public override IEnumerable<Parameter> Parameters => new List<Parameter> 
+        public IEnumerable<Parameter> Parameters => new List<Parameter> 
         { 
             Parameter.PopulationSize
         };
 
-        public override Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 

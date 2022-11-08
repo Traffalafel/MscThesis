@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories.Optimizer
 {
-    public class GOMEAFactory : OptimizerFactory<BitString>
+    public class GOMEAFactory : IOptimizerFactory<BitString>
     {
         private static readonly int _tournamentSize = 2;
         private readonly IParameterFactory _parameterFactory;
@@ -20,12 +20,12 @@ namespace MscThesis.Runner.Factories.Optimizer
             _parameterFactory = parameterFactory;
         }
 
-        public override IEnumerable<Parameter> Parameters => new List<Parameter>
+        public IEnumerable<Parameter> Parameters => new List<Parameter>
         {
             Parameter.PopulationSize
         };
 
-        public override Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 

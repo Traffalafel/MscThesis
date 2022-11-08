@@ -4,17 +4,11 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.Extensions.Configuration;
 using MscThesis.Core.Formats;
 using MscThesis.Runner.Results;
-using MscThesis.UI.Loading;
 using MscThesis.Runner;
 using MscThesis.UI.ViewModels;
 using SkiaSharp;
-using Microsoft.VisualBasic.FileIO;
-using Microsoft.Maui;
-using System.Collections.Generic;
 using MscThesis.Core;
-using LiveChartsCore.Measure;
 using System.Collections.ObjectModel;
-using Microsoft.Maui.Layouts;
 
 namespace MscThesis.UI.Pages;
 
@@ -27,12 +21,8 @@ public partial class ResultPage : ContentPage
 
 	public ResultPage(IConfiguration config)
 	{
-        var settings = new Settings
-        {
-            TSPLibDirectoryPath = config["TSPLibDirectoryPath"]
-        };
-
-        _vm = new ResultVM(settings);
+        var tspLibPath = config["TSPLibDirectoryPath"];
+        _vm = new ResultVM(tspLibPath);
 
         BindingContext = _vm;
 
@@ -195,10 +185,6 @@ public partial class ResultPage : ContentPage
                 });
                 var paramsRows = new List<(string left, string right)>();
                 paramsRows.Add(("Algorithm:", optimizerSpec.Algorithm));
-                if (optimizerSpec.Seed != null)
-                {
-                    paramsRows.Add(("Seed:", $"{optimizerSpec.Seed.Value}"));
-                }
                 foreach (var kv in optimizerSpec.Parameters)
                 {
                     paramsRows.Add(($"{kv.Key}:", $"{kv.Value}"));

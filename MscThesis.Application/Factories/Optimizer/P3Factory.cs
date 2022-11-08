@@ -8,11 +8,11 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories.Optimizer
 {
-    public class P3Factory : OptimizerFactory<BitString>
+    public class P3Factory : IOptimizerFactory<BitString>
     {
-        public override IEnumerable<Parameter> Parameters => new List<Parameter>();
+        public IEnumerable<Parameter> Parameters => new List<Parameter>();
 
-        public override Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             return problem =>
             {

@@ -9,11 +9,11 @@ using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories.Optimizer
 {
-    public class P4Factory : OptimizerFactory<Tour>
+    public class P4Factory : IOptimizerFactory<Tour>
     {
-        public override IEnumerable<Parameter> Parameters => new List<Parameter>();
+        public IEnumerable<Parameter> Parameters => new List<Parameter>();
 
-        public override Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
             return problem =>
             {
