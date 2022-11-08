@@ -9,13 +9,6 @@ using System.Threading;
 
 namespace MscThesis.Core.Algorithms
 {
-    public static class ThreadIdProvider
-    {
-        [DllImport("kernel32.dll")]
-        public static extern uint GetCurrentThreadId();
-    }
-
-    // 1 configuration of 1 algorithm
     public abstract class Optimizer<T> where T : InstanceFormat
     {
         protected readonly int _problemSize;
@@ -46,40 +39,20 @@ namespace MscThesis.Core.Algorithms
 
         private IEnumerable<RunIteration<T>> BuildEnumerator(FitnessFunction<T> fitnessFunction)
         {
-            var processThread = GetCurrentProcessThread();
+            var stopwatch = new Stopwatch();
+
             while (true)
             {
-                var prevTime = processThread?.UserProcessorTime;
+                stopwatch.Restart();
+                stopwatch.Start();
                 var iteration = NextIteration(fitnessFunction);
+                stopwatch.Stop();
 
-                if (processThread != null)
-                {
-                    iteration.CpuTime = processThread.UserProcessorTime - prevTime.Value;
-                }
+                iteration.CpuTime = stopwatch.Elapsed;
 
                 yield return iteration;
             }
         }
 
-        private ProcessThread GetCurrentProcessThread()
-        {
-            uint currentThreadId;
-            try
-            {
-                currentThreadId = ThreadIdProvider.GetCurrentThreadId();
-            }
-            catch
-            {
-                return null;
-            }
-
-            var processThreads = Process.GetCurrentProcess().Threads.Cast<ProcessThread>();
-            var processThread = processThreads.FirstOrDefault(pt => pt.Id == currentThreadId);
-            if (processThread == null)
-            {
-                throw new Exception("Could not find current thread");
-            }
-            return processThread;
-        }
     }
 }

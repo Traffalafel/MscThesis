@@ -7,8 +7,6 @@ namespace MscThesis.UI.ViewModels
 {
     public partial class OptimizerSetupVM : ObservableObject
     {
-        [ObservableProperty]
-        bool customSeed = false;
 
         [ObservableProperty]
         bool parametersExist = false;
@@ -21,7 +19,6 @@ namespace MscThesis.UI.ViewModels
             _runner = runner;
         }
 
-        public string Seed { get; set; }
         public string Name { get; set; }
         public ObservableCollection<ExpressionParameterVM> Parameters { get; set; } = new();
         public string Algorithm

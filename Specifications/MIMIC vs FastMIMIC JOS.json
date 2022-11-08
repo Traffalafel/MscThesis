@@ -7,7 +7,7 @@
     400,
     500
   ],
-  "MaxParallelization": 30,
+  "MaxParallelization": 20,
   "Problem": {
     "Name": "JumpOffsetSpike",
     "Parameters": {

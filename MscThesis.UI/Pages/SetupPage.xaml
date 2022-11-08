@@ -313,30 +313,6 @@
                                             </HorizontalStackLayout>
                                         </Grid>
 
-                                        <!-- Random seed switch -->
-                                        <Grid HorizontalOptions="Fill" RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
-                                            <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}"
-                                                                HorizontalOptions="Fill">
-                                                <Label Style="{StaticResource LabelStyle}"
-                                            Text="Custom seed"/>
-                                            </HorizontalStackLayout>
-                                            <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
-                                                <Switch IsToggled="{Binding CustomSeed}"/>
-                                            </HorizontalStackLayout>
-                                        </Grid>
-
-                                        <!-- Seed entry -->
-                                        <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
-                                        IsVisible="{Binding CustomSeed}">
-                                            <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
-                                                <Label Style="{StaticResource LabelStyle}"
-                                            Text="Seed value"/>
-                                            </HorizontalStackLayout>
-                                            <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
-                                                <Entry Text="{Binding Seed}"/>
-                                            </HorizontalStackLayout>
-                                        </Grid>
-
                                         <view:ExpressionParameterListSetup Parameters="{Binding Parameters}"
                                                                         IsVisible="{Binding ParametersExist}"/>
 
