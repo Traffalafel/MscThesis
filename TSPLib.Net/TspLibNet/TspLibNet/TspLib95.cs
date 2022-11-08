@@ -274,6 +274,8 @@ namespace TspLibNet
                                    string solutionsFile,
                                    string optTourExtension)
         {
+            Console.WriteLine("HEJSA");
+
             if (string.IsNullOrEmpty(name))
             {
                 throw new ArgumentNullException("name");
@@ -288,6 +290,7 @@ namespace TspLibNet
             }
 
             var instancePattern = name + extension;
+            
             var solutions = LoadBestSolutionsFile(Path.Combine(instancesDir, solutionsFile));
 
             foreach (var file in Directory.GetFiles(instancesDir, instancePattern))
