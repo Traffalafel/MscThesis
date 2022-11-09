@@ -1,16 +1,12 @@
 ﻿using MscThesis.Core.Formats;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MscThesis.Core.FitnessFunctions
 {
-    public class OneMax : FitnessFunction<BitString>
+    public class LeadingOnes : FitnessFunction<BitString>
     {
         public override FitnessComparison Comparison => FitnessComparison.Maximization;
 
-        public OneMax(int size) : base(size) { }
+        public LeadingOnes(int size) : base(size) { }
 
         public override double? Optimum(int problemSize)
         {
@@ -19,7 +15,12 @@ namespace MscThesis.Core.FitnessFunctions
 
         protected override double Compute(BitString instance)
         {
-            return instance.Values.Where(val => val == true).Count();
+            var i = 0;
+            while (i < instance.Size && instance.Values[i])
+            {
+                i++;
+            }
+            return i;
         }
     }
 }

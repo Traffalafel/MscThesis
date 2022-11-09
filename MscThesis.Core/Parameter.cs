@@ -8,6 +8,7 @@ namespace MscThesis.Core
         MaxIterations,
         GapSize,
         ProblemName,
-        NumSampledPositions
+        NumSampledPositions,
+        BlockSize
     }
 }

@@ -1,0 +1,107 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 20.0,
+  "Problem": {
+    "Name": "LeadingOnes",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "GOMEA_PopulationSize:50",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "50"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:100",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "100"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:200",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "200"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:n/8",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "n/8"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:n/4",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "n/4"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:n/2",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "n/2"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:n",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:2*n",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "2*n"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:4*n",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "4*n"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:8*n",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "8*n"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:n*log(n)",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "n*log(n)"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

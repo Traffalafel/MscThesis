@@ -8,12 +8,14 @@ using Xunit;
 using Newtonsoft.Json;
 using MscThesis.Runner.Specification;
 using System.Configuration;
+using Newtonsoft.Json.Linq;
 
 namespace MscThesis.Application.Test
 {
     public class IntegrationTests
     {
         private static readonly string _specificationDirectoryPath = "Specifications";
+        private static readonly string _appsettingsPath = "appsettings.json";
 
         public static IEnumerable<object[]> SpecificationFilePaths
         {
@@ -31,7 +33,10 @@ namespace MscThesis.Application.Test
             var content = File.ReadAllText(specificationFilePath);
             var spec = JsonConvert.DeserializeObject<TestSpecification>(content);
 
-            var tspLibPath = ConfigurationManager.AppSettings["TSPLibDirectoryPath"];
+            var settingsContent = File.ReadAllText(_appsettingsPath);
+            var settingsJson = JObject.Parse(settingsContent);
+
+            var tspLibPath = settingsJson["TSPLibDirectoryPath"].Value<string>();
 
             var provider = new TestProvider(tspLibPath);
             var test = provider.Build(spec);

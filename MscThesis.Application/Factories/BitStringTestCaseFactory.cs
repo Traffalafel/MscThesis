@@ -20,7 +20,9 @@ namespace MscThesis.Runner.Factories
             _problems = new Dictionary<string, IProblemFactory<BitString>>
             {
                 { "OneMax", new OneMaxFactory() },
-                { "JumpOffsetSpike", new JumpOffsetSpikeFactory(_parameterFactory) }
+                { "LeadingOnes", new LeadingOnesFactory() },
+                { "JumpOffsetSpike", new JumpOffsetSpikeFactory(_parameterFactory) },
+                { "DeceptiveLeadingBlocks", new DeceptiveLeadingBlocksFactory(_parameterFactory) }
             };
             _terminations = new Dictionary<string, ITerminationFactory<BitString>>
             {

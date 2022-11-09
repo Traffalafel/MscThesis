@@ -7,7 +7,7 @@ namespace MscThesis.Core.FitnessFunctions
     {
         private int _numCalls = 0;
 
-        private int _size;
+        protected int _size;
 
         public FitnessFunction(int size)
         {
