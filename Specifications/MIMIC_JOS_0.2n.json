@@ -1,5 +1,5 @@
 {
-  "NumRuns": 100,
+  "NumRuns": 1,
   "ProblemSizes": [
     100,
     200,
@@ -7,29 +7,33 @@
     400,
     500
   ],
-  "MaxParallelization": 20,
+  "MaxParallelization": 16.0,
   "Problem": {
     "Name": "JumpOffsetSpike",
     "Parameters": {
-      "GapSize": "0.125*n"
+      "GapSize": "0.2*n"
     }
   },
   "Optimizers": [
     {
-      "Seed": null,
-      "Name": "MIMIC",
+      "Name": "MIMIC_PopulationSize:n/4",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4"
+      }
+    },
+    {
+      "Name": "MIMIC_PopulationSize:n",
       "Algorithm": "MIMIC",
       "Parameters": {
         "PopulationSize": "n"
       }
     },
     {
-      "Seed": null,
-      "Name": "FastMIMIC",
-      "Algorithm": "FastMIMIC",
+      "Name": "MIMIC_PopulationSize:4*n",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "n",
-        "NumSampledPositions": "sqrt(n)"
+        "PopulationSize": "4*n"
       }
     }
   ],
@@ -41,7 +45,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n",
+        "MaxIterations": "n/4",
         "Epsilon": "10E-5"
       }
     }
