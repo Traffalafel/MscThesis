@@ -1,5 +1,5 @@
 #!/bin/sh 
-### General options 
+
 ### -- specify queue -- 
 #BSUB -q hpc
 ### -- set the job Name -- 
@@ -12,23 +12,14 @@
 #BSUB -R "rusage[mem=1GB]"
 ### -- set walltime limit: hh:mm -- 
 #BSUB -W 72:00 
-### -- set the email address -- 
-# please uncomment the following line and put in your e-mail address,
-# if you want to receive e-mail notifications on a non-default address
-##BSUB -u traff1997@gmail.com
-### -- send notification at start -- 
-#BSUB -B 
-### -- send notification at completion -- 
-#BSUB -N 
 ### -- Specify the output and error file. %J is the job-id -- 
-### -- -o and -e mean append, -oo and -eo mean overwrite -- 
 #BSUB -o output/{name}.out 
 #BSUB -e output/{name}.err 
 
 # here follow the commands you want to execute with input.in as the input file
-
 module load dotnet/3.1.401
 
+# skips running the test if results already exist
 if [ ! -f "results/{name}.txt" ]; then
     v1_MscThesis/MscThesis.CLI results Specifications/{name}.json
 fi

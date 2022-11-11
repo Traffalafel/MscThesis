@@ -9,7 +9,7 @@ $SCRIPTS_DIR_PATH = "hpc_scripts"
 $TEMPLATE_FILE_PATH = "run_script_template.txt"
 $RESULTS_DIR_PATH = "results"
 
-if (Test-Path $results_path) {
+if (Test-Path $RESULTS_DIR_PATH) {
     # clear local scripts folder
     Get-ChildItem $SCRIPTS_DIR_PATH | ForEach-Object { $_.Delete() }
 }
@@ -39,10 +39,10 @@ Get-ChildItem $SPECS_DIR_PATH -Filter "*.json" | ForEach-Object {
 }
 
 # delete remote scripts folder
-ssh -i $SSH_KEYS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk" 'rm -r -f hpc_scripts'
+ssh -i $SSH_KEYS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk" "rm -r -f hpc_scripts"
 
 # copy scripts folder to remote
-scp -r -i $SSH_KEYS_DIR_PATH $SCRIPTS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.d:hpc_scripts"
+scp -r -i $SSH_KEYS_DIR_PATH $SCRIPTS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk:hpc_scripts"
 
 # copy specifications to remote
-scp -r -i $SSH_KEYS_DIR_PATH $SPECS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.d:."
+scp -r -i $SSH_KEYS_DIR_PATH $SPECS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk:."

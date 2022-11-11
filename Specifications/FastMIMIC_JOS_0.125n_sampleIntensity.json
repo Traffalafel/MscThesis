@@ -9,8 +9,10 @@
   ],
   "MaxParallelization": 20,
   "Problem": {
-    "Name": "OneMax",
-    "Parameters": {}
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "0.125*n"
+    }
   },
   "Optimizers": [
     {

@@ -307,7 +307,7 @@ public partial class ResultPage : ContentPage
         try
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            await _vm.RunTest(_cancellationTokenSource.Token);
+            _vm.RunTest(_cancellationTokenSource.Token);
         }
         catch (Exception e)
         {

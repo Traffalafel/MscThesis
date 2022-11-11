@@ -1,5 +1,5 @@
 {
-  "NumRuns": 1,
+  "NumRuns": 100,
   "ProblemSizes": [
     100,
     200,
@@ -7,7 +7,7 @@
     400,
     500
   ],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 64.0,
   "Problem": {
     "Name": "JumpOffsetSpike",
     "Parameters": {

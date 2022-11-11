@@ -64,11 +64,11 @@ namespace MscThesis.Runner.Tests
                 initial.Add(enumerator.Current);
             }
 
-            var tasks = initial.Select(async result =>
+            var tasks = initial.Select(result => Task.Run(async () =>
             {
                 await result.Execute(cancellationToken);
                 return result;
-            }).ToList();
+            })).ToList();
 
             while (tasks.Count > 0)
             {

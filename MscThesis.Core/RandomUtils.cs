@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MscThesis.Core.Formats;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,21 @@ namespace MscThesis.Core
             var values = new bool[bits.Count];
             bits.CopyTo(values, 0);
             return values[0..size];
+        }
+
+        public static BitString SampleBitString(Random random, double[] probs)
+        {
+            var size = probs.Length;
+
+            var s = new bool[size];
+            for (int i = 0; i < size; i++)
+            {
+                s[i] = RandomUtils.SampleBernoulli(random, probs[i]);
+            }
+            return new BitString
+            {
+                Values = s
+            };
         }
 
         public static bool SampleBernoulli(Random random, double p)

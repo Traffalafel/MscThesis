@@ -58,11 +58,14 @@ namespace MscThesis.UI.ViewModels
             }
         }
 
-        public async Task RunTest(CancellationToken cancellationToken)
+        public void RunTest(CancellationToken cancellationToken)
         {
             IsRunning = true;
-            await _test.Execute(cancellationToken);
-            IsRunning = false;
+            Task.Run(async () =>
+            {
+                await _test.Execute(cancellationToken);
+                IsRunning = false;
+            });
         }
 
     }

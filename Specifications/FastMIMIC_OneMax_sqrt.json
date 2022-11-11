@@ -7,7 +7,7 @@
     400,
     500
   ],
-  "MaxParallelization": 20.0,
+  "MaxParallelization": 64,
   "Problem": {
     "Name": "OneMax",
     "Parameters": {}
@@ -110,7 +110,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n",
+        "MaxIterations": "n/4",
         "Epsilon": "10E-5"
       }
     }

@@ -9,6 +9,7 @@ namespace MscThesis.Core
         GapSize,
         ProblemName,
         NumSampledPositions,
-        BlockSize
+        BlockSize,
+        K
     }
 }

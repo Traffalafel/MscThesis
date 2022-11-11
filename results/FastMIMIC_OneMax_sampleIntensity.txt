@@ -8,7 +8,7 @@ Specification:
     400,
     500
   ],
-  "MaxParallelization": 20.0,
+  "MaxParallelization": 16,
   "Problem": {
     "Name": "OneMax",
     "Parameters": {}
