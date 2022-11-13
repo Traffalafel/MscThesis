@@ -5,7 +5,7 @@
 ### -- set the job Name -- 
 #BSUB -J ThommiB0B_{name}
 ### -- ask for number of cores (default: 1) -- 
-#BSUB -n 16
+#BSUB -n 4
 ### -- specify that the cores must be on the same host -- 
 #BSUB -R "span[hosts=1]"
 ### Memory usage per core

@@ -7,7 +7,7 @@
     400,
     500
   ],
-  "MaxParallelization": 64,
+  "MaxParallelization": 16,
   "Problem": {
     "Name": "OneMax",
     "Parameters": {}
