@@ -27,8 +27,18 @@ namespace MscThesis.Runner
             foreach (var optimizerName in test.OptimizerNames)
             {
                 var observable = test.Fittest(optimizerName);
-                var value = observable.Value.Value;
-                var fitness = observable.Value.Fitness;
+                InstanceFormat value;
+                double fitness;
+                if (observable.Value != null)
+                {
+                    value = observable.Value.Value;
+                    fitness = observable.Value.Fitness.Value;
+                }
+                else
+                {
+                    value = new BitString();
+                    fitness = 0;
+                }
                 lines.Add($"{optimizerName};{value};{fitness}");
             }
 

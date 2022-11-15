@@ -47,11 +47,11 @@ namespace TspLibNet.Graph.Nodes
         /// <summary>
         /// Gets node X coordinate
         /// </summary>
-        public double X { get; protected set; }
+        public double X { get; set; }
 
         /// <summary>
         /// Gets node Y coordinate
         /// </summary>
-        public double Y { get; protected set; }
+        public double Y { get; set; }
     }
 }

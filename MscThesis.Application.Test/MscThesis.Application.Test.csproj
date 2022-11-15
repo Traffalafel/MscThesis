@@ -35,6 +35,8 @@
     <None Remove="Specifications\MIMIC LeadingOnes.json" />
     <None Remove="Specifications\MIMIC multiple runs.json" />
     <None Remove="Specifications\MIMIC OneMax.json" />
+    <None Remove="Specifications\PerturbedTSPLib single run.json" />
+    <None Remove="Specifications\TSP single run.json" />
   </ItemGroup>
 
 </Project>

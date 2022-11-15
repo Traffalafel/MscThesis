@@ -48,7 +48,7 @@ namespace TspLibNet.Graph.EdgeWeights
         /// <summary>
         /// Gets or sets distance function in use
         /// </summary>
-        protected IDistanceFunction DistanceFunction { get; set; }
+        public IDistanceFunction DistanceFunction { get; set; }
 
         /// <summary>
         /// Get weight for given edge

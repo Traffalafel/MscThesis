@@ -10,6 +10,7 @@ namespace MscThesis.Core
         ProblemName,
         NumSampledPositions,
         BlockSize,
-        K
+        K,
+        StdDeviation
     }
 }

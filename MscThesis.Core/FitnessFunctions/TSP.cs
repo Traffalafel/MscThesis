@@ -7,7 +7,7 @@ namespace MscThesis.Core.FitnessFunctions.TSP
     {
         private readonly TspLib95Item _item;
 
-        public TSP(TspLib95Item item) : base(item.Problem.NodeProvider.CountNodes()) // problem size irrelevant
+        public TSP(TspLib95Item item) : base(item.Problem.NodeProvider.CountNodes())
         {
             _item = item;
         }
