@@ -43,8 +43,13 @@ namespace MscThesis.UI.ViewModels
 
         private string GetName()
         {
-            var paramStrings = Parameters.Select(vm => $"{vm.Name}:{vm.Value}");
-            return $"{Algorithm}_{string.Join('_', paramStrings)}";
+            var name = Algorithm;
+            if (Parameters.Any())
+            {
+                var paramStrings = Parameters.Select(vm => $"{vm.Name}:{vm.Value}");
+                name += $"_{string.Join('_', paramStrings)}";
+            }
+            return name;
         }
 
         public OptimizerSpecification ToSpecification()
