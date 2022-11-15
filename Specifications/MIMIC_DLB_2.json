@@ -7,10 +7,12 @@
     400,
     500
   ],
-  "MaxParallelization": 16,
+  "MaxParallelization": 16.0,
   "Problem": {
-    "Name": "LeadingOnes",
-    "Parameters": {}
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": "2"
+    }
   },
   "Optimizers": [
     {

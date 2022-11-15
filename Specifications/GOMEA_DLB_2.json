@@ -7,24 +7,33 @@
     400,
     500
   ],
-  "MaxParallelization": 16,
+  "MaxParallelization": 16.0,
   "Problem": {
-    "Name": "LeadingOnes",
-    "Parameters": {}
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": "2"
+    }
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n/4",
-      "Algorithm": "MIMIC",
+      "Name": "GOMEA_PopulationSize:n/4",
+      "Algorithm": "GOMEA",
       "Parameters": {
         "PopulationSize": "n/4"
       }
     },
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
+      "Name": "GOMEA_PopulationSize:n",
+      "Algorithm": "GOMEA",
       "Parameters": {
         "PopulationSize": "n"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:4*n",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "4*n"
       }
     }
   ],

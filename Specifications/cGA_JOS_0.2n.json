@@ -7,24 +7,33 @@
     400,
     500
   ],
-  "MaxParallelization": 16,
+  "MaxParallelization": 16.0,
   "Problem": {
-    "Name": "LeadingOnes",
-    "Parameters": {}
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "0.2*n"
+    }
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n/4",
-      "Algorithm": "MIMIC",
+      "Name": "cGA_K:n/4",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "n/4"
+        "K": "n/4"
       }
     },
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
+      "Name": "cGA_K:n",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "n"
+        "K": "n"
+      }
+    },
+    {
+      "Name": "cGA_K:4*n",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "4*n"
       }
     }
   ],

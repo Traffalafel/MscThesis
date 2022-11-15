@@ -7,16 +7,18 @@ namespace MscThesis.Core.TerminationCriteria
     {
         private readonly double _epsilon;
         private readonly int _maxIterations;
-        private double _bestFitnessPrev;
+        private double? _bestFitnessGlobal;
         private int _stagnatedIterations;
+        private FitnessComparison _comparison;
 
         public override Property Reason => Property.Stagnation;
 
-        public StagnationTermination(double epsilon, int maxIterations)
+        public StagnationTermination(double epsilon, int maxIterations, FitnessComparison comparison)
         {
             _epsilon = epsilon;
             _maxIterations = maxIterations;
-            _bestFitnessPrev = double.MaxValue;
+            _comparison = comparison;
+            _bestFitnessGlobal = null;
             _stagnatedIterations = 0;
         }
 
@@ -29,8 +31,14 @@ namespace MscThesis.Core.TerminationCriteria
             }
             var bestFitness = fittest.Fitness ?? double.MinValue;
 
-            var diff = Math.Abs(_bestFitnessPrev - bestFitness);
-            if (diff < _epsilon)
+            if (_bestFitnessGlobal == null)
+            {
+                _bestFitnessGlobal = bestFitness;
+                return false;
+            }
+
+            var isImprovement = _comparison.IsFitter(bestFitness, _bestFitnessGlobal.Value);
+            if (!isImprovement || Math.Abs(_bestFitnessGlobal.Value - bestFitness) < _epsilon)
             {
                 _stagnatedIterations++;
             }
@@ -38,7 +46,11 @@ namespace MscThesis.Core.TerminationCriteria
             {
                 _stagnatedIterations = 0;
             }
-            _bestFitnessPrev = bestFitness;
+            
+            if (isImprovement)
+            {
+                _bestFitnessGlobal = bestFitness;
+            }
 
             return _stagnatedIterations >= _maxIterations;
         }
