@@ -1,5 +1,4 @@
-﻿using MscThesis.Runner.Test;
-using MscThesis.Runner;
+﻿using MscThesis.Runner;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Threading;
 using Xunit;
 using Newtonsoft.Json;
 using MscThesis.Runner.Specification;
-using System.Configuration;
 using Newtonsoft.Json.Linq;
 
 namespace MscThesis.Application.Test

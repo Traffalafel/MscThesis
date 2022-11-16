@@ -14,7 +14,7 @@ namespace MscThesis.Core.Algorithms
         private Population<BitString> _population;
 
         public GOMEA(
-            int problemSize, 
+            int problemSize,
             FitnessComparison comparisonStrategy,
             int populationSize,
             ISelectionOperator<BitString> selectionOperator

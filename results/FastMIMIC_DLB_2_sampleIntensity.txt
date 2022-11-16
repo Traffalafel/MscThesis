@@ -1,0 +1,157 @@
+Specification:
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 20.0,
+  "Problem": {
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": "2"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "2*sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:log(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "log(n)"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/log(n)"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/2",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/2"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/4",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/4"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/8",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/8"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n/4",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}
+Type:
+BitString
+Fittest:
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111101000101100;488
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;500
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);111111111111111111111111111111111100101110000010011001000010111110000111000110110100001111101110100011111111000010110010010101100001111100010101001011111010011011010100011100001010110101100110100010010100011010011000111100100001101001111011101000100001110111000101101100111101000010011000000001110011;35
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;500
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;500
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;500
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;500
+Items:
+Series:
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);BestFitness;ProblemSize	(100,16.96);(200,28.3);(300,44.76);(400,73.38);(500,126.88)
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);NumberIterations;ProblemSize	(100,58.15);(200,190.76);(300,427.08);(400,858.58);(500,1774.69)
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);NumberFitnessCalls;ProblemSize	(100,5915);(200,38352);(300,128424);(400,343832);(500,887845)
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);AvgFitness;ProblemSize	(100,11.120999999999992);(200,21.4826);(300,37.56720000000001);(400,65.69049999999999);(500,119.20530000000001)
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);CpuTimeSeconds;ProblemSize	(100,0.13559993700000006);(200,5.954573332000001);(300,28.621670808999987);(400,75.39906683800001);(500,381.720018072)
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);OptimumReached;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);Stagnation;ProblemSize	(100,1);(200,1);(300,1);(400,1);(500,1)
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);MaxIterations;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);BestFitness;ProblemSize	(100,36.12);(200,82.21);(300,166.41);(400,241.46);(500,329.94)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);NumberIterations;ProblemSize	(100,132.57);(200,466.93);(300,1223.94);(400,2062.36);(500,3144.75)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);NumberFitnessCalls;ProblemSize	(100,13357);(200,93586);(300,367482);(400,825344);(500,1572875)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);AvgFitness;ProblemSize	(100,30.615699999999997);(200,76.0271);(300,159.81190000000004);(400,235.0209);(500,323.25690000000014)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);CpuTimeSeconds;ProblemSize	(100,0.499020473);(200,18.864795812999994);(300,126.74136449500003);(400,370.9291751400001);(500,862.4421476349999)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);OptimumReached;ProblemSize	(100,0.03);(200,0.04);(300,0.05);(400,0.11);(500,0.09)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);Stagnation;ProblemSize	(100,0.97);(200,0.96);(300,0.95);(400,0.89);(500,0.91)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);MaxIterations;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);BestFitness;ProblemSize	(100,15.17);(200,17.34);(300,19.53);(400,20.1);(500,21)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);NumberIterations;ProblemSize	(100,52.51);(200,105.07);(300,164.04);(400,207.03);(500,263.36)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);NumberFitnessCalls;ProblemSize	(100,5351);(200,21214);(300,49512);(400,83212);(500,132180)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);AvgFitness;ProblemSize	(100,9.394199999999998);(200,10.569499999999998);(300,12.117300000000002);(400,12.085299999999997);(500,12.950299999999995)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);CpuTimeSeconds;ProblemSize	(100,0.21668578000000005);(200,2.215669141);(300,7.897185101);(400,12.167556521999995);(500,15.997850678000006)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);OptimumReached;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);Stagnation;ProblemSize	(100,1);(200,1);(300,1);(400,1);(500,1)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);MaxIterations;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);BestFitness;ProblemSize	(100,24.66);(200,75.73);(300,164);(400,266.16);(500,328.81)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);NumberIterations;ProblemSize	(100,92.79);(200,446.74);(300,1128.98);(400,2049.84);(500,2777.27)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);NumberFitnessCalls;ProblemSize	(100,9379);(200,89548);(300,338994);(400,820336);(500,1389135)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);AvgFitness;ProblemSize	(100,19.415999999999993);(200,69.48290000000001);(300,157.44510000000008);(400,259.7996999999999);(500,322.47999999999996)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);CpuTimeSeconds;ProblemSize	(100,0.9913085939999995);(200,18.587219617000002);(300,109.88244153900003);(400,393.77053979799996);(500,884.9009770549998)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);OptimumReached;ProblemSize	(100,0);(200,0.05);(300,0.1);(400,0.1);(500,0.15)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);Stagnation;ProblemSize	(100,1);(200,0.95);(300,0.9);(400,0.9);(500,0.85)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);MaxIterations;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;BestFitness;ProblemSize	(100,61.33);(200,155.15);(300,246.49);(400,333.3);(500,404.47)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;NumberIterations;ProblemSize	(100,183.31);(200,500.1);(300,736.33);(400,823.76);(500,951.9)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;NumberFitnessCalls;ProblemSize	(100,18431);(200,100220);(300,221199);(400,329904);(500,476450)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;AvgFitness;ProblemSize	(100,58.50910000000002);(200,152.81609999999998);(300,243.23230000000004);(400,326.8485);(500,397.3795000000001)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;CpuTimeSeconds;ProblemSize	(100,1.7570354459999995);(200,105.17852952400006);(300,427.2939326289999);(400,1036.3870558400004);(500,2151.4064001200004)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;OptimumReached;ProblemSize	(100,0.06);(200,0.24);(300,0.33);(400,0.5);(500,0.47)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;Stagnation;ProblemSize	(100,0.94);(200,0.76);(300,0.67);(400,0.5);(500,0.53)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;MaxIterations;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;BestFitness;ProblemSize	(100,38.61);(200,141.38);(300,242.63);(400,338.93);(500,452.15)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;NumberIterations;ProblemSize	(100,131.75);(200,637.88);(300,1048.42);(400,1389.56);(500,1628.55)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;NumberFitnessCalls;ProblemSize	(100,13275);(200,127776);(300,314826);(400,556224);(500,814775)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;AvgFitness;ProblemSize	(100,33.661300000000004);(200,136.0965);(300,235.4571);(400,330.43160000000006);(500,440.87479999999994)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;CpuTimeSeconds;ProblemSize	(100,0.6567113499999999);(200,35.611655500999994);(300,219.94073243499992);(400,581.882276329);(500,1198.1352364599998)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;OptimumReached;ProblemSize	(100,0);(200,0.25);(300,0.46);(400,0.6);(500,0.76)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;Stagnation;ProblemSize	(100,1);(200,0.75);(300,0.54);(400,0.4);(500,0.24)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;MaxIterations;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;BestFitness;ProblemSize	(100,20.64);(200,72.29);(300,171.27);(400,260.94);(500,363.31)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;NumberIterations;ProblemSize	(100,79.34);(200,441.64);(300,1267.92);(400,1991.8);(500,2785.15)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;NumberFitnessCalls;ProblemSize	(100,8034);(200,88528);(300,380676);(400,797120);(500,1393075)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;AvgFitness;ProblemSize	(100,15.219399999999993);(200,65.9754);(300,165.68899999999996);(400,255.24960000000002);(500,357.2888999999999)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;CpuTimeSeconds;ProblemSize	(100,0.2482397059999999);(200,10.826427383999997);(300,118.46277788200004);(400,407.44775641599995);(500,934.5674814210003)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;OptimumReached;ProblemSize	(100,0);(200,0);(300,0.03);(400,0.12);(500,0.23)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;Stagnation;ProblemSize	(100,1);(200,1);(300,0.97);(400,0.88);(500,0.77)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;MaxIterations;ProblemSize	(100,0);(200,0);(300,0);(400,0);(500,0)

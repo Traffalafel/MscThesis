@@ -1,0 +1,8 @@
+MIMIC_PopulationSize:n;NumberFitnessCalls;ProblemSize	(100,2248);(200,6420);(300,11949);(400,18612);(500,26275)
+FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);NumberFitnessCalls;ProblemSize	(100,18853);(200,72110);(300,160572);(400,275252);(500,428130)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);NumberFitnessCalls;ProblemSize	(100,9117);(200,34516);(300,75951);(400,129608);(500,203705)
+FastMIMIC_PopulationSize:n_NumSampledPositions:log(n);NumberFitnessCalls;ProblemSize	(100,34493);(200,171718);(300,408123);(400,862772);(500,1535225)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n);NumberFitnessCalls;ProblemSize	(100,12114);(200,37182);(300,71778);(400,112672);(500,161680)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;NumberFitnessCalls;ProblemSize	(100,3825);(200,10636);(300,19290);(400,29752);(500,41520)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/4;NumberFitnessCalls;ProblemSize	(100,7250);(200,19736);(300,35628);(400,54464);(500,74835)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;NumberFitnessCalls;ProblemSize	(100,15217);(200,38956);(300,70218);(400,103844);(500,144415)

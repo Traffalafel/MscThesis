@@ -1,0 +1,31 @@
+{
+  "NumRuns": 1,
+  "ProblemSizes": [],
+  "MaxParallelization": 1.0,
+  "Problem": {
+    "Name": "TSPLib",
+    "Parameters": {
+      "ProblemName": "berlin5"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "P4",
+      "Algorithm": "P4",
+      "Parameters": {}
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "25",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

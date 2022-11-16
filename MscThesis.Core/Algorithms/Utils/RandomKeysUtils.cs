@@ -3,6 +3,7 @@ using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace MscThesis.Core.Algorithms.Tours
 {
@@ -37,6 +38,15 @@ namespace MscThesis.Core.Algorithms.Tours
                 Revert(destInstance.Keys, prevKeys);
                 return false;
             }
+        }
+
+        internal static (double, double)[] ComputeRescalingIntervals(int size)
+        {
+            var intervalRange = 1.0d / size;
+            return Enumerable.Range(0, size)
+                             .Select(i => i * intervalRange)
+                             .Select(start => (start, start + intervalRange))
+                             .ToArray();
         }
 
         internal static void Revert(double[] keys, List<(int idx, double prevKey)> prev)

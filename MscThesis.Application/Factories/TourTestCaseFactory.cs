@@ -14,7 +14,9 @@ namespace MscThesis.Runner.Factories
             _optimizers = new Dictionary<string, IOptimizerFactory<Tour>>
             {
                 { "TourMIMIC", new TourMIMICFactory(_parameterFactory) },
-                { "P4", new P4Factory() }
+                { "FastTourMIMIC", new FastTourMIMICFactory(_parameterFactory) },
+                { "P4", new P4Factory() },
+                { "TourGOMEA", new TourGOMEAFactory(_parameterFactory) }
             };
             _problems = new Dictionary<string, IProblemFactory<Tour>>
             {

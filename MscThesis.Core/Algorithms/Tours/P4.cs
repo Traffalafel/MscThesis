@@ -25,7 +25,7 @@ namespace MscThesis.Core.Algorithms.Tours
         {
             _fitnessFunction = fitnessFunction;
             _numFreeNodes = _problemSize - 1;
-            _rescalingIntervals = ComputeRescalingIntervals(_numFreeNodes);
+            _rescalingIntervals = RandomKeysUtils.ComputeRescalingIntervals(_numFreeNodes);
         }
 
         protected override void Initialize(FitnessFunction<Tour> fitnessFunction)
@@ -83,13 +83,5 @@ namespace MscThesis.Core.Algorithms.Tours
             };
         }
 
-        private (double, double)[] ComputeRescalingIntervals(int size)
-        {
-            var intervalRange = 1.0d / size;
-            return Enumerable.Range(0, size)
-                             .Select(i => i * intervalRange)
-                             .Select(start => (start, start + intervalRange))
-                             .ToArray();
-        }
     }
 }
