@@ -1,7 +1,7 @@
 {
   "NumRuns": 100,
   "ProblemSizes": [],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 1,
   "Problem": {
     "Name": "TSPLib",
     "Parameters": {

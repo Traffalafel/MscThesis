@@ -251,8 +251,7 @@ public partial class ResultPage : ContentPage
         {
             var propName = propertyGroup.Key.ToString();
 
-            var optimizerGroups = propertyGroup.GroupBy(group => group.OptimizerName);
-            var series = BuildSeries(optimizerGroups);
+            var series = BuildSeries(propertyGroup);
 
             var chart = new CartesianChart
             {
@@ -438,17 +437,16 @@ public partial class ResultPage : ContentPage
         return layout;
     }
 
-    private List<LineSeries<(double,double)>> BuildSeries(IEnumerable<IGrouping<string, SeriesResult>> groups)
+    private List<LineSeries<(double,double)>> BuildSeries(IGrouping<Property, SeriesResult> groups)
     {
-        return groups.Select(group =>
+        return groups.Select(series =>
         {
-            if (group.Count() > 1)
+            if (series.IsScatter)
             {
                 // Points are not connected
-                var values = Combine(group.Select(x => x.Points));
                 return new LineSeries<(double, double)>
                 {
-                    Values = values,
+                    Values = series.Points,
                     Mapping = (value, point) =>
                     {
                         point.PrimaryValue = value.Item2;
@@ -457,7 +455,7 @@ public partial class ResultPage : ContentPage
                     Stroke = new SolidColorPaint { Color = SKColors.Transparent },
                     Fill = null,
                     GeometrySize = 5,
-                    Name = group.Key,
+                    Name = series.OptimizerName,
                     LineSmoothness = 0
                 };
             }
@@ -466,7 +464,7 @@ public partial class ResultPage : ContentPage
                 // Points are connected
                 return new LineSeries<(double, double)>
                 {
-                    Values = group.First().Points,
+                    Values = series.Points,
                     Mapping = (value, point) =>
                     {
                         point.PrimaryValue = value.Item2;
@@ -474,7 +472,7 @@ public partial class ResultPage : ContentPage
                     },
                     Fill = null,
                     GeometrySize = 0,
-                    Name = group.Key,
+                    Name = series.OptimizerName,
                     LineSmoothness = 0
                 };
             }

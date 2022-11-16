@@ -15,7 +15,7 @@ namespace MscThesis.Runner.Results
         private readonly HashSet<string> _optimizerNames;
 
         private Dictionary<string, Dictionary<Property, ObservableCollection<double>>> _itemValues { get; }
-        private Dictionary<string, Dictionary<Property, List<SeriesResult>>> _seriesValues { get; }
+        private Dictionary<string, Dictionary<Property, SeriesResult>> _seriesValues { get; }
         private Dictionary<string, Dictionary<Property, double>> _sums { get; }
         private Dictionary<string, Dictionary<Property, ObservableValue<double>>> _averages { get; }
 
@@ -30,14 +30,14 @@ namespace MscThesis.Runner.Results
             });
         }).SelectMany(x => x);
 
-        public override IEnumerable<SeriesResult> Series => _seriesValues.SelectMany(x => x.Value).SelectMany(x => x.Value);
+        public override IEnumerable<SeriesResult> Series => _seriesValues.SelectMany(x => x.Value).Select(x => x.Value);
 
         public MultipleRunsComposite(ITestCase<T> generator, int size, int numRuns, int maxParallel, bool saveSeries) 
             : base(() => generator.CreateRun(size, saveSeries), numRuns, maxParallel)
         {
             _optimizerNames = new HashSet<string>();
             _itemValues = new Dictionary<string, Dictionary<Property, ObservableCollection<double>>>();
-            _seriesValues = new Dictionary<string, Dictionary<Property, List<SeriesResult>>>();
+            _seriesValues = new Dictionary<string, Dictionary<Property, SeriesResult>>();
             _sums = new Dictionary<string, Dictionary<Property, double>>();
             _averages = new Dictionary<string, Dictionary<Property, ObservableValue<double>>>();
             _saveSeries = saveSeries;
@@ -55,7 +55,7 @@ namespace MscThesis.Runner.Results
 
                 if (_saveSeries)
                 {
-                    _seriesValues.Add(optimizerName, new Dictionary<Property, List<SeriesResult>>());
+                    _seriesValues.Add(optimizerName, new Dictionary<Property, SeriesResult>());
                 }
             }
 
@@ -75,13 +75,13 @@ namespace MscThesis.Runner.Results
                     var property = series.Property;
                     if (!_seriesValues.ContainsKey(optimizerName))
                     {
-                        _seriesValues.Add(optimizerName, new Dictionary<Property, List<SeriesResult>>());
+                        _seriesValues.Add(optimizerName, new Dictionary<Property, SeriesResult>());
                     }
                     if (!_seriesValues[optimizerName].ContainsKey(property))
                     {
-                        _seriesValues[optimizerName].Add(property, new List<SeriesResult>());
+                        series.IsScatter = true;
+                        _seriesValues[optimizerName].Add(property, series);
                     }
-                    _seriesValues[optimizerName][property].Add(series);
                 }
             }
 
@@ -111,7 +111,10 @@ namespace MscThesis.Runner.Results
                 {
                     var optimizerName = series.OptimizerName;
                     var property = series.Property;
-                    _seriesValues[optimizerName][property].Add(series);
+                    foreach (var point in series.Points)
+                    {
+                        _seriesValues[optimizerName][property].Points.Add(point);
+                    }
                 }
             }
         }

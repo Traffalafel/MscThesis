@@ -38,6 +38,7 @@ namespace MscThesis.Runner.Results
     {
         public Property XAxis { get; set; }
         public ObservableCollection<(double x, double y)> Points { get; set; }
+        public bool IsScatter { get; set; } = false;
     }
 
     public class HistogramResult : Result
