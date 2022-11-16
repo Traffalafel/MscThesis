@@ -1,0 +1,66 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [],
+  "MaxParallelization": 16.0,
+  "Problem": {
+    "Name": "TSPLib",
+    "Parameters": {
+      "ProblemName": "burma14"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n)",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/log(n)",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/log(n)"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/8",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/8"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/4",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/4"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/2",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/2"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

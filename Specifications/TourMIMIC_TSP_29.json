@@ -1,0 +1,47 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [],
+  "MaxParallelization": 16.0,
+  "Problem": {
+    "Name": "TSPLib",
+    "Parameters": {
+      "ProblemName": "bays29"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "TourMIMIC_PopulationSize:n/4",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4"
+      }
+    },
+    {
+      "Name": "TourMIMIC_PopulationSize:n",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    },
+    {
+      "Name": "TourMIMIC_PopulationSize:4*n",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "4*n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

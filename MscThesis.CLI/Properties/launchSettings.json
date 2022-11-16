@@ -2,7 +2,7 @@
   "profiles": {
     "MscThesis.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\traff\\Desktop\\results\\ C:\\Users\\traff\\src\\repos\\MscThesis\\Specifications\\MIMIC_OneMax_linear.json"
+      "commandLineArgs": "C:\\Users\\traff\\src\\repos\\MscThesis\\results C:\\Users\\traff\\src\\repos\\MscThesis\\Specifications\\FastTourMIMIC_sampleIntensity_TSP_14.json"
     }
   }
 }

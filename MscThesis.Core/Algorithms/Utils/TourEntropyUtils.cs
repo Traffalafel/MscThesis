@@ -190,8 +190,8 @@ namespace MscThesis.Core.Algorithms
                     var iPos = positions[i];
                     var jPos = positions[j];
 
-                    counts[iPos, jPos, values[iPos], values[jPos]]++;
-                    counts[jPos, iPos, values[jPos], values[iPos]]++;
+                    counts[i, j, values[iPos], values[jPos]]++;
+                    counts[j, i, values[jPos], values[iPos]]++;
                 }
             }
         }
