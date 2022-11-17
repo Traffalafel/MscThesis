@@ -56,13 +56,11 @@ namespace MscThesis.UI.Loading
                 ;
             }
 
-            var emptyTest = _provider.Build(_specification);
-
             var resultsContent = content.Replace(" ", "")
                                         .Split('\n')
                                         .Skip(c)
                                         .ToList();
-            _test = new LoadedTest(resultsContent, emptyTest);
+            _test = new LoadedTest(resultsContent);
         }
     }
 }

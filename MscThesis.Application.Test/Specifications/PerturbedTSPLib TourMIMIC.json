@@ -1,12 +1,12 @@
 {
-  "NumRuns": 1,
+  "NumRuns": 5,
   "ProblemSizes": [],
   "MaxParallelization": 1.0,
   "Problem": {
     "Name": "PerturbedTSPLib",
     "Parameters": {
       "ProblemName": "berlin5",
-      "StdDeviation": "100"
+      "StdDeviationScale": "1.0"
     }
   },
   "Optimizers": [

@@ -37,6 +37,7 @@
     <None Remove="Specifications\MIMIC OneMax.json" />
     <None Remove="Specifications\PerturbedTSPLib TourMIMIC.json" />
     <None Remove="Specifications\TSP single run.json" />
+    <None Remove="Specifications\TSPLib FastP4.json" />
     <None Remove="Specifications\TSPLib FastTourMIMIC.json" />
     <None Remove="Specifications\TSPLib P4.json" />
     <None Remove="Specifications\TSPLib TourGOMEA.json" />

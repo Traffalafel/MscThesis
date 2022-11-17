@@ -16,6 +16,7 @@ namespace MscThesis.Runner.Factories
                 { "TourMIMIC", new TourMIMICFactory(_parameterFactory) },
                 { "FastTourMIMIC", new FastTourMIMICFactory(_parameterFactory) },
                 { "P4", new P4Factory() },
+                { "FastP4", new FastP4Factory(_parameterFactory) },
                 { "TourGOMEA", new TourGOMEAFactory(_parameterFactory) }
             };
             _problems = new Dictionary<string, IProblemFactory<Tour>>

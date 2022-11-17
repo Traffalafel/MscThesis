@@ -8,7 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TspLibNet;
+using TspLibNet.DistanceFunctions;
+using TspLibNet.Graph.Edges;
 using TspLibNet.Graph.EdgeWeights;
+using TspLibNet.Graph.FixedEdges;
 using TspLibNet.Graph.Nodes;
 
 namespace MscThesis.Runner.Factories.Problem
@@ -36,7 +39,7 @@ namespace MscThesis.Runner.Factories.Problem
                 ProblemSize = size,
                 ExpressionParameters = new List<Parameter>
                 {
-                    Parameter.StdDeviation
+                    Parameter.StdDeviationScale
                 },
                 OptionParameters = new Dictionary<Parameter, IEnumerable<string>>
                 {
@@ -57,43 +60,76 @@ namespace MscThesis.Runner.Factories.Problem
                 var problem = tsp.Problem;
                 if (!(problem.NodeProvider is NodeListBasedNodeProvider)) return false;
                 if (!(problem.EdgeWeightsProvider is FunctionBasedWeightProvider)) return false;
+                var provider = problem.EdgeWeightsProvider as FunctionBasedWeightProvider;
+                if (!(provider.DistanceFunction is Euclidean)) return false;
                 return true;
             });
 
-            _tspNames = tsps.Select(tsp => tsp.Problem.Name).ToList();
+            tsps = tsps.OrderBy(tsp => tsp.Problem.NodeProvider.CountNodes());
+
+            _tspNames = tsps.Select(tsp => tsp.Problem.Name).ToHashSet();
         }
 
         public override Func<int, FitnessFunction<Tour>> BuildProblem(ProblemSpecification spec)
         {
             var name = spec.Parameters[Parameter.ProblemName];
-            var item = _tspLib.TSPItems().Where(item => item.Problem.Name == name).FirstOrDefault();
 
-            var size = item.Problem.NodeProvider.CountNodes();
-            var expressionParams = new Dictionary<Parameter, string> { [Parameter.StdDeviation] = spec.Parameters[Parameter.StdDeviation] };
-            var parameters = _parameterFactory.BuildParameters(expressionParams);
-            var stdDeviation = parameters(Parameter.StdDeviation, size);
-
-            if (item == null)
+            var itemOriginal = _tspLib.TSPItems().Where(item => item.Problem.Name == name).FirstOrDefault();
+            if (itemOriginal == null)
             {
-                throw new Exception();
+                throw new Exception($"Could not find TSP item {name}");
             }
 
-            var random = RandomUtils.BuildRandom().Value;
-            var provider = item.Problem.NodeProvider as NodeListBasedNodeProvider;
-            foreach (var node in provider.Nodes.ToList())
+            var problemSize = itemOriginal.Problem.NodeProvider.CountNodes();
+
+            var nodeProviderOriginal = itemOriginal.Problem.NodeProvider as NodeListBasedNodeProvider;
+            if (nodeProviderOriginal.GetNodes().Any(node => !(node is Node2D)))
             {
-                if (!(node is Node2D))
+                throw new Exception("Only 2D nodes supported for perturbed TSP");
+            }
+            var nodesOriginal = nodeProviderOriginal.GetNodes().Select(node => node as Node2D);
+
+            var meanX = nodesOriginal.Select(node => node.X).Sum();
+            var varianceX = nodesOriginal.Select(node => Math.Pow(node.X - meanX, 2)).Sum() / problemSize;
+            var stdDevX = Math.Sqrt(varianceX);
+            
+            var meanY = nodesOriginal.Select(node => node.Y).Sum();
+            var varianceY = nodesOriginal.Select(node => Math.Pow(node.Y - meanY, 2)).Sum() / problemSize;
+            var stdDevY = Math.Sqrt(varianceX);
+
+            var expressionParams = new Dictionary<Parameter, string> { [Parameter.StdDeviationScale] = spec.Parameters[Parameter.StdDeviationScale] };
+            var parameters = _parameterFactory.BuildParameters(expressionParams);
+            var stdDeviationScale = parameters(Parameter.StdDeviationScale, problemSize);
+
+            return problemSize =>
+            {
+                var nodes = new List<Node2D>();
+                var random = RandomUtils.BuildRandom().Value;
+                foreach (var nodeOriginal in nodesOriginal)
                 {
-                    throw new Exception("Only 2D nodes supported for perturbed TSP");
+                    var x = nodeOriginal.X + RandomUtils.SampleStandard(random, 0, stdDevX * stdDeviationScale);
+                    var y = nodeOriginal.Y + RandomUtils.SampleStandard(random, 0, stdDevY * stdDeviationScale);
+                    var node = new Node2D(nodeOriginal.Id, x, y);
+                    nodes.Add(node);
                 }
 
-                var node2d = node as Node2D;
+                var nodeProvider = new NodeListBasedNodeProvider(nodes);
+                var edgeProvider = new EdgeListBasedEdgeProvider(new List<Edge>());
+                var edgeWeightProvider = new FunctionBasedWeightProvider(new Euclidean());
+                var fixedEdgesProvider = new EdgeListBasedFixedEdgesProvider();
 
-                node2d.X += RandomUtils.SampleStandard(random, 0, stdDeviation);
-                node2d.Y += RandomUtils.SampleStandard(random, 0, stdDeviation);
-            }
+                var problemNew = new TravelingSalesmanProblem(
+                    name,
+                    itemOriginal.Problem.Comment,
+                    ProblemType.TSP,
+                    nodeProvider,
+                    edgeProvider,
+                    edgeWeightProvider,
+                    fixedEdgesProvider);
+                var itemNew = new TspLib95Item(problemNew, null, 0.0d);
 
-            return _ => new TSP(item);
+                return new TSP(itemNew);
+            };
         }
 
         public override ProblemInformation GetInformation(ProblemSpecification spec)

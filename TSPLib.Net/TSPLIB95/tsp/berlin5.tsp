@@ -1,6 +1,6 @@
 NAME: berlin5
 TYPE: TSP
-COMMENT: 5 first cities of Berlin52 (test)
+COMMENT: 5 first cities of Berlin52 problem
 DIMENSION: 52
 EDGE_WEIGHT_TYPE: EUC_2D
 NODE_COORD_SECTION

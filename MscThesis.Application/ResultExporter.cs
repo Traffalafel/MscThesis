@@ -55,8 +55,9 @@ namespace MscThesis.Runner
             lines.Add("Series:");
             foreach (var series in test.Series)
             {
+                var scatterStr = series.IsScatter ? ";Scatter" : string.Empty;
                 var values = string.Join(';', series.Points.Select(p => $"({p.x.ToString(CultureInfo.InvariantCulture)},{p.y.ToString(CultureInfo.InvariantCulture)})"));
-                var s = $"{series.OptimizerName};{series.Property};{series.XAxis}\t{values}";
+                var s = $"{series.OptimizerName};{series.Property};{series.XAxis}{scatterStr}\t{values}";
                 lines.Add(s);
             }
 

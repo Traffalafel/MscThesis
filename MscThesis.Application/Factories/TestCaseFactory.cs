@@ -46,7 +46,7 @@ namespace MscThesis.Runner.Factories
                     {
                         var terminationFactory = GetTerminationFactory(terminationSpec);
                         var creator = terminationFactory.BuildCriterion(terminationSpec, buildProblemFunc);
-                        var termination = creator.Invoke(size);
+                        var termination = creator(size);
                         terminations.Add(termination);
                     }
                     return terminations;

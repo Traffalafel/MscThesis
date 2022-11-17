@@ -19,7 +19,7 @@ namespace MscThesis.UI.Models
         public bool IsTerminated => true;
         public object SeriesLock => _seriesLock;
 
-        public LoadedTest(List<string> lines, ITest<InstanceFormat> emptyTest)
+        public LoadedTest(List<string> lines)
         {
             _optimizerNames = new();
             _items = new();
@@ -161,6 +161,9 @@ namespace MscThesis.UI.Models
             var optimizerName = defSplit[0];
             var yPropertyName = defSplit[1];
             var xPropertyName = defSplit[2];
+
+            var isScatter = defSplit.Length == 4;
+
             _ = Enum.TryParse(yPropertyName, out Property yProperty);
             _ = Enum.TryParse(xPropertyName, out Property xProperty);
 
@@ -169,7 +172,8 @@ namespace MscThesis.UI.Models
                 OptimizerName = optimizerName,
                 Property = yProperty,
                 XAxis = xProperty,
-                Points = new ObservableCollection<(double x, double y)>(points)
+                Points = new ObservableCollection<(double x, double y)>(points),
+                IsScatter = isScatter
             };
         }
 

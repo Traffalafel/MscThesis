@@ -9,6 +9,7 @@ using MscThesis.UI.ViewModels;
 using SkiaSharp;
 using MscThesis.Core;
 using System.Collections.ObjectModel;
+using LiveChartsCore;
 
 namespace MscThesis.UI.Pages;
 
@@ -437,14 +438,14 @@ public partial class ResultPage : ContentPage
         return layout;
     }
 
-    private List<LineSeries<(double,double)>> BuildSeries(IGrouping<Property, SeriesResult> groups)
+    private List<ISeries<(double,double)>> BuildSeries(IGrouping<Property, SeriesResult> groups)
     {
-        return groups.Select(series =>
+        return groups.Select<SeriesResult, ISeries<(double,double)>>(series =>
         {
             if (series.IsScatter)
             {
                 // Points are not connected
-                return new LineSeries<(double, double)>
+                return new ScatterSeries<(double, double)>
                 {
                     Values = series.Points,
                     Mapping = (value, point) =>
@@ -452,11 +453,8 @@ public partial class ResultPage : ContentPage
                         point.PrimaryValue = value.Item2;
                         point.SecondaryValue = value.Item1;
                     },
-                    Stroke = new SolidColorPaint { Color = SKColors.Transparent },
-                    Fill = null,
                     GeometrySize = 5,
                     Name = series.OptimizerName,
-                    LineSmoothness = 0
                 };
             }
             else

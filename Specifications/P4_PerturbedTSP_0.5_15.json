@@ -1,0 +1,32 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [],
+  "MaxParallelization": 16.0,
+  "Problem": {
+    "Name": "PerturbedTSPLib",
+    "Parameters": {
+      "ProblemName": "berlin15",
+      "StdDeviationScale": "0.5"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "P4",
+      "Algorithm": "P4",
+      "Parameters": {}
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

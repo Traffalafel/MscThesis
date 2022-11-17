@@ -11,6 +11,7 @@ namespace MscThesis.Core
         NumSampledPositions,
         BlockSize,
         K,
-        StdDeviation
+        StdDeviationScale,
+        SheddingInterval
     }
 }
