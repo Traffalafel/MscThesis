@@ -1,4 +1,4 @@
-NAME: berlin52
+NAME: berlin30
 TYPE: TSP
 COMMENT: 30 first cities of Berlin52 problem
 DIMENSION: 52
