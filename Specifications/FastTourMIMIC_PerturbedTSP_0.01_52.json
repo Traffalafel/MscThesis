@@ -1,0 +1,75 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [],
+  "MaxParallelization": 16.0,
+  "Problem": {
+    "Name": "PerturbedTSPLib",
+    "Parameters": {
+      "ProblemName": "berlin52",
+      "StdDeviationScale": "0.01"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:sqrt(n)",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n)",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/2",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/2"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/2",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/2"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/8",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/8"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/8",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/8"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

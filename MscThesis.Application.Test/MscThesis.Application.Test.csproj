@@ -41,6 +41,7 @@
     <None Remove="Specifications\TSPLib FastTourMIMIC.json" />
     <None Remove="Specifications\TSPLib P4.json" />
     <None Remove="Specifications\TSPLib TourGOMEA.json" />
+    <None Remove="Specifications\UniformTSP TourMIMIC.json" />
   </ItemGroup>
 
 </Project>

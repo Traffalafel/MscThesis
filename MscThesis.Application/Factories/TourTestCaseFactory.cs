@@ -22,7 +22,8 @@ namespace MscThesis.Runner.Factories
             _problems = new Dictionary<string, IProblemFactory<Tour>>
             {
                 { "TSPLib", new TSPLibFactory(tspLib) },
-                { "PerturbedTSPLib", new PerturbedTSPLibFactory(tspLib, _parameterFactory) }
+                { "PerturbedTSPLib", new PerturbedTSPLibFactory(tspLib, _parameterFactory) },
+                { "UniformTSP", new UniformTSPFactory() },
             };
             _terminations = new Dictionary<string, ITerminationFactory<Tour>>
             {

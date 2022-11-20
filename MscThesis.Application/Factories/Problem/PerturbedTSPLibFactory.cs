@@ -22,7 +22,6 @@ namespace MscThesis.Runner.Factories.Problem
         private IEnumerable<string> _tspNames;
         private TspLib95 _tspLib;
 
-        public bool AllowsMultipleSizes => false;
         public override ProblemDefinition GetDefinition(ProblemSpecification spec)
         {
             int? size = null;

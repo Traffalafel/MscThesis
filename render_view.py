@@ -16,7 +16,12 @@ def remove_parens(s):
 
 def main():
 
+    if len(sys.argv) != 3:
+        print("Usage: <file_path> show/save")
+        return
+
     file_path = sys.argv[1]
+    display = sys.argv[2]
 
     with open(file_path, 'r') as fd:
         lines = fd.readlines()
@@ -54,8 +59,12 @@ def main():
         xs = [float(x) for (x,_) in points]
         ys = [float(y) for (_,y) in points]
 
-        plt.plot(xs, ys, label=name)
-
+        if len(info) == 3:
+            # line plot
+            plt.plot(xs, ys, label=name)
+        if len(info) == 4:
+            # scatter plot
+            plt.scatter(xs, ys, label=name, alpha=0.2)
 
     plt.xlabel(x_prop)
     plt.ylabel(y_prop)
@@ -66,7 +75,10 @@ def main():
     file_name = get_filename(file_path)
     plt.title(file_name)
 
-    file_path_new = os.path.join(CHARTS_DIR_PATH, file_name + ".png")
-    plt.savefig(file_path_new, dpi=300)
+    if display == 'save':
+        file_path_new = os.path.join(CHARTS_DIR_PATH, file_name + ".png")
+        plt.savefig(file_path_new, dpi=300)
+    if display == 'show':
+        plt.show()
 
 main()

@@ -1,0 +1,33 @@
+{
+  "NumRuns": 5,
+  "ProblemSizes": [
+    10
+  ],
+  "MaxParallelization": 1.0,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "TourMIMIC_PopulationSize:25",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "25"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "25",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}
