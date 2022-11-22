@@ -1,0 +1,85 @@
+Specification:
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "MaxParallelization": 16.0,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "TourGOMEA_PopulationSize:n/4",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "n/4"
+      }
+    },
+    {
+      "Name": "TourGOMEA_PopulationSize:n",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    },
+    {
+      "Name": "TourGOMEA_PopulationSize:4*n",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "4*n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}
+Type:
+Tour
+Fittest:
+TourGOMEA_PopulationSize:n/4;1,10,9,5,3,6,8,7,4,2;0
+TourGOMEA_PopulationSize:n;1,2,9,4,3,7,6,10,8,5;0
+TourGOMEA_PopulationSize:4*n;1,4,7,10,8,9,5,2,3,6;0
+Items:
+Series:
+TourGOMEA_PopulationSize:n/4;BestFitness;ProblemSize	(10,2.71);(20,4.81);(30,7.68);(40,10.19);(50,13.64);(60,17.02)
+TourGOMEA_PopulationSize:n/4;NumberIterations;ProblemSize	(10,13.39);(20,26.42);(30,37.85);(40,49.75);(50,62.49);(60,75.24)
+TourGOMEA_PopulationSize:n/4;NumberFitnessCalls;ProblemSize	(10,430.48);(20,4760.6);(30,14844.2);(40,37820);(50,72000.48);(60,130932.6)
+TourGOMEA_PopulationSize:n/4;AvgFitness;ProblemSize	(10,2.72);(20,4.81);(30,7.68);(40,10.22);(50,13.64);(60,17.02)
+TourGOMEA_PopulationSize:n/4;CpuTimeSeconds;ProblemSize	(10,0.013668266);(20,0.40474883000000006);(30,6.197167853);(40,10.478430246);(50,63.678628647000025);(60,154.714184095)
+TourGOMEA_PopulationSize:n/4;OptimumReached;ProblemSize	(10,0.02);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:n/4;Stagnation;ProblemSize	(10,0.98);(20,1);(30,1);(40,1);(50,1);(60,1)
+TourGOMEA_PopulationSize:n/4;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:n;BestFitness;ProblemSize	(10,1.86);(20,4.06);(30,6.6);(40,9.58);(50,12.67);(60,15.86)
+TourGOMEA_PopulationSize:n;NumberIterations;ProblemSize	(10,12.22);(20,25.3);(30,37.32);(40,46.7);(50,58.19);(60,69.3)
+TourGOMEA_PopulationSize:n;NumberFitnessCalls;ProblemSize	(10,1965.2);(20,18236);(30,62727.6);(40,142008);(50,279362);(60,482388)
+TourGOMEA_PopulationSize:n;AvgFitness;ProblemSize	(10,1.9);(20,4.08);(30,6.6);(40,9.6);(50,12.67);(60,15.86)
+TourGOMEA_PopulationSize:n;CpuTimeSeconds;ProblemSize	(10,0.040004276);(20,3.898938743000001);(30,10.351418580000002);(40,81.28285743699996);(50,240.88281326900002);(60,552.1277942340001)
+TourGOMEA_PopulationSize:n;OptimumReached;ProblemSize	(10,0.13);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:n;Stagnation;ProblemSize	(10,0.87);(20,1);(30,1);(40,1);(50,1);(60,1)
+TourGOMEA_PopulationSize:n;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:4*n;BestFitness;ProblemSize	(10,1.62);(20,3.33);(30,5.53);(40,8.26);(50,11.21);(60,14.23)
+TourGOMEA_PopulationSize:4*n;NumberIterations;ProblemSize	(10,11.34);(20,24.49);(30,35.3);(40,47.22);(50,54.85);(60,66.45)
+TourGOMEA_PopulationSize:4*n;NumberFitnessCalls;ProblemSize	(10,7297.6);(20,70611.2);(30,237336);(40,574355.2);(50,1053320);(60,1850208)
+TourGOMEA_PopulationSize:4*n;AvgFitness;ProblemSize	(10,1.7251999999999998);(20,3.33);(30,5.53);(40,8.26);(50,11.21);(60,14.23)
+TourGOMEA_PopulationSize:4*n;CpuTimeSeconds;ProblemSize	(10,0.15017377899999998);(20,14.285001553999997);(30,92.47227663399997);(40,347.29990159899995);(50,913.0327363129996);(60,2180.2676192969984)
+TourGOMEA_PopulationSize:4*n;OptimumReached;ProblemSize	(10,0.1);(20,0.01);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:4*n;Stagnation;ProblemSize	(10,0.9);(20,0.99);(30,1);(40,1);(50,1);(60,1)
+TourGOMEA_PopulationSize:4*n;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0)

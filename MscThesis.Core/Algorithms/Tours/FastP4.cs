@@ -37,11 +37,9 @@ namespace MscThesis.Core.Algorithms.Tours
         {
             base.Initialize(fitnessFunction);
 
-            _pyramid.Add(new P4Level(_random.Value, _numFreeNodes, fitnessFunction, _rescalingIntervals));
+            AddNewLevel();
 
-            var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
-            var initialFitness = fitnessFunction.ComputeFitness(uniform);
-            var individual = new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
+            var individual = GenerateUniform();
             _pyramid[0].Add(individual);
         }
 
@@ -57,9 +55,7 @@ namespace MscThesis.Core.Algorithms.Tours
                 }
             }
 
-            var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
-            var initialFitness = fitnessFunction.ComputeFitness(uniform);
-            var individual = new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
+            var individual = GenerateUniform();
 
             for (int i = 0; i < _pyramid.Count; i++)
             {
@@ -81,6 +77,18 @@ namespace MscThesis.Core.Algorithms.Tours
                 _pyramid[i + 1].Add(individual);
             }
 
+            if (!_pyramid.Any())
+            {
+                AddNewLevel();
+                _pyramid[0].Add(individual);
+            }
+
+            var result = new RunIteration<Tour>
+            {
+                Population = Population,
+                Statistics = new Dictionary<Property, double>()
+            };
+
             _sheddingCounter++;
             if (_sheddingCounter == _sheddingInterval)
             {
@@ -88,12 +96,19 @@ namespace MscThesis.Core.Algorithms.Tours
                 _sheddingCounter = 0;
             }
 
-            return new RunIteration<Tour>
-            {
-                Population = Population,
-                Statistics = new Dictionary<Property, double>()
-            };
+            return result;
         }
 
+        private Individual<RandomKeysTour> GenerateUniform()
+        {
+            var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
+            var initialFitness = _fitnessFunction.ComputeFitness(uniform);
+            return new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
+        }
+
+        private void AddNewLevel()
+        {
+            _pyramid.Add(new P4Level(_random.Value, _numFreeNodes, _fitnessFunction, _rescalingIntervals));
+        }
     }
 }

@@ -32,6 +32,7 @@
     <None Remove="Specifications\FastMIMIC multiple runs.json" />
     <None Remove="Specifications\FastMIMIC single run.json" />
     <None Remove="Specifications\MIMIC DLB.json" />
+    <None Remove="Specifications\MIMIC JOS.json" />
     <None Remove="Specifications\MIMIC LeadingOnes.json" />
     <None Remove="Specifications\MIMIC multiple runs.json" />
     <None Remove="Specifications\MIMIC OneMax.json" />
