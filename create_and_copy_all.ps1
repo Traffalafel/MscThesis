@@ -20,14 +20,14 @@ else {
 
 $template = Get-Content $TEMPLATE_FILE_PATH
 
-$results_names = Get-ChildItem "results" -Recurse -Filter "*.txt" | %{ @{Name=$_.BaseName} }
+$results_names = Get-ChildItem $RESULTS_DIR_PATH -Recurse -Filter "*.txt" | %{ @{Name=$_.BaseName} }
 
-Get-ChildItem $SPECS_DIR_PATH -Filter "*.json" | ForEach-Object {
+Get-ChildItem $SPECS_DIR_PATH -Recurse -Filter "*.json" | ForEach-Object {
     
     $name = $_.BaseName
     
     if ($results_names.Where({ $_.Name -eq $name }, 'First').Count -gt 0) {
-        continue
+        return
     }
 
     Write-Output "Creating script for ${name}"
