@@ -20,17 +20,16 @@ else {
 
 $template = Get-Content $TEMPLATE_FILE_PATH
 
+$results_names = Get-ChildItem "results" -Recurse -Filter "*.txt" | %{ @{Name=$_.BaseName} }
+
 Get-ChildItem $SPECS_DIR_PATH -Filter "*.json" | ForEach-Object {
     
     $name = $_.BaseName
     
-    $results_file = $name + ".txt"
-    $results_path = Join-Path $RESULTS_DIR_PATH $results_file
-    if (Test-Path $results_path -PathType Leaf) {
-        Write-Output "Skipping ${name}"
-        return # skip if results file already exists
+    if ($results_names.Where({ $_.Name -eq $name }, 'First').Count -gt 0) {
+        continue
     }
-    
+
     Write-Output "Creating script for ${name}"
     $file_name = $name + ".sh"
     $file_path = Join-Path $SCRIPTS_DIR_PATH $file_name
@@ -45,4 +44,4 @@ ssh -i $SSH_KEYS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk" "rm -r -f hpc_script
 scp -r -i $SSH_KEYS_DIR_PATH $SCRIPTS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk:hpc_scripts"
 
 # copy specifications to remote
-scp -r -i $SSH_KEYS_DIR_PATH $SPECS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk:."
+scp -i $SSH_KEYS_DIR_PATH $SPECS_DIR_PATH/*.json "${DTU_USER_ID}@login.hpc.dtu.dk:Specifications"

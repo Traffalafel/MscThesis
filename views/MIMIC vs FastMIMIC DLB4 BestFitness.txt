@@ -1,0 +1,5 @@
+MIMIC_PopulationSize:n/4;BestFitness;ProblemSize	(100,14.08);(200,26.81);(300,40.33);(400,53.67);(500,67.43)
+MIMIC_PopulationSize:n;BestFitness;ProblemSize	(100,45.56);(200,89);(300,120.04);(400,144.44);(500,176.12)
+FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n);BestFitness;ProblemSize	(100,19.5);(200,44.09);(300,106.44);(400,196.81);(500,274)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/2;BestFitness;ProblemSize	(100,47.6);(200,127.97);(300,173.67);(400,215.72);(500,248.84)
+FastMIMIC_PopulationSize:n_NumSampledPositions:n/8;BestFitness;ProblemSize	(100,14.6);(200,34.86);(300,128.74);(400,249.03);(500,398.06)

@@ -6,6 +6,7 @@ using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using TspLibNet;
 
@@ -30,7 +31,15 @@ namespace MscThesis.Runner
         {
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);
-            var tests = factory.BuildTestCases(spec);
+            IEnumerable<ITestCase<InstanceFormat>> tests;
+            try
+            {
+                tests = factory.BuildTestCases(spec);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
 
             var problemDef = factory.GetProblemDefinition(spec.Problem);
             List<int> problemSizes;

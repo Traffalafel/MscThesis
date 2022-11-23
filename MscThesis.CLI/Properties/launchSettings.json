@@ -2,7 +2,7 @@
   "profiles": {
     "MscThesis.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\traff\\src\\repos\\MscThesis\\results C:\\Users\\traff\\src\\repos\\MscThesis\\Specifications\\TourMIMIC_PerturbedTSP_0.5_15.json"
+      "commandLineArgs": "C:\\Users\\traff\\src\\repos\\MscThesis\\results C:\\Users\\traff\\src\\repos\\MscThesis\\Specifications\\FastP4_UniformTSP.json"
     }
   }
 }

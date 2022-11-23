@@ -96,6 +96,11 @@ namespace MscThesis.Runner.Factories.Problem
             var varianceY = nodesOriginal.Select(node => Math.Pow(node.Y - meanY, 2)).Sum() / problemSize;
             var stdDevY = Math.Sqrt(varianceX);
 
+            var minX = nodesOriginal.Select(node => node.X).Min();
+            var maxX = nodesOriginal.Select(node => node.X).Max();
+            var minY = nodesOriginal.Select(node => node.Y).Min();
+            var maxY = nodesOriginal.Select(node => node.Y).Max();
+
             var expressionParams = new Dictionary<Parameter, string> { [Parameter.StdDeviationScale] = spec.Parameters[Parameter.StdDeviationScale] };
             var parameters = _parameterFactory.BuildParameters(expressionParams);
             var stdDeviationScale = parameters(Parameter.StdDeviationScale, problemSize);
@@ -108,6 +113,8 @@ namespace MscThesis.Runner.Factories.Problem
                 {
                     var x = nodeOriginal.X + RandomUtils.SampleStandard(random, 0, stdDevX * stdDeviationScale);
                     var y = nodeOriginal.Y + RandomUtils.SampleStandard(random, 0, stdDevY * stdDeviationScale);
+                    x = WrapAround(x, minX, maxX);
+                    y = WrapAround(y, minY, maxY);
                     var node = new Node2D(nodeOriginal.Id, x, y);
                     nodes.Add(node);
                 }
@@ -129,6 +136,25 @@ namespace MscThesis.Runner.Factories.Problem
 
                 return new TSP(itemNew);
             };
+        }
+
+        private double WrapAround(double val, double min, double max)
+        {
+            var output = val;
+            while (output < min || output > max)
+            {
+                if (output < min)
+                {
+                    var diff = Math.Abs(min - output);
+                    output = max - diff;
+                }
+                if (output > max)
+                {
+                    var diff = Math.Abs(output - max);
+                    output = min + diff;
+                }
+            }
+            return output;
         }
 
         public override ProblemInformation GetInformation(ProblemSpecification spec)
