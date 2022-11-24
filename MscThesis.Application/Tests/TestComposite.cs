@@ -73,15 +73,31 @@ namespace MscThesis.Runner.Tests
             while (tasks.Count > 0)
             {
                 var completedTask = await Task.WhenAny(tasks);
-                var result = completedTask.Result;
+
+                ITest<T> result;
+                try
+                {
+                    result = completedTask.Result;
+                    TryUpdateFittest(result);
+                    ConsumeResult(result);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("=== An exception occurred ===");
+                    Console.WriteLine($"Type: {e.GetType().Name}");
+                    Console.WriteLine($"Exception:\n{e}");
+                    while (e.InnerException != null)
+                    {
+                        Console.WriteLine($"InnerException:{e.InnerException}");
+                        e = e.InnerException;
+                    }
+                    Console.WriteLine("======");
+                }
 
                 if (cancellationToken.IsCancellationRequested)
                 {
                     return; // stop execution
                 }
-
-                TryUpdateFittest(result);
-                ConsumeResult(result);
 
                 tasks.Remove(completedTask);
                 if (enumerator.MoveNext())

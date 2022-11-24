@@ -1,3 +1,0 @@
-TourMIMIC_PopulationSize:n/4;BestFitness;Perturbation	(0,24155.72);(0.01,38030.16);(0.02,62086.14);(0.03,90727.44)
-TourMIMIC_PopulationSize:n;BestFitness;Perturbation	(0,23316.95);(0.01,37429.87);(0.02,60188.89);(0.03,87862.49)
-TourMIMIC_PopulationSize:4*n;BestFitness;Perturbation	(0,22602.64);(0.01,35740.54);(0.02,58986.14);(0.03,85237.91)

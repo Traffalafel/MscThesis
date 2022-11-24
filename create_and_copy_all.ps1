@@ -44,4 +44,4 @@ ssh -i $SSH_KEYS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk" "rm -r -f hpc_script
 scp -r -i $SSH_KEYS_DIR_PATH $SCRIPTS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk:hpc_scripts"
 
 # copy specifications to remote
-scp -i $SSH_KEYS_DIR_PATH $SPECS_DIR_PATH/*.json "${DTU_USER_ID}@login.hpc.dtu.dk:Specifications"
+scp -i $SSH_KEYS_DIR_PATH $SPECS_DIR_PATH/**/*.json "${DTU_USER_ID}@login.hpc.dtu.dk:Specifications"

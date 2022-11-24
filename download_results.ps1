@@ -8,6 +8,11 @@ $SPECS_DIR_PATH = "Specifications"
 $RESULTS_DIR_PATH = "results"
 $RESULTS_TMP_DIR_PATH = "results_tmp"
 
+if (Test-Path $RESULTS_TMP_DIR_PATH) {
+    Write-Output "Cannot continue, directory already exists: $($RESULTS_TMP_DIR_PATH)"
+    return
+}
+
 mkdir $RESULTS_TMP_DIR_PATH
 
 scp -r -i $SSH_KEYS_DIR_PATH "${DTU_USER_ID}@login.hpc.dtu.dk:results/*.txt" $RESULTS_TMP_DIR_PATH
@@ -25,10 +30,14 @@ Get-ChildItem $RESULTS_TMP_DIR_PATH -Filter "*.txt" | ForEach-Object {
     }
 
     $spec = $specs_match[0]
-    $dir_name = $spec.Directory
+    $dir_name = $spec.Directory | Split-Path -Leaf
+    $target_dir = Join-Path $RESULTS_DIR_PATH $dir_name
+    if (-Not (Test-Path $target_dir)) {
+        mkdir $target_dir
+    }
 
-    $path_new = Join-Path $RESULTS_DIR_PATH $dir_name $_.Name
+    $path_new = Join-Path $target_dir $_.Name
     Move-Item $_.FullName $path_new
 }
 
-Remove-Item $RESULTS_TMP_DIR_PATH
+Remove-Item -Recurse -Force $RESULTS_TMP_DIR_PATH
