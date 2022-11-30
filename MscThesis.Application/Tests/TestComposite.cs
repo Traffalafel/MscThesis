@@ -74,10 +74,9 @@ namespace MscThesis.Runner.Tests
             {
                 var completedTask = await Task.WhenAny(tasks);
 
-                ITest<T> result;
                 try
                 {
-                    result = completedTask.Result;
+                    var result = completedTask.Result;
                     TryUpdateFittest(result);
                     ConsumeResult(result);
                 }

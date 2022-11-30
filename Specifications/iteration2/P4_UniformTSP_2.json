@@ -1,0 +1,35 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "P4",
+      "Algorithm": "P4"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "2*n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

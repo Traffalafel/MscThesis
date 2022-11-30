@@ -7,7 +7,7 @@
     400,
     500
   ],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 4,
   "Problem": {
     "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
@@ -34,20 +34,6 @@
       "Algorithm": "GOMEA",
       "Parameters": {
         "PopulationSize": "500*4"
-      }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:750*4",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "750*4"
-      }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:1000*4",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "1000*4"
       }
     }
   ],

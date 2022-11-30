@@ -96,6 +96,11 @@ namespace MscThesis.Core
 
         public static int[] SampleUnique(Random random, int numVals, int maxValue)
         {
+            if (maxValue < numVals)
+            {
+                throw new Exception($"Cannot sample {numVals} unique values from [0;{maxValue-1}]");
+            }
+
             var options = Enumerable.Range(0, maxValue).ToArray();
             var output = new int[numVals];
 

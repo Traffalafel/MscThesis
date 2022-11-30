@@ -62,7 +62,8 @@ namespace MscThesis.Core.Algorithms
             var uniFreqs = BitStringEntropyUtils.ComputeUniFrequencies(uniCounts, _population.Size);
             var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(_population);
 
-            var samplePositions = RandomUtils.SampleUnique(_random.Value, _numSampledPositions, problemSize);
+            var toSample = Math.Min(_numSampledPositions, problemSize);
+            var samplePositions = RandomUtils.SampleUnique(_random.Value, toSample, problemSize);
             var jointCountsSample = BitStringEntropyUtils.GetJointCounts(_population, samplePositions);
             var jointFreqsSample = BitStringEntropyUtils.ComputeJointFrequencies(jointCountsSample, _populationSize);
             var jointEntropySample = BitStringEntropyUtils.ComputeJointEntropies(jointFreqsSample);

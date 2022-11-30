@@ -9,7 +9,7 @@
 ### -- specify that the cores must be on the same host -- 
 #BSUB -R "span[hosts=1]"
 ### Memory usage per core
-#BSUB -R "rusage[mem=2GB]"
+#BSUB -R "rusage[mem=4GB]"
 ### -- set walltime limit: hh:mm -- 
 #BSUB -W 72:00 
 ### -- Specify the output and error file. %J is the job-id -- 

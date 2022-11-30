@@ -7,82 +7,82 @@
     400,
     500
   ],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 4,
   "Problem": {
     "Name": "LeadingOnes",
     "Parameters": {}
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:n/2",
+      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:2*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/2",
-        "NumSampledPositions": "n/2"
+        "NumSampledPositions": "2*sqrt(n)"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:n/4",
+      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:3*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/2",
-        "NumSampledPositions": "n/4"
+        "NumSampledPositions": "3*sqrt(n)"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:n/8",
+      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:4*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/2",
-        "NumSampledPositions": "n/8"
+        "NumSampledPositions": "4*sqrt(n)"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/2",
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "n/2"
+        "NumSampledPositions": "2*sqrt(n)"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/4",
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:3*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "n/4"
+        "NumSampledPositions": "3*sqrt(n)"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/8",
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:4*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "n/8"
+        "NumSampledPositions": "4*sqrt(n)"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:n/2",
+      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:2*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "2*n",
-        "NumSampledPositions": "n/2"
+        "NumSampledPositions": "2*sqrt(n)"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:n/4",
+      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:3*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "2*n",
-        "NumSampledPositions": "n/4"
+        "NumSampledPositions": "3*sqrt(n)"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:n/8",
+      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:4*sqrt(n)",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "2*n",
-        "NumSampledPositions": "n/8"
+        "NumSampledPositions": "4*sqrt(n)"
       }
     }
   ],
@@ -90,13 +90,6 @@
     {
       "Name": "Optimum reached",
       "Parameters": {}
-    },
-    {
-      "Name": "Stagnation",
-      "Parameters": {
-        "MaxIterations": "n/2",
-        "Epsilon": "10E-5"
-      }
     }
   ]
 }

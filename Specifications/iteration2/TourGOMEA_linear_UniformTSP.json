@@ -1,0 +1,59 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "TourGOMEA_PopulationSize:n/16",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "n/16"
+      }
+    },
+    {
+      "Name": "TourGOMEA_PopulationSize:n/4",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "n/4"
+      }
+    },
+    {
+      "Name": "TourGOMEA_PopulationSize:n",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    },
+    {
+      "Name": "TourGOMEA_PopulationSize:8*n",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "8*n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "2*n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

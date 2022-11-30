@@ -7,7 +7,7 @@
     400,
     500
   ],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 4,
   "Problem": {
     "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
@@ -15,27 +15,6 @@
     }
   },
   "Optimizers": [
-    {
-      "Name": "GOMEA_PopulationSize:125*2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "125*2"
-      }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:250*2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "250*2"
-      }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:500*2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "500*2"
-      }
-    },
     {
       "Name": "GOMEA_PopulationSize:750*2",
       "Algorithm": "GOMEA",

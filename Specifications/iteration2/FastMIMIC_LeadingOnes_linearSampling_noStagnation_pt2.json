@@ -1,0 +1,55 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "LeadingOnes",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/8",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/8"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:n/2",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "2*n",
+        "NumSampledPositions": "n/2"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:n/4",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "2*n",
+        "NumSampledPositions": "n/4"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:n/8",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "2*n",
+        "NumSampledPositions": "n/8"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    }
+  ]
+}

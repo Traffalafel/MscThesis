@@ -7,7 +7,7 @@
     400,
     500
   ],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 4,
   "Problem": {
     "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
@@ -78,62 +78,6 @@
         "PopulationSize": "n",
         "NumSampledPositions": "75*2"
       }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:4*n_NumSampledPositions:75*2",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "4*n",
-        "NumSampledPositions": "75*2"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:100*2",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "n/4",
-        "NumSampledPositions": "100*2"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:100*2",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "n",
-        "NumSampledPositions": "100*2"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:4*n_NumSampledPositions:100*2",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "4*n",
-        "NumSampledPositions": "100*2"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:125*2",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "n/4",
-        "NumSampledPositions": "125*2"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:125*2",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "n",
-        "NumSampledPositions": "125*2"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:4*n_NumSampledPositions:125*2",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "4*n",
-        "NumSampledPositions": "125*2"
-      }
     }
   ],
   "Terminations": [
@@ -144,7 +88,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n/2",
+        "MaxIterations": "100",
         "Epsilon": "10E-5"
       }
     }

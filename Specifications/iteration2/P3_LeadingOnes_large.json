@@ -12,7 +12,7 @@
     900,
     1000
   ],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 4,
   "Problem": {
     "Name": "LeadingOnes",
     "Parameters": {}

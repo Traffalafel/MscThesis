@@ -1,0 +1,153 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/32",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/32"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/16",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/16"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/8",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/8"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/4",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/4"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/2",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/2"
+      }
+    },
+
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/32",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/32"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/16",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/16"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/8",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/8"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/4",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/4"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/2",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/2"
+      }
+    },
+
+    {
+      "Name": "FastTourMIMIC_PopulationSize:4*n_NumSampledPositions:n/32",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "4*n",
+        "NumSampledPositions": "n/32"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:4*n_NumSampledPositions:n/16",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "4*n",
+        "NumSampledPositions": "n/16"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:4*n_NumSampledPositions:n/8",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "4*n",
+        "NumSampledPositions": "n/8"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:4*n_NumSampledPositions:n/4",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "4*n",
+        "NumSampledPositions": "n/4"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:4*n_NumSampledPositions:n/2",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "4*n",
+        "NumSampledPositions": "n/2"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "2*n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

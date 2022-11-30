@@ -1,0 +1,65 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 4.0,
+  "Problem": {
+    "Name": "OneMax",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "cGA_K:0.5*log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "0.5*log(n)"
+      }
+    },
+    {
+      "Name": "cGA_K:2*log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "2*log(n)"
+      }
+    },
+    {
+      "Name": "cGA_K:log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "log(n)"
+      }
+    },
+    {
+      "Name": "cGA_K:sqrt(n)*log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "sqrt(n)*log(n)"
+      }
+    },
+    {
+      "Name": "cGA_K:sqrt(n)*log(n)/4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "sqrt(n)*log(n)/4"
+      }
+    },
+    {
+      "Name": "cGA_K:4*sqrt(n)*log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "4*sqrt(n)*log(n)"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    }
+  ]
+}

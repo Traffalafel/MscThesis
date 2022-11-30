@@ -7,7 +7,7 @@
     400,
     500
   ],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 4,
   "Problem": {
     "Name": "LeadingOnes",
     "Parameters": {}
@@ -18,27 +18,6 @@
       "Algorithm": "MIMIC",
       "Parameters": {
         "PopulationSize": "8*n/log(n)"
-      }
-    },
-    {
-      "Name": "MIMIC_PopulationSize:10*n/log(n)",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "10*n/log(n)"
-      }
-    },
-    {
-      "Name": "MIMIC_PopulationSize:n/2",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "n/2"
-      }
-    },
-    {
-      "Name": "MIMIC_PopulationSize:n/8",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "n/8"
       }
     }
   ],

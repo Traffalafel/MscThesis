@@ -59,7 +59,8 @@ namespace MscThesis.Core.Algorithms
             var uniFreqs = TourEntropyUtils.ComputeUniFrequencies(uniCounts, _population.Size);
             var uniEntropies = TourEntropyUtils.ComputeUniEntropies(_population);
 
-            var samplePositions = RandomUtils.SampleUnique(_random.Value, _numSampledPositions, problemSize);
+            var toSample = Math.Min(_numSampledPositions, problemSize);
+            var samplePositions = RandomUtils.SampleUnique(_random.Value, toSample, problemSize);
             var jointCountsSample = TourEntropyUtils.GetJointCounts(_population, samplePositions);
             var jointFreqsSample = TourEntropyUtils.ComputeJointFrequencies(jointCountsSample, _populationSize);
             var jointEntropySample = TourEntropyUtils.ComputeJointEntropies(jointFreqsSample);

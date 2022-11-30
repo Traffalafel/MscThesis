@@ -37,7 +37,10 @@ Get-ChildItem $RESULTS_TMP_DIR_PATH -Filter "*.txt" | ForEach-Object {
     }
 
     $path_new = Join-Path $target_dir $_.Name
-    Move-Item $_.FullName $path_new
+
+    if (-Not (Test-Path $path_new)) {
+        Move-Item $_.FullName $path_new
+    }
 }
 
 Remove-Item -Recurse -Force $RESULTS_TMP_DIR_PATH
