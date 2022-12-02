@@ -16,6 +16,8 @@ namespace MscThesis.UI.Models
         private Dictionary<string, Individual<InstanceFormat>> _fittest;
         private Type _instanceType = typeof(InstanceFormat);
 
+        public event EventHandler<EventArgs> OptimizerDone;
+
         public bool IsTerminated => true;
         public object SeriesLock => _seriesLock;
 
