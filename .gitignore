@@ -5,6 +5,7 @@
 
 /hpc_scripts
 /results
+/results_tmp
 
 # Custom
 *.patch
