@@ -1,0 +1,74 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": "4"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "cGA_K:500*4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "500*4"
+      }
+    },
+    {
+      "Name": "cGA_K:1000*4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "1000*4"
+      }
+    },
+    {
+      "Name": "cGA_K:2500*4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "2500*4"
+      }
+    },
+    {
+      "Name": "cGA_K:5000*4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "5000*4"
+      }
+    },
+    {
+      "Name": "cGA_K:10000*4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "10000*4"
+      }
+    },
+    {
+      "Name": "cGA_K:20000*4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "20000*4"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

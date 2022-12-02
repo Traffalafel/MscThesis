@@ -1,0 +1,105 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "LeadingOnes",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "cGA_K:n/128",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/128"
+      }
+    },
+    {
+      "Name": "cGA_K:n/64",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/64"
+      }
+    },
+    {
+      "Name": "cGA_K:n/32",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/32"
+      }
+    },
+    {
+      "Name": "cGA_K:n/16",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/16"
+      }
+    },
+    {
+      "Name": "cGA_K:n/8",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/8"
+      }
+    },
+    {
+      "Name": "cGA_K:n/4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/4"
+      }
+    },
+    {
+      "Name": "cGA_K:n/2",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/2"
+      }
+    },
+    {
+      "Name": "cGA_K:n",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n"
+      }
+    },
+    {
+      "Name": "cGA_K:2*n",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "2*n"
+      }
+    },
+    {
+      "Name": "cGA_K:4*n",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "4*n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

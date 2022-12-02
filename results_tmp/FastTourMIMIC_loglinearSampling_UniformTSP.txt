@@ -1,0 +1,75 @@
+Specification:
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100
+  ],
+  "MaxParallelization": 16.0,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n)",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/log(n)"
+      }
+    },
+    {
+      "Name": "FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n)",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "2*n/log(n)"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "2*n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}
+Type:
+Tour
+Fittest:
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);1,3,7,2,6,8,9,4,5,10;0
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);1,5,3,9,2,10,8,7,4,6;0
+Items:
+Series:
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);BestFitness;ProblemSize	(10,2.11);(20,4.47);(30,7.12);(40,10.52);(50,14.37);(60,17.84)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);NumberIterations;ProblemSize	(10,29);(20,63.88);(30,100.6);(40,129.45);(50,158.91);(60,197.56)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);NumberFitnessCalls;ProblemSize	(10,60);(20,324.4);(30,711.2);(40,1304.5);(50,1918.92);(60,2978.4)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);AvgFitness;ProblemSize	(10,2.25);(20,5.169999999999999);(30,8.3018);(40,12.085000000000004);(50,16.14010000000001);(60,19.9553)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);CpuTimeSeconds;ProblemSize	(10,0.008431682999999999);(20,0.07688917700000003);(30,2.1862446720000004);(40,3.479177648);(50,13.019618337999994);(60,12.223865560000004)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);OptimumReached;ProblemSize	(10,0.07);(20,0);(30,0);(40,0);(50,0);(60,0)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);Stagnation;ProblemSize	(10,0.93);(20,1);(30,1);(40,1);(50,1);(60,1)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n);MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);BestFitness;ProblemSize	(10,2.38);(20,4.46);(30,7.72);(40,10.78);(50,14.65);(60,18.54)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);NumberIterations;ProblemSize	(10,29.03);(20,61.05);(30,88.71);(40,122.29);(50,163.92);(60,181.85)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);NumberFitnessCalls;ProblemSize	(10,60.06);(20,310.25);(30,627.97);(40,1232.9);(50,1979.04);(60,2742.75)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);AvgFitness;ProblemSize	(10,2.545);(20,5.140000000000002);(30,8.747700000000002);(40,12.383999999999997);(50,16.523800000000005);(60,20.701900000000006)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);CpuTimeSeconds;ProblemSize	(10,0.012205341000000003);(20,0.431310018);(30,2.457460657);(40,5.149960892000001);(50,22.926597512000008);(60,59.139626713000006)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);OptimumReached;ProblemSize	(10,0.04);(20,0);(30,0);(40,0);(50,0);(60,0)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);Stagnation;ProblemSize	(10,0.96);(20,1);(30,1);(40,1);(50,1);(60,1)
+FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:2*n/log(n);MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0)

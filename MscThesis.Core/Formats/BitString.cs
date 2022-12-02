@@ -25,6 +25,11 @@ namespace MscThesis.Core.Formats
 
         public override string ToString()
         {
+            if (Values == null)
+            {
+                return string.Empty;
+            }
+
             var s = Values.Select(b => Convert.ToInt32(b)).Select(i => i.ToString()).ToArray();
             return string.Join("", s);
         }

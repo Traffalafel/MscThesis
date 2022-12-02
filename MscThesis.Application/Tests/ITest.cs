@@ -21,6 +21,7 @@ namespace MscThesis.Runner.Results
         public FitnessComparison Comparison { get; }
         public object SeriesLock { get; }
         public void SetLock(object newLock);
+        public event EventHandler<EventArgs> OptimizerDone;
     }
 
     public abstract class Result

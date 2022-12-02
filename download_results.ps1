@@ -44,7 +44,10 @@ Get-ChildItem $RESULTS_TMP_DIR_PATH -Filter "*.txt" | ForEach-Object {
     }
 }
 
-Remove-Item -Recurse -Force $RESULTS_TMP_DIR_PATH
+$directoryInfo = Get-ChildItem $RESULTS_TMP_DIR_PATH | Measure-Object
+if ($directoryInfo.count -eq 0) {
+    Remove-Item -Recurse -Force $RESULTS_TMP_DIR_PATH
+}
 
 # Merge results 
 $to_merge = Get-ChildItem "results" -Recurse -File -Filter "*_pt*.txt" | %{ @{Directory=$_.DirectoryName;Name=($_.BaseName -replace "_pt\d+", "")} } | Sort-Object -Property {$_.Name} -Unique

@@ -39,10 +39,10 @@ namespace MscThesis.CLI
                 return;
             }
             var fileName = Path.GetFileNameWithoutExtension(specificationFilePath);
-            var outputFilePath = Path.Join(resultsDirPath, $"{fileName}.{_resultExtension}");
-            if (File.Exists(outputFilePath))
+            var resultFilePath = Path.Join(resultsDirPath, $"{fileName}.{_resultExtension}");
+            if (File.Exists(resultFilePath))
             {
-                Console.WriteLine($"Results file already exists: {outputFilePath}");
+                Console.WriteLine($"Results file already exists: {resultFilePath}");
                 return;
             }
 
@@ -71,8 +71,19 @@ namespace MscThesis.CLI
 
             // Run test
             Console.WriteLine($"Running test from spec file {fileName}");
+            var intermediateResultFilePath = Path.Join(resultsDirPath, $"{fileName}_tmp.{_resultExtension}");
             try
             {
+                test.OptimizerDone += (sender, args) =>
+                {
+                    // Save temporary results
+                    if (File.Exists(intermediateResultFilePath))
+                    {
+                        File.Delete(intermediateResultFilePath);
+                    }
+                    var resultContent = ResultExporter.Export(test, spec);
+                    File.WriteAllText(intermediateResultFilePath, resultContent);
+                };
                 await test.Execute(source.Token);
             }
             catch (Exception e)
@@ -83,8 +94,12 @@ namespace MscThesis.CLI
             }
 
             // Save results
+            if (File.Exists(intermediateResultFilePath))
+            {
+                File.Delete(intermediateResultFilePath);
+            }
             var resultContent = ResultExporter.Export(test, spec);
-            File.WriteAllText(outputFilePath, resultContent);
+            File.WriteAllText(resultFilePath, resultContent);
 
             Environment.Exit(0);
         }

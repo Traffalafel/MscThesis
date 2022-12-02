@@ -96,7 +96,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n/2",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

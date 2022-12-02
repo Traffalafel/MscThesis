@@ -1,0 +1,121 @@
+Specification:
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100
+  ],
+  "MaxParallelization": 4.0,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "TourMIMIC_PopulationSize:10",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "10"
+      }
+    },
+    {
+      "Name": "TourMIMIC_PopulationSize:25",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "25"
+      }
+    },
+    {
+      "Name": "TourMIMIC_PopulationSize:50",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "50"
+      }
+    },
+    {
+      "Name": "TourMIMIC_PopulationSize:75",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "75"
+      }
+    },
+    {
+      "Name": "TourMIMIC_PopulationSize:100",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "100"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "2*n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}
+Type:
+Tour
+Fittest:
+TourMIMIC_PopulationSize:10;1,2,3,9,8,6,7,5,10,4;0
+TourMIMIC_PopulationSize:25;1,4,3,7,2,8,6,10,5,9;0
+TourMIMIC_PopulationSize:50;1,6,5,7,10,9,3,4,8,2;0
+TourMIMIC_PopulationSize:75;1,10,5,9,2,7,6,3,8,4;0
+TourMIMIC_PopulationSize:100;1,5,9,4,10,8,3,6,7,2;0
+Items:
+Series:
+TourMIMIC_PopulationSize:10;BestFitness;ProblemSize	(10,1.58);(20,4.01);(30,7.18);(40,11);(50,14.52);(60,18.49);(70,22.51);(80,26.67);(90,30.85);(100,34.56)
+TourMIMIC_PopulationSize:10;NumberIterations;ProblemSize	(10,25.18);(20,60.14);(30,100.14);(40,126.83);(50,162.22);(60,189.23);(70,232.13);(80,258.41);(90,293.18);(100,327.18)
+TourMIMIC_PopulationSize:10;NumberFitnessCalls;ProblemSize	(10,261.8);(20,611.4);(30,1011.4);(40,1278.3);(50,1632.2);(60,1902.3);(70,2331.3);(80,2594.1);(90,2941.8);(100,3281.8)
+TourMIMIC_PopulationSize:10;AvgFitness;ProblemSize	(10,2.072999999999999);(20,4.991000000000001);(30,8.565);(40,12.570000000000002);(50,16.278000000000006);(60,20.331);(70,24.388);(80,28.936000000000003);(90,33.172999999999995);(100,36.76599999999999)
+TourMIMIC_PopulationSize:10;CpuTimeSeconds;ProblemSize	(10,0.019016601);(20,0.261304369);(30,1.591952344);(40,5.2961297400000005);(50,15.516589232);(60,34.132722623999996);(70,74.15800008799998);(80,143.004006999);(90,306.09739543499995);(100,620.824583456)
+TourMIMIC_PopulationSize:10;OptimumReached;ProblemSize	(10,0.16);(20,0);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:10;Stagnation;ProblemSize	(10,0.84);(20,1);(30,1);(40,1);(50,1);(60,1);(70,1);(80,1);(90,1);(100,1)
+TourMIMIC_PopulationSize:10;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:25;BestFitness;ProblemSize	(10,1.35);(20,3.61);(30,6.62);(40,10.45);(50,13.97);(60,17.94);(70,21.65);(80,26.32);(90,30.26);(100,34.11)
+TourMIMIC_PopulationSize:25;NumberIterations;ProblemSize	(10,22.49);(20,60.67);(30,99.21);(40,124.93);(50,161.59);(60,188.69);(70,237.68);(80,264.04);(90,283.72);(100,336.78)
+TourMIMIC_PopulationSize:25;NumberFitnessCalls;ProblemSize	(10,587.25);(20,1541.75);(30,2505.25);(40,3148.25);(50,4064.75);(60,4742.25);(70,5967);(80,6626);(90,7118);(100,8444.5)
+TourMIMIC_PopulationSize:25;AvgFitness;ProblemSize	(10,2.1232000000000006);(20,5.072399999999999);(30,8.557999999999998);(40,12.507999999999997);(50,16.531599999999997);(60,20.584800000000005);(70,24.742400000000007);(80,29.396000000000004);(90,33.502);(100,37.4004)
+TourMIMIC_PopulationSize:25;CpuTimeSeconds;ProblemSize	(10,0.03291273499999999);(20,0.43766773299999995);(30,2.1550935079999998);(40,6.633306123);(50,17.744971765000003);(60,39.073791948);(70,83.24567647000002);(80,146.89939759199996);(90,246.16734467700005);(100,680.2857470289999)
+TourMIMIC_PopulationSize:25;OptimumReached;ProblemSize	(10,0.2);(20,0.02);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:25;Stagnation;ProblemSize	(10,0.8);(20,0.98);(30,1);(40,1);(50,1);(60,1);(70,1);(80,1);(90,1);(100,1)
+TourMIMIC_PopulationSize:25;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:50;BestFitness;ProblemSize	(10,1.03);(20,3.21);(30,6.03);(40,9.62);(50,13.47);(60,17.18);(70,21.5);(80,25.59);(90,29.3);(100,33.33)
+TourMIMIC_PopulationSize:50;NumberIterations;ProblemSize	(10,21.05);(20,59.54);(30,99.31);(40,127.92);(50,153.35);(60,193.63);(70,219.77);(80,243.11);(90,291.22);(100,327.88)
+TourMIMIC_PopulationSize:50;NumberFitnessCalls;ProblemSize	(10,1102.5);(20,3027);(30,5015.5);(40,6446);(50,7717.5);(60,9731.5);(70,11038.5);(80,12205.5);(90,14611);(100,16444)
+TourMIMIC_PopulationSize:50;AvgFitness;ProblemSize	(10,2.0980000000000003);(20,4.965799999999999);(30,8.2666);(40,12.341);(50,16.478799999999996);(60,20.409000000000002);(70,25.060200000000012);(80,29.363799999999987);(90,33.19780000000001);(100,37.474399999999996)
+TourMIMIC_PopulationSize:50;CpuTimeSeconds;ProblemSize	(10,0.060918155999999994);(20,0.699030582);(30,3.2658386599999987);(40,9.459959794999996);(50,21.891301646);(60,48.925802434999994);(70,94.93011060999997);(80,167.65244789499997);(90,303.55917957899993);(100,694.8220161629995)
+TourMIMIC_PopulationSize:50;OptimumReached;ProblemSize	(10,0.29);(20,0.02);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:50;Stagnation;ProblemSize	(10,0.71);(20,0.98);(30,1);(40,1);(50,1);(60,1);(70,1);(80,1);(90,1);(100,1)
+TourMIMIC_PopulationSize:50;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:75;BestFitness;ProblemSize	(10,0.99);(20,2.68);(30,5.53);(40,9.37);(50,12.89);(60,16.68);(70,21.07);(80,24.42);(90,28.47);(100,32.68)
+TourMIMIC_PopulationSize:75;NumberIterations;ProblemSize	(10,19.09);(20,64.16);(30,98.16);(40,124.75);(50,167.86);(60,201.05);(70,222.55);(80,262.75);(90,305.52);(100,313.11)
+TourMIMIC_PopulationSize:75;NumberFitnessCalls;ProblemSize	(10,1506.75);(20,4887);(30,7437);(40,9431.25);(50,12664.5);(60,15153.75);(70,16766.25);(80,19781.25);(90,22989);(100,23558.25)
+TourMIMIC_PopulationSize:75;AvgFitness;ProblemSize	(10,2.1069);(20,4.687899999999999);(30,8.139000000000003);(40,12.300600000000006);(50,16.188799999999997);(60,20.231499999999993);(70,24.7416);(80,28.7056);(90,33.24600000000001);(100,37.278499999999994)
+TourMIMIC_PopulationSize:75;CpuTimeSeconds;ProblemSize	(10,0.08391152699999999);(20,1.0450830599999994);(30,4.145869684999999);(40,11.480554108000003);(50,29.182360775999992);(60,59.68269236399998);(70,112.44857683099995);(80,210.04853243600007);(90,369.5592886840001);(100,693.2945653970004)
+TourMIMIC_PopulationSize:75;OptimumReached;ProblemSize	(10,0.33);(20,0.02);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:75;Stagnation;ProblemSize	(10,0.67);(20,0.98);(30,1);(40,1);(50,1);(60,1);(70,1);(80,1);(90,1);(100,1)
+TourMIMIC_PopulationSize:75;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:100;BestFitness;ProblemSize	(10,0.96);(20,2.46);(30,5.64);(40,9.12);(50,12.94);(60,16.61);(70,20.27);(80,23.86);(90,28.34);(100,32.15)
+TourMIMIC_PopulationSize:100;NumberIterations;ProblemSize	(10,18.95);(20,62.62);(30,93.2);(40,129.57);(50,160.34);(60,196.22);(70,220.62);(80,254.42);(90,278.9);(100,324.15)
+TourMIMIC_PopulationSize:100;NumberFitnessCalls;ProblemSize	(10,1995);(20,6362);(30,9420);(40,13057);(50,16134);(60,19722);(70,22162);(80,25542);(90,27990);(100,32515)
+TourMIMIC_PopulationSize:100;AvgFitness;ProblemSize	(10,2.1464);(20,4.631899999999999);(30,8.244799999999998);(40,12.167500000000002);(50,16.2968);(60,20.504399999999997);(70,24.289600000000004);(80,28.25280000000001);(90,33.12429999999999);(100,36.9951)
+TourMIMIC_PopulationSize:100;CpuTimeSeconds;ProblemSize	(10,0.11037775699999995);(20,1.3410460239999997);(30,4.8332805809999995);(40,14.365062671999995);(50,33.188622886000005);(60,67.33105291399998);(70,126.67588856299997);(80,226.529118746);(90,370.508294525);(100,772.0417271380003)
+TourMIMIC_PopulationSize:100;OptimumReached;ProblemSize	(10,0.3);(20,0.06);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)
+TourMIMIC_PopulationSize:100;Stagnation;ProblemSize	(10,0.7);(20,0.94);(30,1);(40,1);(50,1);(60,1);(70,1);(80,1);(90,1);(100,1)
+TourMIMIC_PopulationSize:100;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0);(70,0);(80,0);(90,0);(100,0)

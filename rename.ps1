@@ -1,9 +1,9 @@
-$pattern_old = '_DLB_(\d)'
-$pattern_new = '_DLB_block$1'
+$pattern_old = 'MIMIC_DLB_block(\d)'
+$pattern_new = 'MIMIC_DLB_block$1_constantPop'
 
-ls .\Specifications\ -File -Recurse | % { 
+ls .\Specifications\iteration2 -File -Recurse | % { 
     Rename-Item -Force $_ ($_.Name -replace $pattern_old, $pattern_new) 
 }
-ls .\results\ -File -Recurse | % { 
+ls .\results\iteration2 -File -Recurse | % { 
     Rename-Item -Force $_ ($_.Name -replace $pattern_old, $pattern_new) 
 }

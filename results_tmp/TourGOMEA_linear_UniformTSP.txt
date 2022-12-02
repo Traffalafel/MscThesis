@@ -1,0 +1,101 @@
+Specification:
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "MaxParallelization": 4.0,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "TourGOMEA_PopulationSize:n/16",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "n/16"
+      }
+    },
+    {
+      "Name": "TourGOMEA_PopulationSize:n/4",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "n/4"
+      }
+    },
+    {
+      "Name": "TourGOMEA_PopulationSize:n",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    },
+    {
+      "Name": "TourGOMEA_PopulationSize:8*n",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "8*n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "2*n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}
+Type:
+Tour
+Fittest:
+TourGOMEA_PopulationSize:n/16;1,3,4,20,19,17,18,2,5,15,16,8,7,11,6,12,14,13,10,9;1
+TourGOMEA_PopulationSize:n/4;1,9,4,3,7,2,10,5,8,6;0
+TourGOMEA_PopulationSize:n;1,7,6,4,2,3,9,10,8,5;0
+TourGOMEA_PopulationSize:8*n;1,6,4,2,5,10,8,9,3,7;0
+Items:
+Series:
+TourGOMEA_PopulationSize:n/16;BestFitness;ProblemSize	(0,0);(20,5.37);(30,8.66);(40,11.9);(50,14.84);(60,18.65)
+TourGOMEA_PopulationSize:n/16;NumberIterations;ProblemSize	(0,0);(20,56.47);(30,82.78);(40,103.12);(50,128.44);(60,156.23)
+TourGOMEA_PopulationSize:n/16;NumberFitnessCalls;ProblemSize	(0,0);(20,2033.92);(30,4636.68);(40,15676.24);(50,36993.72);(60,54371.04)
+TourGOMEA_PopulationSize:n/16;AvgFitness;ProblemSize	(0,0);(20,5.37);(30,8.66);(40,11.9);(50,14.84);(60,18.65)
+TourGOMEA_PopulationSize:n/16;CpuTimeSeconds;ProblemSize	(0,0);(20,0.15080037400000001);(30,0.5201240889999998);(40,2.144837896);(50,7.518875645999999);(60,14.188482500000005)
+TourGOMEA_PopulationSize:n/16;OptimumReached;ProblemSize	(0,0);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:n/16;Stagnation;ProblemSize	(0,0);(20,1);(30,1);(40,1);(50,1);(60,1)
+TourGOMEA_PopulationSize:n/16;MaxIterations;ProblemSize	(0,0);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:n/4;BestFitness;ProblemSize	(10,2.33);(20,4.62);(30,7.61);(40,10.32);(50,13.72);(60,16.15)
+TourGOMEA_PopulationSize:n/4;NumberIterations;ProblemSize	(10,26.14);(20,55.07);(30,79.73);(40,97.33);(50,122.53);(60,143.02)
+TourGOMEA_PopulationSize:n/4;NumberFitnessCalls;ProblemSize	(10,838.48);(20,9917.6);(30,31261.16);(40,73980.8);(50,141166.56);(60,248869.8)
+TourGOMEA_PopulationSize:n/4;AvgFitness;ProblemSize	(10,2.33);(20,4.62);(30,7.61);(40,10.33);(50,13.72);(60,16.15)
+TourGOMEA_PopulationSize:n/4;CpuTimeSeconds;ProblemSize	(10,0.021906151000000006);(20,0.6291601880000001);(30,2.797147897999999);(40,10.113727210999999);(50,26.462237661999986);(60,63.815330879)
+TourGOMEA_PopulationSize:n/4;OptimumReached;ProblemSize	(10,0.03);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:n/4;Stagnation;ProblemSize	(10,0.97);(20,1);(30,1);(40,1);(50,1);(60,1)
+TourGOMEA_PopulationSize:n/4;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:n;BestFitness;ProblemSize	(10,1.91);(20,3.88);(30,6.47);(40,9.27);(50,12.23);(60,16.18)
+TourGOMEA_PopulationSize:n;NumberIterations;ProblemSize	(10,23.9);(20,50.97);(30,70.53);(40,89.96);(50,115.83);(60,133.16)
+TourGOMEA_PopulationSize:n;NumberFitnessCalls;ProblemSize	(10,3834);(20,36718.4);(30,118520.4);(40,273518.4);(50,556034);(60,926853.6)
+TourGOMEA_PopulationSize:n;AvgFitness;ProblemSize	(10,1.933);(20,3.88);(30,6.47);(40,9.29);(50,12.23);(60,16.19)
+TourGOMEA_PopulationSize:n;CpuTimeSeconds;ProblemSize	(10,0.106136781);(20,2.1262200500000006);(30,10.855252812999998);(40,37.324323355000004);(50,108.87052139999997);(60,241.08964538599986)
+TourGOMEA_PopulationSize:n;OptimumReached;ProblemSize	(10,0.05);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:n;Stagnation;ProblemSize	(10,0.95);(20,1);(30,1);(40,1);(50,1);(60,1)
+TourGOMEA_PopulationSize:n;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:8*n;BestFitness;ProblemSize	(10,1.32);(20,3.01);(30,5.17);(40,7.48);(50,10.72);(60,14.03)
+TourGOMEA_PopulationSize:8*n;NumberIterations;ProblemSize	(10,20.41);(20,46.62);(30,70.33);(40,88.6);(50,108.75);(60,126.69)
+TourGOMEA_PopulationSize:8*n;NumberFitnessCalls;ProblemSize	(10,26204.8);(20,268691.2);(30,945475.2);(40,2155072);(50,4176400);(60,7054579.2)
+TourGOMEA_PopulationSize:8*n;AvgFitness;ProblemSize	(10,1.4996999999999998);(20,3.0562);(30,5.17);(40,7.48);(50,10.72);(60,14.03)
+TourGOMEA_PopulationSize:8*n;CpuTimeSeconds;ProblemSize	(10,0.8722301869999995);(20,18.348918817999998);(30,82.24161483600001);(40,300.22752673699983);(50,783.2441932459998);(60,1661.254670506999)
+TourGOMEA_PopulationSize:8*n;OptimumReached;ProblemSize	(10,0.16);(20,0.02);(30,0);(40,0);(50,0);(60,0)
+TourGOMEA_PopulationSize:8*n;Stagnation;ProblemSize	(10,0.84);(20,0.98);(30,1);(40,1);(50,1);(60,1)
+TourGOMEA_PopulationSize:8*n;MaxIterations;ProblemSize	(10,0);(20,0);(30,0);(40,0);(50,0);(60,0)

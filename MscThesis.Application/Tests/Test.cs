@@ -35,6 +35,7 @@ namespace MscThesis.Runner.Results
         public abstract ISet<string> OptimizerNames { get; }
         public abstract IEnumerable<ItemResult> Items {get;}
         public abstract IEnumerable<SeriesResult> Series {get;}
+        public event EventHandler<EventArgs> OptimizerDone;
 
         public void SetLock(object newLock)
         {
@@ -60,6 +61,11 @@ namespace MscThesis.Runner.Results
                 var other = test.Fittest(optimizerName)?.Value;
                 TryUpdateFittest(optimizerName, other);
             }
+        }
+
+        protected void TriggerOptimizerDone()
+        {
+            OptimizerDone.Invoke(this, new EventArgs());
         }
 
         protected void TryUpdateFittest(string optimizerName, Individual<T> other)

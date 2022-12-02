@@ -31,7 +31,7 @@ namespace MscThesis.Runner.Results
 
         protected override void ConsumeResult(ITest<T> result)
         {
-            // Do nothing
+            TriggerOptimizerDone();
         }
     }
 }
