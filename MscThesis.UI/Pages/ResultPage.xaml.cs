@@ -166,6 +166,45 @@ public partial class ResultPage : ContentPage
         }
         Layout.Add(problemLayout);
 
+        Layout.Add(BuildHorizontalLine());
+
+        // Termination spec
+        var terminationLayout = new VerticalStackLayout
+        {
+            Margin = BoxMargin
+        };
+        terminationLayout.Add(new Label
+        {
+            Text = "Termination criteria",
+            Margin = BoxTitleMargin,
+            FontSize = TitleSize
+        });
+        var c = 0;
+        foreach (var terminationSpec in spec.Terminations)
+        {
+            if (c != 0)
+            {
+                terminationLayout.Add(new BoxView
+                {
+                    HeightRequest = 4,
+                    HorizontalOptions = LayoutOptions.Fill,
+                    BackgroundColor = Colors.Transparent,
+                    Color = Colors.Transparent
+                });
+            }
+            c++;
+
+            var rows = new List<(string left, string right)>();
+            rows.Add(("Name:", terminationSpec.Name));
+            foreach (var kv in terminationSpec.Parameters)
+            {
+                rows.Add(($"{kv.Key}:", $"{kv.Value}"));
+            }
+            var grid = BuildGrid(ToObservable(rows));
+            terminationLayout.Add(grid);
+        }
+        Layout.Add(terminationLayout);
+
         // Optimizers
         foreach (var optimizerSpec in spec.Optimizers)
         {
