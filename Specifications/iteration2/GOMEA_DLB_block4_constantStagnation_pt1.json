@@ -9,36 +9,31 @@
   ],
   "MaxParallelization": 4,
   "Problem": {
-    "Name": "LeadingOnes",
-    "Parameters": {}
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": "4"
+    }
   },
   "Optimizers": [
     {
-      "Name": "GOMEA_PopulationSize:2*n",
+      "Name": "GOMEA_PopulationSize:125*4",
       "Algorithm": "GOMEA",
       "Parameters": {
-        "PopulationSize": "2*n"
+        "PopulationSize": "125*4"
       }
     },
     {
-      "Name": "GOMEA_PopulationSize:3*n",
+      "Name": "GOMEA_PopulationSize:250*4",
       "Algorithm": "GOMEA",
       "Parameters": {
-        "PopulationSize": "3*n"
+        "PopulationSize": "250*4"
       }
     },
     {
-      "Name": "GOMEA_PopulationSize:3*n/2",
+      "Name": "GOMEA_PopulationSize:500*4",
       "Algorithm": "GOMEA",
       "Parameters": {
-        "PopulationSize": "3*n/2"
-      }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:5*n/2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "5*n/2"
+        "PopulationSize": "500*4"
       }
     }
   ],
@@ -50,7 +45,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "100",
         "Epsilon": "10E-5"
       }
     }

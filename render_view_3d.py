@@ -66,7 +66,9 @@ def main():
         x_val = None
         for y_idx, p in enumerate(ps):
 
-            x,y,z = (float(v) for v in p)
+            x = int(p[0])
+            y = int(p[1])
+            z = float(p[2])
 
             if len(y_vals) <= y_idx:
                 y_vals.append(y)

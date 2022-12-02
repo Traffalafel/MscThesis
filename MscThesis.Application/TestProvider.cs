@@ -32,14 +32,7 @@ namespace MscThesis.Runner
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);
             IEnumerable<ITestCase<InstanceFormat>> tests;
-            try
-            {
-                tests = factory.BuildTestCases(spec);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+            tests = factory.BuildTestCases(spec);
 
             var problemDef = factory.GetProblemDefinition(spec.Problem);
             List<int> problemSizes;

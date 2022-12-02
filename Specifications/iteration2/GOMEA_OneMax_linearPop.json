@@ -14,24 +14,24 @@
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n/3",
-      "Algorithm": "MIMIC",
+      "Name": "GOMEA_PopulationSize:n",
+      "Algorithm": "GOMEA",
       "Parameters": {
-        "PopulationSize": "n/3"
+        "PopulationSize": "n"
       }
     },
     {
-      "Name": "MIMIC_PopulationSize:n/2",
-      "Algorithm": "MIMIC",
+      "Name": "GOMEA_PopulationSize:n/4",
+      "Algorithm": "GOMEA",
       "Parameters": {
-        "PopulationSize": "n/2"
+        "PopulationSize": "n/4"
       }
     },
     {
-      "Name": "MIMIC_PopulationSize:2*n/3",
-      "Algorithm": "MIMIC",
+      "Name": "GOMEA_PopulationSize:n/8",
+      "Algorithm": "GOMEA",
       "Parameters": {
-        "PopulationSize": "2*n/3"
+        "PopulationSize": "n/8"
       }
     }
   ],
@@ -43,7 +43,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n/2",
+        "MaxIterations": "n*log(n)",
         "Epsilon": "10E-5"
       }
     }

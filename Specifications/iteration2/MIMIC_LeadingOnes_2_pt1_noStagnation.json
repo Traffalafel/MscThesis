@@ -1,0 +1,30 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "LeadingOnes",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "MIMIC_PopulationSize:8*n/log(n)",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "8*n/log(n)"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    }
+  ]
+}

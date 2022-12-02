@@ -14,75 +14,75 @@
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:n/log(n)",
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:n/16",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/4",
-        "NumSampledPositions": "n/log(n)"
+        "NumSampledPositions": "n/16"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:n/log(n)",
+      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:n/16",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/2",
-        "NumSampledPositions": "n/log(n)"
+        "NumSampledPositions": "n/16"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/log(n)",
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/16",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "n/log(n)"
+        "NumSampledPositions": "n/16"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:sqrt(n)",
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:n/8",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/4",
-        "NumSampledPositions": "sqrt(n)"
+        "NumSampledPositions": "n/8"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:sqrt(n)",
+      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:n/8",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/2",
-        "NumSampledPositions": "sqrt(n)"
+        "NumSampledPositions": "n/8"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n)",
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/8",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "sqrt(n)"
+        "NumSampledPositions": "n/8"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:2*sqrt(n)",
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:n/4",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/4",
-        "NumSampledPositions": "2*sqrt(n)"
+        "NumSampledPositions": "n/4"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:2*sqrt(n)",
+      "Name": "FastMIMIC_PopulationSize:n/2_NumSampledPositions:n/4",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/2",
-        "NumSampledPositions": "2*sqrt(n)"
+        "NumSampledPositions": "n/4"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n)",
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/4",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "2*sqrt(n)"
+        "NumSampledPositions": "n/4"
       }
     }
   ],

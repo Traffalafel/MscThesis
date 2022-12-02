@@ -11,48 +11,40 @@
   "Problem": {
     "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
-      "BlockSize": "4"
+      "BlockSize": "2"
     }
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC_PopulationSize:4*n_NumSampledPositions:50*4",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "4*n",
-        "NumSampledPositions": "50*4"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:75*4",
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:50",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/4",
-        "NumSampledPositions": "75*4"
+        "NumSampledPositions": "50"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:75*4",
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:50",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "75*4"
+        "NumSampledPositions": "50"
       }
     },
     {
-      "Name": "FastMIMIC_PopulationSize:4*n_NumSampledPositions:75*4",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "4*n",
-        "NumSampledPositions": "75*4"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:100*4",
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:100",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n/4",
-        "NumSampledPositions": "100*4"
+        "NumSampledPositions": "100"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:100",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "100"
       }
     }
   ],
@@ -64,7 +56,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "100",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

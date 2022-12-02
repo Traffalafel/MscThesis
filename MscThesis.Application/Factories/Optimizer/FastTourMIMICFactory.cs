@@ -36,6 +36,12 @@ namespace MscThesis.Runner.Factories
             {
                 var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
                 var numSampledPositions = (int)parameters.Invoke(Parameter.NumSampledPositions, problem.Size);
+
+                if (numSampledPositions > problem.Size)
+                {
+                    throw new Exception("Cannot sample more positions than problem size");
+                }
+
                 return new FastTourMIMIC(problem.Size, problem.Comparison, populationSize, numSampledPositions, selection);
             };
         }

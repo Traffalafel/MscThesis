@@ -1,33 +1,29 @@
 {
   "NumRuns": 100,
   "ProblemSizes": [
+    50,
     100,
+    150,
     200,
+    250,
     300,
+    350,
     400,
+    450,
     500
   ],
   "MaxParallelization": 4,
   "Problem": {
-    "Name": "DeceptiveLeadingBlocks",
+    "Name": "JumpOffsetSpike",
     "Parameters": {
-      "BlockSize": "2"
+      "GapSize": "40"
     }
   },
   "Optimizers": [
     {
-      "Name": "GOMEA_PopulationSize:750*2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "750*2"
-      }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:1000*2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "1000*2"
-      }
+      "Name": "P3",
+      "Algorithm": "P3",
+      "Parameters": {}
     }
   ],
   "Terminations": [

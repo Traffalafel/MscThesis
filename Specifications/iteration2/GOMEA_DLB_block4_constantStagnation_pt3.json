@@ -31,7 +31,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n/2",
+        "MaxIterations": "100",
         "Epsilon": "10E-5"
       }
     }

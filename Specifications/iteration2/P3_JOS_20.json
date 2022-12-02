@@ -1,0 +1,42 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    50,
+    100,
+    150,
+    200,
+    250,
+    300,
+    350,
+    400,
+    450,
+    500
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "20"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "P3",
+      "Algorithm": "P3",
+      "Parameters": {}
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n/2",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

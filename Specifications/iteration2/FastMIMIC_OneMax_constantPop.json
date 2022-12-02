@@ -90,13 +90,6 @@
     {
       "Name": "Optimum reached",
       "Parameters": {}
-    },
-    {
-      "Name": "Stagnation",
-      "Parameters": {
-        "MaxIterations": "n/2",
-        "Epsilon": "10E-5"
-      }
     }
   ]
 }

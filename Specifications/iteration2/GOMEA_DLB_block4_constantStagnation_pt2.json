@@ -11,29 +11,15 @@
   "Problem": {
     "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
-      "BlockSize": "2"
+      "BlockSize": "4"
     }
   },
   "Optimizers": [
     {
-      "Name": "GOMEA_PopulationSize:125*2",
+      "Name": "GOMEA_PopulationSize:750*4",
       "Algorithm": "GOMEA",
       "Parameters": {
-        "PopulationSize": "125*2"
-      }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:250*2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "250*2"
-      }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:500*2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "500*2"
+        "PopulationSize": "750*4"
       }
     }
   ],
@@ -45,7 +31,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n/2",
+        "MaxIterations": "100",
         "Epsilon": "10E-5"
       }
     }

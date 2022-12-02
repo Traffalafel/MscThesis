@@ -11,29 +11,36 @@
   "Problem": {
     "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
-      "BlockSize": "4"
+      "BlockSize": "2"
     }
   },
   "Optimizers": [
     {
-      "Name": "GOMEA_PopulationSize:125*4",
-      "Algorithm": "GOMEA",
+      "Name": "MIMIC_PopulationSize:50*2",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "125*4"
+        "PopulationSize": "50*2"
       }
     },
     {
-      "Name": "GOMEA_PopulationSize:250*4",
-      "Algorithm": "GOMEA",
+      "Name": "MIMIC_PopulationSize:100*2",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "250*4"
+        "PopulationSize": "100*2"
       }
     },
     {
-      "Name": "GOMEA_PopulationSize:500*4",
-      "Algorithm": "GOMEA",
+      "Name": "MIMIC_PopulationSize:250*2",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "500*4"
+        "PopulationSize": "250*2"
+      }
+    },
+    {
+      "Name": "MIMIC_PopulationSize:500*2",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "500*2"
       }
     }
   ],
@@ -45,7 +52,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n/2",
+        "MaxIterations": "100",
         "Epsilon": "10E-5"
       }
     }
