@@ -14,26 +14,10 @@
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/8",
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/4",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "n/8"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:n/2",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "2*n",
-        "NumSampledPositions": "n/2"
-      }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:2*n_NumSampledPositions:n/4",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "2*n",
         "NumSampledPositions": "n/4"
       }
     }

@@ -2,7 +2,15 @@
   "NumRuns": 100,
   "ProblemSizes": [
     100,
-    200
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000
   ],
   "MaxParallelization": 4,
   "Problem": {

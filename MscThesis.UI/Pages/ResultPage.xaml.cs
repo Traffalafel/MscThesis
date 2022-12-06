@@ -121,6 +121,19 @@ public partial class ResultPage : ContentPage
         var problemDef = _vm.Provider.GetProblemDefinition(problemSpec);
         var problemInformation = _vm.Provider.GetProblemInformation(problemSpec);
 
+        if (_vm.ResultsFilePath != null)
+        {
+            // Get name 
+            var name = Path.GetFileNameWithoutExtension(_vm.ResultsFilePath);
+            var nameLabel = new Label
+            {
+                Text = $"Name: {name}",
+                Margin = BoxMargin,
+                FontSize = SubTitleSize
+            };
+            Layout.Add(nameLabel);
+        }
+
         // Problem spec
         var problemRows = new List<(string left, string right)>();
         problemRows.Add(("Name:", problemSpec.Name));
@@ -205,12 +218,15 @@ public partial class ResultPage : ContentPage
         }
         Layout.Add(terminationLayout);
 
+        var multipleSizes = spec.ProblemSizes.Count > 1;
+
         // Optimizers
         foreach (var optimizerSpec in spec.Optimizers)
         {
             try
             {
                 Layout.Add(BuildHorizontalLine());
+                var horizontal = new HorizontalStackLayout();
 
                 var optimizerName = optimizerSpec.Name;
                 var optLayout = new VerticalStackLayout
@@ -240,36 +256,38 @@ public partial class ResultPage : ContentPage
                     FontSize = SubTitleSize
                 });
                 paramsColumn.Add(paramsGrid);
-
-                var items = _vm.Test.Items.Where(item => item.OptimizerName == optimizerName);
-                var statRows = items.Select(item => ($"{item.Property.ToString()}:", item.Observable.ToStringObservable())).ToList();
-                var statGrid = BuildGrid(statRows);
-                var statColumn = new VerticalStackLayout
-                {
-                    Margin = new Thickness(15, 5, 15, 0)
-                };
-                statColumn.Add(new Label
-                {
-                    Text = "Statistics",
-                    FontSize = SubTitleSize
-                });
-                statColumn.Add(statGrid);
-
-                var horizontal = new HorizontalStackLayout();
                 horizontal.Add(paramsColumn);
-                horizontal.Add(statColumn);
 
-                // Best solution view
-                var fittest = test.Fittest(optimizerName);
-                if (test.InstanceType == typeof(BitString))
+                if (!multipleSizes)
                 {
-                    var view = BuildBitStringView(fittest);
-                    horizontal.Add(view);
-                }
-                if (test.InstanceType == typeof(Tour))
-                {
-                    var view = BuildTourView(fittest);
-                    horizontal.Add(view);
+                    // Statistics
+                    var items = _vm.Test.Items.Where(item => item.OptimizerName == optimizerName);
+                    var statRows = items.Select(item => ($"{item.Property.ToString()}:", item.Observable.ToStringObservable())).ToList();
+                    var statGrid = BuildGrid(statRows);
+                    var statColumn = new VerticalStackLayout
+                    {
+                        Margin = new Thickness(15, 5, 15, 0)
+                    };
+                    statColumn.Add(new Label
+                    {
+                        Text = "Statistics",
+                        FontSize = SubTitleSize
+                    });
+                    statColumn.Add(statGrid);
+                    horizontal.Add(statColumn);
+
+                    // Best solution view
+                    var fittest = test.Fittest(optimizerName);
+                    if (test.InstanceType == typeof(BitString))
+                    {
+                        var view = BuildBitStringView(fittest);
+                        horizontal.Add(view);
+                    }
+                    if (test.InstanceType == typeof(Tour))
+                    {
+                        var view = BuildTourView(fittest);
+                        horizontal.Add(view);
+                    }
                 }
 
                 optLayout.Add(horizontal);
@@ -277,7 +295,7 @@ public partial class ResultPage : ContentPage
             }
             catch (Exception e)
             {
-                ;
+                ; // ignore
             }
 
         }

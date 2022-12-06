@@ -28,13 +28,6 @@
       "Parameters": {
         "PopulationSize": "250*2"
       }
-    },
-    {
-      "Name": "GOMEA_PopulationSize:500*2",
-      "Algorithm": "GOMEA",
-      "Parameters": {
-        "PopulationSize": "500*2"
-      }
     }
   ],
   "Terminations": [

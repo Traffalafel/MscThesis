@@ -50,7 +50,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "2*n",
         "Epsilon": "10E-5"
       }
     }

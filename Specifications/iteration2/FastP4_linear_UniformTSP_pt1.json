@@ -1,0 +1,52 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "UniformTSP",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "FastP4_SheddingInterval:n/4",
+      "Algorithm": "FastP4",
+      "Parameters": {
+        "SheddingInterval": "n/4"
+      }
+    },
+    {
+      "Name": "FastP4_SheddingInterval:n/2",
+      "Algorithm": "FastP4",
+      "Parameters": {
+        "SheddingInterval": "n/2"
+      }
+    },
+    {
+      "Name": "FastP4_SheddingInterval:n",
+      "Algorithm": "FastP4",
+      "Parameters": {
+        "SheddingInterval": "n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "2*n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

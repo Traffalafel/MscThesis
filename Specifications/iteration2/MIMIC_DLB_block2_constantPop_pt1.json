@@ -16,10 +16,24 @@
   },
   "Optimizers": [
     {
-      "Name": "GOMEA_PopulationSize:750*2",
-      "Algorithm": "GOMEA",
+      "Name": "MIMIC_PopulationSize:50*2",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "750*2"
+        "PopulationSize": "50*2"
+      }
+    },
+    {
+      "Name": "MIMIC_PopulationSize:100*2",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "100*2"
+      }
+    },
+    {
+      "Name": "MIMIC_PopulationSize:250*2",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "250*2"
       }
     }
   ],

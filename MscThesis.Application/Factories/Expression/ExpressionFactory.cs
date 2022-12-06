@@ -107,7 +107,11 @@ namespace MscThesis.Runner.Factories.Expression
                 }
                 else if (fst.Token.Symbol == Symbol.Sqrt)
                 {
-                    return new SqrtExpression(valExpr); ;
+                    return new SqrtExpression(valExpr);
+                }
+                else if (fst.Token.Symbol == Symbol.Exp)
+                {
+                    return new ExpExpression(valExpr);
                 }
                 else
                 {

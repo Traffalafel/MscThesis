@@ -12,7 +12,7 @@ namespace MscThesis.Runner.Factories.Expression
         private static HashSet<Symbol> _terminals = new HashSet<Symbol>
         {
             Symbol.N, Symbol.Constant, Symbol.End, Symbol.ParensOpen, Symbol.ParensClose,
-            Symbol.Sqrt, Symbol.Log, Symbol.Plus, Symbol.Minus, Symbol.Asterisk, Symbol.Slash
+            Symbol.Sqrt, Symbol.Log, Symbol.Exp, Symbol.Plus, Symbol.Minus, Symbol.Asterisk, Symbol.Slash
         };
 
         public Parser()
@@ -39,15 +39,16 @@ namespace MscThesis.Runner.Factories.Expression
                 /*  9 */ new Symbol[] { Symbol.VAL, Symbol.POW },
                 /* 10 */ new Symbol[] { Symbol.Log, Symbol.VAL },
                 /* 11 */ new Symbol[] { Symbol.Sqrt, Symbol.VAL },
+                /* 12 */ new Symbol[] { Symbol.Exp, Symbol.VAL },
 
                 // POW
-                /* 12 */ new Symbol[] { Symbol.Power, Symbol.VAL },
-                /* 13 */ new Symbol[] { },
+                /* 13 */ new Symbol[] { Symbol.Power, Symbol.VAL },
+                /* 14 */ new Symbol[] { },
 
                 // VAL
-                /* 14 */ new Symbol[] { Symbol.ParensOpen, Symbol.TERM, Symbol.ParensClose },
-                /* 15 */ new Symbol[] { Symbol.Constant },
-                /* 16 */ new Symbol[] { Symbol.N},
+                /* 15 */ new Symbol[] { Symbol.ParensOpen, Symbol.TERM, Symbol.ParensClose },
+                /* 16 */ new Symbol[] { Symbol.Constant },
+                /* 17 */ new Symbol[] { Symbol.N},
             };
 
             var numSymbols = Enum.GetNames(typeof(Symbol)).Length;
@@ -59,6 +60,7 @@ namespace MscThesis.Runner.Factories.Expression
             _parsingTable[(int)Symbol.TERM, (int)Symbol.ParensOpen] = 1;
             _parsingTable[(int)Symbol.TERM, (int)Symbol.Log] = 1;
             _parsingTable[(int)Symbol.TERM, (int)Symbol.Sqrt] = 1;
+            _parsingTable[(int)Symbol.TERM, (int)Symbol.Exp] = 1;
 
             // Row 2
             _parsingTable[(int)Symbol.TERM_E, (int)Symbol.Plus] = 2;
@@ -72,6 +74,7 @@ namespace MscThesis.Runner.Factories.Expression
             _parsingTable[(int)Symbol.MUL, (int)Symbol.ParensOpen] = 5;
             _parsingTable[(int)Symbol.MUL, (int)Symbol.Log] = 5;
             _parsingTable[(int)Symbol.MUL, (int)Symbol.Sqrt] = 5;
+            _parsingTable[(int)Symbol.MUL, (int)Symbol.Exp] = 5;
 
             // Row 4
             _parsingTable[(int)Symbol.MUL_E, (int)Symbol.Asterisk] = 6;
@@ -87,20 +90,21 @@ namespace MscThesis.Runner.Factories.Expression
             _parsingTable[(int)Symbol.EXPR, (int)Symbol.ParensOpen] = 9;
             _parsingTable[(int)Symbol.EXPR, (int)Symbol.Log] = 10;
             _parsingTable[(int)Symbol.EXPR, (int)Symbol.Sqrt] = 11;
+            _parsingTable[(int)Symbol.EXPR, (int)Symbol.Exp] = 12;
 
             // Row 6
-            _parsingTable[(int)Symbol.POW, (int)Symbol.Power] = 12;
-            _parsingTable[(int)Symbol.POW, (int)Symbol.End] = 13;
-            _parsingTable[(int)Symbol.POW, (int)Symbol.ParensClose] = 13;
-            _parsingTable[(int)Symbol.POW, (int)Symbol.Slash] = 13;
-            _parsingTable[(int)Symbol.POW, (int)Symbol.Asterisk] = 13;
-            _parsingTable[(int)Symbol.POW, (int)Symbol.Plus] = 13;
-            _parsingTable[(int)Symbol.POW, (int)Symbol.Minus] = 13;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Power] = 13;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.End] = 14;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.ParensClose] = 14;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Slash] = 14;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Asterisk] = 14;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Plus] = 14;
+            _parsingTable[(int)Symbol.POW, (int)Symbol.Minus] = 14;
 
             // Row 7
-            _parsingTable[(int)Symbol.VAL, (int)Symbol.ParensOpen] = 14;
-            _parsingTable[(int)Symbol.VAL, (int)Symbol.Constant] = 15;
-            _parsingTable[(int)Symbol.VAL, (int)Symbol.N] = 16;
+            _parsingTable[(int)Symbol.VAL, (int)Symbol.ParensOpen] = 15;
+            _parsingTable[(int)Symbol.VAL, (int)Symbol.Constant] = 16;
+            _parsingTable[(int)Symbol.VAL, (int)Symbol.N] = 17;
         }
 
         public ParseTree Parse(Scanner scanner)

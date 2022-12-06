@@ -16,10 +16,10 @@
   },
   "Optimizers": [
     {
-      "Name": "GOMEA_PopulationSize:750*2",
+      "Name": "GOMEA_PopulationSize:500*2",
       "Algorithm": "GOMEA",
       "Parameters": {
-        "PopulationSize": "750*2"
+        "PopulationSize": "500*2"
       }
     }
   ],

@@ -44,14 +44,6 @@
         "PopulationSize": "n",
         "NumSampledPositions": "n/2"
       }
-    },
-    {
-      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/4",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "n",
-        "NumSampledPositions": "n/4"
-      }
     }
   ],
   "Terminations": [

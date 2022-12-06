@@ -2,7 +2,7 @@
   "profiles": {
     "MscThesis.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\traff\\src\\repos\\MscThesis\\results C:\\Users\\traff\\src\\repos\\MscThesis\\Specifications\\iteration2\\cGA_OneMax_logK.json"
+      "commandLineArgs": "C:\\Users\\traff\\src\\repos\\MscThesis\\results C:\\Users\\traff\\src\\repos\\MscThesis\\Specifications\\iteration2\\GOMEA_LeadingOnes_constantPop.json"
     }
   }
 }

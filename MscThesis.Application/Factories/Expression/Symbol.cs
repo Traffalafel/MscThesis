@@ -10,6 +10,7 @@ namespace MscThesis.Runner.Factories.Expression
         ParensClose,
         Sqrt,
         Log,
+        Exp,
         Plus,
         Minus,
         Asterisk,

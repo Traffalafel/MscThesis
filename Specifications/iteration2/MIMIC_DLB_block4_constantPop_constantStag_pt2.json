@@ -11,15 +11,15 @@
   "Problem": {
     "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
-      "BlockSize": "2"
+      "BlockSize": "4"
     }
   },
   "Optimizers": [
     {
-      "Name": "GOMEA_PopulationSize:750*2",
-      "Algorithm": "GOMEA",
+      "Name": "MIMIC_PopulationSize:500*4",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "750*2"
+        "PopulationSize": "500*4"
       }
     }
   ],
@@ -31,7 +31,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n",
+        "MaxIterations": "100",
         "Epsilon": "10E-5"
       }
     }

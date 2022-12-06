@@ -17,7 +17,11 @@ namespace MscThesis.Runner.Test
             { "sqrt(n) + 2", (n) => Math.Sqrt(n) + 2 },
             { "(n*(n+1))/2", (n) => (n*(n+1))/2 },
             { "n^2", (n) => Math.Pow(n,2) },
-            { "log(0.1)*1/n-20.1", (n) => Math.Log2(0.1) * 1 / n - 20.1 }
+            { "log(0.1)*1/n-20.1", (n) => Math.Log2(0.1) * 1 / n - 20.1 },
+            { "exp(n) * log(n)", (n) => Math.Exp(n) * Math.Log2(n) },
+            { "exp(n)", (n) => Math.Exp(n) },
+            { "log(n)", (n) => Math.Log2(n) },
+            { "log(1 / (1 - exp(log(0.9)/n)))", (n) => Math.Log2(1 / (1 - Math.Exp(Math.Log2(0.9)/n))) },
         };
 
         public static IEnumerable<object[]> Keys

@@ -107,6 +107,17 @@ namespace MscThesis.Runner.Factories.Expression
                     };
                     _currentIdx += 4;
                     return;
+                case 'e':
+                    if (_content.Length - _currentIdx < 3 || _content.Substring(_currentIdx, 3) != "exp")
+                    {
+                        throw new Exception();
+                    }
+                    _current = new Token
+                    {
+                        Symbol = Symbol.Exp
+                    };
+                    _currentIdx += 3;
+                    return;
                 case 'n':
                     _current = new Token
                     {
