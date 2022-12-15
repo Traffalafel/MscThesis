@@ -8,20 +8,20 @@ using System.Linq;
 
 namespace MscThesis.Core.Selection
 {
-    public class QuartileSelection<T> : ISelectionOperator<T> where T : InstanceFormat
+    public class PercentileSelection<T> : ISelectionOperator<T> where T : InstanceFormat
     {
-        private double _quartile;
+        private double _percentile;
         private SelectionMethod _method;
 
-        public QuartileSelection(double quartile, SelectionMethod method)
+        public PercentileSelection(double percentile, SelectionMethod method)
         {
-            _quartile = quartile;
+            _percentile = percentile;
             _method = method;
         }
 
         public Population<T> Select(Random _, Population<T> population, FitnessFunction<T> fitnessFunction)
         {
-            var targetSize = Convert.ToInt32(Math.Ceiling(population.Size * _quartile));
+            var targetSize = Convert.ToInt32(Math.Ceiling(population.Size * _percentile));
 
             IEnumerable<Individual<T>> ordered;
             if (_method == SelectionMethod.Maximize)

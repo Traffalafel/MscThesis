@@ -12,7 +12,7 @@ namespace MscThesis.Runner.Factories
 {
     public class TourMIMICFactory : IOptimizerFactory<Tour>
     {
-        private static readonly double _selectionQuartile = 0.5d;
+        private static readonly double _selectionPercentile = 0.5d;
 
         private readonly IParameterFactory _parameterFactory;
 
@@ -26,14 +26,14 @@ namespace MscThesis.Runner.Factories
             Parameter.PopulationSize
         };
 
-        public Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<Tour>, VariableSpecification, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
-            var selection = new QuartileSelection<Tour>(_selectionQuartile, SelectionMethod.Minimize);
+            var selection = new PercentileSelection<Tour>(_selectionPercentile, SelectionMethod.Minimize);
 
-            return problem =>
+            return (problem, varSpec) =>
             {
-                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
+                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size, varSpec);
                 return new TourMIMIC(problem.Size, problem.Comparison, populationSize, selection);
             };
         }

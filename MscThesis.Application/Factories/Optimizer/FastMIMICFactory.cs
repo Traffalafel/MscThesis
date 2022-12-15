@@ -12,7 +12,7 @@ namespace MscThesis.Runner.Factories
 {
     public class FastMIMICFactory : IOptimizerFactory<BitString>
     {
-        private static readonly double _selectionQuartile = 0.5d;
+        private static readonly double _selectionPercentile = 0.5d;
 
         private readonly IParameterFactory _parameterFactory;
 
@@ -27,16 +27,16 @@ namespace MscThesis.Runner.Factories
             Parameter.NumSampledPositions
         };
 
-        public Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<BitString>, VariableSpecification, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            var selection = new QuartileSelection<BitString>(_selectionQuartile, SelectionMethod.Maximize);
+            var selection = new PercentileSelection<BitString>(_selectionPercentile, SelectionMethod.Maximize);
 
-            return problem =>
+            return (problem, varSpec) =>
             {
-                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                var numSampledPositions = (int)parameters.Invoke(Parameter.NumSampledPositions, problem.Size);
+                var populationSize = (int)parameters(Parameter.PopulationSize, problem.Size, varSpec);
+                var numSampledPositions = (int)parameters(Parameter.NumSampledPositions, problem.Size, varSpec);
                 return new FastMIMIC(problem.Size, problem.Comparison, populationSize, numSampledPositions, selection);
             };
         }

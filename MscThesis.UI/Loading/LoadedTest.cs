@@ -16,11 +16,13 @@ namespace MscThesis.UI.Models
         private Dictionary<string, Individual<InstanceFormat>> _fittest;
         private Type _instanceType = typeof(InstanceFormat);
 
+
         public event EventHandler<EventArgs> OptimizerDone;
 
         public bool IsTerminated => true;
         public object SeriesLock => _seriesLock;
-
+        public double VariableValue { get; } = 0.0d;
+ 
         public LoadedTest(List<string> lines)
         {
             _optimizerNames = new();
@@ -79,14 +81,15 @@ namespace MscThesis.UI.Models
                 // Parse items
                 try
                 {
-                    var item = ParseItemLine(lines[c]);
+                    var line = lines[c];
+                    c++;
+                    var item = ParseItemLine(line);
                     _optimizerNames.Add(item.OptimizerName);
                     _items.Add(item);
-                    c++;
                 }
                 catch
                 {
-                    throw new Exception();
+                    ; // ignore
                 }
             }
 
@@ -96,14 +99,15 @@ namespace MscThesis.UI.Models
                 // Parse series
                 try
                 {
-                    var series = ParseSeriesLine(lines[c]);
+                    var line = lines[c];
+                    c++;
+                    var series = ParseSeriesLine(line);
                     _optimizerNames.Add(series.OptimizerName);
                     _series.Add(series);
-                    c++;
                 }
                 catch
                 {
-                    throw new Exception();
+                    ; // ignore
                 }
             }
 
@@ -162,12 +166,12 @@ namespace MscThesis.UI.Models
             var defSplit = def.Split(';');
             var optimizerName = defSplit[0];
             var yPropertyName = defSplit[1];
-            var xPropertyName = defSplit[2];
+            var xParameterName = defSplit[2];
 
             var isScatter = defSplit.Length == 4;
 
             _ = Enum.TryParse(yPropertyName, out Property yProperty);
-            _ = Enum.TryParse(xPropertyName, out Property xProperty);
+            _ = Enum.TryParse(xParameterName, out Parameter xProperty);
 
             return new SeriesResult
             {

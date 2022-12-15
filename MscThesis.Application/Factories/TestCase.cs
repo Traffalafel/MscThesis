@@ -1,4 +1,5 @@
-﻿using MscThesis.Core.Algorithms;
+﻿using MscThesis.Core;
+using MscThesis.Core.Algorithms;
 using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.TerminationCriteria;
@@ -12,11 +13,11 @@ namespace MscThesis.Runner.Factories
     public class TestCase<T> : ITestCase<T> where T : InstanceFormat
     {
         private readonly string _name;
-        private readonly Func<FitnessFunction<T>, Optimizer<T>> _buildOptimizer;
+        private readonly Func<FitnessFunction<T>, VariableSpecification, Optimizer<T>> _buildOptimizer;
         private readonly Func<int, FitnessFunction<T>> _buildProblem;
         private readonly Func<int, IEnumerable<TerminationCriterion<T>>> _buildTerminations;
 
-        public TestCase(string name, Func<FitnessFunction<T>, Optimizer<T>> buildOptimizer, Func<int, FitnessFunction<T>> buildProblem, Func<int, IEnumerable<TerminationCriterion<T>>> buildTerminations)
+        public TestCase(string name, Func<FitnessFunction<T>, VariableSpecification, Optimizer<T>> buildOptimizer, Func<int, FitnessFunction<T>> buildProblem, Func<int, IEnumerable<TerminationCriterion<T>>> buildTerminations)
         {
             _name = name;
             _buildOptimizer = buildOptimizer;
@@ -24,18 +25,30 @@ namespace MscThesis.Runner.Factories
             _buildTerminations = buildTerminations;
         }
 
-        public ITest<T> CreateRun(int size, bool saveSeries)
+        public ITest<T> CreateRun(int problemSize, bool saveSeries, VariableSpecification variableSpec)
         {
-            var problem = _buildProblem.Invoke(size);
-            var optimizer = _buildOptimizer.Invoke(problem);
-            var terminations = _buildTerminations.Invoke(size);
+            var problem = _buildProblem(problemSize);
+
+            var optimizer = _buildOptimizer(problem, variableSpec);
+            
+            var terminations = _buildTerminations(problemSize);
+
+            var variableValue = variableSpec?.Value ?? problemSize;
 
             var run = optimizer.Run(problem);
             foreach (var criterion in terminations)
             {
                 run.AddTerminationCriterion(criterion);
             }
-            return new SingleRun<T>(run, problem, _name, optimizer.StatisticsProperties, size, saveSeries);
+            return new SingleRun<T>(run, problem, _name, optimizer.StatisticsProperties, variableValue, saveSeries);
         }
+    }
+
+    public class VariableSpecification
+    {
+        public VariableSpecification() { }
+
+        public Parameter Variable { get; set; }
+        public int Value { get; set; } 
     }
 }

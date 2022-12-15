@@ -30,8 +30,8 @@ namespace MscThesis.Runner.Factories.Termination
 
             return (size) =>
             {
-                var epsilon = parameters(Parameter.Epsilon, size);
-                var maxStagnatedIterations = (int) parameters(Parameter.MaxIterations, size);
+                var epsilon = parameters(Parameter.Epsilon, size, null);
+                var maxStagnatedIterations = (int) parameters(Parameter.MaxIterations, size, null);
                 var fitnessFunction = fitnessGenerator(size);
                 return new StagnationTermination<T>(epsilon, maxStagnatedIterations, fitnessFunction.Comparison);
             };

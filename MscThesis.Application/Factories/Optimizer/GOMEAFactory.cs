@@ -25,13 +25,13 @@ namespace MscThesis.Runner.Factories.Optimizer
             Parameter.PopulationSize
         };
 
-        public Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<BitString>, VariableSpecification, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            return problem =>
+            return (problem, varSpec) =>
             {
-                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
+                var populationSize = (int)parameters(Parameter.PopulationSize, problem.Size, varSpec);
                 var selection = new TournamentSelection<BitString>(populationSize, _tournamentSize);
                 return new GOMEA(problem.Size, problem.Comparison, populationSize, selection);
             };

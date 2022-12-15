@@ -53,7 +53,7 @@ namespace MscThesis.Core.Algorithms
 
             var jointCounts = BitStringEntropyUtils.GetJointCounts(_population);
             var jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(jointCounts, _population.Size);
-            var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(jointFreqs);
+            var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(jointFreqs, uniFreqs);
 
             var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, jointEntropies);
 

@@ -5,7 +5,7 @@ import numpy as np
 
 CHARTS_DIR_PATH = r"C:\Users\traff\Desktop\charts"
 
-# Renders plot from data file
+# Renders 3d plot from data file
 
 def get_filename(path):
     (_, tail) = os.path.split(path)

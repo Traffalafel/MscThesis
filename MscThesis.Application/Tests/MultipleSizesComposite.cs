@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace MscThesis.Runner.Results
 {
-    public class MultipleSizesComposite<T> : TestComposite<T>, ITest<T> where T : InstanceFormat
+    public class MultipleVariablesComposite<T> : TestComposite<T>, ITest<T> where T : InstanceFormat
     {
-        private Property _xAxis;
+        private Parameter _xAxis;
         private HashSet<string> _optimizerNames;
         private Dictionary<string, Dictionary<Property, ObservableCollection<(double,double)>>> _points { get; }
 
@@ -27,7 +27,7 @@ namespace MscThesis.Runner.Results
             });
         }).SelectMany(x => x);
 
-        public MultipleSizesComposite(List<ITest<T>> tests, int maxParallel, Property xAxis) : base(tests, maxParallel)
+        public MultipleVariablesComposite(List<ITest<T>> tests, int maxParallel, Parameter xAxis) : base(tests, maxParallel)
         {
             _xAxis = xAxis;
             _optimizerNames = new HashSet<string>();
@@ -40,7 +40,7 @@ namespace MscThesis.Runner.Results
                 _points[name] = new Dictionary<Property, ObservableCollection<(double,double)>>();
             }
 
-            foreach (var item in NotX(first.Items))
+            foreach (var item in first.Items)
             {
                 _points[item.OptimizerName].Add(item.Property, new ObservableCollection<(double,double)>());
             }
@@ -48,10 +48,7 @@ namespace MscThesis.Runner.Results
 
         protected override void ConsumeResult(ITest<T> result)
         {
-            var xItem = result.Items.FirstOrDefault(item => item.Property == _xAxis);
-            var xValue = xItem.Observable.Value;
-
-            foreach (var item in NotX(result.Items))
+            foreach (var item in result.Items)
             {
                 _optimizerNames.Add(item.OptimizerName);
 
@@ -59,14 +56,9 @@ namespace MscThesis.Runner.Results
 
                 lock (SeriesLock)
                 {
-                    _points[item.OptimizerName][item.Property].Add((xValue, observable.Value));
+                    _points[item.OptimizerName][item.Property].Add((result.VariableValue, observable.Value));
                 }
             }
-        }
-
-        private IEnumerable<ItemResult> NotX(IEnumerable<ItemResult> input)
-        {
-            return input.Where(item => item.Property != _xAxis);
         }
 
     }

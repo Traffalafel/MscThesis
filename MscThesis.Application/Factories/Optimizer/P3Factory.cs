@@ -12,9 +12,9 @@ namespace MscThesis.Runner.Factories.Optimizer
     {
         public IEnumerable<Parameter> Parameters => new List<Parameter>();
 
-        public Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<BitString>, VariableSpecification, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
-            return problem =>
+            return (problem, _) =>
             {
                 return new P3(problem.Size, problem);
             };

@@ -1,46 +1,51 @@
 {
   "NumRuns": 100,
   "ProblemSizes": [
+    20,
+    40,
+    60,
+    80,
     100,
-    200,
-    300,
-    400,
-    500
+    120,
+    140,
+    160,
+    180,
+    200
   ],
   "MaxParallelization": 4,
   "Problem": {
     "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
-      "BlockSize": "4"
+      "BlockSize": "2"
     }
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:50*4",
-      "Algorithm": "MIMIC",
+      "Name": "cGA_K:5*log(n)",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "50*4"
+        "K": "5*log(n)"
       }
     },
     {
-      "Name": "MIMIC_PopulationSize:100*4",
-      "Algorithm": "MIMIC",
+      "Name": "cGA_K:10*log(n)",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "100*4"
+        "K": "10*log(n)"
       }
     },
     {
-      "Name": "MIMIC_PopulationSize:250*4",
-      "Algorithm": "MIMIC",
+      "Name": "cGA_K:15*log(n)",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "250*4"
+        "K": "15*log(n)"
       }
     },
     {
-      "Name": "MIMIC_PopulationSize:500*4",
-      "Algorithm": "MIMIC",
+      "Name": "cGA_K:20*log(n)",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "500*4"
+        "K": "20*log(n)"
       }
     }
   ],
@@ -52,7 +57,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n",
+        "MaxIterations": "n*log(n)",
         "Epsilon": "10E-5"
       }
     }

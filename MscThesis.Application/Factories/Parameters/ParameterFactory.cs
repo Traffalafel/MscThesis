@@ -15,17 +15,21 @@ namespace MscThesis.Runner.Factories.Parameters
             _expressionFactory = expressionFactory;
         }
 
-        public Func<Parameter, int, double> BuildParameters(IDictionary<Parameter, string> spec)
+        public Func<Parameter, int, VariableSpecification, double> BuildParameters(IDictionary<Parameter, string> spec)
         {
             var expressions = spec.ToDictionary(kv => kv.Key, kv => _expressionFactory.BuildExpression(kv.Value));
 
-            return (parameter, n) =>
+            return (parameter, n, varSpec) =>
             {
+                if (varSpec != null)
+                {
+                    return varSpec.Value;
+                }
+
                 if (!expressions.ContainsKey(parameter))
                 {
                     throw new Exception($"Parameter {parameter} not found in specification");
                 }
-
                 return expressions[parameter].Compute(n);
             };
         }

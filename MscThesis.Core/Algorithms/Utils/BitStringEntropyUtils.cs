@@ -44,34 +44,39 @@ namespace MscThesis.Core.Algorithms.BitStrings
                 return new double[0, 0];
             }
 
-            var counts = GetJointCounts(population);
-            var freqs = ComputeJointFrequencies(counts, population.Size);
-            return ComputeJointEntropies(freqs);
+            var uniCounts = GetUniCounts(population);
+            var uniFreqs = ComputeUniFrequencies(uniCounts, population.Size);
+            var jointCounts = GetJointCounts(population);
+            var jointFreqs = ComputeJointFrequencies(jointCounts, population.Size);
+            return ComputeJointEntropies(jointFreqs, uniFreqs);
         }
 
-        internal static double[,] ComputeJointEntropies(double[,][] jointFrequencies)
+        internal static double[,] ComputeJointEntropies(double[,][] jointFrequencies, double[] uniFrequencies)
         {
             var problemSize = jointFrequencies.GetLength(0);
-
             var jointEntropies = new double[problemSize, problemSize];
             for (int i = 0; i < problemSize; i++)
             {
-                for (int j = i + 1; j < problemSize; j++)
+                for (int j = 0; j < problemSize; j++)
                 {
+                    var up = uniFrequencies[j];
                     var jp = jointFrequencies[i, j];
-                    jointEntropies[i, j] = -jp.Sum(p =>
-                    {
-                        if (p <= 0 || p >= 1)
-                        {
-                            return 0.0;
-                        }
-                        else
-                        {
-                            return p * Math.Log2(p);
-                        }
-                    });
-
-                    jointEntropies[j, i] = jointEntropies[i, j];
+                    jointEntropies[i, j] = -jp.Select((p, idx) => (p, idx))
+                                              .Sum(x =>
+                                              {
+                                                  if (x.p <= 0 || x.p >= 1)
+                                                  {
+                                                      return 0.0;
+                                                  }
+                                                  else if (x.idx == 1 || x.idx == 3)
+                                                  {
+                                                      return x.p * Math.Log2(x.p / up);
+                                                  }
+                                                  else
+                                                  {
+                                                      return x.p * Math.Log2(x.p / (1 - up));
+                                                  }
+                                              });
                 }
             }
 
@@ -184,7 +189,7 @@ namespace MscThesis.Core.Algorithms.BitStrings
             var freqs = new double[problemSize, problemSize][];
             for (var i = 0; i < problemSize; i++)
             {
-                for (var j = i + 1; j < problemSize; j++)
+                for (var j = 0; j < problemSize; j++)
                 {
                     freqs[i, j] = new double[4];
                     for (var k = 0; k < 4; k++)

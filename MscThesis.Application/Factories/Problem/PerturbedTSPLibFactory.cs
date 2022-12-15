@@ -103,7 +103,7 @@ namespace MscThesis.Runner.Factories.Problem
 
             var expressionParams = new Dictionary<Parameter, string> { [Parameter.StdDeviationScale] = spec.Parameters[Parameter.StdDeviationScale] };
             var parameters = _parameterFactory.BuildParameters(expressionParams);
-            var stdDeviationScale = parameters(Parameter.StdDeviationScale, problemSize);
+            var stdDeviationScale = parameters(Parameter.StdDeviationScale, problemSize, null);
 
             return problemSize =>
             {

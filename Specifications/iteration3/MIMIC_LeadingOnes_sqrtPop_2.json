@@ -1,0 +1,51 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "LeadingOnes",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "MIMIC_PopulationSize:8*sqrt(n)",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "8*sqrt(n)"
+      }
+    },
+    {
+      "Name": "MIMIC_PopulationSize:9*sqrt(n)",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "9*sqrt(n)"
+      }
+    },
+    {
+      "Name": "MIMIC_PopulationSize:10*sqrt(n)",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "10*sqrt(n)"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

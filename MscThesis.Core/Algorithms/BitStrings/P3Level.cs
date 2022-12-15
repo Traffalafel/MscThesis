@@ -68,7 +68,7 @@ namespace MscThesis.Core.Algorithms
 
             BitStringEntropyUtils.AddToJointCounts(_jointCounts, individual.Value);
             var jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(_jointCounts, populationSize);
-            var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(jointFreqs);
+            var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(jointFreqs, uniFreqs);
 
             _clusters = ClusteringUtils.BuildClusters(uniEntropies, jointEntropies);
         }

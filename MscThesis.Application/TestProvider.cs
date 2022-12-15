@@ -6,7 +6,6 @@ using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using TspLibNet;
 
@@ -29,23 +28,48 @@ namespace MscThesis.Runner
 
         public ITest<InstanceFormat> Build(TestSpecification spec)
         {
+            var variable = spec.Variable ?? Parameter.ProblemSize;
+
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);
             IEnumerable<ITestCase<InstanceFormat>> tests;
             tests = factory.BuildTestCases(spec);
 
             var problemDef = factory.GetProblemDefinition(spec.Problem);
-            List<int> problemSizes;
-            if (problemDef.CustomSizesAllowed)
+            if (!problemDef.CustomSizesAllowed)
             {
-                problemSizes = spec.ProblemSizes;
+                if (variable == Parameter.ProblemSize)
+                {
+                    spec.VariableValues = new List<int> { problemDef.ProblemSize.Value };
+                }
+                else
+                {
+                    spec.ProblemSize = problemDef.ProblemSize;
+                }
+            }
+
+            IEnumerable<int> variableValues;
+            if (spec.ProblemSizes != null)
+            {
+                variableValues = spec.ProblemSizes;
+            }
+            else if (spec.VariableValue != null)
+            {
+                variableValues = new List<int> { spec.VariableValue.Value };
             }
             else
             {
-                problemSizes = new List<int> { problemDef.ProblemSize.Value };
+                if (spec.VariableValues != null)
+                {
+                    variableValues = spec.VariableValues;
+                }
+                else
+                {
+                    variableValues = GenerateIterator(spec.VariableSteps);
+                }
             }
 
-            return GatherResults(tests, problemSizes, spec.NumRuns, spec.MaxParallelization);
+            return GatherResults(tests, variable, variableValues, spec.NumRuns, spec.MaxParallelization, spec.ProblemSize);
         }
 
         public List<string> GetProblemNames()
@@ -151,9 +175,9 @@ namespace MscThesis.Runner
             return null;
         }
 
-        private ITest<T> GatherResults<T>(IEnumerable<ITestCase<T>> tests, IEnumerable<int> problemSizes, int numRuns, double maxParallelization) where T : InstanceFormat
+        private ITest<T> GatherResults<T>(IEnumerable<ITestCase<T>> tests, Parameter variable, IEnumerable<int> variableSizes, int numRuns, double maxParallelization, int? problemSize) where T : InstanceFormat
         {
-            var numSizes = problemSizes.Count();
+            var numSizes = variableSizes.Count();
             var sizeRuns = numRuns;
             var testRuns = sizeRuns * numSizes;
 
@@ -168,31 +192,45 @@ namespace MscThesis.Runner
             var results = new List<ITest<T>>();
             foreach (var test in tests)
             {
-                var isSingleSize = problemSizes.Count() == 1;
+                var isSingleSize = variableSizes.Count() == 1;
                 var sizeResults = new List<ITest<T>>();
-                foreach (var size in problemSizes)
+                foreach (var size in variableSizes)
                 {
+                    VariableSpecification varSpec = null;
+                    if (variable != Parameter.ProblemSize)
+                    {
+                        varSpec = new VariableSpecification
+                        {
+                            Variable = variable,
+                            Value = size
+                        };
+                    }
+                    else
+                    {
+                        problemSize = size;
+                    }
+
                     var isSingleRun = numRuns == 1;
                     ITest<T> run;
                     if (isSingleRun)
                     {
-                        run = test.CreateRun(size, isSingleRun && isSingleSize);
+                        run = test.CreateRun(problemSize.Value, isSingleRun && isSingleSize, varSpec);
                     }
                     else
                     {
-                        run = new MultipleRunsComposite<T>(test, size, numRuns, runBatchSize, isSingleSize);
+                        run = new MultipleRunsComposite<T>(test, problemSize.Value, numRuns, runBatchSize, isSingleSize, varSpec);
                     }
                     sizeResults.Add(run);
                 }
 
                 ITest<T> sizeResult;
-                if (problemSizes.Count() == 1)
+                if (variableSizes.Count() == 1)
                 {
                     sizeResult = sizeResults.First();
                 }
                 else
                 {
-                    sizeResult = new MultipleSizesComposite<T>(sizeResults, sizeBatchSize, Property.ProblemSize);
+                    sizeResult = new MultipleVariablesComposite<T>(sizeResults, sizeBatchSize, variable);
                 }
                 results.Add(sizeResult);
             }
@@ -205,6 +243,40 @@ namespace MscThesis.Runner
             {
                 return new MultipleOptimizersComposite<T>(results, testBatchSize);
             }
+        }
+
+        private IEnumerable<int> GenerateIterator(StepsSpecification spec)
+        {
+            if (spec.Start <= 0 || spec.Stop <= 0)
+            {
+                throw new Exception("Start and stop must both be strictly positive.");
+            }
+            if (spec.Stop < spec.Start)
+            {
+                throw new Exception("Start must be lower than stop.");
+            }
+            if (spec.Step < 0)
+            {
+                throw new Exception("Cannot have negative step size.");
+            }
+            if (spec.Step == 0 && spec.Start != spec.Stop)
+            {
+                throw new Exception("Start and stop must be equal for step size zero.");
+            }
+
+            if (spec.Step == 0)
+            {
+                yield return spec.Start;
+                yield break;
+            }
+
+            var c = spec.Start;
+            do
+            {
+                yield return c;
+                c += spec.Step;
+            }
+            while (c <= spec.Stop);
         }
 
     }

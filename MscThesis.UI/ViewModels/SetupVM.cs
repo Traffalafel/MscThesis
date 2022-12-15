@@ -176,7 +176,6 @@ namespace MscThesis.UI.ViewModels
                 Optimizers = Optimizers.Select(o => o.ToSpecification()).ToList(),
                 MaxParallelization = Convert.ToDouble(MaxParallelization),
                 Problem = CreateProblemSpec(),
-                ProblemSizes = problemSizes,
                 Terminations = Terminations.Select(t => t.ToSpecification()).ToList()
             };
         }

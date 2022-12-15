@@ -1,0 +1,43 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "LeadingOnes",
+    "Parameters": {}
+  },
+  "Optimizers": [
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:5*sqrt(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "5*sqrt(n)"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

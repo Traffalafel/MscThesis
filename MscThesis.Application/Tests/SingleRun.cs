@@ -25,7 +25,7 @@ namespace MscThesis.Runner.Results
             FitnessFunction<T> fitnessFunction, 
             string optimizerName, 
             ISet<Property> statisticsProperties, 
-            int problemSize,
+            int variableValue,
             bool saveSeries)
         {
             _saveSeries = saveSeries;
@@ -34,6 +34,7 @@ namespace MscThesis.Runner.Results
             _optimizerName = optimizerName;
             _instanceType = fitnessFunction.InstanceType;
             _comparisonStrategy = fitnessFunction.Comparison;
+            VariableValue = variableValue;
 
             _itemData = new Dictionary<Property, ObservableValue<double>>();
             _seriesData = new Dictionary<Property, ObservableCollection<(double, double)>>();
@@ -53,7 +54,6 @@ namespace MscThesis.Runner.Results
             _itemData[Property.NumberIterations] = new ObservableValue<double>();
             _itemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
             _itemData[Property.AvgFitness] = new ObservableValue<double>();
-            _itemData[Property.ProblemSize] = new ObservableValue<double>(problemSize);
             _itemData[Property.CpuTimeSeconds] = new ObservableValue<double>(0.0d);
 
             // Terminations
@@ -141,7 +141,7 @@ namespace MscThesis.Runner.Results
         public override IEnumerable<SeriesResult> Series => _seriesData.Select(data => new SeriesResult
         {
             OptimizerName = _optimizerName,
-            XAxis = Property.NumberIterations,
+            XAxis = Parameter.NumberIterations,
             Property = data.Key,
             Points = data.Value
         });

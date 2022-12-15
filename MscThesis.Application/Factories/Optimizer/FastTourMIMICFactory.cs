@@ -12,7 +12,7 @@ namespace MscThesis.Runner.Factories
 {
     public class FastTourMIMICFactory : IOptimizerFactory<Tour>
     {
-        private static readonly double _selectionQuartile = 0.5d;
+        private static readonly double _selectionPercentile = 0.5d;
 
         private readonly IParameterFactory _parameterFactory;
 
@@ -27,15 +27,15 @@ namespace MscThesis.Runner.Factories
             Parameter.NumSampledPositions
         };
 
-        public Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<Tour>, VariableSpecification, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
-            var selection = new QuartileSelection<Tour>(_selectionQuartile, SelectionMethod.Minimize);
+            var selection = new PercentileSelection<Tour>(_selectionPercentile, SelectionMethod.Minimize);
 
-            return problem =>
+            return (problem, varSpec) =>
             {
-                var populationSize = (int)parameters.Invoke(Parameter.PopulationSize, problem.Size);
-                var numSampledPositions = (int)parameters.Invoke(Parameter.NumSampledPositions, problem.Size);
+                var populationSize = (int)parameters(Parameter.PopulationSize, problem.Size, varSpec);
+                var numSampledPositions = (int)parameters(Parameter.NumSampledPositions, problem.Size, varSpec);
 
                 if (numSampledPositions > problem.Size)
                 {

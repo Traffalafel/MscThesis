@@ -11,7 +11,7 @@ namespace MscThesis.Runner.Factories
     public interface IOptimizerFactory<T> where T : InstanceFormat
     {
         public IEnumerable<Parameter> Parameters { get; }
-        public Func<FitnessFunction<T>, Optimizer<T>> BuildCreator(OptimizerSpecification spec);
+        public Func<FitnessFunction<T>, VariableSpecification, Optimizer<T>> BuildCreator(OptimizerSpecification spec);
     }
 
 }

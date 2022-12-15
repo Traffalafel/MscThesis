@@ -4,7 +4,7 @@ import os
 
 CHARTS_DIR_PATH = r"C:\Users\traff\Desktop\charts"
 
-# Renders plot from data file
+# Renders 2d plot from data file
 
 def get_filename(path):
     (_, tail) = os.path.split(path)

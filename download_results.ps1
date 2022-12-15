@@ -42,6 +42,9 @@ Get-ChildItem $RESULTS_TMP_DIR_PATH -Filter "*.txt" | ForEach-Object {
     if (-Not (Test-Path $path_new)) {
         Move-Item $_.FullName $path_new
     }
+    elseif (-Not ($_.BaseName-match ".+_tmp")) {
+        Remove-Item -Force $_.FullName
+    }
 }
 
 $directoryInfo = Get-ChildItem $RESULTS_TMP_DIR_PATH | Measure-Object
@@ -49,4 +52,4 @@ if ($directoryInfo.count -eq 0) {
     Remove-Item -Recurse -Force $RESULTS_TMP_DIR_PATH
 }
 
-& ./merge_results.ps1
+& ./scripts/merge_results.ps1

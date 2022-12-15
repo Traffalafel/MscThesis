@@ -32,8 +32,8 @@ namespace MscThesis.Runner.Results
 
         public override IEnumerable<SeriesResult> Series => _seriesValues.SelectMany(x => x.Value).Select(x => x.Value);
 
-        public MultipleRunsComposite(ITestCase<T> generator, int size, int numRuns, int maxParallel, bool saveSeries) 
-            : base(() => generator.CreateRun(size, saveSeries), numRuns, maxParallel)
+        public MultipleRunsComposite(ITestCase<T> generator, int problemSize, int numRuns, int maxParallel, bool saveSeries, VariableSpecification varSpec) 
+            : base(() => generator.CreateRun(problemSize, saveSeries, varSpec), numRuns, maxParallel)
         {
             _optimizerNames = new HashSet<string>();
             _itemValues = new Dictionary<string, Dictionary<Property, ObservableCollection<double>>>();
@@ -42,9 +42,11 @@ namespace MscThesis.Runner.Results
             _averages = new Dictionary<string, Dictionary<Property, ObservableValue<double>>>();
             _saveSeries = saveSeries;
 
-            var empty = generator.CreateRun(size, saveSeries);
+            var empty = generator.CreateRun(problemSize, saveSeries, varSpec);
             _instanceType = empty.InstanceType;
             _comparisonStrategy = empty.Comparison;
+
+            VariableValue = empty.VariableValue;
 
             foreach (var optimizerName in empty.OptimizerNames)
             {

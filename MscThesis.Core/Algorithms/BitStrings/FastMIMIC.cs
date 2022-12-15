@@ -16,6 +16,7 @@ namespace MscThesis.Core.Algorithms
 
         private Population<BitString> _population;
 
+        private double[] _uniFreqs;
         private double[,][] _jointFreqs;
         private double[,] _jointEntropies;
 
@@ -50,8 +51,10 @@ namespace MscThesis.Core.Algorithms
 
 
             var jointCounts = BitStringEntropyUtils.GetJointCounts(_population);
+            var uniCounts = BitStringEntropyUtils.GetUniCounts(_population);
+            _uniFreqs = BitStringEntropyUtils.ComputeUniFrequencies(uniCounts, _population.Size);
             _jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(jointCounts, _population.Size);
-            _jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(_jointFreqs);
+            _jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(_jointFreqs, _uniFreqs);
         }
 
         protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
@@ -66,7 +69,7 @@ namespace MscThesis.Core.Algorithms
             var samplePositions = RandomUtils.SampleUnique(_random.Value, toSample, problemSize);
             var jointCountsSample = BitStringEntropyUtils.GetJointCounts(_population, samplePositions);
             var jointFreqsSample = BitStringEntropyUtils.ComputeJointFrequencies(jointCountsSample, _populationSize);
-            var jointEntropySample = BitStringEntropyUtils.ComputeJointEntropies(jointFreqsSample);
+            var jointEntropySample = BitStringEntropyUtils.ComputeJointEntropies(jointFreqsSample, uniFreqs);
             for (int i = 0; i < samplePositions.Length; i++)
             {
                 for (int j = i+1; j < samplePositions.Length; j++)

@@ -24,13 +24,13 @@ namespace MscThesis.Runner.Factories
             Parameter.K
         };
 
-        public Func<FitnessFunction<BitString>, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<BitString>, VariableSpecification, Optimizer<BitString>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            return problem =>
+            return (problem, varSpec) =>
             {
-                var k = parameters.Invoke(Parameter.K, problem.Size);
+                var k = parameters(Parameter.K, problem.Size, varSpec);
                 return new CGA(problem.Size, problem.Comparison, k);
             };
         }

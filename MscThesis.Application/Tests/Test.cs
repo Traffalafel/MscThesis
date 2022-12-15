@@ -37,6 +37,8 @@ namespace MscThesis.Runner.Results
         public abstract IEnumerable<SeriesResult> Series {get;}
         public event EventHandler<EventArgs> OptimizerDone;
 
+        public double VariableValue { get; protected set; }
+
         public void SetLock(object newLock)
         {
             _lock = newLock;

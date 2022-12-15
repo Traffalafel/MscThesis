@@ -1,0 +1,65 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    20,
+    40,
+    60,
+    80,
+    100,
+    120,
+    140,
+    160,
+    180,
+    200
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": "2"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "cGA_K:0.25*sqrt(n)*log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "0.25*sqrt(n)*log(n)"
+      }
+    },
+    {
+      "Name": "cGA_K:0.5*sqrt(n)*log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "0.5*sqrt(n)*log(n)"
+      }
+    },
+    {
+      "Name": "cGA_K:0.75*sqrt(n)*log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "0.75*sqrt(n)*log(n)"
+      }
+    },
+    {
+      "Name": "cGA_K:sqrt(n)*log(n)",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "sqrt(n)*log(n)"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

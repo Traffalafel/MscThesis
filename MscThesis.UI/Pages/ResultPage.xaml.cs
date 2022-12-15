@@ -138,20 +138,27 @@ public partial class ResultPage : ContentPage
         var problemRows = new List<(string left, string right)>();
         problemRows.Add(("Name:", problemSpec.Name));
         problemRows.Add(("Number of runs:", $"{spec.NumRuns}"));
-        if (spec.ProblemSizes.Count == 1)
+        if (spec.ProblemSize != null)
         {
-            problemRows.Add(("Problem size:", $"{spec.ProblemSizes[0]}"));
+            problemRows.Add(("ProblemSize:", spec.ProblemSize.ToString()));
         }
-        if (spec.ProblemSizes.Count > 1)
+        problemRows.Add(("Variable:", spec.Variable.ToString()));
+
+        if (spec.VariableValue != null)
         {
-            var start = spec.ProblemSizes.First();
-            var stop = spec.ProblemSizes.Last();
-            var snd = spec.ProblemSizes[1];
-            var step = snd - start;
-            problemRows.Add(("Problem size start:", $"{start}"));
-            problemRows.Add(("Problem size stop:", $"{stop}"));
-            problemRows.Add(("Problem size step:", $"{step}"));
+            problemRows.Add(("Variable value:", $"{spec.VariableValue}"));
         }
+        if (spec.VariableValues != null)
+        {
+            ; // TODO
+        }
+        if (spec.VariableSteps != null)
+        {
+            problemRows.Add(("Variable start:", $"{spec.VariableSteps.Start}"));
+            problemRows.Add(("Variable stop:", $"{spec.VariableSteps.Stop}"));
+            problemRows.Add(("Variable step:", $"{spec.VariableSteps.Step}"));
+        }
+
         foreach (var kv in problemSpec.Parameters)
         {
             problemRows.Add(($"{kv.Key}:", $"{kv.Value}"));
@@ -218,7 +225,7 @@ public partial class ResultPage : ContentPage
         }
         Layout.Add(terminationLayout);
 
-        var multipleSizes = spec.ProblemSizes.Count > 1;
+        var multipleSizes = spec.VariableValues != null || spec.VariableSteps != null;
 
         // Optimizers
         foreach (var optimizerSpec in spec.Optimizers)

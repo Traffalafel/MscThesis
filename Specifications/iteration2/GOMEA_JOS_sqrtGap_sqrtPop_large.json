@@ -1,0 +1,51 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000
+  ],
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "sqrt(n)"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "GOMEA_PopulationSize:sqrt(n)",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "sqrt(n)"
+      }
+    },
+    {
+      "Name": "GOMEA_PopulationSize:2*sqrt(n)",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "2*sqrt(n)"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached",
+      "Parameters": {}
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

@@ -36,7 +36,7 @@ namespace MscThesis.Runner.Factories.Problem
 
             return (size) =>
             {
-                var gapSize = (int)parameters.Invoke(Parameter.GapSize, size);
+                var gapSize = (int)parameters(Parameter.GapSize, size, null);
                 return new JumpOffsetSpike(size, gapSize);
             };
         }

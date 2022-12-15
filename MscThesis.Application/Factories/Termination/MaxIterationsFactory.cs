@@ -29,7 +29,7 @@ namespace MscThesis.Runner.Factories.Termination
 
             return (size) =>
             {
-                var maxIterations = (int) parameters(Parameter.MaxIterations, size);
+                var maxIterations = (int) parameters(Parameter.MaxIterations, size, null);
                 return new MaxIterationsTermination<T>(maxIterations);
             };
 

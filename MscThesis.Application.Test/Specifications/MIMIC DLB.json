@@ -1,6 +1,6 @@
 ﻿{
   "NumRuns": 1,
-  "ProblemSizes": [
+  "VariableValues": [
     100
   ],
   "MaxParallelization": 1,

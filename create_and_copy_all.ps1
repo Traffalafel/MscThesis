@@ -27,6 +27,7 @@ Get-ChildItem $SPECS_DIR_PATH -Recurse -Filter "*.json" | ForEach-Object {
     $name = $_.BaseName
     
     if ($results_names.Where({ $_.Name -eq $name }, 'First').Count -gt 0) {
+        echo $_.BaseName
         return
     }
 

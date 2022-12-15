@@ -6,6 +6,6 @@ namespace MscThesis.Runner.Factories.Parameters
 {
     public interface IParameterFactory
     {
-        public Func<Parameter, int, double> BuildParameters(IDictionary<Parameter, string> spec);
+        public Func<Parameter, int, VariableSpecification, double> BuildParameters(IDictionary<Parameter, string> spec);
     }
 }

@@ -49,6 +49,27 @@
       "Parameters": {
         "K": "n/8"
       }
+    },
+    {
+      "Name": "cGA_K:n/4",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/4"
+      }
+    },
+    {
+      "Name": "cGA_K:n/2",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n/2"
+      }
+    },
+    {
+      "Name": "cGA_K:n",
+      "Algorithm": "cGA",
+      "Parameters": {
+        "K": "n"
+      }
     }
   ],
   "Terminations": [
@@ -59,7 +80,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n",
+        "MaxIterations": "n*log(n)",
         "Epsilon": "10E-5"
       }
     }

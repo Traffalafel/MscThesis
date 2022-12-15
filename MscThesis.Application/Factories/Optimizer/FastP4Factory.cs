@@ -24,13 +24,13 @@ namespace MscThesis.Runner.Factories.Optimizer
             Parameter.SheddingInterval
         };
 
-        public Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<Tour>, VariableSpecification, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            return problem =>
+            return (problem, varSpec) =>
             {
-                var sheddingInterval = (int)parameters.Invoke(Parameter.SheddingInterval, problem.Size);
+                var sheddingInterval = (int)parameters.Invoke(Parameter.SheddingInterval, problem.Size, varSpec);
                 return new FastP4(problem.Size, sheddingInterval, problem);
             };
         }

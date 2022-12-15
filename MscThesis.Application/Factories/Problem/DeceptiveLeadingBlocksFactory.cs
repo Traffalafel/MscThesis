@@ -36,7 +36,7 @@ namespace MscThesis.Runner.Factories.Problem
 
             return (size) =>
             {
-                var blockSize = (int)parameters.Invoke(Parameter.BlockSize, size);
+                var blockSize = (int)parameters(Parameter.BlockSize, size, null);
                 return new DeceptiveLeadingBlocks(size, blockSize);
             };
         }

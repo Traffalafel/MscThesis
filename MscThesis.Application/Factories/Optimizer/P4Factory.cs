@@ -13,9 +13,9 @@ namespace MscThesis.Runner.Factories.Optimizer
     {
         public IEnumerable<Parameter> Parameters => new List<Parameter>();
 
-        public Func<FitnessFunction<Tour>, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
+        public Func<FitnessFunction<Tour>, VariableSpecification, Optimizer<Tour>> BuildCreator(OptimizerSpecification spec)
         {
-            return problem =>
+            return (problem, _) =>
             {
                 return new P4(problem.Size, problem);
             };

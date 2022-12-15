@@ -22,6 +22,7 @@ namespace MscThesis.Runner.Results
         public object SeriesLock { get; }
         public void SetLock(object newLock);
         public event EventHandler<EventArgs> OptimizerDone;
+        public double VariableValue { get; }
     }
 
     public abstract class Result
@@ -37,7 +38,7 @@ namespace MscThesis.Runner.Results
 
     public class SeriesResult : Result
     {
-        public Property XAxis { get; set; }
+        public Parameter XAxis { get; set; }
         public ObservableCollection<(double x, double y)> Points { get; set; }
         public bool IsScatter { get; set; } = false;
     }
