@@ -19,9 +19,9 @@ namespace MscThesis.Runner.Factories.Problem
             };
         }
 
-        public override Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification _)
+        public override Func<int, VariableSpecification, FitnessFunction<BitString>> BuildProblem(ProblemSpecification _)
         {
-            return (size) => new OneMax(size);
+            return (size, _) => new OneMax(size);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace MscThesis.Runner.Factories.Problem
 {
     public abstract class ProblemFactory<T> : IProblemFactory<T> where T : InstanceFormat
     {
-        public abstract Func<int, FitnessFunction<T>> BuildProblem(ProblemSpecification spec);
+        public abstract Func<int, VariableSpecification, FitnessFunction<T>> BuildProblem(ProblemSpecification spec);
 
         public virtual ProblemDefinition GetDefinition(ProblemSpecification spec)
         {

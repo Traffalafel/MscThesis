@@ -10,7 +10,7 @@ namespace MscThesis.Runner.Factories
     {
         public ProblemDefinition GetDefinition(ProblemSpecification spec);
         public ProblemInformation GetInformation(ProblemSpecification spec);
-        public Func<int, FitnessFunction<T>> BuildProblem(ProblemSpecification spec);
+        public Func<int, VariableSpecification, FitnessFunction<T>> BuildProblem(ProblemSpecification spec);
     }
 
 }

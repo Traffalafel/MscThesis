@@ -39,14 +39,14 @@ namespace MscThesis.Runner.Factories
                 var optimizerFactory = GetOptimizerFactory(optimizerSpec);
                 var buildOptimizerFunc = optimizerFactory.BuildCreator(optimizerSpec);
 
-                var buildTerminationsFunc = new Func<int, IEnumerable<TerminationCriterion<T>>>((problemSize) =>
+                var buildTerminationsFunc = new Func<int, VariableSpecification, IEnumerable<TerminationCriterion<T>>>((problemSize, varSpec) =>
                 {
                     var terminations = new List<TerminationCriterion<T>>();
                     foreach (var terminationSpec in spec.Terminations)
                     {
                         var terminationFactory = GetTerminationFactory(terminationSpec);
                         var creator = terminationFactory.BuildCriterion(terminationSpec, buildProblemFunc);
-                        var termination = creator(problemSize);
+                        var termination = creator(problemSize, varSpec);
                         terminations.Add(termination);
                     }
                     return terminations;

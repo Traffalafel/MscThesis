@@ -1,0 +1,95 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 20,
+  "Problem": {
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "sqrt(n)"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:sqrt(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:2*sqrt(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "2*sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:2*sqrt(n)",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "2*sqrt(n)"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:n/2",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/2"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/2",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/2"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n/4_NumSampledPositions:n/8",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4",
+        "NumSampledPositions": "n/8"
+      }
+    },
+    {
+      "Name": "FastMIMIC_PopulationSize:n_NumSampledPositions:n/8",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/8"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n/2",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

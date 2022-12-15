@@ -12,11 +12,11 @@ namespace MscThesis.Runner.Factories.Termination
     {
         public IEnumerable<Parameter> Parameters => new List<Parameter>();
 
-        public Func<int, TerminationCriterion<T>> BuildCriterion(TerminationSpecification _, Func<int, FitnessFunction<T>> buildProblemFunc)
+        public Func<int, VariableSpecification, TerminationCriterion<T>> BuildCriterion(TerminationSpecification _, Func<int, VariableSpecification, FitnessFunction<T>> buildProblemFunc)
         {
-            return (size) =>
+            return (size, varSpec) =>
             {
-                var fitnessFunction = buildProblemFunc(size);
+                var fitnessFunction = buildProblemFunc(size, varSpec);
                 if (!fitnessFunction.Optimum(size).HasValue)
                 {
                     throw new Exception("Fitness function must have known global optimum");

@@ -1,0 +1,34 @@
+{
+  "NumRuns": 100,
+  "MaxParallelization": 16,
+  "Variable": "PopulationSize",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 100,
+    "Step": 1
+  },
+  "Problem": {
+    "Name": "TSPLib",
+    "Parameters": {
+      "ProblemName": "berlin30"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "TourMIMIC",
+      "Algorithm": "TourMIMIC"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

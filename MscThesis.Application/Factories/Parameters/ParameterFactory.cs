@@ -21,7 +21,7 @@ namespace MscThesis.Runner.Factories.Parameters
 
             return (parameter, n, varSpec) =>
             {
-                if (varSpec != null)
+                if (varSpec != null && varSpec.Variable == parameter)
                 {
                     return varSpec.Value;
                 }

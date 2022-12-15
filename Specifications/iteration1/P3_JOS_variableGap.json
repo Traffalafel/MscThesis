@@ -1,0 +1,32 @@
+{
+  "NumRuns": 100,
+  "ProblemSize": 100,
+  "Variable": "GapSize",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 30,
+    "Step": 1
+  },
+  "MaxParallelization": 16,
+  "Problem": {
+    "Name": "JumpOffsetSpike"
+  },
+  "Optimizers": [
+    {
+      "Name": "P3",
+      "Algorithm": "P3"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

@@ -14,10 +14,10 @@ namespace MscThesis.Runner.Factories
     {
         private readonly string _name;
         private readonly Func<FitnessFunction<T>, VariableSpecification, Optimizer<T>> _buildOptimizer;
-        private readonly Func<int, FitnessFunction<T>> _buildProblem;
-        private readonly Func<int, IEnumerable<TerminationCriterion<T>>> _buildTerminations;
+        private readonly Func<int, VariableSpecification, FitnessFunction<T>> _buildProblem;
+        private readonly Func<int, VariableSpecification, IEnumerable<TerminationCriterion<T>>> _buildTerminations;
 
-        public TestCase(string name, Func<FitnessFunction<T>, VariableSpecification, Optimizer<T>> buildOptimizer, Func<int, FitnessFunction<T>> buildProblem, Func<int, IEnumerable<TerminationCriterion<T>>> buildTerminations)
+        public TestCase(string name, Func<FitnessFunction<T>, VariableSpecification, Optimizer<T>> buildOptimizer, Func<int, VariableSpecification, FitnessFunction<T>> buildProblem, Func<int, VariableSpecification, IEnumerable<TerminationCriterion<T>>> buildTerminations)
         {
             _name = name;
             _buildOptimizer = buildOptimizer;
@@ -27,11 +27,11 @@ namespace MscThesis.Runner.Factories
 
         public ITest<T> CreateRun(int problemSize, bool saveSeries, VariableSpecification variableSpec)
         {
-            var problem = _buildProblem(problemSize);
+            var problem = _buildProblem(problemSize, variableSpec);
 
             var optimizer = _buildOptimizer(problem, variableSpec);
             
-            var terminations = _buildTerminations(problemSize);
+            var terminations = _buildTerminations(problemSize, variableSpec);
 
             var variableValue = variableSpec?.Value ?? problemSize;
 
@@ -49,6 +49,6 @@ namespace MscThesis.Runner.Factories
         public VariableSpecification() { }
 
         public Parameter Variable { get; set; }
-        public int Value { get; set; } 
+        public double Value { get; set; } 
     }
 }

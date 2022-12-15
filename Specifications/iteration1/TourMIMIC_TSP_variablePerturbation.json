@@ -1,0 +1,37 @@
+{
+  "NumRuns": 100,
+  "MaxParallelization": 16,
+  "Variable": "StdDeviationScale",
+  "VariableSteps": {
+    "Start": 0,
+    "Stop": 0.5,
+    "Step": 0.001
+  },
+  "Problem": {
+    "Name": "PerturbedTSPLib",
+    "Parameters": {
+      "ProblemName": "berlin30"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "TourMIMIC",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

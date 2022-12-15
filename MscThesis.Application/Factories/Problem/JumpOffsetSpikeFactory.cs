@@ -30,13 +30,22 @@ namespace MscThesis.Runner.Factories.Problem
             };
         } 
 
-        public override Func<int, FitnessFunction<BitString>> BuildProblem(ProblemSpecification spec)
+        public override Func<int, VariableSpecification, FitnessFunction<BitString>> BuildProblem(ProblemSpecification spec)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            return (size) =>
+            return (size, varSpec) =>
             {
-                var gapSize = (int)parameters(Parameter.GapSize, size, null);
+                int gapSize;
+                if (varSpec != null && varSpec.Variable == Parameter.BlockSize)
+                {
+                    gapSize = (int)varSpec.Value;
+                }
+                else
+                {
+                    gapSize = (int)parameters(Parameter.GapSize, size, null);
+                }
+
                 return new JumpOffsetSpike(size, gapSize);
             };
         }

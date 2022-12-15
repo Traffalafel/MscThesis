@@ -11,7 +11,7 @@ namespace MscThesis.Runner.Specification
         public StepsSpecification VariableSteps { get; set; }
         public int? VariableValue { get; set; }
         public List<int> ProblemSizes { get; set; }
-        public List<int> VariableValues { get; set; }
+        public List<double> VariableValues { get; set; }
         public int? ProblemSize { get; set; }
         public double MaxParallelization { get; set; }
         public ProblemSpecification Problem { get; set; }
@@ -29,8 +29,8 @@ namespace MscThesis.Runner.Specification
 
     public class StepsSpecification
     {
-        public int Start { get; set; }
-        public int Stop { get; set; }
-        public int Step { get; set; }
+        public double Start { get; set; }
+        public double Stop { get; set; }
+        public double Step { get; set; }
     }
 }

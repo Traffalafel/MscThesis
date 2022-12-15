@@ -25,7 +25,7 @@ namespace MscThesis.Runner.Results
             FitnessFunction<T> fitnessFunction, 
             string optimizerName, 
             ISet<Property> statisticsProperties, 
-            int variableValue,
+            double variableValue,
             bool saveSeries)
         {
             _saveSeries = saveSeries;
@@ -122,9 +122,8 @@ namespace MscThesis.Runner.Results
 
             _itemData[_iterations.TerminationReason].Value++;
 
-            var problemSize = _fitnessFunction.Size;
             var cpuTime = _itemData[Property.CpuTimeSeconds].Value;
-            Console.WriteLine($"Optimizer: {_optimizerName}; Size: {problemSize}; CPU time: {cpuTime}; Termination: {_iterations.TerminationReason}");
+            Console.WriteLine($"Optimizer: {_optimizerName}; Variable: {VariableValue}; CPU time: {cpuTime}; Termination: {_iterations.TerminationReason}");
 
             _isTerminated = true;
             return Task.CompletedTask;

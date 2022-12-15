@@ -1,0 +1,52 @@
+{
+  "NumRuns": 100,
+  "ProblemSizes": [
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "MaxParallelization": 16,
+  "Problem": {
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "sqrt(n)"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "MIMIC_PopulationSize:n/4",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "n/4"
+      }
+    },
+    {
+      "Name": "MIMIC_PopulationSize:n",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    },
+    {
+      "Name": "MIMIC_PopulationSize:4*n",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "4*n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n/4",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

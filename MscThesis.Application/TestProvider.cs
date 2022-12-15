@@ -40,7 +40,7 @@ namespace MscThesis.Runner
             {
                 if (variable == Parameter.ProblemSize)
                 {
-                    spec.VariableValues = new List<int> { problemDef.ProblemSize.Value };
+                    spec.ProblemSizes = new List<int> { problemDef.ProblemSize.Value };
                 }
                 else
                 {
@@ -48,14 +48,14 @@ namespace MscThesis.Runner
                 }
             }
 
-            IEnumerable<int> variableValues;
+            IEnumerable<double> variableValues;
             if (spec.ProblemSizes != null)
             {
-                variableValues = spec.ProblemSizes;
+                variableValues = spec.ProblemSizes.Select(size => Convert.ToDouble(size));
             }
             else if (spec.VariableValue != null)
             {
-                variableValues = new List<int> { spec.VariableValue.Value };
+                variableValues = new List<double> { spec.VariableValue.Value };
             }
             else
             {
@@ -175,7 +175,7 @@ namespace MscThesis.Runner
             return null;
         }
 
-        private ITest<T> GatherResults<T>(IEnumerable<ITestCase<T>> tests, Parameter variable, IEnumerable<int> variableSizes, int numRuns, double maxParallelization, int? problemSize) where T : InstanceFormat
+        private ITest<T> GatherResults<T>(IEnumerable<ITestCase<T>> tests, Parameter variable, IEnumerable<double> variableSizes, int numRuns, double maxParallelization, int? problemSize) where T : InstanceFormat
         {
             var numSizes = variableSizes.Count();
             var sizeRuns = numRuns;
@@ -207,7 +207,7 @@ namespace MscThesis.Runner
                     }
                     else
                     {
-                        problemSize = size;
+                        problemSize = Convert.ToInt32(size);
                     }
 
                     var isSingleRun = numRuns == 1;
@@ -245,11 +245,11 @@ namespace MscThesis.Runner
             }
         }
 
-        private IEnumerable<int> GenerateIterator(StepsSpecification spec)
+        private IEnumerable<double> GenerateIterator(StepsSpecification spec)
         {
-            if (spec.Start <= 0 || spec.Stop <= 0)
+            if (spec.Start < 0 || spec.Stop < 0)
             {
-                throw new Exception("Start and stop must both be strictly positive.");
+                throw new Exception("Start and stop must both be positive.");
             }
             if (spec.Stop < spec.Start)
             {

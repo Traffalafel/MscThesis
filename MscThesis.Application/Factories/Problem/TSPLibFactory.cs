@@ -44,7 +44,7 @@ namespace MscThesis.Runner.Factories.Problem
             _tspNames = tsps.Select(tsp => tsp.Problem.Name).ToList();
         }
 
-        public override Func<int, FitnessFunction<Tour>> BuildProblem(ProblemSpecification spec)
+        public override Func<int, VariableSpecification, FitnessFunction<Tour>> BuildProblem(ProblemSpecification spec)
         {
             var name = spec.Parameters[Parameter.ProblemName];
             var item = _tspLib.TSPItems().Where(item => item.Problem.Name == name).FirstOrDefault();
@@ -54,7 +54,7 @@ namespace MscThesis.Runner.Factories.Problem
                 throw new Exception();
             }
 
-            return _ => new TSP(item);
+            return (_1,_2) => new TSP(item);
         }
 
         public override ProblemInformation GetInformation(ProblemSpecification spec)

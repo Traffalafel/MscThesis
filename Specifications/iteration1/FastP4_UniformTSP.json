@@ -8,7 +8,7 @@
     50,
     60
   ],
-  "MaxParallelization": 16.0,
+  "MaxParallelization": 16,
   "Problem": {
     "Name": "UniformTSP",
     "Parameters": {}
@@ -38,8 +38,7 @@
   ],
   "Terminations": [
     {
-      "Name": "Optimum",
-      "Parameters": {}
+      "Name": "Optimum reached"
     },
     {
       "Name": "Stagnation",

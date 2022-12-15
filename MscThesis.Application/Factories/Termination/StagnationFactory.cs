@@ -24,15 +24,15 @@ namespace MscThesis.Runner.Factories.Termination
             Parameter.Epsilon
         };
 
-        public Func<int, TerminationCriterion<T>> BuildCriterion(TerminationSpecification spec, Func<int, FitnessFunction<T>> fitnessGenerator)
+        public Func<int, VariableSpecification, TerminationCriterion<T>> BuildCriterion(TerminationSpecification spec, Func<int, VariableSpecification, FitnessFunction<T>> fitnessGenerator)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            return (size) =>
+            return (size, varSpec) =>
             {
                 var epsilon = parameters(Parameter.Epsilon, size, null);
                 var maxStagnatedIterations = (int) parameters(Parameter.MaxIterations, size, null);
-                var fitnessFunction = fitnessGenerator(size);
+                var fitnessFunction = fitnessGenerator(size, varSpec);
                 return new StagnationTermination<T>(epsilon, maxStagnatedIterations, fitnessFunction.Comparison);
             };
 

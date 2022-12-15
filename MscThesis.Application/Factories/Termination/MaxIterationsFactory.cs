@@ -23,11 +23,11 @@ namespace MscThesis.Runner.Factories.Termination
             Parameter.MaxIterations
         };
 
-        public Func<int, TerminationCriterion<T>> BuildCriterion(TerminationSpecification spec, Func<int, FitnessFunction<T>> _)
+        public Func<int, VariableSpecification, TerminationCriterion<T>> BuildCriterion(TerminationSpecification spec, Func<int, VariableSpecification, FitnessFunction<T>> _)
         {
             var parameters = _parameterFactory.BuildParameters(spec.Parameters);
 
-            return (size) =>
+            return (size, _) =>
             {
                 var maxIterations = (int) parameters(Parameter.MaxIterations, size, null);
                 return new MaxIterationsTermination<T>(maxIterations);

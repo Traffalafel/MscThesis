@@ -17,9 +17,9 @@ namespace MscThesis.Runner.Factories.Problem
 {
     public class UniformTSPFactory : ProblemFactory<Tour>
     {
-        public override Func<int, FitnessFunction<Tour>> BuildProblem(ProblemSpecification spec)
+        public override Func<int, VariableSpecification, FitnessFunction<Tour>> BuildProblem(ProblemSpecification spec)
         {
-            return problemSize =>
+            return (problemSize, _) =>
             {
                 var nodes = new List<Node2D>();
                 var random = RandomUtils.BuildRandom().Value;

@@ -69,7 +69,7 @@ namespace MscThesis.Runner.Factories.Problem
             _tspNames = tsps.Select(tsp => tsp.Problem.Name).ToHashSet();
         }
 
-        public override Func<int, FitnessFunction<Tour>> BuildProblem(ProblemSpecification spec)
+        public override Func<int, VariableSpecification, FitnessFunction<Tour>> BuildProblem(ProblemSpecification spec)
         {
             var name = spec.Parameters[Parameter.ProblemName];
 
@@ -101,12 +101,22 @@ namespace MscThesis.Runner.Factories.Problem
             var minY = nodesOriginal.Select(node => node.Y).Min();
             var maxY = nodesOriginal.Select(node => node.Y).Max();
 
-            var expressionParams = new Dictionary<Parameter, string> { [Parameter.StdDeviationScale] = spec.Parameters[Parameter.StdDeviationScale] };
-            var parameters = _parameterFactory.BuildParameters(expressionParams);
-            var stdDeviationScale = parameters(Parameter.StdDeviationScale, problemSize, null);
-
-            return problemSize =>
+            return (problemSize, varSpec) =>
             {
+                double stdDeviationScale;
+                if (varSpec != null && varSpec.Variable == Parameter.StdDeviationScale)
+                {
+                    stdDeviationScale = varSpec.Value;
+                }
+                else
+                {
+                    var expressionParams = new Dictionary<Parameter, string> { 
+                        [Parameter.StdDeviationScale] = spec.Parameters[Parameter.StdDeviationScale] 
+                    };
+                    var parameters = _parameterFactory.BuildParameters(expressionParams);
+                    stdDeviationScale = parameters(Parameter.StdDeviationScale, problemSize, null);
+                }
+
                 var nodes = new List<Node2D>();
                 var random = RandomUtils.BuildRandom().Value;
                 foreach (var nodeOriginal in nodesOriginal)

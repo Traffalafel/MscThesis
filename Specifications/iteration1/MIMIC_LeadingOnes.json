@@ -30,8 +30,7 @@
   ],
   "Terminations": [
     {
-      "Name": "Optimum reached",
-      "Parameters": {}
+      "Name": "Optimum reached"
     },
     {
       "Name": "Stagnation",
