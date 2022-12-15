@@ -37,7 +37,7 @@ namespace MscThesis.Runner.Factories.Problem
             return (size, varSpec) =>
             {
                 int gapSize;
-                if (varSpec != null && varSpec.Variable == Parameter.BlockSize)
+                if (varSpec != null && varSpec.Variable == Parameter.GapSize)
                 {
                     gapSize = (int)varSpec.Value;
                 }
