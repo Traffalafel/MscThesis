@@ -44,7 +44,7 @@ namespace MscThesis.Runner.Factories.Problem
                     edgeProvider,
                     edgeWeightProvider,
                     fixedEdgesProvider);
-                var itemNew = new TspLib95Item(problemNew, null, 0.0d);
+                var itemNew = new TspLib95Item(problemNew, null, double.MinValue);
 
                 return new TSP(itemNew);
             };

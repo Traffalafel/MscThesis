@@ -3,9 +3,9 @@
   "MaxParallelization": 16,
   "Variable": "PopulationSize",
   "VariableSteps": {
-    "Start": 1,
-    "Stop": 100,
-    "Step": 1
+    "Start": 5,
+    "Stop": 300,
+    "Step": 5
   },
   "Problem": {
     "Name": "TSPLib",

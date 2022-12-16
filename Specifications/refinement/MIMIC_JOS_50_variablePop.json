@@ -1,11 +1,11 @@
 {
-  "NumRuns": 100,
+  "NumRuns": 1000,
   "ProblemSize": 50,
   "Variable": "PopulationSize",
   "VariableSteps": {
     "Start": 5,
-    "Stop": 500,
-    "Step": 5
+    "Stop": 80,
+    "Step": 1
   },
   "MaxParallelization": 4,
   "Problem": {

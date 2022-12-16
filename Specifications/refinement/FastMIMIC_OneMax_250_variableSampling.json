@@ -1,0 +1,37 @@
+{
+  "NumRuns": 100,
+  "ProblemSize": 250,
+  "Variable": "NumSampledPositions",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 250,
+    "Step": 1
+  },
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "OneMax",
+    "Parameters": {
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "FastMIMIC",
+      "Algorithm": "FastMIMIC",
+"Parameters": {
+"PopulationSize": "n"
+}
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

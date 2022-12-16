@@ -1,0 +1,35 @@
+{
+  "NumRuns": 1000,
+  "ProblemSize": 120,
+  "Variable": "PopulationSize",
+  "VariableSteps": {
+    "Start": 5,
+    "Stop": 1000,
+    "Step": 5
+  },
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": "2"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "GOMEA",
+      "Algorithm": "GOMEA"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}
