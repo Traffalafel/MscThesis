@@ -4,7 +4,7 @@
   "Variable": "K",
   "VariableSteps": {
     "Start": 1,
-    "Stop": 100,
+    "Stop": 200,
     "Step": 1
   },
   "MaxParallelization": 4,

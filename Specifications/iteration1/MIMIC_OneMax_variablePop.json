@@ -3,9 +3,9 @@
   "ProblemSize": 100,
   "Variable": "PopulationSize",
   "VariableSteps": {
-    "Start": 1,
-    "Stop": 100,
-    "Step": 1
+    "Start": 25,
+    "Stop": 200,
+    "Step": 5
   },
   "MaxParallelization": 4,
   "Problem": {

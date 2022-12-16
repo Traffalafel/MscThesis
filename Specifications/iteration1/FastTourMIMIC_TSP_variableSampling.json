@@ -1,0 +1,37 @@
+{
+  "NumRuns": 100,
+  "MaxParallelization": 16,
+  "Variable": "NumSampledPositions",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 30,
+    "Step": 1
+  },
+  "Problem": {
+    "Name": "TSPLib",
+    "Parameters": {
+      "ProblemName": "berlin30"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "FastTourMIMIC",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "Variable": "PopulationSize",
   "VariableSteps": {
     "Start": 10,
-    "Stop": 200,
+    "Stop": 500,
     "Step": 10
   },
   "MaxParallelization": 16,

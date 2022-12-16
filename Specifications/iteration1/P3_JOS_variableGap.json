@@ -4,7 +4,7 @@
   "Variable": "GapSize",
   "VariableSteps": {
     "Start": 1,
-    "Stop": 30,
+    "Stop": 100,
     "Step": 1
   },
   "MaxParallelization": 16,

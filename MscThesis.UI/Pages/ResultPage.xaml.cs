@@ -159,9 +159,12 @@ public partial class ResultPage : ContentPage
             problemRows.Add(("Variable step:", $"{spec.VariableSteps.Step}"));
         }
 
-        foreach (var kv in problemSpec.Parameters)
+        if (problemSpec.Parameters != null)
         {
-            problemRows.Add(($"{kv.Key}:", $"{kv.Value}"));
+            foreach (var kv in problemSpec.Parameters)
+            {
+                problemRows.Add(($"{kv.Key}:", $"{kv.Value}"));
+            }
         }
         var problemGrid = BuildGrid(ToObservable(problemRows));
         var problemLayout = new VerticalStackLayout
@@ -216,9 +219,12 @@ public partial class ResultPage : ContentPage
 
             var rows = new List<(string left, string right)>();
             rows.Add(("Name:", terminationSpec.Name));
-            foreach (var kv in terminationSpec.Parameters)
+            if (terminationSpec.Parameters != null)
             {
-                rows.Add(($"{kv.Key}:", $"{kv.Value}"));
+                foreach (var kv in terminationSpec.Parameters)
+                {
+                    rows.Add(($"{kv.Key}:", $"{kv.Value}"));
+                }
             }
             var grid = BuildGrid(ToObservable(rows));
             terminationLayout.Add(grid);
@@ -248,9 +254,12 @@ public partial class ResultPage : ContentPage
                 });
                 var paramsRows = new List<(string left, string right)>();
                 paramsRows.Add(("Algorithm:", optimizerSpec.Algorithm));
-                foreach (var kv in optimizerSpec.Parameters)
+                if (optimizerSpec.Parameters != null)
                 {
-                    paramsRows.Add(($"{kv.Key}:", $"{kv.Value}"));
+                    foreach (var kv in optimizerSpec.Parameters)
+                    {
+                        paramsRows.Add(($"{kv.Key}:", $"{kv.Value}"));
+                    }
                 }
                 var paramsGrid = BuildGrid(ToObservable(paramsRows));
                 var paramsColumn = new VerticalStackLayout

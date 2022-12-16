@@ -4,7 +4,7 @@
   "Variable": "PopulationSize",
   "VariableSteps": {
     "Start": 1,
-    "Stop": 100,
+    "Stop": 500,
     "Step": 1
   },
   "Problem": {
