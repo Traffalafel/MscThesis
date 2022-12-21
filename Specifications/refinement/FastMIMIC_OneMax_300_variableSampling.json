@@ -3,7 +3,7 @@
   "ProblemSize": 300,
   "Variable": "NumSampledPositions",
   "VariableSteps": {
-    "Start": 1,
+    "Start": 20,
     "Stop": 300,
     "Step": 1
   },

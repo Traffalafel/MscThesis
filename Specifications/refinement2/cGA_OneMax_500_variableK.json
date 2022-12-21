@@ -1,0 +1,34 @@
+{
+  "NumRuns": 1000,
+  "ProblemSize": 500,
+  "Variable": "K",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 300,
+    "Step": 1
+  },
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "OneMax",
+    "Parameters": {
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "cGA",
+      "Algorithm": "cGA"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

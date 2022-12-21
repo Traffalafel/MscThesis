@@ -1,0 +1,32 @@
+{
+  "NumRuns": 100,
+  "ProblemSize": 110,
+  "Variable": "PopulationSize",
+  "VariableSteps": {
+    "Start": 2,
+    "Stop": 300,
+    "Step": 2
+  },
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "LeadingOnes"
+  },
+  "Optimizers": [
+    {
+      "Name": "MIMIC",
+      "Algorithm": "MIMIC"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

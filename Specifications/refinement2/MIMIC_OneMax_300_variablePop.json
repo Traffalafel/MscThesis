@@ -1,9 +1,9 @@
 {
-  "NumRuns": 1000,
-  "ProblemSize": 200,
+  "NumRuns": 100,
+  "ProblemSize": 300,
   "Variable": "PopulationSize",
   "VariableSteps": {
-    "Start": 60,
+    "Start": 90,
     "Stop": 200,
     "Step": 1
   },

@@ -1,5 +1,5 @@
 {
-  "NumRuns": 1000,
+  "NumRuns": 100,
   "ProblemSize": 200,
   "Variable": "PopulationSize",
   "VariableSteps": {
@@ -26,7 +26,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "n/2",
         "Epsilon": "10E-5"
       }
     }

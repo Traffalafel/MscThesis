@@ -1,22 +1,20 @@
 {
-  "NumRuns": 1000,
-  "ProblemSize": 200,
+  "NumRuns": 100,
+  "ProblemSize": 50,
   "Variable": "PopulationSize",
   "VariableSteps": {
-    "Start": 50,
-    "Stop": 200,
-    "Step": 1
+    "Start": 2,
+    "Stop": 500,
+    "Step": 2
   },
   "MaxParallelization": 4,
   "Problem": {
-    "Name": "OneMax",
-    "Parameters": {
-    }
+    "Name": "LeadingOnes"
   },
   "Optimizers": [
     {
-      "Name": "MIMIC",
-      "Algorithm": "MIMIC"
+      "Name": "GOMEA",
+      "Algorithm": "GOMEA"
     }
   ],
   "Terminations": [
@@ -26,7 +24,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "n/2",
         "Epsilon": "10E-5"
       }
     }
