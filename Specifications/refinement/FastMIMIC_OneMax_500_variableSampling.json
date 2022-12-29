@@ -1,6 +1,6 @@
 {
   "NumRuns": 100,
-  "ProblemSize": 300,
+  "ProblemSize": 500,
   "Variable": "NumSampledPositions",
   "VariableSteps": {
     "Start": 40,

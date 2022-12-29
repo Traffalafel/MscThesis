@@ -16,7 +16,7 @@
       "Name": "FastTourMIMIC",
       "Algorithm": "FastTourMIMIC",
       "Parameters": {
-        "PopulationSize": "n"
+        "PopulationSize": "100"
       }
     }
   ],

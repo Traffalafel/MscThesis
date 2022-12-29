@@ -3,9 +3,9 @@
   "ProblemSize": 200,
   "Variable": "PopulationSize",
   "VariableSteps": {
-    "Start": 40,
+    "Start": 2,
     "Stop": 200,
-    "Step": 1
+    "Step": 2
   },
   "MaxParallelization": 4,
   "Problem": {
@@ -26,7 +26,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

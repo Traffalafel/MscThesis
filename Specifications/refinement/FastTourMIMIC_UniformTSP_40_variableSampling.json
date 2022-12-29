@@ -1,0 +1,35 @@
+{
+  "NumRuns": 100,
+  "ProblemSize": 40,
+  "Variable": "NumSampledPositions",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 40,
+    "Step": 1
+  },
+  "MaxParallelization": 16,
+  "Problem": {
+    "Name": "UniformTSP"
+  },
+  "Optimizers": [
+    {
+      "Name": "FastTourMIMIC",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "100"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

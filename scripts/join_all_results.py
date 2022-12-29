@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import utils
 
 RESULTS_DIR = "results"
-FILENAME_PATTERN = "([a-zA-z_]+)(_\d+)?_variable(\w+)\.txt"
+FILENAME_PATTERN = "([a-zA-z0-9_]+)(_\d+)_variable(\w+)\.txt"
 PROPERTIES = ["BestFitness", "NumberFitnessCalls", "CpuTimeSeconds"]
 CHARTS_DIR = r"G:\My Drive\Dokumenter\DTU\Speciale\charts\variable"
 

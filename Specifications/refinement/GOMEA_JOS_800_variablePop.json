@@ -1,0 +1,35 @@
+{
+  "NumRuns": 1000,
+  "ProblemSize": 800,
+  "Variable": "PopulationSize",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 20,
+    "Step": 1
+  },
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "sqrt(n)"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "GOMEA",
+      "Algorithm": "GOMEA"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n/2",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "ProblemSize": 200,
   "Variable": "PopulationSize",
   "VariableSteps": {
-    "Start": 20,
+    "Start": 10,
     "Stop": 80,
     "Step": 1
   },
@@ -27,7 +27,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

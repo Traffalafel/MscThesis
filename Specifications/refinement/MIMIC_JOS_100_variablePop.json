@@ -1,0 +1,35 @@
+{
+  "NumRuns": 1000,
+  "ProblemSize": 100,
+  "Variable": "PopulationSize",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 80,
+    "Step": 1
+  },
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "sqrt(n)"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "MIMIC",
+      "Algorithm": "MIMIC"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}
