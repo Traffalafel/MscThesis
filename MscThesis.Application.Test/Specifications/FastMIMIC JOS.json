@@ -8,14 +8,18 @@
   ],
   "MaxParallelization": 1,
   "Problem": {
-    "Name": "LeadingOnes"
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "sqrt(n)"
+    }
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
+      "Name": "FastMIMIC",
+      "Algorithm": "FastMIMIC",
       "Parameters": {
-        "PopulationSize": "n"
+        "PopulationSize": "n",
+        "NumSampledPositions": "n/2"
       }
     }
   ],

@@ -10,8 +10,8 @@
   },
   "Optimizers": [
     {
-      "Name": "TourMIMIC_PopulationSize:25",
-      "Algorithm": "TourMIMIC",
+      "Name": "TourGOMEA_PopulationSize:25",
+      "Algorithm": "TourGOMEA",
       "Parameters": {
         "PopulationSize": "25"
       }
@@ -19,7 +19,7 @@
   ],
   "Terminations": [
     {
-      "Name": "Optimum",
+      "Name": "Optimum reached",
       "Parameters": {}
     },
     {

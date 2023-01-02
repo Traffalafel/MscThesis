@@ -1,8 +1,10 @@
 ﻿{
-  "NumRuns": 20,
+  "NumRuns": 10,
   "Variable": "ProblemSize",
   "VariableValues": [
-    100
+    10,
+    20,
+    30
   ],
   "MaxParallelization": 1,
   "Problem": {
@@ -10,12 +12,8 @@
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC_PopulationSize:n",
-      "Algorithm": "FastMIMIC",
-      "Parameters": {
-        "PopulationSize": "n",
-        "NumSampledPositions": "sqrt(n)"
-      }
+      "Name": "P3",
+      "Algorithm": "P3"
     }
   ],
   "Terminations": [

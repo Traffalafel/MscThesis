@@ -68,41 +68,34 @@ namespace MscThesis.Core.Algorithms.Tours
             return prev;
         }
 
-        internal static double[,] ComputeD(double[,] delta1Sums, double[,] delta2Sums, int populationSize)
-        { 
-            var delta1 = ComputeDelta1(delta1Sums, populationSize);
-            var delta2 = ComputeDelta2(delta2Sums, populationSize);
-
-            var size = delta1.GetLength(0);
-            var D = new double[size, size];
-            for (int i = 0; i < size; i++)
+        internal static double[,] ComputeDelta1(int numFreeNodes, Population<RandomKeysTour> population)
+        {
+            var delta1Sums = new double[numFreeNodes, numFreeNodes];
+            foreach (var individual in population)
             {
-                for (int j = i+1; j < size; j++)
-                {
-                    D[i, j] = 1 - (delta1[i, j] * delta2[i, j]);
-                    D[j, i] = D[i, j];
-                }
+                AddToDelta1Sums(delta1Sums, individual.Value);
             }
-            return D;
+
+            return ComputeDelta1(delta1Sums, population.Size);
         }
 
         internal static double[,] ComputeDelta1(double[,] delta1Sums, int populationSize)
         {
-            var size = delta1Sums.GetLength(0);
-            var delta1 = new double[size, size];
+            var numFreeNodes = delta1Sums.GetLength(0);
 
-            for (int i = 0; i < size; i++)
+            var delta1 = new double[numFreeNodes, numFreeNodes];
+            for (int i = 0; i < numFreeNodes; i++)
             {
-                for (int j = i + 1; j < size; j++)
+                for (int j = i + 1; j < numFreeNodes; j++)
                 {
                     var p_ij = (1.0d / populationSize) * delta1Sums[i, j];
                     delta1[i, j] = 1.0d + (p_ij * Math.Log2(p_ij)) * ((1.0d - p_ij) * Math.Log2(1.0d - p_ij));
                     delta1[j, i] = delta1[i, j];
                 }
             }
-
             return delta1;
         }
+
 
         internal static void AddToDelta1Sums(double[,] delta1Sums, RandomKeysTour tour)
         {
@@ -121,22 +114,33 @@ namespace MscThesis.Core.Algorithms.Tours
             }
         }
 
+        internal static double[,] ComputeDelta2(int numFreeNodes, Population<RandomKeysTour> population)
+        {
+            var delta2Sums = new double[numFreeNodes, numFreeNodes];
+            foreach (var individual in population)
+            {
+                AddToDelta1Sums(delta2Sums, individual.Value);
+            }
+
+            return ComputeDelta2(delta2Sums, population.Size);
+        }
+
         internal static double[,] ComputeDelta2(double[,] delta2Sums, int populationSize)
         {
-            var size = delta2Sums.GetLength(0);
-            var delta2 = new double[size, size];
+            var numFreeNodes = delta2Sums.GetLength(0);
 
-            for (int i = 0; i < size; i++)
+            var delta2 = new double[numFreeNodes, numFreeNodes];
+            for (int i = 0; i < numFreeNodes; i++)
             {
-                for (int j = i + 1; j < size; j++)
+                for (int j = i + 1; j < numFreeNodes; j++)
                 {
-                    delta2[i,j] = 1.0d - (1.0d / populationSize) * delta2Sums[i, j];
+                    delta2[i, j] = 1.0d - (1.0d / populationSize) * delta2Sums[i, j];
                     delta2[j, i] = delta2[i, j];
                 }
             }
-
             return delta2;
         }
+
 
         internal static void AddToDelta2Sums(double[,] delta1Sums, RandomKeysTour tour)
         {

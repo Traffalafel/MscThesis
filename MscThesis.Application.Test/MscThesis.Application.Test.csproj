@@ -29,20 +29,33 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Specifications\FastMIMIC multiple runs.json" />
-    <None Remove="Specifications\FastMIMIC single run.json" />
+    <None Remove="Specifications\FastMIMIC DLB.json" />
+    <None Remove="Specifications\FastMIMIC JOS.json" />
+    <None Remove="Specifications\FastMIMIC LeadingOnes.json" />
+    <None Remove="Specifications\FastMIMIC OneMax.json" />
+    <None Remove="Specifications\FastP4 TSPLib.json" />
+    <None Remove="Specifications\FastP4 UniformTSP.json" />
+    <None Remove="Specifications\FastTourMIMIC TSPLib.json" />
+    <None Remove="Specifications\FastTourMIMIC UniformTSP.json" />
+    <None Remove="Specifications\GOMEA DLB.json" />
+    <None Remove="Specifications\GOMEA JOS.json" />
+    <None Remove="Specifications\GOMEA LeadingOnes.json" />
+    <None Remove="Specifications\GOMEA OneMax.json" />
     <None Remove="Specifications\MIMIC DLB.json" />
     <None Remove="Specifications\MIMIC JOS.json" />
     <None Remove="Specifications\MIMIC LeadingOnes.json" />
-    <None Remove="Specifications\MIMIC multiple runs.json" />
     <None Remove="Specifications\MIMIC OneMax.json" />
-    <None Remove="Specifications\PerturbedTSPLib TourMIMIC.json" />
+    <None Remove="Specifications\P3 DLB.json" />
+    <None Remove="Specifications\P3 JOS.json" />
+    <None Remove="Specifications\P3 LeadingOnes.json" />
+    <None Remove="Specifications\P3 OneMax.json" />
+    <None Remove="Specifications\P4 TSPLib.json" />
+    <None Remove="Specifications\P4 UniformTSP.json" />
+    <None Remove="Specifications\TourGOMEA TSPLib.json" />
+    <None Remove="Specifications\TourGOMEA UniformTSP.json" />
+    <None Remove="Specifications\TourMIMIC PerturbedTSPLib.json" />
+    <None Remove="Specifications\TourMIMIC UniformTSP.json" />
     <None Remove="Specifications\TSP single run.json" />
-    <None Remove="Specifications\TSPLib FastP4.json" />
-    <None Remove="Specifications\TSPLib FastTourMIMIC.json" />
-    <None Remove="Specifications\TSPLib P4.json" />
-    <None Remove="Specifications\TSPLib TourGOMEA.json" />
-    <None Remove="Specifications\UniformTSP TourMIMIC.json" />
   </ItemGroup>
 
 </Project>

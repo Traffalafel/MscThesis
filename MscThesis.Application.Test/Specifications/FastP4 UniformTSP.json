@@ -1,26 +1,27 @@
 {
-  "NumRuns": 5,
+  "NumRuns": 10,
+  "Variable": "ProblemSize",
   "VariableValues": [
-    10
+    5,
+    10,
+    15
   ],
-  "MaxParallelization": 1.0,
+  "MaxParallelization": 1,
   "Problem": {
-    "Name": "UniformTSP",
-    "Parameters": {}
+    "Name": "UniformTSP"
   },
   "Optimizers": [
     {
-      "Name": "TourMIMIC_PopulationSize:25",
-      "Algorithm": "TourMIMIC",
+      "Name": "FastP4",
+      "Algorithm": "FastP4",
       "Parameters": {
-        "PopulationSize": "25"
+        "SheddingInterval": "10"
       }
     }
   ],
   "Terminations": [
     {
-      "Name": "Optimum",
-      "Parameters": {}
+      "Name": "Optimum reached"
     },
     {
       "Name": "Stagnation",

@@ -1,19 +1,22 @@
 ﻿{
-  "NumRuns": 20,
+  "NumRuns": 10,
+  "Variable": "ProblemSize",
   "VariableValues": [
-    100
+    10,
+    20,
+    30
   ],
-  "MaxParallelization": 4,
+  "MaxParallelization": 1,
   "Problem": {
-    "Name": "OneMax"
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "sqrt(n)"
+    }
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "n"
-      }
+      "Name": "P3",
+      "Algorithm": "P3"
     }
   ],
   "Terminations": [

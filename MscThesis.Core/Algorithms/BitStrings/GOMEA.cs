@@ -49,7 +49,9 @@ namespace MscThesis.Core.Algorithms
         {
             var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(_population);
             var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(_population);
-            var clusters = ClusteringUtils.BuildClusters(uniEntropies, jointEntropies);
+
+            var distanceFunc = ClusteringUtils.GetEntropyDistanceFunc(jointEntropies, uniEntropies);
+            var clusters = ClusteringUtils.BuildClusters(_problemSize, distanceFunc);
 
             var output = new Population<BitString>(_comparisonStrategy);
 

@@ -1,19 +1,22 @@
 ﻿{
-  "NumRuns": 1,
+  "NumRuns": 10,
+  "Variable": "ProblemSize",
   "VariableValues": [
-    100
+    10,
+    20,
+    30
   ],
   "MaxParallelization": 1,
   "Problem": {
-    "Name": "OneMax"
+    "Name": "LeadingOnes"
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC_PopulationSize:n",
+      "Name": "FastMIMIC",
       "Algorithm": "FastMIMIC",
       "Parameters": {
         "PopulationSize": "n",
-        "NumSampledPositions": "sqrt(n)"
+        "NumSampledPositions": "n/2"
       }
     }
   ],

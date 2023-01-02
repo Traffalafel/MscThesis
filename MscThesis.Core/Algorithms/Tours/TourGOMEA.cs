@@ -71,15 +71,10 @@ namespace MscThesis.Core.Algorithms.Tours
 
         private List<HashSet<int>> ComputeClusters(Population<RandomKeysTour> population)
         {
-            var delta1Sums = new double[_numFreeNodes, _numFreeNodes];
-            var delta2Sums = new double[_numFreeNodes, _numFreeNodes];
-            foreach (var individual in population)
-            {
-                RandomKeysUtils.AddToDelta1Sums(delta1Sums, individual.Value);
-                RandomKeysUtils.AddToDelta2Sums(delta2Sums, individual.Value);
-            }
-            var D = RandomKeysUtils.ComputeD(delta1Sums, delta2Sums, population.Size);
-            return ClusteringUtils.BuildClusters(D);
+            var delta1 = RandomKeysUtils.ComputeDelta1(_numFreeNodes, population);
+            var delta2 = RandomKeysUtils.ComputeDelta2(_numFreeNodes, population);
+            var distanceFunc = ClusteringUtils.GetPermutationDistanceFunc(delta1, delta2);
+            return ClusteringUtils.BuildClusters(_numFreeNodes, distanceFunc);
         }
 
         private Population<RandomKeysTour> TournamentSelection(Random random, Population<RandomKeysTour> population, FitnessFunction<Tour> fitnessFunction)

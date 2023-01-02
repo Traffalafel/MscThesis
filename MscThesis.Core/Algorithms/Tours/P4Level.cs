@@ -35,8 +35,10 @@ namespace MscThesis.Core.Algorithms.Tours
         {
             RandomKeysUtils.AddToDelta1Sums(_delta1Sums, individual.Value);
             RandomKeysUtils.AddToDelta2Sums(_delta2Sums, individual.Value);
-            var D = RandomKeysUtils.ComputeD(_delta1Sums, _delta2Sums, _population.Size);
-            _clusters = ClusteringUtils.BuildClusters(D);
+            var delta1 = RandomKeysUtils.ComputeDelta1(_delta1Sums, _population.Size);
+            var delta2 = RandomKeysUtils.ComputeDelta2(_delta2Sums, _population.Size);
+            var distanceFunc = ClusteringUtils.GetPermutationDistanceFunc(delta1, delta2);
+            _clusters = ClusteringUtils.BuildClusters(_problemSize, distanceFunc);
         }
     }
 }

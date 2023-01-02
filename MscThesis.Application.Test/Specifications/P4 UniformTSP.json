@@ -1,33 +1,29 @@
-﻿{
+{
   "NumRuns": 10,
   "Variable": "ProblemSize",
   "VariableValues": [
+    5,
     10,
-    20,
-    30
+    15
   ],
   "MaxParallelization": 1,
   "Problem": {
-    "Name": "LeadingOnes"
+    "Name": "UniformTSP"
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "n"
-      }
+      "Name": "P4",
+      "Algorithm": "P4"
     }
   ],
   "Terminations": [
     {
-      "Name": "Optimum reached",
-      "Parameters": {}
+      "Name": "Optimum reached"
     },
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n",
+        "MaxIterations": "25",
         "Epsilon": "10E-5"
       }
     }

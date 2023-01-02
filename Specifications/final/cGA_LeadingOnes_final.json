@@ -1,40 +1,21 @@
 {
   "NumRuns": 1000,
-  "ProblemSizes": [
-    100,
-    200,
-    300,
-    400,
-    500,
-    600,
-    700,
-    800,
-    900,
-    1000,
-    1100,
-    1200,
-    1300,
-    1400,
-    1500,
-    1600,
-    1700,
-    1800,
-    1900,
-    2000
-  ],
+  "Variable": "ProblemSize",
+  "VariableSteps": {
+    "Start": 100,
+    "Stop": 1000,
+    "Step": 50
+  },
   "MaxParallelization": 4,
   "Problem": {
-    "Name": "JumpOffsetSpike",
-    "Parameters": {
-      "GapSize": "sqrt(n)"
-    }
+    "Name": "LeadingOnes"
   },
   "Optimizers": [
     {
-      "Name": "cGA_K:0.3*sqrt(n)*log(n)",
+      "Name": "cGA_1.5*sqrt(n)",
       "Algorithm": "cGA",
       "Parameters": {
-        "K": "0.3*sqrt(n)*log(n)"
+        "K": "1.5*sqrt(n)"
       }
     }
   ],

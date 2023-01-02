@@ -8,12 +8,12 @@
   ],
   "MaxParallelization": 1,
   "Problem": {
-    "Name": "LeadingOnes"
+    "Name": "OneMax"
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
+      "Name": "GOMEA_PopulationSize:n",
+      "Algorithm": "GOMEA",
       "Parameters": {
         "PopulationSize": "n"
       }

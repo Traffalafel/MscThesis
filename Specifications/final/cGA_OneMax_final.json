@@ -1,21 +1,21 @@
-﻿{
-  "NumRuns": 10,
+{
+  "NumRuns": 1000,
   "Variable": "ProblemSize",
-  "VariableValues": [
-    10,
-    20,
-    30
-  ],
-  "MaxParallelization": 1,
+  "VariableSteps": {
+    "Start": 100,
+    "Stop": 1000,
+    "Step": 50
+  },
+  "MaxParallelization": 4,
   "Problem": {
-    "Name": "LeadingOnes"
+    "Name": "OneMax"
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
+      "Name": "cGA",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "n"
+        "K": "0.07*n+2*sqrt(n)"
       }
     }
   ],
@@ -27,7 +27,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n",
+        "MaxIterations": "n*log(n)",
         "Epsilon": "10E-5"
       }
     }

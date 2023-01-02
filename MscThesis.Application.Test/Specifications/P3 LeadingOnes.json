@@ -12,11 +12,8 @@
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "n"
-      }
+      "Name": "P3",
+      "Algorithm": "P3"
     }
   ],
   "Terminations": [

@@ -1,23 +1,12 @@
-{
-  "NumRuns": 1000,
-  "ProblemSizes": [
-    100,
-    200,
-    300,
-    400,
-    500,
-    600,
-    700,
-    800,
-    900,
-    1000,
-    1100,
-    1200,
-    1300,
-    1400,
-    1500
+﻿{
+  "NumRuns": 10,
+  "Variable": "ProblemSize",
+  "VariableValues": [
+    10,
+    20,
+    30
   ],
-  "MaxParallelization": 4,
+  "MaxParallelization": 1,
   "Problem": {
     "Name": "JumpOffsetSpike",
     "Parameters": {
@@ -26,10 +15,10 @@
   },
   "Optimizers": [
     {
-      "Name": "GOMEA_PopulationSize:2*sqrt(n)",
-      "Algorithm": "GOMEA",
+      "Name": "MIMIC_PopulationSize:n",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "2*sqrt(n)"
+        "PopulationSize": "n"
       }
     }
   ],
@@ -41,7 +30,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

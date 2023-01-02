@@ -1,26 +1,27 @@
 {
-  "NumRuns": 1,
-  "VariableValues": [],
-  "MaxParallelization": 1.0,
+  "NumRuns": 10,
+  "Variable": "ProblemSize",
+  "VariableValues": [
+    5,
+    10,
+    15
+  ],
+  "MaxParallelization": 1,
   "Problem": {
-    "Name": "TSPLib",
-    "Parameters": {
-      "ProblemName": "berlin5"
-    }
+    "Name": "UniformTSP"
   },
   "Optimizers": [
     {
-      "Name": "TourGOMEA_PopulationSize:25",
+      "Name": "TourGOMEA",
       "Algorithm": "TourGOMEA",
       "Parameters": {
-        "PopulationSize": "25"
+        "PopulationSize": "20"
       }
     }
   ],
   "Terminations": [
     {
-      "Name": "Optimum",
-      "Parameters": {}
+      "Name": "Optimum reached"
     },
     {
       "Name": "Stagnation",

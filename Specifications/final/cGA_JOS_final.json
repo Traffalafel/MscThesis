@@ -1,22 +1,11 @@
 {
   "NumRuns": 1000,
-  "ProblemSizes": [
-    100,
-    200,
-    300,
-    400,
-    500,
-    600,
-    700,
-    800,
-    900,
-    1000,
-    1100,
-    1200,
-    1300,
-    1400,
-    1500
-  ],
+  "Variable": "ProblemSize",
+  "VariableSteps": {
+    "Start": 100,
+    "Stop": 1000,
+    "Step": 50
+  },
   "MaxParallelization": 4,
   "Problem": {
     "Name": "JumpOffsetSpike",
@@ -26,11 +15,10 @@
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC_PopulationSize:3*sqrt(n)_NumSampledPositions:6*sqrt(n)",
-      "Algorithm": "FastMIMIC",
+      "Name": "cGA",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "3*sqrt(n)",
-        "NumSampledPositions": "6*sqrt(n)"
+        "K": "1.866*sqrt(n)"
       }
     }
   ],

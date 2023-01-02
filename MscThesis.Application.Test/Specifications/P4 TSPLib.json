@@ -10,17 +10,14 @@
   },
   "Optimizers": [
     {
-      "Name": "TourMIMIC_PopulationSize:25",
-      "Algorithm": "TourMIMIC",
-      "Parameters": {
-        "PopulationSize": "25",
-        "NumSampledPositions": "2"
-      }
+      "Name": "P4",
+      "Algorithm": "P4",
+      "Parameters": {}
     }
   ],
   "Terminations": [
     {
-      "Name": "Optimum",
+      "Name": "Optimum reached",
       "Parameters": {}
     },
     {

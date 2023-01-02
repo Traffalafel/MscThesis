@@ -1,23 +1,26 @@
 {
-  "NumRuns": 1,
+  "NumRuns": 5,
   "VariableValues": [],
   "MaxParallelization": 1.0,
   "Problem": {
-    "Name": "TSPLib",
+    "Name": "PerturbedTSPLib",
     "Parameters": {
-      "ProblemName": "berlin5"
+      "ProblemName": "berlin5",
+      "StdDeviationScale": "1.0"
     }
   },
   "Optimizers": [
     {
-      "Name": "P4",
-      "Algorithm": "P4",
-      "Parameters": {}
+      "Name": "TourMIMIC_PopulationSize:25",
+      "Algorithm": "TourMIMIC",
+      "Parameters": {
+        "PopulationSize": "25"
+      }
     }
   ],
   "Terminations": [
     {
-      "Name": "Optimum",
+      "Name": "Optimum reached",
       "Parameters": {}
     },
     {

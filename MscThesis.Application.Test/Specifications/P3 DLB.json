@@ -8,15 +8,15 @@
   ],
   "MaxParallelization": 1,
   "Problem": {
-    "Name": "LeadingOnes"
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": 2
+    }
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
-      "Parameters": {
-        "PopulationSize": "n"
-      }
+      "Name": "P3",
+      "Algorithm": "P3"
     }
   ],
   "Terminations": [

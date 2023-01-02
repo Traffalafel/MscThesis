@@ -1,35 +1,24 @@
 {
   "NumRuns": 1000,
-  "ProblemSizes": [
-    100,
-    200,
-    300,
-    400,
-    500,
-    600,
-    700,
-    800,
-    900,
-    1000,
-    1100,
-    1200,
-    1300,
-    1400,
-    1500
-  ],
+  "Variable": "ProblemSize",
+  "VariableSteps": {
+    "Start": 100,
+    "Stop": 800,
+    "Step": 50
+  },
   "MaxParallelization": 4,
   "Problem": {
-    "Name": "JumpOffsetSpike",
+    "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
-      "GapSize": "sqrt(n)"
+      "BlockSize": "2"
     }
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:4*sqrt(n)",
-      "Algorithm": "MIMIC",
+      "Name": "cGA",
+      "Algorithm": "cGA",
       "Parameters": {
-        "PopulationSize": "4*sqrt(n)"
+        "K": "1.436*n"
       }
     }
   ],

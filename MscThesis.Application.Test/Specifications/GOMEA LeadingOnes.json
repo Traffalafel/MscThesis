@@ -12,8 +12,8 @@
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_PopulationSize:n",
-      "Algorithm": "MIMIC",
+      "Name": "GOMEA_PopulationSize:n",
+      "Algorithm": "GOMEA",
       "Parameters": {
         "PopulationSize": "n"
       }

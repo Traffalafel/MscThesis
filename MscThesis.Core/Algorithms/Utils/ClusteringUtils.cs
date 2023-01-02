@@ -7,107 +7,77 @@ namespace MscThesis.Core.Algorithms
     internal static class ClusteringUtils
     {
 
-        internal static List<HashSet<int>> BuildClusters(double[] uniEntropies, double[,] jointEntropies)
+        internal static List<HashSet<int>> BuildClusters(int problemSize, Func<int, int, double> distanceFunc)
         {
-            var problemSize = uniEntropies.GetLength(0);
+            var clusters = Enumerable.Range(0, problemSize).Select(c => new HashSet<int> { c }).ToList();
+            var Dpositions = Enumerable.Range(0, problemSize).ToList();
+
+            var unmerged = Enumerable.Range(0, problemSize).ToHashSet();
+            var useful = new List<HashSet<int>>(clusters);
 
             var D = new double[problemSize, problemSize];
             for (int i = 0; i < problemSize; i++)
             {
                 for (int j = i; j < problemSize; j++)
                 {
-                    D[i, j] = 2 - (uniEntropies[i] + uniEntropies[j]) / jointEntropies[i, j];
+                    D[i, j] = distanceFunc(i, j);
                     D[j, i] = D[i, j];
                 }
             }
 
-            return BuildClusters(D);
-        }
-
-        // Builds clusters minimizing distance matrix D
-        // This overwrites D
-        internal static List<HashSet<int>> BuildClusters(double[,] D)
-        {
-            var dim = D.GetLength(0);
-            if (dim != D.GetLength(1))
-            {
-                throw new Exception("D must be square");
-            }
-
-            var Dsum = new double[dim, dim];
-            for (int i = 0; i < dim; i++)
-            {
-                for (int j = i; j < dim; j++)
-                {
-                    Dsum[i, j] = D[i, j];
-                    Dsum[j, i] = D[i, j];
-                }
-            }
-
-            var sizes = new int[dim];
-            for (int i = 0; i < dim; i++)
-            {
-                sizes[i] = 1;
-            }
-
-            // Re-build clusters
-            var clusters = Enumerable.Range(0, dim).Select(c => new HashSet<int> { c }).ToList();
-            var unmerged = Enumerable.Range(0, dim).Select(c => (c, d: c)).ToHashSet();
-            var useful = new HashSet<HashSet<int>>(clusters);
             while (unmerged.Count > 1)
             {
                 var pairs = GetPairs(unmerged);
-
-                var (dist, pair) = pairs.Select(p => (Dsum[p.C1.d, p.C2.d], p)).Min();
+                var (dist, pair) = pairs.Select(p => (D[Dpositions[p.C1], Dpositions[p.C2]], p)).Min();
                 var C1 = pair.C1;
                 var C2 = pair.C2;
 
-                var remaining = unmerged.Select(x => x.d);
-                Merge(D, Dsum, sizes, remaining, C1.d, C2.d);
+                var cluster1 = clusters[C1];
+                var cluster2 = clusters[C2];
+                var clusterNew = cluster1.Union(cluster2).ToHashSet();
+
                 unmerged.Remove(C1);
                 unmerged.Remove(C2);
 
-                var cluster1 = clusters[C1.c];
-                var cluster2 = clusters[C2.c];
+                var mergedPos = Dpositions[C1];
+                var nanPos = Dpositions[C2];
 
-                var clusterNew = cluster1.Union(cluster2).ToHashSet();
-                clusters.Add(clusterNew);
-                unmerged.Add((clusters.Count - 1, C1.d));
-                useful.Add(clusterNew);
+                foreach (var remainingIdx in unmerged)
+                {
+                    var remainingCluster = clusters[remainingIdx];
+                    var distanceNew = UPGMA(cluster1, cluster2, distanceFunc);
+                    var remainingPos = Dpositions[remainingIdx];
+
+                    D[mergedPos, remainingPos] = distanceNew;
+                    D[remainingPos, mergedPos] = distanceNew;
+                    D[nanPos, remainingPos] = double.NaN;
+                    D[remainingPos, nanPos] = double.NaN;
+                }
 
                 if (dist == 0)
                 {
                     useful.Remove(cluster1);
                     useful.Remove(cluster2);
                 }
+
+                var idxNew = clusters.Count;
+                Dpositions.Add(mergedPos);
+                clusters.Add(clusterNew);
+                useful.Add(clusterNew);
+                unmerged.Add(idxNew);
             }
+
             return useful.OrderBy(c => c.Count).SkipLast(1).ToList();
         }
 
-        // Merge c2 into c1 and overwrite c2 with NaN
-        private static void Merge(double[,] D, double[,] Dsum, int[] sizes, IEnumerable<int> remaining, int c1, int c2)
+        internal static Func<int, int, double> GetEntropyDistanceFunc(double[,] jointEntropies, double[] uniEntropies)
         {
-            var sizeNew = sizes[c1] + sizes[c2];
-            sizes[c1] = sizeNew;
-            sizes[c2] = 0;
+            return (c1, c2) => 2 - (uniEntropies[c1] + uniEntropies[c2]) / jointEntropies[c1, c2];
+        }
 
-            foreach (var i in remaining)
-            {
-                if (sizes[i] == 0)
-                {
-                    continue;
-                }
-
-                Dsum[i, c1] = Dsum[i, c1] + Dsum[i, c2];
-                Dsum[i, c2] = double.NaN;
-                Dsum[c1, i] = Dsum[i, c1];
-                Dsum[c2, i] = Dsum[i, c2];
-
-                D[i, c1] = (1 / (sizeNew * sizes[i])) * Dsum[i, c1];
-                D[i, c2] = double.NaN;
-                D[c1, i] = D[i, c1];
-                D[c2, i] = D[i, c2];
-            }
+        internal static Func<int, int, double> GetPermutationDistanceFunc(double[,] delta1, double[,] delta2)
+        {
+            return (c1, c2) => 1 - delta1[c1, c2] * delta2[c1, c2];
         }
 
         private static IEnumerable<(T C1, T C2)> GetPairs<T>(IEnumerable<T> values)
@@ -117,5 +87,19 @@ namespace MscThesis.Core.Algorithms
                 return values.Skip(i + 1).Select(C2 => (C1, C2));
             }).SelectMany(x => x);
         }
+
+        private static double UPGMA(HashSet<int> cluster1, HashSet<int> cluster2, Func<int, int, double> distanceFunc)
+        {
+            var sum = 0.0d;
+            foreach (var c1 in cluster1)
+            {
+                foreach (var c2 in cluster2)
+                {
+                    sum += distanceFunc(c1, c2);
+                }
+            }
+            return (1.0d / (cluster1.Count * cluster2.Count)) * sum;
+        }
+
     }
 }
