@@ -1,25 +1,26 @@
 {
-  "NumRuns": 100,
-  "ProblemSize": 500,
-  "Variable": "NumSampledPositions",
+  "NumRuns": 500,
+  "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 40,
-    "Stop": 300,
-    "Step": 1
+    "Start": 20,
+    "Stop": 200,
+    "Step": 20
   },
   "MaxParallelization": 4,
   "Problem": {
-    "Name": "OneMax",
+    "Name": "DeceptiveLeadingBlocks",
     "Parameters": {
+      "BlockSize": "2"
     }
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC",
+      "Name": "FastMIMIC_Pop:0.855*n+20.5_Sampling:0.6*n",
       "Algorithm": "FastMIMIC",
-"Parameters": {
-"PopulationSize": "n"
-}
+      "Parameters": {
+        "PopulationSize": "0.855*n+20.5",
+        "NumSampledPositions": "0.6*n"
+      }
     }
   ],
   "Terminations": [

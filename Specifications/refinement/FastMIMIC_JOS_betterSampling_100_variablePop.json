@@ -19,7 +19,7 @@
       "Name": "FastMIMIC",
       "Algorithm": "FastMIMIC",
       "Parameters": {
-      "NumSampledPositions": "0.01*n+20"
+      "NumSampledPositions": "0.15*n+5"
       }
     }
   ],

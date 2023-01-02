@@ -1,11 +1,10 @@
 {
-  "NumRuns": 1000,
-  "ProblemSize": 500,
-  "Variable": "K",
+  "NumRuns": 500,
+  "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 1,
-    "Stop": 300,
-    "Step": 1
+    "Start": 20,
+    "Stop": 240,
+    "Step": 20
   },
   "MaxParallelization": 4,
   "Problem": {
@@ -13,8 +12,12 @@
   },
   "Optimizers": [
     {
-      "Name": "cGA",
-      "Algorithm": "cGA"
+      "Name": "FastMIMIC_Pop:0.65*n+18.8_Sampling:0.6*n",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "0.65*n+18.8",
+        "NumSampledPositions": "0.6*n"
+      }
     }
   ],
   "Terminations": [
