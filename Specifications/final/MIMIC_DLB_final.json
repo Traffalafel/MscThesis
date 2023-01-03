@@ -1,21 +1,24 @@
 {
-  "NumRuns": 1000,
+  "NumRuns": 250,
   "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 100,
-    "Stop": 1000,
-    "Step": 50
+    "Start": 15,
+    "Stop": 150,
+    "Step": 15
   },
   "MaxParallelization": 4,
   "Problem": {
-    "Name": "OneMax"
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": "2"
+    }
   },
   "Optimizers": [
     {
-      "Name": "cGA_K:0.405*sqrt(n)*log(n)",
-      "Algorithm": "cGA",
+      "Name": "MIMIC_Pop:0.14*n^2+0.7*n+5",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "K": "0.405*sqrt(n)*log(n)"
+        "PopulationSize": "0.14*n^2+0.7*n+5"
       }
     }
   ],
@@ -27,7 +30,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

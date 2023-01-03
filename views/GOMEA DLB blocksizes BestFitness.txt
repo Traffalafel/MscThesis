@@ -1,6 +1,0 @@
-GOMEA_DLB2_PopulationSize:n/4;BestFitness;ProblemSize	(100,15.79);(200,26.29);(300,39.44);(400,49.77);(500,57.94)
-GOMEA_DLB2_PopulationSize:n;BestFitness;ProblemSize	(100,42.08);(200,76.26);(300,107.55);(400,130.8);(500,158.84)
-GOMEA_DLB2_PopulationSize:4*n;BestFitness;ProblemSize	(100,89.7);(200,155.2);(300,231.06);(400,277.45);(500,341.69)
-GOMEA_DLB4_PopulationSize:n/4;BestFitness;ProblemSize	(100,14.49);(200,25.26);(300,31.69);(400,39);(500,46.45)
-GOMEA_DLB4_PopulationSize:n;BestFitness;ProblemSize	(100,35.97);(200,61.13);(300,85.39);(400,101.69);(500,122.01)
-GOMEA_DLB4_PopulationSize:4*n;BestFitness;ProblemSize	(100,75.55);(200,127.74);(300,194.46);(400,221.61);(500,276.74)

@@ -1,9 +1,9 @@
 {
-  "NumRuns": 1000,
+  "NumRuns": 250,
   "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 100,
-    "Stop": 1000,
+    "Start": 50,
+    "Stop": 500,
     "Step": 50
   },
   "MaxParallelization": 4,
@@ -12,10 +12,10 @@
   },
   "Optimizers": [
     {
-      "Name": "cGA_K:0.405*sqrt(n)*log(n)",
-      "Algorithm": "cGA",
+      "Name": "MIMIC_Pop:0.26*n",
+      "Algorithm": "MIMIC",
       "Parameters": {
-        "K": "0.405*sqrt(n)*log(n)"
+        "PopulationSize": "0.26*n"
       }
     }
   ],
@@ -27,7 +27,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "n*log(n)",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

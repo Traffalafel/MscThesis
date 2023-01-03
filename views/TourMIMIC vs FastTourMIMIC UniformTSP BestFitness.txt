@@ -1,6 +1,0 @@
-FastTourMIMIC_PopulationSize:n_NumSampledPositions:sqrt(n);BestFitness;ProblemSize	(10,1.95);(20,4.23);(30,6.89);(40,10.17);(50,13.38);(60,17.32)
-FastTourMIMIC_PopulationSize:n/4_NumSampledPositions:n/8;BestFitness;ProblemSize	(10,3.2);(20,5.45);(30,8.19);(40,10.97);(50,15.22);(60,18.44)
-FastTourMIMIC_PopulationSize:n_NumSampledPositions:n/8;BestFitness;ProblemSize	(10,2.24);(20,4.29);(30,7.34);(40,10);(50,13.67);(60,17.26)
-TourMIMIC_PopulationSize:n/4;BestFitness;ProblemSize	(10,2.87);(20,4.52);(30,8.28);(40,11.78);(50,15.35);(60,19.26)
-TourMIMIC_PopulationSize:n;BestFitness;ProblemSize	(10,1.75);(20,4.05);(30,7.08);(40,10.67);(50,13.93);(60,17.91)
-TourMIMIC_PopulationSize:4*n;BestFitness;ProblemSize	(10,1.27);(20,3.09);(30,6);(40,9.42);(50,12.94);(60,16.38)

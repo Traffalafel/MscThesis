@@ -1,0 +1,6 @@
+Param: K
+Title: cGA_OneMax_variableK NumberFitnessCalls
+X: 50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800
+Y: 16, 27, 37, 48, 54, 62, 75, 85, 96, 106, 115
+0.426*log(n)*sqrt(n)
+8.443*log(n)
