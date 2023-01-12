@@ -1,0 +1,5 @@
+Param: Pop
+Title: FastMIMIC_JOS_betterSampling_variablePop CpuTimeSeconds
+X: 100, 200, 300, 400, 500, 600
+Y: 19, 28, 36, 42, 47, 49
+2.048*sqrt(n)

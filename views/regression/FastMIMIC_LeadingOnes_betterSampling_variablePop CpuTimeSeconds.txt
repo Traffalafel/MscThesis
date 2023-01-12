@@ -1,0 +1,5 @@
+Param: Pop
+Title: FastMIMIC_LeadingOnes_betterSampling Pop CpuTimeSeconds
+X: 80, 100, 120, 140, 160
+Y: 74, 92, 105, 128, 146
+0.908*n

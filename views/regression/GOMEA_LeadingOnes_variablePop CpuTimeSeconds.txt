@@ -1,0 +1,5 @@
+Param: Pop
+Title: GOMEA_LeadingOnes_variablePop CpuTimeSeconds
+X: 50, 60, 70, 80, 90, 100, 110, 120
+Y: 80, 98, 115, 130, 140, 155, 170, 190
+1.580*n

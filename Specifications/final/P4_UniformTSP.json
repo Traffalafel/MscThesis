@@ -1,0 +1,31 @@
+{
+  "NumRuns": 100,
+  "Variable": "ProblemSize",
+  "VariableSteps": {
+    "Start": 5,
+    "Stop": 50,
+    "Step": 5
+  },
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "UniformTSP"
+  },
+  "Optimizers": [
+    {
+      "Name": "P4",
+      "Algorithm": "P4"
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

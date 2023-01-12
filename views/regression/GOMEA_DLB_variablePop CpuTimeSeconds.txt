@@ -1,0 +1,5 @@
+Param: Pop
+Title: GOMEA_DLB_variablePop CpuTimeSeconds
+X: 50, 60, 70, 80, 90, 100
+Y: 240, 300, 350, 440, 500, 560
+0.849*n*log(n)

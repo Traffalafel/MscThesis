@@ -54,6 +54,7 @@
     <None Remove="Specifications\TourGOMEA TSPLib.json" />
     <None Remove="Specifications\TourGOMEA UniformTSP.json" />
     <None Remove="Specifications\TourMIMIC PerturbedTSPLib.json" />
+    <None Remove="Specifications\TourMIMIC SortedMax.json" />
     <None Remove="Specifications\TourMIMIC UniformTSP.json" />
     <None Remove="Specifications\TSP single run.json" />
   </ItemGroup>

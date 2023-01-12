@@ -1,0 +1,5 @@
+Param: K
+Title: cGA_JOS_variableK CpuTimeSeconds
+X: 100, 200, 300, 400, 500, 600, 700, 800
+Y: 18, 28, 33, 38, 44, 47, 51, 54
+1.923*sqrt(n)

@@ -1,0 +1,35 @@
+{
+  "NumRuns": 500,
+  "ProblemSize": 50,
+  "Variable": "NumSampledPositions",
+  "VariableSteps": {
+    "Start": 1,
+    "Stop": 50,
+    "Step": 1
+  },
+  "MaxParallelization": 16,
+  "Problem": {
+    "Name": "SortedMax"
+  },
+  "Optimizers": [
+    {
+      "Name": "FastTourMIMIC",
+      "Algorithm": "FastTourMIMIC",
+      "Parameters": {
+        "PopulationSize": "200"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

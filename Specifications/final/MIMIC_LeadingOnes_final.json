@@ -1,5 +1,5 @@
 {
-  "NumRuns": 250,
+  "NumRuns": 500,
   "Variable": "ProblemSize",
   "VariableSteps": {
     "Start": 10,
@@ -12,10 +12,10 @@
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_Pop:0.0065*n^2",
+      "Name": "MIMIC_Pop:0.00639*n^2",
       "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "0.0065*n^2"
+        "PopulationSize": "0.00639*n^2"
       }
     }
   ],

@@ -1,9 +1,9 @@
 {
-  "NumRuns": 1000,
+  "NumRuns": 500,
   "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 100,
-    "Stop": 800,
+    "Start": 50,
+    "Stop": 1000,
     "Step": 50
   },
   "MaxParallelization": 4,
@@ -15,7 +15,7 @@
   },
   "Optimizers": [
     {
-      "Name": "cGA",
+      "Name": "cGA_K:1.436*n",
       "Algorithm": "cGA",
       "Parameters": {
         "K": "1.436*n"

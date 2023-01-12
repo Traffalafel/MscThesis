@@ -2,9 +2,9 @@
   "NumRuns": 500,
   "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 20,
+    "Start": 10,
     "Stop": 200,
-    "Step": 20
+    "Step": 10
   },
   "MaxParallelization": 4,
   "Problem": {
@@ -15,10 +15,10 @@
   },
   "Optimizers": [
     {
-      "Name": "FastMIMIC_Pop:0.855*n+20.5_Sampling:0.6*n",
+      "Name": "FastMIMIC_Pop:0.855*n+19.7_Sampling:0.6*n",
       "Algorithm": "FastMIMIC",
       "Parameters": {
-        "PopulationSize": "0.855*n+20.5",
+        "PopulationSize": "0.855*n+19.7",
         "NumSampledPositions": "0.6*n"
       }
     }

@@ -1,0 +1,5 @@
+Param: Sampling
+Title: FastMIMIC_LeadingOnes Sampling CpuTimeSeconds
+X: 80, 100, 120, 140, 160
+Y: 64, 76, 91, 110, 125
+0.777*n

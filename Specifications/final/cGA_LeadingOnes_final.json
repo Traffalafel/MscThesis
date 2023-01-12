@@ -1,9 +1,9 @@
 {
-  "NumRuns": 1000,
+  "NumRuns": 500,
   "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 100,
-    "Stop": 1000,
+    "Start": 50,
+    "Stop": 800,
     "Step": 50
   },
   "MaxParallelization": 4,
@@ -12,10 +12,10 @@
   },
   "Optimizers": [
     {
-      "Name": "cGA_1.5*sqrt(n)",
+      "Name": "cGA_0.190*sqrt(n)*log(n)",
       "Algorithm": "cGA",
       "Parameters": {
-        "K": "1.5*sqrt(n)"
+        "K": "0.190*sqrt(n)*log(n)"
       }
     }
   ],

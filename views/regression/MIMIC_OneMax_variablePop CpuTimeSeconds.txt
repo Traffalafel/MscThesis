@@ -1,0 +1,5 @@
+Param: Pop
+Title: MIMIC_OneMax_variablePop CpuTimeSeconds
+X: 100, 150, 200, 250, 300, 350, 400
+Y: 28, 42, 54, 68, 76, 89, 104
+0.261*n

@@ -24,6 +24,7 @@ namespace MscThesis.Runner.Factories
                 { "TSPLib", new TSPLibFactory(tspLib) },
                 { "PerturbedTSPLib", new PerturbedTSPLibFactory(tspLib, _parameterFactory) },
                 { "UniformTSP", new UniformTSPFactory() },
+                { "SortedMax", new SortedMaxFactory() }
             };
             _terminations = new Dictionary<string, ITerminationFactory<Tour>>
             {

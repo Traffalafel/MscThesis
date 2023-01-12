@@ -1,0 +1,5 @@
+Param: Pop
+Title: MIMIC_DLB_variablePop BestFitness
+X: 20, 30, 40, 50, 60, 70, 80, 90
+Y: 70, 130, 180, 280, 360, 500, 670, 880
+0.106*n**2

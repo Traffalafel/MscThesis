@@ -1,0 +1,5 @@
+Param: Pop
+Title: MIMIC_JOS_variablePop NumberFitnessCalls
+X: 50, 100, 150, 200, 250, 300
+Y: 20, 26, 31, 37, 42, 47
+0.108*n+15

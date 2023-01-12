@@ -1,0 +1,5 @@
+Param: Pop
+Title: FastMIMIC_OneMax_betterSampling_variablePop CpuTimeSeconds
+X: 100, 200, 300, 400
+Y: 64, 94, 125, 140
+6.934*sqrt(n)

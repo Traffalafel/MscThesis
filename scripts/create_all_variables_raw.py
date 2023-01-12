@@ -6,7 +6,7 @@ import utils
 RESULTS_DIR = "results"
 FILENAME_PATTERN = "([a-zA-z0-9_]+)(_\d+)_variable(\w+)\.txt"
 PROPERTIES = ["BestFitness", "NumberFitnessCalls", "CpuTimeSeconds"]
-CHARTS_DIR = r"G:\My Drive\Dokumenter\DTU\Speciale\charts\variable"
+CHARTS_DIR = r"G:\My Drive\Dokumenter\DTU\Speciale\raw charts\variable"
 
 def main():
 
@@ -31,9 +31,13 @@ def main():
 
     for key in names:
         for prop in PROPERTIES:
-            utils.create_chart(key, names[key], prop)
+            utils.create_chart(names[key], prop, None)
+            plt.title(key)
+            plt.ylabel(prop)
             output_path = os.path.join(CHARTS_DIR, f"{key} {prop}.png")
             print(output_path)
+            plt.legend(bbox_to_anchor=(1, 1), loc='upper left')
+            plt.tight_layout()
             plt.savefig(output_path, dpi=300)
             plt.cla()
             plt.clf()

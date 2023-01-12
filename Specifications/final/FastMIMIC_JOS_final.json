@@ -1,0 +1,38 @@
+{
+  "NumRuns": 500,
+  "Variable": "ProblemSize",
+  "VariableSteps": {
+    "Start": 50,
+    "Stop": 1000,
+    "Step": 50
+  },
+  "MaxParallelization": 4,
+  "Problem": {
+    "Name": "JumpOffsetSpike",
+    "Parameters": {
+      "GapSize": "sqrt(n)"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "FastMIMIC_Pop:2.048*sqrt(n)_Sampling:0.157*n+4.666",
+      "Algorithm": "FastMIMIC",
+      "Parameters": {
+        "PopulationSize": "2.048*sqrt(n)",
+        "NumSampledPositions": "0.157*n+4.666"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n*log(n)",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "NumRuns": 100,
+  "NumRuns": 250,
   "ProblemSize": 20,
   "Variable": "PopulationSize",
   "VariableSteps": {

@@ -20,7 +20,7 @@ def get_filename(file_path):
     return os.path.splitext(name)[0]
 
 def get_file_lines(file_path, property):
-    pattern = f"^(\w+);{property};(\w+)\t"
+    pattern = f"^(\S+);{property};(\w+)\t"
     with open(file_path, 'r') as fd:
         lines = fd.readlines()
     for line in lines:
@@ -42,13 +42,25 @@ def clean_line(line):
     ys = [p[1] for p in points]
     return xs, ys
 
-def create_chart(vals, prop):
+def create_chart(vals, property, x_limit):
     lines = []
     vals = sorted(vals, key=lambda v: v[0]) # sort by size
     for size,filepath,param in vals:
-        for _, _, line in get_file_lines(filepath, prop):
+        for _, _, line in get_file_lines(filepath, property):
             lines.append((size, line))
+        plt.xlabel(param)
 
     for (size, line) in lines:
         xs, ys = clean_line(line)
+        xs, ys = bound(xs, ys, x_limit)
         plt.scatter(xs, ys, label=f"n={size}", marker=".")
+
+def bound(xs, ys, x_limit):
+    if x_limit is None:
+        return xs, ys
+    points = zip(xs, ys)
+    x_limit = float(x_limit)
+    points = [p for p in points if p[0] <= x_limit]
+    xs = [p[0] for p in points]
+    ys = [p[1] for p in points]
+    return xs, ys

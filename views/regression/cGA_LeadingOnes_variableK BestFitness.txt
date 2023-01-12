@@ -1,0 +1,5 @@
+Param: K
+Title: cGA_LeadingOnes_variableK BestFitness
+X: 50, 100, 150, 200, 250, 300, 400
+Y: 9, 14, 17, 20, 25, 27, 32
+0.190*sqrt(n)*log(n)

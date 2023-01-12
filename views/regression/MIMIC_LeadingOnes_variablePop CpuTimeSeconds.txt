@@ -1,0 +1,5 @@
+Param: Pop
+Title: MIMIC_LeadingOnes_variablePop CpuTimeSeconds
+X: 40, 50, 60, 70, 80, 90, 100, 110, 120
+Y: 12, 19, 24, 32, 40, 49, 60, 79, 94
+0.00639*n**2

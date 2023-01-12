@@ -2,9 +2,9 @@
   "NumRuns": 500,
   "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 50,
-    "Stop": 500,
-    "Step": 50
+    "Start": 40,
+    "Stop": 800,
+    "Step": 40
   },
   "MaxParallelization": 4,
   "Problem": {
@@ -15,10 +15,10 @@
   },
   "Optimizers": [
     {
-      "Name": "MIMIC_Pop:12*log(n)-30",
+      "Name": "MIMIC_Pop:0.108*n+15",
       "Algorithm": "MIMIC",
       "Parameters": {
-        "PopulationSize": "12*log(n)-30"
+        "PopulationSize": "0.108*n+15"
       }
     }
   ],

@@ -1,8 +1,8 @@
 {
-  "NumRuns": 1000,
+  "NumRuns": 500,
   "Variable": "ProblemSize",
   "VariableSteps": {
-    "Start": 100,
+    "Start": 50,
     "Stop": 1000,
     "Step": 50
   },
@@ -15,10 +15,10 @@
   },
   "Optimizers": [
     {
-      "Name": "cGA",
+      "Name": "cGA_K:1.923*sqrt(n)",
       "Algorithm": "cGA",
       "Parameters": {
-        "K": "1.866*sqrt(n)"
+        "K": "1.923*sqrt(n)"
       }
     }
   ],

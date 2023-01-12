@@ -1,5 +1,5 @@
 {
-  "NumRuns": 100,
+  "NumRuns": 500,
   "ProblemSize": 30,
   "Variable": "NumSampledPositions",
   "VariableSteps": {
@@ -16,7 +16,7 @@
       "Name": "FastTourMIMIC",
       "Algorithm": "FastTourMIMIC",
       "Parameters": {
-        "PopulationSize": "100"
+        "PopulationSize": "200"
       }
     }
   ],

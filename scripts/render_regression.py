@@ -55,11 +55,11 @@ def main():
     end_x = max(xs) + 50
     dx = np.linspace(1, end_x, 100)
 
-    plt.scatter(xs, ys)
-
     for line in lines[c:]:
         f = create_function(line)
         plt.plot(dx, [f(x) for x in dx], label=line)
+
+    plt.scatter(xs, ys, c="k", zorder=3)
 
     plt.legend()
     plt.title(title)
@@ -75,7 +75,7 @@ def main():
         plt.show()
     else:
         file_name = utils.get_filename(file_path)
-        out_file_path = os.path.join(CHARTS_DIR, f"{file_name} regression.png")
+        out_file_path = os.path.join(display_option, f"{file_name} regression.png")
         plt.savefig(out_file_path, dpi=300)
         plt.cla()
         plt.clf()   

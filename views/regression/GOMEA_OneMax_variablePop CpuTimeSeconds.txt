@@ -1,0 +1,5 @@
+Param: Pop
+Title: GOMEA_OneMax_variablePop CpuTimeSeconds
+X: 100, 200, 300, 400, 500
+Y: 30, 37, 51, 61, 66
+2.93*sqrt(n)
