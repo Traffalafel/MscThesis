@@ -24,9 +24,8 @@ namespace MscThesis.Core.Algorithms
             _populationSize = populationSize;
         }
 
-        protected override void Initialize(FitnessFunction<Tour> fitnessFunction)
+        protected override void Initialize(FitnessFunction<Tour> _)
         {
-            base.Initialize(fitnessFunction);
             // Initialize population uniformly
             _population = new Population<Tour>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
@@ -41,7 +40,7 @@ namespace MscThesis.Core.Algorithms
             Property.AvgEntropy
         };
 
-        protected override RunIteration<Tour> NextIteration(FitnessFunction<Tour> fitnessFunction)
+        protected override RunIteration NextIteration(FitnessFunction<Tour> fitnessFunction)
         {
             var problemSize = _population.ProblemSize;
 
@@ -110,7 +109,7 @@ namespace MscThesis.Core.Algorithms
                 { Property.AvgEntropy, avgJointEntropy }
             };
 
-            return new RunIteration<Tour>
+            return new RunIteration
             {
                 Population = _population,
                 Statistics = stats

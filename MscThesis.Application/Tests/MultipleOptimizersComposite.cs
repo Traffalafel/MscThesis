@@ -1,17 +1,15 @@
-﻿using MscThesis.Core;
-using MscThesis.Core.Formats;
-using MscThesis.Runner.Tests;
+﻿using MscThesis.Runner.Tests;
 using System.Collections.Generic;
 
 namespace MscThesis.Runner.Results
 {
-    public class MultipleOptimizersComposite<T> : TestComposite<T>, ITest<T> where T : InstanceFormat
+    public class MultipleOptimizersComposite : TestComposite, ITest
     {
         private HashSet<string> _optimizerNames;
         private List<ItemResult> _items;
         private List<SeriesResult> _series;
 
-        public MultipleOptimizersComposite(List<ITest<T>> tests, int maxParallel) : base(tests, maxParallel)
+        public MultipleOptimizersComposite(List<ITest> tests, int maxParallel) : base(tests, maxParallel)
         {
             _optimizerNames = new HashSet<string>();
             _items = new List<ItemResult>();
@@ -29,7 +27,7 @@ namespace MscThesis.Runner.Results
         public override IEnumerable<ItemResult> Items => _items;
         public override IEnumerable<SeriesResult> Series => _series;
 
-        protected override void ConsumeResult(ITest<T> result)
+        protected override void ConsumeResult(ITest result)
         {
             TriggerOptimizerDone();
         }

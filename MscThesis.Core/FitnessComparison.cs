@@ -1,5 +1,6 @@
 ﻿using MscThesis.Core.Formats;
 using System;
+using System.Collections.Generic;
 
 namespace MscThesis.Core
 {
@@ -15,6 +16,32 @@ namespace MscThesis.Core
 
         public static FitnessComparison Minimization => new FitnessComparison((v1, v2) => v1 < v2);
         public static FitnessComparison Maximization => new FitnessComparison((v1, v2) => v1 > v2);
+
+        public double? GetFittest(IEnumerable<double?> vals)
+        {
+            double? fittest = null;
+            foreach (var val in vals)
+            {
+                if (IsFitter(val, fittest))
+                {
+                    fittest = val;
+                }
+            }
+            return fittest;
+        }
+
+        public bool IsFitter(double? val1, double? val2)
+        {
+            if (val2 == null)
+            {
+                return true;
+            }
+            if (val1 == null)
+            {
+                return false;
+            }
+            return _strategy(val1.Value, val2.Value);
+        }
 
         // true => val1 is fitter than val2
         public bool IsFitter(double val1, double val2)

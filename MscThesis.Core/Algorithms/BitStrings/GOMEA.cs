@@ -28,8 +28,6 @@ namespace MscThesis.Core.Algorithms
 
         protected override void Initialize(FitnessFunction<BitString> fitnessFunction)
         {
-            base.Initialize(fitnessFunction);
-
             // Initialize population uniformly
             _population = new Population<BitString>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
@@ -45,7 +43,7 @@ namespace MscThesis.Core.Algorithms
             _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);
         }
 
-        protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
+        protected override RunIteration NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
             var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(_population);
             var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(_population);
@@ -93,7 +91,10 @@ namespace MscThesis.Core.Algorithms
             }
 
             _population = _selectionOperator.Select(_random.Value, output, fitnessFunction);
-            return new RunIteration<BitString>(_population);
+            return new RunIteration
+            {
+                Population = _population
+            };
         }
 
         private bool Equals(BitString bs1, BitString bs2, IEnumerable<int> indices)

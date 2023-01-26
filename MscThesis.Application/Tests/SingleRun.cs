@@ -1,8 +1,6 @@
-﻿using MscThesis.Core.Formats;
-using MscThesis.Core;
+﻿using MscThesis.Core;
 using System.Collections.Generic;
 using System;
-using MscThesis.Core.FitnessFunctions;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,18 +9,19 @@ using System.Threading;
 namespace MscThesis.Runner.Results
 {
     // 1 run of 1 optimizer on 1 problem of 1 size
-    public class SingleRun<T> : Test<T> where T : InstanceFormat
+    public class SingleRun : Test
     {
         private bool _saveSeries;
         private string _optimizerName;
         private Dictionary<Property, ObservableValue<double>> _itemData;
         private Dictionary<Property, ObservableCollection<(double, double)>> _seriesData;
-        private Run<T> _iterations;
-        private FitnessFunction<T> _fitnessFunction;
+        private Run _iterations;
+        private Func<int> _getNumCalls;
 
         public SingleRun(
-            Run<T> iterations, 
-            FitnessFunction<T> fitnessFunction, 
+            Run iterations, 
+            Func<int> getNumCalls,
+            FitnessComparison fitnessComparison,
             string optimizerName, 
             ISet<Property> statisticsProperties, 
             double variableValue,
@@ -30,10 +29,9 @@ namespace MscThesis.Runner.Results
         {
             _saveSeries = saveSeries;
             _iterations = iterations;
-            _fitnessFunction = fitnessFunction;
+            _getNumCalls = getNumCalls;
             _optimizerName = optimizerName;
-            _instanceType = fitnessFunction.InstanceType;
-            _comparisonStrategy = fitnessFunction.Comparison;
+            _comparisonStrategy = fitnessComparison;
             VariableValue = variableValue;
 
             _itemData = new Dictionary<Property, ObservableValue<double>>();
@@ -48,12 +46,10 @@ namespace MscThesis.Runner.Results
             {
                 _seriesData[Property.BestFitness] = new ObservableCollection<(double, double)>();
                 _seriesData[Property.PopulationSize] = new ObservableCollection<(double, double)>();
-                _seriesData[Property.AvgFitness] = new ObservableCollection<(double, double)>();
             }
             _itemData[Property.BestFitness] = new ObservableValue<double>();
             _itemData[Property.NumberIterations] = new ObservableValue<double>();
             _itemData[Property.NumberFitnessCalls] = new ObservableValue<double>();
-            _itemData[Property.AvgFitness] = new ObservableValue<double>();
             _itemData[Property.CpuTimeSeconds] = new ObservableValue<double>(0.0d);
 
             // Terminations
@@ -83,34 +79,31 @@ namespace MscThesis.Runner.Results
                     }
                 }
 
-                var iterationFittest = iteration.Population.Fittest;
-                if (iterationFittest == null || iterationFittest.Fitness == null)
-                {
-                    throw new Exception();
-                }
+                var fitnesses = iteration.Population.Select(i => i.Fitness);
+                var iterationFittest = _comparisonStrategy.GetFittest(fitnesses);
                 TryUpdateFittest(_optimizerName, iterationFittest);
+                var bestFitness = BestFitness(_optimizerName).Value;
 
-                var avgFitness = iteration.Population.GetAverageFitness();
-
-                var bestFitness = Fittest(_optimizerName).Value.Fitness.Value;
+                var populationSize = iteration.Population.Count();
 
                 if (_saveSeries)
                 {
                     lock (SeriesLock)
                     {
-                        _seriesData[Property.BestFitness].Add((numIterations, bestFitness));
-                        _seriesData[Property.PopulationSize].Add((numIterations, iteration.Population.Size));
-                        _seriesData[Property.AvgFitness].Add((numIterations, avgFitness));
+                        if (bestFitness != null)
+                        {
+                            _seriesData[Property.BestFitness].Add((numIterations, bestFitness.Value));
+                        }
+                        _seriesData[Property.PopulationSize].Add((numIterations, populationSize));
                     }
                 }
 
-                if (_fittest[_optimizerName].Value != null)
+                if (_bestFitness[_optimizerName].Value != null)
                 {
-                    _itemData[Property.BestFitness].Value = _fittest[_optimizerName].Value.Fitness.Value;
+                    _itemData[Property.BestFitness].Value = _bestFitness[_optimizerName].Value.Value;
                 }
                 _itemData[Property.NumberIterations].Value = numIterations;
-                _itemData[Property.NumberFitnessCalls].Value = _fitnessFunction.GetNumCalls();
-                _itemData[Property.AvgFitness].Value = Math.Round(avgFitness, 2);
+                _itemData[Property.NumberFitnessCalls].Value = _getNumCalls();
 
                 if (iteration.CpuTime != null)
                 {

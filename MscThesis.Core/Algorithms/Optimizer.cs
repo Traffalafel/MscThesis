@@ -3,8 +3,6 @@ using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace MscThesis.Core.Algorithms
@@ -23,21 +21,18 @@ namespace MscThesis.Core.Algorithms
             _comparisonStrategy = comparisonStrategy;
         }
 
-        protected virtual void Initialize(FitnessFunction<T> fitnessFunction)
+        protected abstract void Initialize(FitnessFunction<T> fitnessFunction);
+        protected abstract RunIteration NextIteration(FitnessFunction<T> fitnessFunction);
+
+        public Run Run(FitnessFunction<T> fitnessFunction)
         {
             _random = RandomUtils.BuildRandom();
-        }
-
-        protected abstract RunIteration<T> NextIteration(FitnessFunction<T> fitnessFunction);
-
-        public Run<T> Run(FitnessFunction<T> fitnessFunction)
-        {
             Initialize(fitnessFunction);
             var enumerator = BuildEnumerator(fitnessFunction);
-            return new Run<T>(enumerator);
+            return new Run(enumerator);
         }
 
-        private IEnumerable<RunIteration<T>> BuildEnumerator(FitnessFunction<T> fitnessFunction)
+        private IEnumerable<RunIteration> BuildEnumerator(FitnessFunction<T> fitnessFunction)
         {
             var stopwatch = new Stopwatch();
 

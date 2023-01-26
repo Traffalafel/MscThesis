@@ -2,31 +2,19 @@
 using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
-    public abstract class Test<T> : ITest<T> where T : InstanceFormat
+    public abstract class Test : ITest
     {
         private object _lock = new object { };
 
         protected bool _isTerminated;
-        protected Dictionary<string, ObservableValue<Individual<T>>> _fittest = new Dictionary<string, ObservableValue<Individual<T>>>();
         protected Type _instanceType = typeof(InstanceFormat);
         protected FitnessComparison _comparisonStrategy;
-
-        public void Initialize(IEnumerable<string> optimizerNames)
-        {
-            foreach (var optimizerName in optimizerNames)
-            {
-                if (!_fittest.ContainsKey(optimizerName))
-                {
-                    _fittest.Add(optimizerName, new ObservableValue<Individual<T>>());
-                }
-            }
-        }
+        protected Dictionary<string, ObservableValue<double?>> _bestFitness = new Dictionary<string, ObservableValue<double?>>();
 
         public object SeriesLock => _lock;
         public Type InstanceType => _instanceType;
@@ -44,24 +32,26 @@ namespace MscThesis.Runner.Results
             _lock = newLock;
         }
 
-        public IObservableValue<Individual<T>> Fittest(string optimizerName)
+        public IObservableValue<double?> BestFitness(string optimizerName)
         {
-            if (!_fittest.ContainsKey(optimizerName))
+            if (!_bestFitness.ContainsKey(optimizerName))
             {
                 return null;
             }
             else
             {
-                return _fittest[optimizerName];
+                return _bestFitness[optimizerName];
             }
         }
 
-        protected void TryUpdateFittest(ITest<T> test)
+        public void Initialize(IEnumerable<string> optimizerNames)
         {
-            foreach (var optimizerName in test.OptimizerNames)
+            foreach (var optimizerName in optimizerNames)
             {
-                var other = test.Fittest(optimizerName)?.Value;
-                TryUpdateFittest(optimizerName, other);
+                if (!_bestFitness.ContainsKey(optimizerName))
+                {
+                    _bestFitness.Add(optimizerName, new ObservableValue<double?>());
+                }
             }
         }
 
@@ -69,18 +59,37 @@ namespace MscThesis.Runner.Results
         {
             OptimizerDone.Invoke(this, new EventArgs());
         }
-
-        protected void TryUpdateFittest(string optimizerName, Individual<T> other)
+        
+        protected void TryUpdateFittest(ITest test)
         {
-            if (!_fittest.ContainsKey(optimizerName))
+            foreach (var optimizerName in test.OptimizerNames)
+            {
+                var other = test.BestFitness(optimizerName).Value;
+                TryUpdateFittest(optimizerName, other);
+            }
+        }
+
+        protected void TryUpdateFittest(string optimizerName, double? other)
+        {
+            if (!_bestFitness.ContainsKey(optimizerName))
             {
                 return;
             }
 
-            // Overwrite fittest if better
-            if (_comparisonStrategy.IsFitter(other, _fittest[optimizerName].Value))
+            if (other == null)
             {
-                _fittest[optimizerName].Value = other;
+                return;
+            }
+            if (_bestFitness[optimizerName].Value == null)
+            {
+                _bestFitness[optimizerName].Value = other.Value;
+                return;
+            }
+
+            // Overwrite fittest if better
+            if (_comparisonStrategy.IsFitter(other.Value, _bestFitness[optimizerName].Value.Value))
+            {
+                _bestFitness[optimizerName].Value = other;
             }
         }
 

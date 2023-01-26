@@ -31,8 +31,6 @@ namespace MscThesis.Core.Algorithms.Tours
 
         protected override void Initialize(FitnessFunction<Tour> fitnessFunction)
         {
-            base.Initialize(fitnessFunction);
-
             // Initialize population uniformly
             _population = new Population<RandomKeysTour>(_comparisonStrategy);
             for (int i = 0; i < _populationSize; i++)
@@ -46,7 +44,7 @@ namespace MscThesis.Core.Algorithms.Tours
             _population = TournamentSelection(_random.Value, _population, fitnessFunction);
         }
 
-        protected override RunIteration<Tour> NextIteration(FitnessFunction<Tour> fitnessFunction)
+        protected override RunIteration NextIteration(FitnessFunction<Tour> fitnessFunction)
         {
             foreach (var ind in _population)
             {
@@ -66,7 +64,10 @@ namespace MscThesis.Core.Algorithms.Tours
 
             _population = TournamentSelection(_random.Value, _population, fitnessFunction);
             var populationTour = new Population<Tour>(_population, _comparisonStrategy);
-            return new RunIteration<Tour>(populationTour);
+            return new RunIteration 
+            {
+                Population = populationTour 
+            };
         }
 
         private List<HashSet<int>> ComputeClusters(Population<RandomKeysTour> population)

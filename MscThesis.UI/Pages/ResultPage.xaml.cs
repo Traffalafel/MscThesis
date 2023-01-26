@@ -283,19 +283,6 @@ public partial class ResultPage : ContentPage
                     });
                     statColumn.Add(statGrid);
                     horizontal.Add(statColumn);
-
-                    // Best solution view
-                    var fittest = test.Fittest(optimizerName);
-                    if (test.InstanceType == typeof(BitString))
-                    {
-                        var view = BuildBitStringView(fittest);
-                        horizontal.Add(view);
-                    }
-                    if (test.InstanceType == typeof(Tour))
-                    {
-                        var view = BuildTourView(fittest);
-                        horizontal.Add(view);
-                    }
                 }
 
                 optLayout.Add(horizontal);
@@ -379,112 +366,6 @@ public partial class ResultPage : ContentPage
             var msg = $"An exception was thrown with the message:\n{e.Message}";
             await DisplayAlert("Exception occured", msg, "Close");
         }
-    }
-
-    private View BuildBitStringView(IObservableValue<Individual<InstanceFormat>> observable)
-    {
-        var layout = BuildIndividualLayout();
-        layout.WidthRequest = 600;
-
-        double fitness = default;
-        string value = string.Empty;
-        if (observable != null && observable.Value != null)
-        {
-            fitness = observable.Value.Fitness.Value;
-            value = observable.Value.Value.ToString();
-        }
-        var fitnessObservable = new ObservableValue<double>(fitness);
-        observable.PropertyChanged += (s, e) =>
-        {
-            fitnessObservable.Value = observable.Value.Fitness.Value;
-        };
-        var fitnessHorizontal = new HorizontalStackLayout();
-        fitnessHorizontal.Add(new Label
-        {
-            Text = "Fitness:",
-            Margin = new Thickness(0, 0, 10, 5)
-        });
-        var fitnessLabel = new Label
-        {
-            BindingContext = fitnessObservable
-        };
-        fitnessLabel.SetBinding(Label.TextProperty, "Value");
-        fitnessHorizontal.Add(fitnessLabel);
-        layout.Add(fitnessHorizontal);
-
-        layout.Add(new Label
-        {
-            Text = "Value:",
-            Margin = new Thickness(0, 0, 0, 2)
-        });
-
-        var valueObservable = new ObservableValue<string>(value);
-        observable.PropertyChanged += (s, e) =>
-        {
-            valueObservable.Value = observable.Value.Value.ToString();
-        };
-        var valueLabel = new Label
-        {
-            BindingContext = valueObservable,
-            LineBreakMode = LineBreakMode.CharacterWrap
-        };
-        valueLabel.SetBinding(Label.TextProperty, "Value");
-        layout.Add(valueLabel);
-
-        return layout;
-    }
-
-    private View BuildTourView(IObservableValue<Individual<InstanceFormat>> observable)
-    {
-        var layout = BuildIndividualLayout();
-        layout.WidthRequest = 600;
-
-        double fitness = default;
-        string value = string.Empty;
-        if (observable != null && observable.Value != null)
-        {
-            fitness = observable.Value.Fitness.Value;
-            value = observable.Value.Value.ToString();
-        }
-        var fitnessObservable = new ObservableValue<double>(fitness);
-        observable.PropertyChanged += (s, e) =>
-        {
-            fitnessObservable.Value = observable.Value.Fitness.Value;
-        };
-        var fitnessHorizontal = new HorizontalStackLayout();
-        fitnessHorizontal.Add(new Label
-        {
-            Text = "Fitness:",
-            Margin = new Thickness(0, 0, 10, 5)
-        });
-        var fitnessLabel = new Label
-        {
-            BindingContext = fitnessObservable
-        };
-        fitnessLabel.SetBinding(Label.TextProperty, "Value");
-        fitnessHorizontal.Add(fitnessLabel);
-        layout.Add(fitnessHorizontal);
-
-        layout.Add(new Label
-        {
-            Text = "Value:",
-            Margin = new Thickness(0, 0, 0, 2)
-        });
-
-        var valueObservable = new ObservableValue<string>(value);
-        observable.PropertyChanged += (s, e) =>
-        {
-            valueObservable.Value = observable.Value.Value.ToString();
-        };
-        var valueLabel = new Label
-        {
-            BindingContext = valueObservable,
-            LineBreakMode = LineBreakMode.CharacterWrap
-        };
-        valueLabel.SetBinding(Label.TextProperty, "Value");
-        layout.Add(valueLabel);
-
-        return layout;
     }
 
     private VerticalStackLayout BuildIndividualLayout()

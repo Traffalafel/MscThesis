@@ -1,9 +1,10 @@
-﻿using MscThesis.Core.Formats;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MscThesis.Core.TerminationCriteria
 {
-    public class StagnationTermination<T> : TerminationCriterion<T> where T : InstanceFormat
+    public class StagnationTermination : TerminationCriterion
     {
         private readonly double _epsilon;
         private readonly int _maxIterations;
@@ -22,14 +23,9 @@ namespace MscThesis.Core.TerminationCriteria
             _stagnatedIterations = 0;
         }
 
-        public override bool ShouldTerminate(Population<T> pop)
+        public override bool ShouldTerminate(IEnumerable<double?> fitnesses)
         {
-            var fittest = pop.Fittest;
-            if (fittest == null)
-            {
-                throw new Exception("Fittest individual in population cannot be null");
-            }
-            var bestFitness = fittest.Fitness ?? double.MinValue;
+            var bestFitness = _comparison.GetFittest(fitnesses);
 
             if (_bestFitnessGlobal == null)
             {
@@ -38,7 +34,7 @@ namespace MscThesis.Core.TerminationCriteria
             }
 
             var isImprovement = _comparison.IsFitter(bestFitness, _bestFitnessGlobal.Value);
-            if (!isImprovement || Math.Abs(_bestFitnessGlobal.Value - bestFitness) < _epsilon)
+            if (!isImprovement || Math.Abs(_bestFitnessGlobal.Value - bestFitness.Value) < _epsilon)
             {
                 _stagnatedIterations++;
             }

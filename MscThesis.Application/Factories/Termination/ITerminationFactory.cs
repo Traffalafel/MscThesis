@@ -11,7 +11,7 @@ namespace MscThesis.Runner.Factories
     public interface ITerminationFactory<T> where T : InstanceFormat
     {
         public IEnumerable<Parameter> Parameters { get; }
-        public Func<int, VariableSpecification, TerminationCriterion<T>> BuildCriterion(TerminationSpecification spec, Func<int, VariableSpecification, FitnessFunction<T>> fitnessCreator);
+        public Func<int, VariableSpecification, TerminationCriterion> BuildCriterion(TerminationSpecification spec, Func<int, VariableSpecification, FitnessFunction<T>> fitnessCreator);
     }
 
 }

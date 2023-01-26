@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Tests
 {
-    public abstract class TestComposite<T> : Test<T> where T : InstanceFormat
+    public abstract class TestComposite : Test
     {
-        private IEnumerable<ITest<T>> _subTests;
+        private IEnumerable<ITest> _subTests;
         private int _maxParallel;
 
-        public TestComposite(List<ITest<T>> subTests, int maxParallel)
+        public TestComposite(List<ITest> subTests, int maxParallel)
         {
             _subTests = subTests;
             _maxParallel = maxParallel;
@@ -26,12 +26,12 @@ namespace MscThesis.Runner.Tests
                 Initialize(optimizerNames);
                 foreach (var name in optimizerNames)
                 {
-                    var observable = test.Fittest(name);
+                    var observable = test.BestFitness(name);
                     observable.PropertyChanged += (s, e) =>
                     {
-                        if (_comparisonStrategy.IsFitter(observable.Value, _fittest[name].Value))
+                        if (_comparisonStrategy.IsFitter(observable.Value, _bestFitness[name].Value))
                         {
-                            _fittest[name].Value = observable.Value;
+                            _bestFitness[name].Value = observable.Value;
                         }
                     };
                 }
@@ -40,7 +40,7 @@ namespace MscThesis.Runner.Tests
             }
         }
 
-        public TestComposite(Func<ITest<T>> generateFunc, int numTests, int maxParallel)
+        public TestComposite(Func<ITest> generateFunc, int numTests, int maxParallel)
         {
             _maxParallel = maxParallel;
 
@@ -57,7 +57,7 @@ namespace MscThesis.Runner.Tests
         {
             var enumerator = _subTests.GetEnumerator();
 
-            var initial = new List<ITest<T>>();
+            var initial = new List<ITest>();
             for (int i = 0; i < _maxParallel; i++)
             {
                 enumerator.MoveNext();
@@ -113,9 +113,9 @@ namespace MscThesis.Runner.Tests
             _isTerminated = true;
         }
 
-        protected abstract void ConsumeResult(ITest<T> result);
+        protected abstract void ConsumeResult(ITest result);
 
-        private IEnumerable<ITest<T>> CreateEnumerable(Func<ITest<T>> generate, int numTests)
+        private IEnumerable<ITest> CreateEnumerable(Func<ITest> generate, int numTests)
         {
             var c = 0;
             while (c < numTests)
@@ -126,17 +126,17 @@ namespace MscThesis.Runner.Tests
             yield break;
         }
 
-        private ITest<T> CreateTest(Func<ITest<T>> generate)
+        private ITest CreateTest(Func<ITest> generate)
         {
             var test = generate();
             foreach (var name in test.OptimizerNames)
             {
-                var observable = test.Fittest(name);
+                var observable = test.BestFitness(name);
                 observable.PropertyChanged += (s, e) =>
                 {
-                    if (_comparisonStrategy.IsFitter(observable.Value, _fittest[name].Value))
+                    if (_comparisonStrategy.IsFitter(observable.Value, _bestFitness[name].Value))
                     {
-                        _fittest[name].Value = observable.Value;
+                        _bestFitness[name].Value = observable.Value;
                     }
                 };
             }

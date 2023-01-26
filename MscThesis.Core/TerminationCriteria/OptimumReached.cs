@@ -1,8 +1,9 @@
-﻿using MscThesis.Core.Formats;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace MscThesis.Core.TerminationCriteria
 {
-    public class OptimumReached<T> : TerminationCriterion<T> where T : InstanceFormat
+    public class OptimumReached : TerminationCriterion
     {
         private double _optimum;
 
@@ -13,9 +14,9 @@ namespace MscThesis.Core.TerminationCriteria
             _optimum = optimum;
         }
 
-        public override bool ShouldTerminate(Population<T> pop)
+        public override bool ShouldTerminate(IEnumerable<double?> fitnesses)
         {
-            return pop.Fittest.Fitness == _optimum;
+            return fitnesses.Any(f => f == _optimum);
         }
     }
 }

@@ -13,25 +13,24 @@ namespace MscThesis.Runner
 {
     public class TestProvider
     {
-        private List<ITestCaseFactory<InstanceFormat>> _factories;
+        private List<ITestCaseFactory> _factories;
 
         public TestProvider(string tspLibPath)
         {
             var tspLib = new TspLib95(tspLibPath);
 
-            _factories = new List<ITestCaseFactory<InstanceFormat>>
+            _factories = new List<ITestCaseFactory>
             {
                 new BitStringTestCaseFactory(),
                 new TourTestCaseFactory(tspLib)
             };
         }
 
-        public ITest<InstanceFormat> Build(TestSpecification spec)
+        public ITest Build(TestSpecification spec)
         {
             var variable = spec.Variable ?? Parameter.ProblemSize;
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);
-            var tests = factory.BuildTestCases(spec);
 
             var problemDef = factory.GetProblemDefinition(spec.Problem);
             if (!problemDef.CustomSizesAllowed)
@@ -53,10 +52,7 @@ namespace MscThesis.Runner
                 }
             }
 
-
-            IEnumerable<double> variableValues = GenerateIterator(spec.VariableSteps);
-
-            return GatherResults(tests, variable, variableValues, spec.NumRuns, spec.MaxParallelization, spec.ProblemSize);
+            return factory.BuildTest(spec);
         }
 
         public List<string> GetProblemNames()
@@ -150,7 +146,7 @@ namespace MscThesis.Runner
             return new List<Parameter>();
         }
 
-        private ITestCaseFactory<InstanceFormat> GetTestFactory(string problemName)
+        private ITestCaseFactory GetTestFactory(string problemName)
         {
             foreach (var factory in _factories)
             {
@@ -160,116 +156,6 @@ namespace MscThesis.Runner
                 }
             }
             return null;
-        }
-
-        private ITest<T> GatherResults<T>(IEnumerable<ITestCase<T>> tests, Parameter variable, IEnumerable<double> variableSizes, int numRuns, double maxParallelization, int? problemSize) where T : InstanceFormat
-        {
-            var numSizes = variableSizes.Count();
-            var sizeRuns = numRuns;
-            var testRuns = sizeRuns * numSizes;
-
-            var testBatchSize = (int)Math.Ceiling(maxParallelization / testRuns);
-            maxParallelization /= testBatchSize;
-
-            var sizeBatchSize = (int)Math.Ceiling(maxParallelization / sizeRuns);
-            maxParallelization /= sizeBatchSize;
-
-            var runBatchSize = (int)maxParallelization;
-
-            var results = new List<ITest<T>>();
-            foreach (var test in tests)
-            {
-                var isSingleSize = variableSizes.Count() == 1;
-                var sizeResults = new List<ITest<T>>();
-                foreach (var size in variableSizes)
-                {
-                    VariableSpecification varSpec = null;
-                    if (variable != Parameter.ProblemSize)
-                    {
-                        varSpec = new VariableSpecification
-                        {
-                            Variable = variable,
-                            Value = size
-                        };
-                    }
-                    else
-                    {
-                        problemSize = Convert.ToInt32(size);
-                    }
-
-                    var isSingleRun = numRuns == 1;
-                    ITest<T> run;
-                    if (isSingleRun)
-                    {
-                        run = test.CreateRun(problemSize.Value, isSingleRun && isSingleSize, varSpec);
-                    }
-                    else
-                    {
-                        run = new MultipleRunsComposite<T>(test, problemSize.Value, numRuns, runBatchSize, isSingleSize, varSpec);
-                    }
-                    sizeResults.Add(run);
-                }
-
-                ITest<T> sizeResult;
-                if (variableSizes.Count() == 1)
-                {
-                    sizeResult = sizeResults.First();
-                }
-                else
-                {
-                    sizeResult = new MultipleVariablesComposite<T>(sizeResults, sizeBatchSize, variable);
-                }
-                results.Add(sizeResult);
-            }
-
-            if (tests.Count() == 1)
-            {
-                return results.First();
-            }
-            else
-            {
-                return new MultipleOptimizersComposite<T>(results, testBatchSize);
-            }
-        }
-
-        private IEnumerable<double> GenerateIterator(StepsSpecification spec)
-        {
-            if (spec.Stop == null || spec.Step == null)
-            {
-                yield return spec.Start;
-                yield break;
-            }
-
-            if (spec.Start < 0 || spec.Stop < 0)
-            {
-                throw new Exception("Start and stop must both be positive.");
-            }
-            if (spec.Stop < spec.Start)
-            {
-                throw new Exception("Start must be lower than stop.");
-            }
-            if (spec.Step < 0)
-            {
-                throw new Exception("Cannot have negative step size.");
-            }
-            if (spec.Step == 0 && spec.Start != spec.Stop)
-            {
-                throw new Exception("Start and stop must be equal for step size zero.");
-            }
-
-            if (spec.Step == 0)
-            {
-                yield return spec.Start;
-                yield break;
-            }
-
-            var c = spec.Start;
-            do
-            {
-                yield return c;
-                c += spec.Step.Value;
-            }
-            while (c <= spec.Stop);
         }
 
     }

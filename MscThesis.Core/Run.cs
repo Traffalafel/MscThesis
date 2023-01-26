@@ -1,30 +1,30 @@
-﻿using MscThesis.Core.Formats;
-using MscThesis.Core.TerminationCriteria;
+﻿using MscThesis.Core.TerminationCriteria;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MscThesis.Core
 {
-    public class Run<T> : IEnumerable<RunIteration<T>> where T : InstanceFormat
+    public class Run : IEnumerable<RunIteration>
     {
-        private IEnumerable<RunIteration<T>> _iterator;
-        private List<TerminationCriterion<T>> _terminations;
+        private IEnumerable<RunIteration> _iterator;
+        private List<TerminationCriterion> _terminations;
         private Property _terminationReason;
 
         public Property TerminationReason => _terminationReason;
 
-        public Run(IEnumerable<RunIteration<T>> iterator)
+        public Run(IEnumerable<RunIteration> iterator)
         {
             _iterator = iterator;
-            _terminations = new List<TerminationCriterion<T>>();
+            _terminations = new List<TerminationCriterion>();
         }
 
-        public void AddTerminationCriterion(TerminationCriterion<T> termination)
+        public void AddTerminationCriterion(TerminationCriterion termination)
         {
             _terminations.Add(termination);
         }
 
-        public IEnumerator<RunIteration<T>> GetEnumerator()
+        public IEnumerator<RunIteration> GetEnumerator()
         {
             return BuildIterator().GetEnumerator();
         }
@@ -33,14 +33,15 @@ namespace MscThesis.Core
             return GetEnumerator();
         }
 
-        private IEnumerable<RunIteration<T>> BuildIterator()
+        private IEnumerable<RunIteration> BuildIterator()
         {
             foreach (var iteration in _iterator)
             {
                 yield return iteration;
                 foreach (var termination in _terminations)
                 {
-                    if (termination.ShouldTerminate(iteration.Population))
+                    var fitnesses = iteration.Population.Select(i => i.Fitness);
+                    if (termination.ShouldTerminate(fitnesses))
                     {
                         _terminationReason = termination.Reason;
                         yield break;

@@ -7,7 +7,7 @@ namespace MscThesis.Core.Algorithms.BitStrings
     public class CGA : Optimizer<BitString>
     {
         private readonly double _kInv;
-        private readonly double[] _probs;
+        private double[] _probs;
 
         public CGA(
             int problemSize,
@@ -15,17 +15,20 @@ namespace MscThesis.Core.Algorithms.BitStrings
             double K) : base(problemSize, comparisonStrategy)
         {
             _kInv = 1.0d / K;
+        }
 
-            _probs = new double[problemSize];
-            for (int i = 0; i < problemSize; i++)
+        public override ISet<Property> StatisticsProperties => new HashSet<Property>();
+
+        protected override void Initialize(FitnessFunction<BitString> fitnessFunction)
+        {
+            _probs = new double[_problemSize];
+            for (int i = 0; i < _problemSize; i++)
             {
                 _probs[i] = 0.5d;
             }
         }
 
-        public override ISet<Property> StatisticsProperties => new HashSet<Property>();
-
-        protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
+        protected override RunIteration NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
             var x = RandomUtils.SampleBitString(_random.Value, _probs);
             var y = RandomUtils.SampleBitString(_random.Value, _probs);
@@ -69,7 +72,10 @@ namespace MscThesis.Core.Algorithms.BitStrings
             var individuals = new List<Individual<BitString>> { xInd, yInd };
 
             var population = new Population<BitString>(individuals, _comparisonStrategy);
-            return new RunIteration<BitString>(population);
+            return new RunIteration
+            {
+                Population = population
+            };
         }
 
     }

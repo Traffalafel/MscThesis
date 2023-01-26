@@ -30,8 +30,6 @@ namespace MscThesis.Core.Algorithms.Tours
 
         protected override void Initialize(FitnessFunction<Tour> fitnessFunction)
         {
-            base.Initialize(fitnessFunction);
-
             _pyramid.Add(new P4Level(_random.Value, _numFreeNodes, fitnessFunction, _rescalingIntervals));
 
             var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
@@ -42,7 +40,7 @@ namespace MscThesis.Core.Algorithms.Tours
 
         public override ISet<Property> StatisticsProperties => new HashSet<Property>();
 
-        protected override RunIteration<Tour> NextIteration(FitnessFunction<Tour> fitnessFunction)
+        protected override RunIteration NextIteration(FitnessFunction<Tour> fitnessFunction)
         {
             foreach (var level in _pyramid)
             {
@@ -76,7 +74,7 @@ namespace MscThesis.Core.Algorithms.Tours
                 _pyramid[i + 1].Add(individual);
             }
 
-            return new RunIteration<Tour>
+            return new RunIteration
             {
                 Population = Population,
                 Statistics = new Dictionary<Property, double>()

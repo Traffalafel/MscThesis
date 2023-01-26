@@ -1,19 +1,18 @@
 ﻿using MscThesis.Core;
-using MscThesis.Core.FitnessFunctions;
-using MscThesis.Core.Formats;
 using MscThesis.Runner.Factories.Problem;
+using MscThesis.Runner.Results;
 using MscThesis.Runner.Specification;
 using System.Collections.Generic;
 
 namespace MscThesis.Runner.Factories
 {
-    public interface ITestCaseFactory<out T> where T : InstanceFormat
+    public interface ITestCaseFactory
     {
         public ISet<string> Algorithms { get; }
         public ISet<string> Problems { get; }
         public ISet<string> Terminations { get; }
 
-        public IEnumerable<ITestCase<InstanceFormat>> BuildTestCases(TestSpecification spec);
+        public ITest BuildTest(TestSpecification spec);
 
         public ProblemDefinition GetProblemDefinition(ProblemSpecification specification);
         public ProblemInformation GetProblemInformation(ProblemSpecification specification);

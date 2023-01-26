@@ -30,7 +30,6 @@ namespace MscThesis.Runner.Factories
             {
                 { "Optimum reached", new GlobalOptimumFactory<Tour>() },
                 { "Stagnation", new StagnationFactory<Tour>(_parameterFactory) },
-                { "Max iterations", new MaxIterationsFactory<Tour>(_parameterFactory) }
             };
         }
     }

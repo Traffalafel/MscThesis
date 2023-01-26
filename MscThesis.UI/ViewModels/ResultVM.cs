@@ -26,10 +26,10 @@ namespace MscThesis.UI.ViewModels
         bool isRunning;
 
         private TestProvider _provider;
-        private ITest<InstanceFormat> _test;
+        private ITest _test;
 
         public TestProvider Provider => _provider;
-        public ITest<InstanceFormat> Test => _test;
+        public ITest Test => _test;
 
         public ResultVM(string tspLibPath)
         {

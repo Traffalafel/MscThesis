@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace MscThesis.Runner.Results
 {
-    public interface ITest<out T> where T : InstanceFormat
+    public interface ITest
     {
         public bool IsTerminated { get; }
         public Task Execute(CancellationToken cancellationToken);
 
         public ISet<string> OptimizerNames { get; }
-        public IObservableValue<Individual<T>> Fittest(string optimizerName);
         public IEnumerable<ItemResult> Items { get; }
         public IEnumerable<SeriesResult> Series { get; }
+        IObservableValue<double?> BestFitness(string optimizername);
         public Type InstanceType { get; }
         public FitnessComparison Comparison { get; }
         public object SeriesLock { get; }

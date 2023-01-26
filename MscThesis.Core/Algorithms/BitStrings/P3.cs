@@ -24,14 +24,12 @@ namespace MscThesis.Core.Algorithms
 
         protected override void Initialize(FitnessFunction<BitString> fitnessFunction)
         {
-            base.Initialize(fitnessFunction);
-
             _pyramid.Add(new P3Level(_random.Value, _problemSize, _fitnessFunction));
         }
 
         public override ISet<Property> StatisticsProperties => new HashSet<Property>();
 
-        protected override RunIteration<BitString> NextIteration(FitnessFunction<BitString> fitnessFunction)
+        protected override RunIteration NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
             var uniform = BitString.CreateUniform(_random.Value, _problemSize);
             var individual = HillClimb(_random.Value, uniform, fitnessFunction);
@@ -66,7 +64,7 @@ namespace MscThesis.Core.Algorithms
                 AddToHashset(individual);
             }
 
-            return new RunIteration<BitString>
+            return new RunIteration
             {
                 Population = GetPopulation(),
                 Statistics = new Dictionary<Property, double>()

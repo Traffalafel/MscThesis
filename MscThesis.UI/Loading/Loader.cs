@@ -15,7 +15,7 @@ namespace MscThesis.UI.Loading
         private TestProvider _provider;
 
         public TestSpecification Specification => _specification;
-        public ITest<InstanceFormat> Test => _test;
+        public ITest Test => _test;
 
         public Loader(string content, TestProvider provider)
         {

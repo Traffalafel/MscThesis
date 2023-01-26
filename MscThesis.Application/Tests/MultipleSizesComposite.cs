@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MscThesis.Runner.Results
 {
-    public class MultipleVariablesComposite<T> : TestComposite<T>, ITest<T> where T : InstanceFormat
+    public class MultipleVariablesComposite : TestComposite
     {
         private Parameter _xAxis;
         private HashSet<string> _optimizerNames;
@@ -27,7 +27,7 @@ namespace MscThesis.Runner.Results
             });
         }).SelectMany(x => x);
 
-        public MultipleVariablesComposite(List<ITest<T>> tests, int maxParallel, Parameter xAxis) : base(tests, maxParallel)
+        public MultipleVariablesComposite(List<ITest> tests, int maxParallel, Parameter xAxis) : base(tests, maxParallel)
         {
             _xAxis = xAxis;
             _optimizerNames = new HashSet<string>();
@@ -46,7 +46,7 @@ namespace MscThesis.Runner.Results
             }
         }
 
-        protected override void ConsumeResult(ITest<T> result)
+        protected override void ConsumeResult(ITest result)
         {
             foreach (var item in result.Items)
             {

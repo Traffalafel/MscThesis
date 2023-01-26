@@ -4,16 +4,14 @@ using System.Collections.Generic;
 
 namespace MscThesis.Core
 {
-    public class RunIteration<T> where T : InstanceFormat
+    public class RunIteration
     {
-        public RunIteration() { }
-        public RunIteration(Population<T> population)
+        public RunIteration()
         {
-            Population = population;
             Statistics = new Dictionary<Property, double>();
         }
 
-        public Population<T> Population;
+        public IEnumerable<Individual<InstanceFormat>> Population;
         public IDictionary<Property, double> Statistics;
         public TimeSpan CpuTime;
     }

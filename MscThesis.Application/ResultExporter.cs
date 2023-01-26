@@ -10,7 +10,7 @@ namespace MscThesis.Runner
 {
     public class ResultExporter
     {
-        public static string Export(ITest<InstanceFormat> test, TestSpecification specification)
+        public static string Export(ITest test, TestSpecification specification)
         {
             var lines = new List<string>();
 
@@ -26,20 +26,8 @@ namespace MscThesis.Runner
             lines.Add("Fittest:");
             foreach (var optimizerName in test.OptimizerNames)
             {
-                var observable = test.Fittest(optimizerName);
-                InstanceFormat value;
-                double fitness;
-                if (observable.Value != null)
-                {
-                    value = observable.Value.Value;
-                    fitness = observable.Value.Fitness.Value;
-                }
-                else
-                {
-                    value = new BitString();
-                    fitness = 0;
-                }
-                lines.Add($"{optimizerName};{value};{fitness}");
+                var bestFitness = test.BestFitness(optimizerName);
+                lines.Add($"{optimizerName};{bestFitness}");
             }
 
             // Export items

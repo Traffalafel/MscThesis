@@ -29,7 +29,6 @@ namespace MscThesis.Runner.Factories
             {
                 { "Optimum reached", new GlobalOptimumFactory<BitString>() },
                 { "Stagnation", new StagnationFactory<BitString>(_parameterFactory) },
-                { "Max iterations", new MaxIterationsFactory<BitString>(_parameterFactory) }
             };
         }
     }

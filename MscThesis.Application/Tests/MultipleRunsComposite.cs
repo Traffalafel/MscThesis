@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MscThesis.Runner.Results
 {
-    internal class MultipleRunsComposite<T> : TestComposite<T> where T : InstanceFormat
+    internal class MultipleRunsComposite : TestComposite
     {
         private readonly bool _saveSeries;
         private readonly HashSet<string> _optimizerNames;
@@ -32,8 +32,8 @@ namespace MscThesis.Runner.Results
 
         public override IEnumerable<SeriesResult> Series => _seriesValues.SelectMany(x => x.Value).Select(x => x.Value);
 
-        public MultipleRunsComposite(ITestCase<T> generator, int problemSize, int numRuns, int maxParallel, bool saveSeries, VariableSpecification varSpec) 
-            : base(() => generator.CreateRun(problemSize, saveSeries, varSpec), numRuns, maxParallel)
+        public MultipleRunsComposite(Func<ITest> generate, int numRuns, int maxParallel, bool saveSeries, VariableSpecification varSpec) 
+            : base(generate, numRuns, maxParallel)
         {
             _optimizerNames = new HashSet<string>();
             _itemValues = new Dictionary<string, Dictionary<Property, ObservableCollection<double>>>();
@@ -42,7 +42,7 @@ namespace MscThesis.Runner.Results
             _averages = new Dictionary<string, Dictionary<Property, ObservableValue<double>>>();
             _saveSeries = saveSeries;
 
-            var empty = generator.CreateRun(problemSize, saveSeries, varSpec);
+            var empty = generate();
             _instanceType = empty.InstanceType;
             _comparisonStrategy = empty.Comparison;
 
@@ -89,7 +89,7 @@ namespace MscThesis.Runner.Results
 
         }
 
-        protected override void ConsumeResult(ITest<T> result)
+        protected override void ConsumeResult(ITest result)
         {
             foreach (var item in result.Items)
             {

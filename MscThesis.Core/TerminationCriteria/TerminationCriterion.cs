@@ -1,13 +1,10 @@
-﻿using MscThesis.Core.Formats;
-using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace MscThesis.Core.TerminationCriteria
 {
-
-    public abstract class TerminationCriterion<T> where T : InstanceFormat
+    public abstract class TerminationCriterion
     {
-        public abstract bool ShouldTerminate(Population<T> pop);
+        public abstract bool ShouldTerminate(IEnumerable<double?> fitnesses);
         public abstract Property Reason { get; }
     }
 }

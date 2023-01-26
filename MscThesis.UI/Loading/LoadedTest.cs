@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace MscThesis.UI.Models
 {
-    internal class LoadedTest : ITest<InstanceFormat>
+    internal class LoadedTest : ITest
     {
         private object _seriesLock = new object { };
         private HashSet<string> _optimizerNames;
@@ -207,6 +207,11 @@ namespace MscThesis.UI.Models
         public void SetLock(object newLock)
         {
             _seriesLock = newLock;
+        }
+
+        public IObservableValue<double?> BestFitness(string optimizername)
+        {
+            throw new NotImplementedException();
         }
     }
 }

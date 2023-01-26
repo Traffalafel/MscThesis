@@ -6,7 +6,6 @@ namespace MscThesis.Core
         NumberFitnessCalls,
         NumberIterations,
         AvgEntropy,
-        AvgFitness,
         BestFitness,
         PopulationSize,
         ProblemSize,
