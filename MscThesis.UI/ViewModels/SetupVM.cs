@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MscThesis.Core;
 using MscThesis.Runner;
 using MscThesis.Runner.Specification;
 using System.Collections.ObjectModel;
@@ -8,6 +9,9 @@ namespace MscThesis.UI.ViewModels
 
     public partial class SetupVM : ObservableObject
     {
+        private static readonly string NoneParameter = "None";
+        private static readonly string ProblemSizeParameter = "ProblemSize";
+
         [ObservableProperty]
         bool customProblemSizesAllowed = false;
 
@@ -16,6 +20,15 @@ namespace MscThesis.UI.ViewModels
 
         [ObservableProperty]
         bool multipleSizes = false;
+
+        [ObservableProperty]
+        bool variableSelected = false;
+
+        [ObservableProperty]
+        bool specifyProblemSize = false;
+
+        [ObservableProperty]
+        string selectedVariable = NoneParameter;
 
         [ObservableProperty]
         string problemInformationName = string.Empty;
@@ -39,6 +52,8 @@ namespace MscThesis.UI.ViewModels
         public SetupVM(string tspLibPath)
         {
             _provider = new TestProvider(tspLibPath);
+
+            UpdateParameterOptions();
         }
 
         public string ProblemName {
@@ -67,6 +82,22 @@ namespace MscThesis.UI.ViewModels
                     var definition = _provider.GetProblemDefinition(problemSpec);
 
                     CustomProblemSizesAllowed = definition.CustomSizesAllowed;
+                    if (!CustomProblemSizesAllowed)
+                    {
+                        SpecifyProblemSize = false;
+                        if (VariableParameterOptions.Contains(ProblemSizeParameter))
+                        {
+                            VariableParameterOptions.Remove(ProblemSizeParameter);
+                        }
+                    }
+                    else
+                    {
+                        SpecifyProblemSize = SelectedVariable != ProblemSizeParameter;
+                        if (!VariableParameterOptions.Contains(ProblemSizeParameter))
+                        {
+                            VariableParameterOptions.Add(ProblemSizeParameter);
+                        }
+                    }
 
                     var expressionVMs = definition.ExpressionParameters.Select(vm => new ExpressionParameterVM
                     {
@@ -92,12 +123,27 @@ namespace MscThesis.UI.ViewModels
                     }
 
                     ReloadProblemInformation();
+                    UpdateParameterOptions();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ;
+                    ; // do nothing
                 }
             } 
+        }
+
+        public string Variable
+        {
+            get
+            {
+                return SelectedVariable;
+            }
+            set 
+            {
+                SelectedVariable = value;
+                VariableSelected = SelectedVariable != NoneParameter;
+                SpecifyProblemSize = SelectedVariable != ProblemSizeParameter;
+            }
         }
 
         public void ReloadProblemInformation()
@@ -109,15 +155,15 @@ namespace MscThesis.UI.ViewModels
         }
 
         public string NumRuns { get; set; } = "1";
-
-        public string ProblemSizeStart { get; set; }
-        public string ProblemSizeStop { get; set; }
-        public string ProblemSizeStep { get; set; }
-
         public string MaxParallelization { get; set; } = "1";
+        public string ProblemSize { get; set; }
+        public string VariableStart { get; set; }
+        public string VariableStop { get; set; }
+        public string VariableStep { get; set; }
 
         public ObservableCollection<ExpressionParameterVM> ProblemExpressionParameters { get; set; } = new();
         public ObservableCollection<OptionParameterVM> ProblemOptionParameters { get; set; } = new();
+        public ObservableCollection<string> VariableParameterOptions { get; set; } = new();
 
         public ObservableCollection<TerminationSetupVM> Terminations { get; set; } = new();
         public ObservableCollection<OptimizerSetupVM> Optimizers { get; set; } = new();
@@ -126,16 +172,62 @@ namespace MscThesis.UI.ViewModels
         public ObservableCollection<string> PossibleAlgorithmNames { get; set; } = new();
         public ObservableCollection<string> PossibleTerminationNames { get; set; } = new();
 
+        public void UpdateParameterOptions()
+        {
+            var parameters = new HashSet<string>();
+            foreach (var param in ProblemExpressionParameters)
+            {
+                parameters.Add(param.Parameter.ToString());
+            }
+            foreach (var optimizer in Optimizers)
+            {
+                foreach (var param in optimizer.Parameters)
+                {
+                    parameters.Add(param.Parameter.ToString());
+                }
+            }
+            foreach (var termination in Terminations)
+            {
+                foreach (var param in termination.Parameters)
+                {
+                    parameters.Add(param.Parameter.ToString());
+                }
+            }
+
+            var toRemove = new HashSet<string>();
+
+            foreach (var p in VariableParameterOptions)
+            {
+                if (!parameters.Contains(p))
+                {
+                    toRemove.Add(p);
+                }
+            }
+            foreach (var p in toRemove)
+            {
+                VariableParameterOptions.Remove(p);
+            }
+            foreach (var p in parameters)
+            {
+                if (!VariableParameterOptions.Contains(p))
+                {
+                    VariableParameterOptions.Add(p);
+                }
+            }
+            VariableParameterOptions.Add(NoneParameter);
+            VariableParameterOptions.Add(ProblemSizeParameter);
+        }
+
         public void AddOptimizer()
         {
-            var newOptimizer = new OptimizerSetupVM(_provider);
+            var newOptimizer = new OptimizerSetupVM(_provider, UpdateParameterOptions);
             Optimizers.Add(newOptimizer);
             AnyOptimizersExist = true;
         }
 
         public void AddTerminationCriterion()
         {
-            var newCriterion = new TerminationSetupVM(_provider);
+            var newCriterion = new TerminationSetupVM(_provider, UpdateParameterOptions);
             Terminations.Add(newCriterion);
             AnyTerminationsExist = true;
         }
@@ -157,65 +249,22 @@ namespace MscThesis.UI.ViewModels
                 throw new Exception();
             }
 
-            var problemSizes = new List<int>();
-            if (CustomProblemSizesAllowed)
-            {
-                if (MultipleSizes)
-                {
-                    problemSizes = ParseProblemSizes(ProblemSizeStart, ProblemSizeStop, ProblemSizeStep).ToList();
-                }
-                else
-                {
-                    problemSizes = new List<int> { Convert.ToInt32(ProblemSizeStart) };
-                }
-            }
-
+            var canParse = Enum.TryParse(SelectedVariable, out Parameter variable);
             return new TestSpecification
             {
                 NumRuns = Convert.ToInt32(NumRuns),
-                Optimizers = Optimizers.Select(o => o.ToSpecification()).ToList(),
                 MaxParallelization = Convert.ToDouble(MaxParallelization),
+                Variable = canParse ? variable : null,
+                VariableSteps = new StepsSpecification
+                {
+                    Start = Convert.ToInt32(VariableStart),
+                    Stop = VariableStop != string.Empty ? Convert.ToInt32(VariableStop) : null,
+                    Step = VariableStep != string.Empty ? Convert.ToInt32(VariableStep) : null
+                },
                 Problem = CreateProblemSpec(),
+                Optimizers = Optimizers.Select(o => o.ToSpecification()).ToList(),
                 Terminations = Terminations.Select(t => t.ToSpecification()).ToList()
             };
-        }
-
-        private IEnumerable<int> ParseProblemSizes(string startStr, string stopStr, string stepStr)
-        {
-            var start = Convert.ToInt32(startStr);
-            var stop = Convert.ToInt32(stopStr);
-            var step = Convert.ToInt32(stepStr);
-
-            if (start <= 0 || stop <= 0)
-            {
-                throw new Exception("Start and stop must both be strictly positive.");
-            }
-            if (stop < start)
-            {
-                throw new Exception("Start must be lower than stop.");
-            }
-            if (step < 0)
-            {
-                throw new Exception("Cannot have negative step size.");
-            }
-            if (step == 0 && start != stop)
-            {
-                throw new Exception("Start and stop must be equal for step size zero.");
-            }
-
-            if (step == 0)
-            {
-                yield return start;
-                yield break;
-            }
-
-            var c = start;
-            do
-            {
-                yield return c;
-                c += step;
-            }
-            while (c <= stop);
         }
 
     }

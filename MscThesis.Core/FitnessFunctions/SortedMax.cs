@@ -16,18 +16,11 @@ namespace MscThesis.Core.FitnessFunctions.TSP
 
         protected override double Compute(Tour instance)
         {
-            return NumSwaps(instance);
-        }
-
-        private int NumSwaps(Tour tour)
-        {
             var swapCount = 0;
-            var pos = 0;
-            foreach (var val in tour)
+            for (var i = 0; i < instance.Values.Length; i++)
             {
-                var diff = Math.Abs(pos - val);
+                var diff = Math.Abs(i - instance.Values[i]);
                 swapCount += diff;
-                pos++;
             }
             return swapCount / 2;
         }

@@ -1,22 +1,19 @@
 {
-  "NumRuns": 10,
+  "NumRuns": 250,
   "Variable": "ProblemSize",
   "VariableSteps": {
     "Start": 5,
-    "Stop": 15,
+    "Stop": 70,
     "Step": 5
   },
-  "MaxParallelization": 1,
+  "MaxParallelization": 4,
   "Problem": {
-    "Name": "UniformTSP"
+    "Name": "SortedMax"
   },
   "Optimizers": [
     {
-      "Name": "TourGOMEA",
-      "Algorithm": "TourGOMEA",
-      "Parameters": {
-        "PopulationSize": "20"
-      }
+      "Name": "P4",
+      "Algorithm": "P4"
     }
   ],
   "Terminations": [
@@ -26,7 +23,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "25",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

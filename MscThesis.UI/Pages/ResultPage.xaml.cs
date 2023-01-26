@@ -144,14 +144,6 @@ public partial class ResultPage : ContentPage
         }
         problemRows.Add(("Variable:", spec.Variable.ToString()));
 
-        if (spec.VariableValue != null)
-        {
-            problemRows.Add(("Variable value:", $"{spec.VariableValue}"));
-        }
-        if (spec.VariableValues != null)
-        {
-            ; // TODO
-        }
         if (spec.VariableSteps != null)
         {
             problemRows.Add(("Variable start:", $"{spec.VariableSteps.Start}"));
@@ -231,7 +223,7 @@ public partial class ResultPage : ContentPage
         }
         Layout.Add(terminationLayout);
 
-        var multipleSizes = spec.VariableValues != null || spec.VariableSteps != null;
+        var multipleSizes = spec.VariableSteps != null;
 
         // Optimizers
         foreach (var optimizerSpec in spec.Optimizers)

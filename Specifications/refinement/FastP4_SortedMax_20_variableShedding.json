@@ -1,20 +1,20 @@
 {
-  "NumRuns": 1,
-  "MaxParallelization": 1,
-  "Variable": "ProblemSize",
+  "NumRuns": 100,
+  "ProblemSize": 20,
+  "Variable": "SheddingInterval",
   "VariableSteps": {
-    "Start": 10
+    "Start": 2,
+    "Stop": 100,
+    "Step": 2
   },
+  "MaxParallelization": 16,
   "Problem": {
     "Name": "SortedMax"
   },
   "Optimizers": [
     {
-      "Name": "TourMIMIC_PopulationSize:2*n",
-      "Algorithm": "TourMIMIC",
-      "Parameters": {
-        "PopulationSize": "2*n"
-      }
+      "Name": "FastP4",
+      "Algorithm": "FastP4"
     }
   ],
   "Terminations": [
@@ -24,7 +24,7 @@
     {
       "Name": "Stagnation",
       "Parameters": {
-        "MaxIterations": "2*n",
+        "MaxIterations": "n",
         "Epsilon": "10E-5"
       }
     }

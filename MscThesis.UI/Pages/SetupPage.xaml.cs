@@ -42,6 +42,7 @@ public partial class SetupPage : ContentPage
         {
             _vm.AnyOptimizersExist = false;
         }
+        _vm.UpdateParameterOptions();
     }
 
 	public void AddTerminationCriterion(object sender, EventArgs e)
@@ -58,6 +59,7 @@ public partial class SetupPage : ContentPage
         {
             _vm.AnyTerminationsExist = false;
         }
+        _vm.UpdateParameterOptions();
     }
 
     public async void Run(object sender, EventArgs e)

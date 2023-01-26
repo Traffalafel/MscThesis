@@ -29,45 +29,32 @@ namespace MscThesis.Runner
         public ITest<InstanceFormat> Build(TestSpecification spec)
         {
             var variable = spec.Variable ?? Parameter.ProblemSize;
-
             var problemName = spec.Problem.Name;
             var factory = GetTestFactory(problemName);
-            IEnumerable<ITestCase<InstanceFormat>> tests;
-            tests = factory.BuildTestCases(spec);
+            var tests = factory.BuildTestCases(spec);
 
             var problemDef = factory.GetProblemDefinition(spec.Problem);
             if (!problemDef.CustomSizesAllowed)
             {
+                spec.ProblemSize = problemDef.ProblemSize;
                 if (variable == Parameter.ProblemSize)
                 {
-                    spec.ProblemSizes = new List<int> { problemDef.ProblemSize.Value };
-                }
-                else
-                {
-                    spec.ProblemSize = problemDef.ProblemSize;
+                    if (spec.VariableSteps == null)
+                    {
+                        spec.VariableSteps = new StepsSpecification
+                        {
+                            Start = problemDef.ProblemSize.Value
+                        };
+                    }
+                    else
+                    {
+                        spec.VariableSteps.Start = problemDef.ProblemSize.Value;
+                    }
                 }
             }
 
-            IEnumerable<double> variableValues;
-            if (spec.ProblemSizes != null)
-            {
-                variableValues = spec.ProblemSizes.Select(size => Convert.ToDouble(size));
-            }
-            else if (spec.VariableValue != null)
-            {
-                variableValues = new List<double> { spec.VariableValue.Value };
-            }
-            else
-            {
-                if (spec.VariableValues != null)
-                {
-                    variableValues = spec.VariableValues;
-                }
-                else
-                {
-                    variableValues = GenerateIterator(spec.VariableSteps);
-                }
-            }
+
+            IEnumerable<double> variableValues = GenerateIterator(spec.VariableSteps);
 
             return GatherResults(tests, variable, variableValues, spec.NumRuns, spec.MaxParallelization, spec.ProblemSize);
         }
@@ -247,6 +234,12 @@ namespace MscThesis.Runner
 
         private IEnumerable<double> GenerateIterator(StepsSpecification spec)
         {
+            if (spec.Stop == null || spec.Step == null)
+            {
+                yield return spec.Start;
+                yield break;
+            }
+
             if (spec.Start < 0 || spec.Stop < 0)
             {
                 throw new Exception("Start and stop must both be positive.");
@@ -274,7 +267,7 @@ namespace MscThesis.Runner
             do
             {
                 yield return c;
-                c += spec.Step;
+                c += spec.Step.Value;
             }
             while (c <= spec.Stop);
         }

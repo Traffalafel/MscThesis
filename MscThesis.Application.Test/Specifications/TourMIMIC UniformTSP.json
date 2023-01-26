@@ -1,11 +1,11 @@
 {
   "NumRuns": 10,
   "Variable": "ProblemSize",
-  "VariableValues": [
-    5,
-    10,
-    15
-  ],
+  "VariableSteps": {
+    "Start": 5,
+    "Stop": 15,
+    "Step": 5
+  },
   "MaxParallelization": 1,
   "Problem": {
     "Name": "UniformTSP"

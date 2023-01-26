@@ -13,10 +13,12 @@ namespace MscThesis.UI.ViewModels
 
         private string _name = string.Empty;
         private TestProvider _runner;
+        private Action _algorithmChanged;
 
-        public TerminationSetupVM(TestProvider runner)
+        public TerminationSetupVM(TestProvider runner, Action algorithmChanged)
         {
             _runner = runner;
+            _algorithmChanged = algorithmChanged;
         }
 
         public ObservableCollection<ExpressionParameterVM> Parameters { get; set; } = new();
@@ -37,6 +39,7 @@ namespace MscThesis.UI.ViewModels
                     Parameters.Add(vm);
                 }
                 ParametersExist = paramsNew.Count() > 0;
+                _algorithmChanged.Invoke();
             }
         }
 

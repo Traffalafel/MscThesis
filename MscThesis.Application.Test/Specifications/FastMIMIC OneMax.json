@@ -1,11 +1,11 @@
 ﻿{
   "NumRuns": 10,
   "Variable": "ProblemSize",
-  "VariableValues": [
-    10,
-    20,
-    30
-  ],
+  "VariableSteps": {
+    "Start": 10,
+    "Stop": 30,
+    "Step": 10
+  },
   "MaxParallelization": 1,
   "Problem": {
     "Name": "OneMax"

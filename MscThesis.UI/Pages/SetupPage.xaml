@@ -156,108 +156,20 @@
                 </HorizontalStackLayout>
             </Grid>
 
-            <!-- Multiple sizes -->
+            <!-- Problem size -->
             <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
-                  IsVisible="{Binding CustomProblemSizesAllowed}">
+                  IsVisible="{Binding SpecifyProblemSize}">
                 <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
-                    <Label Grid.Row="4" Grid.Column="0" 
-                           Style="{StaticResource LabelStyle}"
-                           Text="Multiple sizes"
-                       />
+                    <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource LabelStyle}"
+                    Text="Problem size"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
-                    <Switch Grid.Row="4" Grid.Column="1" 
-                            Style="{StaticResource SwitchStyle}"
-                            IsToggled="{Binding MultipleSizes}"/>
-                </HorizontalStackLayout>
-            </Grid>
-
-            <!-- Problem size start -->
-            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
-                  IsVisible="{Binding CustomProblemSizesAllowed}">
-                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
-                    <Label
-                       Style="{StaticResource LabelStyle}"
-                       Text="Problem size">
-                        <Label.IsVisible>
-                            <MultiBinding Converter="{StaticResource SingleProblemSizeConverter}">
-                                <Binding Path="CustomProblemSizesAllowed"/>
-                                <Binding Path="MultipleSizes"/>
-                            </MultiBinding>
-                        </Label.IsVisible>
-                    </Label>
-                    <Label
-                       Style="{StaticResource LabelStyle}"
-                       Text="Problem size start">
-                        <Label.IsVisible>
-                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
-                                <Binding Path="CustomProblemSizesAllowed"/>
-                                <Binding Path="MultipleSizes"/>
-                            </MultiBinding>
-                        </Label.IsVisible>
-                    </Label>
-                </HorizontalStackLayout>
-                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
-                    <Entry
+                    <Entry Grid.Row="1" Grid.Column="1"
                        Style="{StaticResource EntryStyle}"
-                       Text="{Binding ProblemSizeStart}"/>
-                </HorizontalStackLayout>
-            </Grid>
-
-            <!-- Problem size stop -->
-            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
-                  IsVisible="{Binding CustomProblemSizesAllowed}">
-                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
-                    <Label Grid.Row="6" Grid.Column="0"
-                       Style="{StaticResource LabelStyle}"
-                       Text="Problem size stop">
-                        <Label.IsVisible>
-                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
-                                <Binding Path="CustomProblemSizesAllowed"/>
-                                <Binding Path="MultipleSizes"/>
-                            </MultiBinding>
-                        </Label.IsVisible>
-                    </Label>
-                </HorizontalStackLayout>
-                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
-                    <Entry Grid.Row="6" Grid.Column="1"
-                       Style="{StaticResource EntryStyle}"
-                       Text="{Binding ProblemSizeStop}">
-                        <Entry.IsVisible>
-                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
-                                <Binding Path="CustomProblemSizesAllowed"/>
-                                <Binding Path="MultipleSizes"/>
-                            </MultiBinding>
-                        </Entry.IsVisible>
-                    </Entry>
-                </HorizontalStackLayout>
-            </Grid>
-
-            <!-- Problem size step -->
-            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
-                  IsVisible="{Binding CustomProblemSizesAllowed}">
-                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
-                    <Label Grid.Row="6" Grid.Column="0"
-                       Style="{StaticResource LabelStyle}"
-                       Text="Problem size step">
-                        <Label.IsVisible>
-                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
-                                <Binding Path="CustomProblemSizesAllowed"/>
-                                <Binding Path="MultipleSizes"/>
-                            </MultiBinding>
-                        </Label.IsVisible>
-                    </Label>
-                </HorizontalStackLayout>
-                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
-                    <Entry Grid.Row="6" Grid.Column="1"
-                       Style="{StaticResource EntryStyle}"
-                       Text="{Binding ProblemSizeStep}">
-                        <Entry.IsVisible>
-                            <MultiBinding Converter="{StaticResource MultipleProblemSizeConverter}">
-                                <Binding Path="CustomProblemSizesAllowed"/>
-                                <Binding Path="MultipleSizes"/>
-                            </MultiBinding>
-                        </Entry.IsVisible>
+                       Text="{Binding ProblemSize}">
+                        <Entry.Behaviors>
+                            <behavior:NumericValidator/>
+                        </Entry.Behaviors>
                     </Entry>
                 </HorizontalStackLayout>
             </Grid>
@@ -266,6 +178,71 @@
                                                IsVisible="{Binding ExpressionParamsExist}"/>
             <view:OptionParameterListSetup Parameters="{Binding ProblemOptionParameters}"
                                            IsVisible="{Binding OptionParamsExist}"/>
+
+            <!-- Variable -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="0" Grid.Column="0" 
+                       Style="{StaticResource LabelStyle}"
+                       Text="Variable"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Picker Grid.Row="0" Grid.Column="1"
+                        Style="{StaticResource PickerStyle}"
+                        ItemsSource="{Binding VariableParameterOptions}" SelectedItem="{Binding Variable}">
+                    </Picker>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Problem size start -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                  IsVisible="{Binding VariableSelected}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label
+                       Style="{StaticResource LabelStyle}"
+                       Text="Variable start">
+                    </Label>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Entry
+                       Style="{StaticResource EntryStyle}"
+                       Text="{Binding VariableStart}"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Variable stop -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                  IsVisible="{Binding VariableSelected}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="6" Grid.Column="0"
+                       Style="{StaticResource LabelStyle}"
+                       Text="Variable stop">
+                    </Label>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Entry Grid.Row="6" Grid.Column="1"
+                       Style="{StaticResource EntryStyle}"
+                       Text="{Binding VariableStop}">
+                    </Entry>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Variable step -->
+            <Grid RowDefinitions="{StaticResource RowDef}" ColumnDefinitions="{StaticResource ColsDef}"
+                  IsVisible="{Binding VariableSelected}">
+                <HorizontalStackLayout Grid.Column="0" Style="{StaticResource LeftCol}">
+                    <Label Grid.Row="6" Grid.Column="0"
+                       Style="{StaticResource LabelStyle}"
+                       Text="Variable step">
+                    </Label>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Style="{StaticResource RightCol}">
+                    <Entry Grid.Row="6" Grid.Column="1"
+                       Style="{StaticResource EntryStyle}"
+                       Text="{Binding VariableStep}">
+                    </Entry>
+                </HorizontalStackLayout>
+            </Grid>
 
             <HorizontalStackLayout IsVisible="{Binding ProblemInformationName, Converter={StaticResource NotEmptyStringConverter}}"
                                    Margin="10,10,0,0">

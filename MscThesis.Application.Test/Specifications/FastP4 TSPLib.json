@@ -1,6 +1,5 @@
 {
   "NumRuns": 1,
-  "VariableValues": [],
   "MaxParallelization": 1.0,
   "Problem": {
     "Name": "TSPLib",

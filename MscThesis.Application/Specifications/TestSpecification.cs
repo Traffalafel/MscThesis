@@ -7,11 +7,10 @@ namespace MscThesis.Runner.Specification
     public class TestSpecification
     {
         public int NumRuns { get; set; }
+        
         public Parameter? Variable { get; set; }
         public StepsSpecification VariableSteps { get; set; }
-        public int? VariableValue { get; set; }
-        public List<int> ProblemSizes { get; set; }
-        public List<double> VariableValues { get; set; }
+
         public int? ProblemSize { get; set; }
         public double MaxParallelization { get; set; }
         public ProblemSpecification Problem { get; set; }
@@ -30,7 +29,7 @@ namespace MscThesis.Runner.Specification
     public class StepsSpecification
     {
         public double Start { get; set; }
-        public double Stop { get; set; }
-        public double Step { get; set; }
+        public double? Stop { get; set; }
+        public double? Step { get; set; }
     }
 }

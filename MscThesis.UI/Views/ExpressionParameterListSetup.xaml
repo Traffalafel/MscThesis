@@ -5,9 +5,11 @@
              x:Class="MscThesis.UI.Views.ExpressionParameterListSetup"
              xmlns:vm="clr-namespace:MscThesis.UI.ViewModels"
              xmlns:behavior="clr-namespace:MscThesis.UI.Behaviors"
+             xmlns:conv="clr-namespace:MscThesis.UI.Converters"
              xmlns:view="clr-namespace:MscThesis.UI.Views">
 
     <ContentView.Resources>
+        <conv:StringNotEqualsConverter x:Key="StringNotEqualsConverter"/>
     </ContentView.Resources>
     
     <VerticalStackLayout BindingContext="{x:Reference this}">
@@ -19,7 +21,14 @@
                     <ViewCell x:DataType="vm:ExpressionParameterVM">
                         <view:ExpressionParameterSetup 
                             Name="{Binding Name}" 
-                            Value="{Binding Value, Mode=TwoWay}"/>
+                            Value="{Binding Value, Mode=TwoWay}">
+                            <view:ExpressionParameterSetup.IsVisible>
+                                <MultiBinding Converter="{StaticResource StringNotEqualsConverter}">
+                                    <Binding Source="{RelativeSource AncestorType={x:Type vm:SetupVM}}" Path="SelectedVariable"/>
+                                    <Binding Path="Name"/>
+                                </MultiBinding>
+                            </view:ExpressionParameterSetup.IsVisible>
+                        </view:ExpressionParameterSetup>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

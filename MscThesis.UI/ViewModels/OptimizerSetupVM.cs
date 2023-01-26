@@ -12,11 +12,13 @@ namespace MscThesis.UI.ViewModels
         bool parametersExist = false;
 
         private TestProvider _runner;
+        private Action _algorithmChanged;
         private string _algorithm = string.Empty;
 
-        public OptimizerSetupVM(TestProvider runner)
+        public OptimizerSetupVM(TestProvider runner, Action algorithmChanged)
         {
             _runner = runner;
+            _algorithmChanged = algorithmChanged;
         }
 
         public string Name { get; set; }
@@ -38,6 +40,7 @@ namespace MscThesis.UI.ViewModels
                     Parameters.Add(vm);
                 }
                 ParametersExist = paramsNew.Count() > 0;
+                _algorithmChanged.Invoke();
             }
         }
 
