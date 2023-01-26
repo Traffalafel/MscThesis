@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MscThesis.Application\MscThesis.Application.csproj" />
+    <ProjectReference Include="..\MscThesis.Framework\MscThesis.Framework.csproj" />
   </ItemGroup>
 
 </Project>

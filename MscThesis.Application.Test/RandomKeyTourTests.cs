@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace MscThesis.Runner.Test
+namespace MscThesis.Framework.Test
 {
     public class RandomKeyTourTests
     {

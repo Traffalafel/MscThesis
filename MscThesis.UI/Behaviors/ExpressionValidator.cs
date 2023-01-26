@@ -1,4 +1,4 @@
-﻿using MscThesis.Runner.Factories.Expression;
+﻿using MscThesis.Framework.Factories.Expression;
 using MscThesis.UI.ViewModels;
 
 namespace MscThesis.UI.Behaviors

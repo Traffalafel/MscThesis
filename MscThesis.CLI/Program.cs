@@ -1,6 +1,6 @@
 ﻿using MscThesis.Core;
-using MscThesis.Runner;
-using MscThesis.Runner.Specification;
+using MscThesis.Framework;
+using MscThesis.Framework.Specification;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

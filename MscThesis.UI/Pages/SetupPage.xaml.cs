@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Configuration;
-using MscThesis.Runner;
+using MscThesis.Framework;
 using MscThesis.UI.ViewModels;
 using Newtonsoft.Json;
 

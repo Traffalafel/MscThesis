@@ -1,10 +1,10 @@
-﻿using MscThesis.Runner.Factories.Expression;
+﻿using MscThesis.Framework.Factories.Expression;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace MscThesis.Runner.Test
+namespace MscThesis.Framework.Test
 {
     public class ParserTests
     {

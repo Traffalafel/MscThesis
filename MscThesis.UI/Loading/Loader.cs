@@ -1,7 +1,7 @@
 ﻿using MscThesis.Core.Formats;
-using MscThesis.Runner;
-using MscThesis.Runner.Results;
-using MscThesis.Runner.Specification;
+using MscThesis.Framework;
+using MscThesis.Framework.Tests;
+using MscThesis.Framework.Specification;
 using MscThesis.UI.Models;
 using Newtonsoft.Json;
 using System.Text.Json;
@@ -12,15 +12,12 @@ namespace MscThesis.UI.Loading
     {
         private TestSpecification _specification;
         private LoadedTest _test;
-        private TestProvider _provider;
 
         public TestSpecification Specification => _specification;
         public ITest Test => _test;
 
         public Loader(string content, TestProvider provider)
         {
-            _provider = provider;
-
             content = content.Replace("\r", "");
 
             var lines = content.Split('\n');

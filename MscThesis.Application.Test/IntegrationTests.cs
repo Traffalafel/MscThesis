@@ -1,14 +1,14 @@
-﻿using MscThesis.Runner;
+﻿using MscThesis.Framework;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using Xunit;
 using Newtonsoft.Json;
-using MscThesis.Runner.Specification;
+using MscThesis.Framework.Specification;
 using Newtonsoft.Json.Linq;
 
-namespace MscThesis.Application.Test
+namespace MscThesis.Framework.Test
 {
     public class IntegrationTests
     {

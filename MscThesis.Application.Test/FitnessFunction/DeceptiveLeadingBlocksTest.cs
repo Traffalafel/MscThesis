@@ -2,7 +2,7 @@
 using MscThesis.Core.Formats;
 using Xunit;
 
-namespace MscThesis.Application.Test.FitnessFunction
+namespace MscThesis.Framework.Test.FitnessFunction
 {
     public class DeceptiveLeadingBlocksTest
     {

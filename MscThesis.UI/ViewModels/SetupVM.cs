@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MscThesis.Core;
-using MscThesis.Runner;
-using MscThesis.Runner.Specification;
+using MscThesis.Framework;
+using MscThesis.Framework.Specification;
 using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.ViewModels
