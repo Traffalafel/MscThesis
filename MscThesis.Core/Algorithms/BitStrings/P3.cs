@@ -71,9 +71,12 @@ namespace MscThesis.Core.Algorithms
             };
         }
 
-        private Individual<BitString> HillClimb(Random random, BitString solution, FitnessFunction<BitString> fitnessFunction)
+        private BitString HillClimb(Random random, BitString solution, FitnessFunction<BitString> fitnessFunction)
         {
-            var fitness = fitnessFunction.ComputeFitness(solution);
+            if (solution.Fitness == null)
+            {
+                solution.Fitness = fitnessFunction.ComputeFitness(solution);
+            }
 
             var problemSize = solution.Values.Length;
             var options = Enumerable.Range(0, problemSize).ToArray();
@@ -93,10 +96,10 @@ namespace MscThesis.Core.Algorithms
                     solution.Flip(index);
                     var fitnessNew = fitnessFunction.ComputeFitness(solution);
 
-                    if (fitnessNew > fitness)
+                    if (fitnessNew > solution.Fitness)
                     {
                         tried = new HashSet<int>();
-                        fitness = fitnessNew;
+                        solution.Fitness = fitnessNew;
                     }
                     else
                     {
@@ -106,17 +109,17 @@ namespace MscThesis.Core.Algorithms
                 }
             }
 
-            return new IndividualImpl<BitString>(solution, fitness);
+            return solution;
         }
 
-        private void AddToHashset(Individual<BitString> individual)
+        private void AddToHashset(BitString individual)
         {
-            _hashset.Add(individual.Value.ToString());
+            _hashset.Add(individual.ToString());
         }
 
-        private bool Exists(Individual<BitString> individual)
+        private bool Exists(BitString individual)
         {
-            return _hashset.Contains(individual.Value.ToString());
+            return _hashset.Contains(individual.ToString());
         }
 
         private Population<BitString> GetPopulation()

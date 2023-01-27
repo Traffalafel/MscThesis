@@ -6,7 +6,7 @@ using System;
 
 namespace MscThesis.Framework.Factories
 {
-    public interface IProblemFactory<T> where T : InstanceFormat
+    public interface IProblemFactory<T> where T : Instance
     {
         public ProblemDefinition GetDefinition(ProblemSpecification spec);
         public ProblemInformation GetInformation(ProblemSpecification spec);

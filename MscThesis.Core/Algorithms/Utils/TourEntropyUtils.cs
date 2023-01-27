@@ -127,7 +127,7 @@ namespace MscThesis.Core.Algorithms
             var counts = new double[problemSize,problemSize];
             foreach (var individual in population)
             {
-                AddToUniCounts(counts, individual.Value);
+                AddToUniCounts(counts, individual);
             }
             return counts;
         }
@@ -138,7 +138,7 @@ namespace MscThesis.Core.Algorithms
             var counts = new double[problemSize, problemSize, problemSize, problemSize];
             foreach (var individual in population)
             {
-                AddToJointCounts(counts, individual.Value);
+                AddToJointCounts(counts, individual);
             }
             return counts;
         }
@@ -150,7 +150,7 @@ namespace MscThesis.Core.Algorithms
             var counts = new double[numPositions, numPositions, problemSize, problemSize];
             foreach (var individual in population)
             {
-                AddToJointCounts(counts, individual.Value, positions);
+                AddToJointCounts(counts, individual, positions);
             }
             return counts;
         }

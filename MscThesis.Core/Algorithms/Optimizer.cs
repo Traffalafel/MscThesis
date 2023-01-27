@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace MscThesis.Core.Algorithms
 {
-    public abstract class Optimizer<T> where T : InstanceFormat
+    public abstract class Optimizer<T> where T : Instance
     {
         protected readonly int _problemSize;
         protected readonly FitnessComparison _comparisonStrategy;

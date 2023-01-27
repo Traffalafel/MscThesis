@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MscThesis.Core.Formats
 {
-    public class BitString : InstanceFormat
+    public class BitString : Instance
     {
         public bool[] Values { get; set; }
 
@@ -34,7 +34,7 @@ namespace MscThesis.Core.Formats
             return string.Join("", s);
         }
 
-        public static InstanceFormat FromString(string str)
+        public static Instance FromString(string str)
         {
             var values = str.Select(c => c == '1').ToArray();
             return new BitString

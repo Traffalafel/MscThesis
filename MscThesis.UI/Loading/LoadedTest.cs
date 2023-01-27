@@ -13,8 +13,8 @@ namespace MscThesis.UI.Models
         private HashSet<string> _optimizerNames;
         private List<ItemResult> _items;
         private List<SeriesResult> _series;
-        private Dictionary<string, Individual<InstanceFormat>> _fittest;
-        private Type _instanceType = typeof(InstanceFormat);
+        private Dictionary<string, Instance> _fittest;
+        private Type _instanceType = typeof(Instance);
 
 
         public event EventHandler<EventArgs> OptimizerDone;
@@ -38,7 +38,7 @@ namespace MscThesis.UI.Models
             }
             c++;
 
-            Func<string, InstanceFormat> createInstanceFunc;
+            Func<string, Instance> createInstanceFunc;
             if (lines[c] == "BitString")
             {
                 _instanceType = typeof(BitString);
@@ -113,7 +113,7 @@ namespace MscThesis.UI.Models
 
         }
 
-        private (string optimizerName, Individual<InstanceFormat> individual) ParseFittestLine(string line, Func<string, InstanceFormat> createInstanceFunc)
+        private (string optimizerName, Instance individual) ParseFittestLine(string line, Func<string, Instance> createInstanceFunc)
         {
             var split = line.Split(';');
             var optimizerName = split[0];
@@ -121,9 +121,8 @@ namespace MscThesis.UI.Models
             var fitnessStr = split[2];
 
             var instance = createInstanceFunc(valueStr);
-            var fitness = Convert.ToInt32(fitnessStr);
-            var individual = new IndividualImpl<InstanceFormat>(instance, fitness);
-            return (optimizerName, individual);
+            instance.Fitness = Convert.ToInt32(fitnessStr);
+            return (optimizerName, instance);
         }
 
         private ItemResult ParseItemLine(string line)
@@ -194,14 +193,14 @@ namespace MscThesis.UI.Models
             return Task.CompletedTask;
         }
 
-        public IObservableValue<Individual<InstanceFormat>> Fittest(string optimizerName)
+        public IObservableValue<Instance> Fittest(string optimizerName)
         {
             if (!_fittest.ContainsKey(optimizerName))
             {
                 return null;
             }
 
-            return new ObservableValue<Individual<InstanceFormat>>(_fittest[optimizerName]);
+            return new ObservableValue<Instance>(_fittest[optimizerName]);
         }
 
         public void SetLock(object newLock)

@@ -49,7 +49,7 @@ namespace MscThesis.Core.Algorithms.Tours
             {
                 foreach (var ind in level.Population)
                 {
-                    ind.Value.ReEncode(_random.Value);
+                    ind.ReEncode(_random.Value);
                 }
             }
 
@@ -97,11 +97,11 @@ namespace MscThesis.Core.Algorithms.Tours
             return result;
         }
 
-        private Individual<RandomKeysTour> GenerateUniform()
+        private RandomKeysTour GenerateUniform()
         {
             var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
-            var initialFitness = _fitnessFunction.ComputeFitness(uniform);
-            return new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
+            uniform.Fitness = _fitnessFunction.ComputeFitness(uniform);
+            return uniform;
         }
 
         private void AddNewLevel()

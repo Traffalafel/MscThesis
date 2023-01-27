@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Framework.Factories.Termination
 {
-    public class StagnationFactory<T> : ITerminationFactory<T> where T : InstanceFormat
+    public class StagnationFactory<T> : ITerminationFactory<T> where T : Instance
     {
         private ParameterFactory _parameterFactory;
 

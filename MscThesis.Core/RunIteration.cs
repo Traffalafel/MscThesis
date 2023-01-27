@@ -11,7 +11,7 @@ namespace MscThesis.Core
             Statistics = new Dictionary<Property, double>();
         }
 
-        public IEnumerable<Individual<InstanceFormat>> Population;
+        public IEnumerable<Instance> Population;
         public IDictionary<Property, double> Statistics;
         public TimeSpan CpuTime;
     }

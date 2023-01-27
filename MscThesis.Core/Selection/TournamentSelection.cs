@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MscThesis.Core.Selection
 {
-    public class TournamentSelection<T> : ISelectionOperator<T> where T : InstanceFormat
+    public class TournamentSelection<T> : ISelectionOperator<T> where T : Instance
     {
         private readonly int _numTournaments;
         private readonly int _tournamentSize;

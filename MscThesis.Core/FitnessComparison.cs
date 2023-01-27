@@ -50,7 +50,7 @@ namespace MscThesis.Core
         }
 
         // true => i1 is fitter than i2
-        public bool IsFitter(Individual<InstanceFormat> i1, Individual<InstanceFormat> i2)
+        public bool IsFitter(Instance i1, Instance i2)
         {
             if (i1 == null && i2 == null)
             {

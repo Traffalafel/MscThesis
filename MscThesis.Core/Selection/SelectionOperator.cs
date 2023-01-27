@@ -4,7 +4,7 @@ using System;
 
 namespace MscThesis.Core.Selection
 {
-    public interface ISelectionOperator<T> where T : InstanceFormat
+    public interface ISelectionOperator<T> where T : Instance
     {
         public Population<T> Select(Random random, Population<T> population, FitnessFunction<T> fitnessFunction);
     }

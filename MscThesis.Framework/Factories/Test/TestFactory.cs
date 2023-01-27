@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace MscThesis.Framework.Factories
 {
-    public abstract class TestFactory<T> : ITestFactory where T : InstanceFormat
+    public abstract class TestFactory<T> : ITestFactory where T : Instance
     {
         public ISet<string> Algorithms => _optimizers.Keys.ToHashSet();
         public ISet<string> Problems => _problems.Keys.ToHashSet();

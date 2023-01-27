@@ -37,7 +37,7 @@ namespace MscThesis.Core.Algorithms
             for (int i = 0; i < _populationSize; i++)
             {
                 var bs = BitString.CreateUniform(_random.Value, _problemSize);
-                _population.Add(new IndividualImpl<BitString>(bs));
+                _population.Add(bs);
             }
         }
 
@@ -99,7 +99,7 @@ namespace MscThesis.Core.Algorithms
                 }
 
                 var bs = new BitString { Values = vals };
-                _population.Add(new IndividualImpl<BitString>(bs));
+                _population.Add(bs);
             }
 
             foreach (var individual in _population)
@@ -109,7 +109,7 @@ namespace MscThesis.Core.Algorithms
                     continue;
                 }
 
-                individual.Fitness = fitnessFunction.ComputeFitness(individual.Value);
+                individual.Fitness = fitnessFunction.ComputeFitness(individual);
             }
 
             _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);

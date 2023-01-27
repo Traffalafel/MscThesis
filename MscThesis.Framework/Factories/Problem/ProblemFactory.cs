@@ -5,7 +5,7 @@ using System;
 
 namespace MscThesis.Framework.Factories.Problem
 {
-    public abstract class ProblemFactory<T> : IProblemFactory<T> where T : InstanceFormat
+    public abstract class ProblemFactory<T> : IProblemFactory<T> where T : Instance
     {
         public abstract Func<int, VariableSpecification, FitnessFunction<T>> BuildProblem(ProblemSpecification spec);
 

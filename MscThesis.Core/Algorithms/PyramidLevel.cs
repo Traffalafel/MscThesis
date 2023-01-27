@@ -1,11 +1,10 @@
-﻿using MscThesis.Core.FitnessFunctions;
-using MscThesis.Core.Formats;
+﻿using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
 
 namespace MscThesis.Core.Algorithms
 {
-    public abstract class PyramidLevel<T> where T : InstanceFormat
+    public abstract class PyramidLevel<T> where T : Instance
     {
         protected Random _random;
         protected Population<T> _population;
@@ -19,13 +18,13 @@ namespace MscThesis.Core.Algorithms
             _population = new Population<T>(comparisonStrategy);
         }
 
-        public void Add(Individual<T> individual)
+        public void Add(T individual)
         {
             _population.Add(individual);
             RecomputeClusters(individual);
         }
 
-        public void Mix(Individual<T> individual)
+        public void Mix(T individual)
         {
             foreach (var cluster in _clusters)
             {
@@ -45,8 +44,8 @@ namespace MscThesis.Core.Algorithms
             }
         }
 
-        protected abstract void RecomputeClusters(Individual<T> individual);
-        protected abstract bool Mix(Individual<T> donor, Individual<T> dest, HashSet<int> cluster);
+        protected abstract void RecomputeClusters(T individual);
+        protected abstract bool Mix(T donor, T dest, HashSet<int> cluster);
 
         private static void Swap<_>(List<_> list, int a, int b)
         {

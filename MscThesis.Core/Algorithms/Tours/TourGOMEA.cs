@@ -36,9 +36,8 @@ namespace MscThesis.Core.Algorithms.Tours
             for (int i = 0; i < _populationSize; i++)
             {
                 var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
-                var fitness = fitnessFunction.ComputeFitness(uniform);
-                var individual = new IndividualImpl<RandomKeysTour>(uniform, fitness);
-                _population.Add(individual);
+                uniform.Fitness = fitnessFunction.ComputeFitness(uniform);
+                _population.Add(uniform);
             }
 
             _population = TournamentSelection(_random.Value, _population, fitnessFunction);
@@ -48,7 +47,7 @@ namespace MscThesis.Core.Algorithms.Tours
         {
             foreach (var ind in _population)
             {
-                ind.Value.ReEncode(_random.Value);
+                ind.ReEncode(_random.Value);
             }
 
             var clusters = ComputeClusters(_population);

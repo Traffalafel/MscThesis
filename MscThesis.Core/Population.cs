@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace MscThesis.Core
 {
-    public class Population<T> : IEnumerable<Individual<T>> where T : InstanceFormat
+    public class Population<T> : IEnumerable<T> where T : Instance
     {
-        private List<Individual<T>> _individuals;
-        private Individual<T> _fittest;
+        private List<T> _individuals;
+        private T _fittest;
         private FitnessComparison _comparisonStrategy;
 
-        public List<Individual<T>> Individuals => _individuals;
-        public Individual<T> Fittest => _fittest;
+        public List<T> Individuals => _individuals;
+        public T Fittest => _fittest;
 
         public int ProblemSize { get
             {
@@ -30,11 +30,11 @@ namespace MscThesis.Core
 
         public Population(FitnessComparison comparisonStrategy)
         {
-            _individuals = new List<Individual<T>>();
+            _individuals = new List<T>();
             _comparisonStrategy = comparisonStrategy;
         }
 
-        public Population(IEnumerable<Individual<T>> individuals, FitnessComparison comparisonStrategy)
+        public Population(IEnumerable<T> individuals, FitnessComparison comparisonStrategy)
         {
             _individuals = individuals.ToList();
             _comparisonStrategy = comparisonStrategy;
@@ -43,7 +43,7 @@ namespace MscThesis.Core
             _fittest = fittest;
         }
 
-        public void Add(Individual<T> individual)
+        public void Add(T individual)
         {
             _individuals.Add(individual);
 
@@ -61,10 +61,10 @@ namespace MscThesis.Core
 
         public IEnumerable<T> GetValues()
         {
-            return _individuals.Select(p => p.Value);
+            return _individuals;
         }
 
-        public IEnumerator<Individual<T>> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             foreach (var individual in _individuals)
             {

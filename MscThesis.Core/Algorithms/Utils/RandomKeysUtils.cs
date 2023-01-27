@@ -12,10 +12,10 @@ namespace MscThesis.Core.Algorithms.Tours
         private static double _rescalingProb = 0.1d;
 
         // Copy values over from donor
-        internal static bool OptimalMixing(Random random, Individual<RandomKeysTour> donor, Individual<RandomKeysTour> dest, HashSet<int> cluster, FitnessFunction<Tour> fitnessFunction, (double, double)[] rescalingIntervals)
+        internal static bool OptimalMixing(Random random, RandomKeysTour donor, RandomKeysTour dest, HashSet<int> cluster, FitnessFunction<Tour> fitnessFunction, (double, double)[] rescalingIntervals)
         {
-            var donorInstance = donor.Value;
-            var destInstance = dest.Value;
+            var donorInstance = donor;
+            var destInstance = dest;
 
             var prevKeys = Copy(donorInstance.Keys, destInstance.Keys, cluster);
 
@@ -73,7 +73,7 @@ namespace MscThesis.Core.Algorithms.Tours
             var delta1Sums = new double[numFreeNodes, numFreeNodes];
             foreach (var individual in population)
             {
-                AddToDelta1Sums(delta1Sums, individual.Value);
+                AddToDelta1Sums(delta1Sums, individual);
             }
 
             return ComputeDelta1(delta1Sums, population.Size);
@@ -119,7 +119,7 @@ namespace MscThesis.Core.Algorithms.Tours
             var delta2Sums = new double[numFreeNodes, numFreeNodes];
             foreach (var individual in population)
             {
-                AddToDelta1Sums(delta2Sums, individual.Value);
+                AddToDelta1Sums(delta2Sums, individual);
             }
 
             return ComputeDelta2(delta2Sums, population.Size);

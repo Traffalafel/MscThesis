@@ -26,15 +26,15 @@ namespace MscThesis.Core.Algorithms.Tours
             _rescalingIntervals = rescalingIntervals;
         }
 
-        protected override bool Mix(Individual<RandomKeysTour> donor, Individual<RandomKeysTour> dest, HashSet<int> cluster)
+        protected override bool Mix(RandomKeysTour donor, RandomKeysTour dest, HashSet<int> cluster)
         {
             return RandomKeysUtils.OptimalMixing(_random, donor, dest, cluster, _fitnessFunction, _rescalingIntervals);
         }
 
-        protected override void RecomputeClusters(Individual<RandomKeysTour> individual)
+        protected override void RecomputeClusters(RandomKeysTour individual)
         {
-            RandomKeysUtils.AddToDelta1Sums(_delta1Sums, individual.Value);
-            RandomKeysUtils.AddToDelta2Sums(_delta2Sums, individual.Value);
+            RandomKeysUtils.AddToDelta1Sums(_delta1Sums, individual);
+            RandomKeysUtils.AddToDelta2Sums(_delta2Sums, individual);
             var delta1 = RandomKeysUtils.ComputeDelta1(_delta1Sums, _population.Size);
             var delta2 = RandomKeysUtils.ComputeDelta2(_delta2Sums, _population.Size);
             var distanceFunc = ClusteringUtils.GetPermutationDistanceFunc(delta1, delta2);

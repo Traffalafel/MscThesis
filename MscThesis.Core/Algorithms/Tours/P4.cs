@@ -33,9 +33,8 @@ namespace MscThesis.Core.Algorithms.Tours
             _pyramid.Add(new P4Level(_random.Value, _numFreeNodes, fitnessFunction, _rescalingIntervals));
 
             var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
-            var initialFitness = fitnessFunction.ComputeFitness(uniform);
-            var individual = new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
-            _pyramid[0].Add(individual);
+            uniform.Fitness = fitnessFunction.ComputeFitness(uniform);
+            _pyramid[0].Add(uniform);
         }
 
         public override ISet<Property> StatisticsProperties => new HashSet<Property>();
@@ -46,19 +45,18 @@ namespace MscThesis.Core.Algorithms.Tours
             {
                 foreach (var ind in level.Population)
                 {
-                    ind.Value.ReEncode(_random.Value);
+                    ind.ReEncode(_random.Value);
                 }
             }
 
-            var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
-            var initialFitness = fitnessFunction.ComputeFitness(uniform);
-            var individual = new IndividualImpl<RandomKeysTour>(uniform, initialFitness);
+            var instance = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
+            instance.Fitness = fitnessFunction.ComputeFitness(instance);
 
             for (int i = 0; i < _pyramid.Count; i++)
             {
-                var fitnessPrev = individual.Fitness.Value;
-                _pyramid[i].Mix(individual);
-                var fitnessNew = individual.Fitness.Value;
+                var fitnessPrev = instance.Fitness.Value;
+                _pyramid[i].Mix(instance);
+                var fitnessNew = instance.Fitness.Value;
 
                 if (!_fitnessFunction.Comparison.IsFitter(fitnessNew, fitnessPrev))
                 {
@@ -71,7 +69,7 @@ namespace MscThesis.Core.Algorithms.Tours
                     var levelNew = new P4Level(_random.Value, _numFreeNodes, fitnessFunction, _rescalingIntervals);
                     _pyramid.Add(levelNew);
                 }
-                _pyramid[i + 1].Add(individual);
+                _pyramid[i + 1].Add(instance);
             }
 
             return new RunIteration

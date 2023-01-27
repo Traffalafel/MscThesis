@@ -31,16 +31,16 @@ namespace MscThesis.Core.Algorithms.BitStrings
         protected override RunIteration NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
             var x = RandomUtils.SampleBitString(_random.Value, _probs);
+            x.Fitness = fitnessFunction.ComputeFitness(x);
+            
             var y = RandomUtils.SampleBitString(_random.Value, _probs);
+            y.Fitness = fitnessFunction.ComputeFitness(y);
 
-            var fitnessX = fitnessFunction.ComputeFitness(x);
-            var fitnessY = fitnessFunction.ComputeFitness(y);
-
-            if (fitnessX < fitnessY)
+            if (x.Fitness < y.Fitness)
             {
                 // swap
                 (x, y) = (y, x);
-                (fitnessX, fitnessY) = (fitnessY, fitnessX);
+                (x.Fitness, y.Fitness) = (y.Fitness, x.Fitness);
             }
 
             var marginMin = 1.0d / _problemSize;
@@ -67,10 +67,7 @@ namespace MscThesis.Core.Algorithms.BitStrings
                 }
             }
 
-            var xInd = new IndividualImpl<BitString>(x, fitnessX);
-            var yInd = new IndividualImpl<BitString>(y, fitnessY);
-            var individuals = new List<Individual<BitString>> { xInd, yInd };
-
+            var individuals = new List<BitString> { x, y };
             var population = new Population<BitString>(individuals, _comparisonStrategy);
             return new RunIteration
             {

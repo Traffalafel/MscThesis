@@ -20,19 +20,18 @@ namespace MscThesis.Core.Algorithms
             _jointCounts = new double[problemSize, problemSize,4];
         }
 
-        protected override bool Mix(Individual<BitString> donor, Individual<BitString> dest, HashSet<int> cluster)
+        protected override bool Mix(BitString donor, BitString dest, HashSet<int> cluster)
         {
             var fitnessPrev = dest.Fitness;
 
-            var solution = dest.Value;
-            var prevValues = cluster.Select(c => (c, solution.Values[c])).ToList();
+            var prevValues = cluster.Select(c => (c, dest.Values[c])).ToList();
 
             var changed = false;
             foreach (var i in cluster)
             {
-                if (solution.Values[i] != donor.Value.Values[i])
+                if (dest.Values[i] != donor.Values[i])
                 {
-                    solution.Values[i] = donor.Value.Values[i];
+                    dest.Values[i] = donor.Values[i];
                     changed = true;
                 }
             }
@@ -42,13 +41,13 @@ namespace MscThesis.Core.Algorithms
                 return false;
             }
 
-            var fitnessNew = _fitnessFunction.ComputeFitness(solution);
+            var fitnessNew = _fitnessFunction.ComputeFitness(dest);
             if (fitnessPrev > fitnessNew)
             {
                 // Revert changes
                 foreach (var (i, val) in prevValues)
                 {
-                    solution.Values[i] = val;
+                    dest.Values[i] = val;
                 }
             }
             else
@@ -58,15 +57,15 @@ namespace MscThesis.Core.Algorithms
             return true;
         }
 
-        protected override void RecomputeClusters(Individual<BitString> individual)
+        protected override void RecomputeClusters(BitString individual)
         {
             var populationSize = _population.Count();
 
-            BitStringEntropyUtils.AddToUniCounts(_uniCounts, individual.Value);
+            BitStringEntropyUtils.AddToUniCounts(_uniCounts, individual);
             var uniFreqs = BitStringEntropyUtils.ComputeUniFrequencies(_uniCounts, populationSize);
             var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(uniFreqs);
 
-            BitStringEntropyUtils.AddToJointCounts(_jointCounts, individual.Value);
+            BitStringEntropyUtils.AddToJointCounts(_jointCounts, individual);
             var jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(_jointCounts, populationSize);
             var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(jointFreqs, uniFreqs);
 

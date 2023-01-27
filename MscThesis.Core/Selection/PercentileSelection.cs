@@ -1,14 +1,12 @@
 ﻿using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace MscThesis.Core.Selection
 {
-    public class PercentileSelection<T> : ISelectionOperator<T> where T : InstanceFormat
+    public class PercentileSelection<T> : ISelectionOperator<T> where T : Instance
     {
         private double _percentile;
         private SelectionMethod _method;
@@ -23,7 +21,7 @@ namespace MscThesis.Core.Selection
         {
             var targetSize = Convert.ToInt32(Math.Ceiling(population.Size * _percentile));
 
-            IEnumerable<Individual<T>> ordered;
+            IEnumerable<T> ordered;
             if (_method == SelectionMethod.Maximize)
             {
                 ordered = population.OrderByDescending(i => i.Fitness);

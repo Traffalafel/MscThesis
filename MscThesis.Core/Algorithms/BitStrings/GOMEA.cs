@@ -33,12 +33,12 @@ namespace MscThesis.Core.Algorithms
             for (int i = 0; i < _populationSize; i++)
             {
                 var bs = BitString.CreateUniform(_random.Value, _problemSize);
-                _population.Add(new IndividualImpl<BitString>(bs));
+                _population.Add(bs);
             }
 
             foreach (var individual in _population)
             {
-                individual.Fitness = fitnessFunction.ComputeFitness(individual.Value);
+                individual.Fitness = fitnessFunction.ComputeFitness(individual);
             }
             _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);
         }
@@ -55,15 +55,15 @@ namespace MscThesis.Core.Algorithms
 
             foreach (var individual in _population)
             {
-                var b = Clone(individual.Value);
-                var o = Clone(individual.Value);
+                var b = Clone(individual);
+                var o = Clone(individual);
 
                 var oFitness = individual.Fitness.Value;
                 var bFitness = individual.Fitness.Value;
 
                 foreach (var cluster in clusters)
                 {
-                    var p = RandomUtils.Choose(_random.Value, _population.Individuals).Value;
+                    var p = RandomUtils.Choose(_random.Value, _population.Individuals);
 
                     Copy(p, o, cluster);
 
@@ -85,9 +85,8 @@ namespace MscThesis.Core.Algorithms
                         Copy(b, o, cluster);
                     }
                 }
-
-                var mixed = new IndividualImpl<BitString>(o, oFitness);
-                output.Add(mixed);
+                o.Fitness = oFitness;
+                output.Add(o);
             }
 
             _population = _selectionOperator.Select(_random.Value, output, fitnessFunction);
@@ -127,7 +126,8 @@ namespace MscThesis.Core.Algorithms
             }
             return new BitString
             {
-                Values = clone
+                Values = clone,
+                Fitness = values.Fitness
             };
         }
 

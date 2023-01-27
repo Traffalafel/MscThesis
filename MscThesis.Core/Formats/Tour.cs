@@ -6,7 +6,7 @@ using TspLibNet.Tours;
 
 namespace MscThesis.Core.Formats
 {
-    public class Tour : InstanceFormat, IEnumerable<int>, ITour
+    public class Tour : Instance, IEnumerable<int>, ITour
     {
         protected int[] _values;
 

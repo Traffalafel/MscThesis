@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace MscThesis.Framework.Factories.Termination
 {
-    public class GlobalOptimumFactory<T> : ITerminationFactory<T> where T : InstanceFormat
+    public class GlobalOptimumFactory<T> : ITerminationFactory<T> where T : Instance
     {
         public IEnumerable<Parameter> Parameters => new List<Parameter>();
 

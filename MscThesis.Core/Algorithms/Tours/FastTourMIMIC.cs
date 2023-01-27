@@ -38,7 +38,7 @@ namespace MscThesis.Core.Algorithms
             for (int i = 0; i < _populationSize; i++)
             {
                 var permutation = Tour.CreateUniform(_random.Value, _problemSize);
-                _population.Add(new IndividualImpl<Tour>(permutation));
+                _population.Add(permutation);
             }
 
             _jointFreqs = TourEntropyUtils.GetJointCounts(_population);
@@ -119,7 +119,7 @@ namespace MscThesis.Core.Algorithms
                 }
 
                 var instance = new Tour(values);
-                _population.Add(new IndividualImpl<Tour>(instance));
+                _population.Add(instance);
             }
 
             foreach (var individual in _population)
@@ -129,7 +129,7 @@ namespace MscThesis.Core.Algorithms
                     continue;
                 }
 
-                individual.Fitness = fitnessFunction.ComputeFitness(individual.Value);
+                individual.Fitness = fitnessFunction.ComputeFitness(individual);
             }
 
             _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);

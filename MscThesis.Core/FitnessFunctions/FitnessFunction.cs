@@ -3,7 +3,7 @@ using System;
 
 namespace MscThesis.Core.FitnessFunctions
 {
-    public abstract class FitnessFunction<T> where T : InstanceFormat
+    public abstract class FitnessFunction<T> where T : Instance
     {
         private int _numCalls = 0;
 

@@ -12,7 +12,7 @@ namespace MscThesis.Framework.Tests
         private object _lock = new object { };
 
         protected bool _isTerminated;
-        protected Type _instanceType = typeof(InstanceFormat);
+        protected Type _instanceType = typeof(Instance);
         protected FitnessComparison _comparisonStrategy;
         protected Dictionary<string, ObservableValue<double?>> _bestFitness = new Dictionary<string, ObservableValue<double?>>();
 
