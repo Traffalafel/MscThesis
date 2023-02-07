@@ -1,23 +1,22 @@
-﻿using MscThesis.Core.FitnessFunctions;
-using MscThesis.Core.Formats;
+﻿using MscThesis.Core.Formats;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+using System.Linq;
 
 namespace MscThesis.Core.Algorithms
 {
     internal static class TourEntropyUtils
     {
-        internal static double[] ComputeUniEntropies(Population<Tour> population)
+        internal static double[] ComputeUniEntropies(IEnumerable<Tour> population, int problemSize)
         {
-            if (population.Size == 0)
+            var populationSize = population.Count();
+            if (populationSize == 0)
             {
                 return new double[0];
             }
 
-            var counts = GetUniCounts(population);
-            var freqs = ComputeUniFrequencies(counts, population.Size);
+            var counts = GetUniCounts(population, problemSize);
+            var freqs = ComputeUniFrequencies(counts, populationSize);
             return ComputeUniEntropies(freqs);
         }
 
@@ -42,15 +41,16 @@ namespace MscThesis.Core.Algorithms
             return entropies;
         }
 
-        internal static double[,] ComputeJointEntropies(Population<Tour> population)
+        internal static double[,] ComputeJointEntropies(IEnumerable<Tour> population, int problemSize)
         {
-            if (population.Size == 0)
+            var populationSize = population.Count();
+            if (populationSize == 0)
             {
                 return new double[0,0];
             }
 
-            var counts = GetJointCounts(population);
-            var freqs = ComputeJointFrequencies(counts, population.Size);
+            var counts = GetJointCounts(population, problemSize);
+            var freqs = ComputeJointFrequencies(counts, populationSize);
             return ComputeJointEntropies(freqs);
         }
 
@@ -121,9 +121,8 @@ namespace MscThesis.Core.Algorithms
             return freqs;
         }
 
-        internal static double[,] GetUniCounts(Population<Tour> population)
+        internal static double[,] GetUniCounts(IEnumerable<Tour> population, int problemSize)
         {
-            var problemSize = population.ProblemSize;
             var counts = new double[problemSize,problemSize];
             foreach (var individual in population)
             {
@@ -132,9 +131,8 @@ namespace MscThesis.Core.Algorithms
             return counts;
         }
 
-        internal static double[,,,] GetJointCounts(Population<Tour> population)
+        internal static double[,,,] GetJointCounts(IEnumerable<Tour> population, int problemSize)
         {
-            var problemSize = population.ProblemSize;
             var counts = new double[problemSize, problemSize, problemSize, problemSize];
             foreach (var individual in population)
             {
@@ -143,9 +141,8 @@ namespace MscThesis.Core.Algorithms
             return counts;
         }
 
-        internal static double[,,,] GetJointCounts(Population<Tour> population, int[] positions)
+        internal static double[,,,] GetJointCounts(IEnumerable<Tour> population, int[] positions, int problemSize)
         {
-            var problemSize = population.ProblemSize;
             var numPositions = positions.Length;
             var counts = new double[numPositions, numPositions, problemSize, problemSize];
             foreach (var individual in population)

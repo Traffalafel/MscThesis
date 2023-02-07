@@ -1,6 +1,5 @@
 ﻿using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,16 +11,15 @@ namespace MscThesis.Core.Algorithms.Tours
         private FitnessFunction<Tour> _fitnessFunction;
         private (double, double)[] _rescalingIntervals;
         private int _numFreeNodes;
-        private Population<Tour> Population
+        private IEnumerable<Tour> Population
         {
             get
             {
-                var individuals = _pyramid.Select(level => level.Population.Individuals).SelectMany(x => x);
-                return new Population<Tour>(individuals, _comparisonStrategy);
+                return _pyramid.Select(level => level.Population).SelectMany(x => x);
             }
         }
 
-        public P4(int problemSize, FitnessFunction<Tour> fitnessFunction) : base(problemSize, fitnessFunction.Comparison)
+        public P4(int problemSize, FitnessFunction<Tour> fitnessFunction) : base(problemSize)
         {
             _fitnessFunction = fitnessFunction;
             _numFreeNodes = _problemSize - 1;

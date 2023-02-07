@@ -1,5 +1,5 @@
 Param: Sampling
 Title: FastMIMIC_OneMax_variableSampling CpuTimeSeconds
-X: 100, 150, 200, 250, 300, 350, 400, 450
-Y: 33, 42, 55, 64, 71, 81, 92, 99
+X: 150, 200, 250, 300, 350, 400, 450
+Y: 42, 55, 64, 71, 81, 92, 99
 0.190*n+14.940

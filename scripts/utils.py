@@ -42,7 +42,7 @@ def clean_line(line):
     ys = [p[1] for p in points]
     return xs, ys
 
-def create_chart(vals, property, x_limit):
+def create_chart(vals, property, x_limit, ignore_sizes):
     lines = []
     vals = sorted(vals, key=lambda v: v[0]) # sort by size
     for size,filepath,param in vals:
@@ -51,6 +51,8 @@ def create_chart(vals, property, x_limit):
         plt.xlabel(param)
 
     for (size, line) in lines:
+        if size in ignore_sizes:
+            continue
         xs, ys = clean_line(line)
         xs, ys = bound(xs, ys, x_limit)
         plt.scatter(xs, ys, label=f"n={size}", marker=".")

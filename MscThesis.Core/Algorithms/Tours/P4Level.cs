@@ -15,12 +15,12 @@ namespace MscThesis.Core.Algorithms.Tours
         private double[,] _delta1Sums;
         private double[,] _delta2Sums;
 
-        internal P4Level(Random random, int problemSize, FitnessFunction<Tour> fitnessFunction, (double, double)[] rescalingIntervals) : base(random, fitnessFunction.Comparison)
+        internal P4Level(Random random, int problemSize, FitnessFunction<Tour> fitnessFunction, (double, double)[] rescalingIntervals) : base(random)
         {
             _random = random;
             _fitnessFunction = fitnessFunction;
             _problemSize = problemSize;
-            _population = new Population<RandomKeysTour>(fitnessFunction.Comparison);
+            _population = new List<RandomKeysTour>();
             _delta1Sums = new double[problemSize, problemSize];
             _delta2Sums = new double[problemSize, problemSize];
             _rescalingIntervals = rescalingIntervals;
@@ -35,8 +35,8 @@ namespace MscThesis.Core.Algorithms.Tours
         {
             RandomKeysUtils.AddToDelta1Sums(_delta1Sums, individual);
             RandomKeysUtils.AddToDelta2Sums(_delta2Sums, individual);
-            var delta1 = RandomKeysUtils.ComputeDelta1(_delta1Sums, _population.Size);
-            var delta2 = RandomKeysUtils.ComputeDelta2(_delta2Sums, _population.Size);
+            var delta1 = RandomKeysUtils.ComputeDelta1(_delta1Sums, _population.Count);
+            var delta2 = RandomKeysUtils.ComputeDelta2(_delta2Sums, _population.Count);
             var distanceFunc = ClusteringUtils.GetPermutationDistanceFunc(delta1, delta2);
             _clusters = ClusteringUtils.BuildClusters(_problemSize, distanceFunc);
         }

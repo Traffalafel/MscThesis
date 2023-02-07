@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MscThesis.Core;
-using MscThesis.Framework;
-using MscThesis.Framework.Specification;
+using MscThesis.Runner;
+using MscThesis.Runner.Specification;
 using System.Collections.ObjectModel;
 
 namespace MscThesis.UI.ViewModels
@@ -249,9 +249,16 @@ namespace MscThesis.UI.ViewModels
                 throw new Exception();
             }
 
+            int? problemSize = null;
+            if (!string.IsNullOrWhiteSpace(ProblemSize))
+            {
+                problemSize = int.Parse(ProblemSize);
+            }
+
             var canParse = Enum.TryParse(SelectedVariable, out Parameter variable);
             return new TestSpecification
             {
+                ProblemSize = problemSize,
                 NumRuns = Convert.ToInt32(NumRuns),
                 MaxParallelization = Convert.ToDouble(MaxParallelization),
                 Variable = canParse ? variable : null,

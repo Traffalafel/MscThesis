@@ -8,7 +8,7 @@ namespace MscThesis.Core
     public class Run : IEnumerable<RunIteration>
     {
         private IEnumerable<RunIteration> _iterator;
-        private List<TerminationCriterion> _terminations;
+        private List<ITerminationCriterion> _terminations;
         private Property _terminationReason;
 
         public Property TerminationReason => _terminationReason;
@@ -16,10 +16,10 @@ namespace MscThesis.Core
         public Run(IEnumerable<RunIteration> iterator)
         {
             _iterator = iterator;
-            _terminations = new List<TerminationCriterion>();
+            _terminations = new List<ITerminationCriterion>();
         }
 
-        public void AddTerminationCriterion(TerminationCriterion termination)
+        public void AddTerminationCriterion(ITerminationCriterion termination)
         {
             _terminations.Add(termination);
         }

@@ -1,0 +1,37 @@
+﻿{
+  "NumRuns": 10,
+  "Variable": "ProblemSize",
+  "VariableSteps": {
+    "Start": 10,
+    "Stop": 30,
+    "Step": 10
+  },
+  "MaxParallelization": 1,
+  "Problem": {
+    "Name": "DeceptiveLeadingBlocks",
+    "Parameters": {
+      "BlockSize": 2
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "MIMIC_PopulationSize:n",
+      "Algorithm": "MIMIC",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

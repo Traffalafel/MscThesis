@@ -62,7 +62,7 @@ def main():
     plt.scatter(xs, ys, c="k", zorder=3)
 
     plt.legend()
-    plt.title(title)
+    plt.title(title, fontsize=14)
     plt.xlabel("Problem size")
     plt.ylabel(parameter)
 

@@ -9,30 +9,21 @@ namespace MscThesis.Core.Selection
     public class PercentileSelection<T> : ISelectionOperator<T> where T : Instance
     {
         private double _percentile;
-        private SelectionMethod _method;
 
-        public PercentileSelection(double percentile, SelectionMethod method)
+        public PercentileSelection(double percentile)
         {
             _percentile = percentile;
-            _method = method;
         }
 
-        public Population<T> Select(Random _, Population<T> population, FitnessFunction<T> fitnessFunction)
+        public List<T> Select(Random _, List<T> population, FitnessFunction<T> fitnessFunction)
         {
-            var targetSize = Convert.ToInt32(Math.Ceiling(population.Size * _percentile));
-
-            IEnumerable<T> ordered;
-            if (_method == SelectionMethod.Maximize)
+            var targetSize = Convert.ToInt32(Math.Ceiling(population.Count() * _percentile));
+            foreach (var individual in population)
             {
-                ordered = population.OrderByDescending(i => i.Fitness);
+                individual.Fitness ??= fitnessFunction.ComputeFitness(individual);
             }
-            else
-            {
-                ordered = population.OrderBy(i => i.Fitness);
-            }
-            var newIndividuals = ordered.Take(targetSize);
-
-            return new Population<T>(newIndividuals, fitnessFunction.Comparison);
+            var ordered = population.OrderByDescending(i => i.Fitness, fitnessFunction.Comparison);
+            return ordered.Take(targetSize).ToList();
         }
     }
 }

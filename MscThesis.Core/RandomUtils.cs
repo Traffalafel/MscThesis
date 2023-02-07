@@ -116,7 +116,7 @@ namespace MscThesis.Core
             return output;
         }
 
-        // Code from SO answer @ https://stackoverflow.com/questions/218060/random-gaussian-variables
+        // Code from SO answer: https://stackoverflow.com/questions/218060/random-gaussian-variables
         public static double SampleStandard(Random random, double mean, double stdDeviation)
         {
             double u1 = 1.0 - random.NextDouble(); //uniform(0,1] random doubles

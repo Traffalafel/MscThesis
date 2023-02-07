@@ -12,15 +12,12 @@ namespace MscThesis.Core.Algorithms.Tours
         private readonly int _populationSize;
         private readonly int _tournamentSize = 2;
         private (double, double)[] _rescalingIntervals;
-
-
-        private Population<RandomKeysTour> _population;
+        private List<RandomKeysTour> _population;
 
         public TourGOMEA(
             int problemSize, 
-            FitnessComparison comparisonStrategy,
             int populationSize
-            ) : base(problemSize, comparisonStrategy)
+            ) : base(problemSize)
         {
             _numFreeNodes = problemSize - 1;
             _populationSize = populationSize;
@@ -32,7 +29,7 @@ namespace MscThesis.Core.Algorithms.Tours
         protected override void Initialize(FitnessFunction<Tour> fitnessFunction)
         {
             // Initialize population uniformly
-            _population = new Population<RandomKeysTour>(_comparisonStrategy);
+            _population = new List<RandomKeysTour>();
             for (int i = 0; i < _populationSize; i++)
             {
                 var uniform = RandomKeysTour.CreateUniform(_random.Value, _problemSize);
@@ -56,20 +53,19 @@ namespace MscThesis.Core.Algorithms.Tours
             {
                 foreach (var cluster in clusters)
                 {
-                    var donor = RandomUtils.Choose(_random.Value, _population.Individuals);
+                    var donor = RandomUtils.Choose(_random.Value, _population);
                     RandomKeysUtils.OptimalMixing(_random.Value, donor, individual, cluster, fitnessFunction, _rescalingIntervals);
                 }
             }
 
             _population = TournamentSelection(_random.Value, _population, fitnessFunction);
-            var populationTour = new Population<Tour>(_population, _comparisonStrategy);
             return new RunIteration 
             {
-                Population = populationTour 
+                Population = _population 
             };
         }
 
-        private List<HashSet<int>> ComputeClusters(Population<RandomKeysTour> population)
+        private List<HashSet<int>> ComputeClusters(List<RandomKeysTour> population)
         {
             var delta1 = RandomKeysUtils.ComputeDelta1(_numFreeNodes, population);
             var delta2 = RandomKeysUtils.ComputeDelta2(_numFreeNodes, population);
@@ -77,17 +73,17 @@ namespace MscThesis.Core.Algorithms.Tours
             return ClusteringUtils.BuildClusters(_numFreeNodes, distanceFunc);
         }
 
-        private Population<RandomKeysTour> TournamentSelection(Random random, Population<RandomKeysTour> population, FitnessFunction<Tour> fitnessFunction)
+        private List<RandomKeysTour> TournamentSelection(Random random, List<RandomKeysTour> population, FitnessFunction<Tour> fitnessFunction)
         {
             var comparison = fitnessFunction.Comparison;
-            var output = new Population<RandomKeysTour>(comparison);
-            var numTournaments = population.Size;
+            var output = new List<RandomKeysTour>();
+            var numTournaments = population.Count;
 
             for (int i = 0; i < numTournaments; i++)
             {
                 var sample = Enumerable.Range(0, _tournamentSize).Select(_ =>
                 {
-                    return RandomUtils.Choose(random, population.Individuals);
+                    return RandomUtils.Choose(random, population);
                 });
                 var fittest = sample.Aggregate((i1, i2) => comparison.IsFitter(i1, i2) ? i1 : i2);
                 output.Add(fittest);

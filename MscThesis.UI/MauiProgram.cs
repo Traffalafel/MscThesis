@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MscThesis.Framework;
+using MscThesis.Runner;
 using MscThesis.UI.Pages;
 using MscThesis.UI.ViewModels;
 using SkiaSharp.Views.Maui.Controls.Hosting;

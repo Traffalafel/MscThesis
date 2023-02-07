@@ -1,0 +1,32 @@
+{
+  "NumRuns": 5,
+  "MaxParallelization": 1.0,
+  "Problem": {
+    "Name": "PerturbedTSPLib",
+    "Parameters": {
+      "ProblemName": "berlin5",
+      "StdDeviationScale": "1.0"
+    }
+  },
+  "Optimizers": [
+    {
+      "Name": "TourGOMEA_PopulationSize:15",
+      "Algorithm": "TourGOMEA",
+      "Parameters": {
+        "PopulationSize": "15"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "25",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

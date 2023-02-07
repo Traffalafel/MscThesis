@@ -1,11 +1,8 @@
-﻿using MscThesis.Core;
-using MscThesis.Framework;
-using MscThesis.Framework.Specification;
+﻿using MscThesis.Runner;
+using MscThesis.Runner.Specification;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;

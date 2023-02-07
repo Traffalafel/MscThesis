@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MscThesis.Core.Formats;
-using MscThesis.Framework;
-using MscThesis.Framework.Tests;
-using MscThesis.Framework.Specification;
+using MscThesis.Runner;
+using MscThesis.Runner.Tests;
+using MscThesis.Runner.Specification;
 using MscThesis.UI.Loading;
 using MscThesis.UI.Models;
 using System.Threading;

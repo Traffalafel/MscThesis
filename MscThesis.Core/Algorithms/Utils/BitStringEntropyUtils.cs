@@ -1,20 +1,22 @@
 ﻿using MscThesis.Core.Formats;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MscThesis.Core.Algorithms.BitStrings
 {
     internal static class BitStringEntropyUtils
     {
-        internal static double[] ComputeUniEntropies(Population<BitString> population)
+        internal static double[] ComputeUniEntropies(IEnumerable<BitString> population, int problemSize)
         {
-            if (population.Size == 0)
+            var populationSize = population.Count();
+            if (populationSize == 0)
             {
                 return new double[0];
             }
 
-            var counts = GetUniCounts(population);
-            var freqs = ComputeUniFrequencies(counts, population.Size);
+            var counts = GetUniCounts(population, problemSize);
+            var freqs = ComputeUniFrequencies(counts, populationSize);
             return ComputeUniEntropies(freqs);
         }
 
@@ -37,17 +39,18 @@ namespace MscThesis.Core.Algorithms.BitStrings
             return entropies;
         }
 
-        internal static double[,] ComputeJointEntropies(Population<BitString> population)
+        internal static double[,] ComputeJointEntropies(IEnumerable<BitString> population, int problemSize)
         {
-            if (population.Size == 0)
+            var populationSize = population.Count();
+            if (populationSize == 0)
             {
                 return new double[0, 0];
             }
 
-            var uniCounts = GetUniCounts(population);
-            var uniFreqs = ComputeUniFrequencies(uniCounts, population.Size);
-            var jointCounts = GetJointCounts(population);
-            var jointFreqs = ComputeJointFrequencies(jointCounts, population.Size);
+            var uniCounts = GetUniCounts(population, problemSize);
+            var uniFreqs = ComputeUniFrequencies(uniCounts, populationSize);
+            var jointCounts = GetJointCounts(population, problemSize);
+            var jointFreqs = ComputeJointFrequencies(jointCounts, populationSize);
             return ComputeJointEntropies(jointFreqs, uniFreqs);
         }
 
@@ -83,13 +86,10 @@ namespace MscThesis.Core.Algorithms.BitStrings
             return jointEntropies;
         }
 
-        internal static double[] GetUniCounts(Population<BitString> population)
+        internal static double[] GetUniCounts(IEnumerable<BitString> population, int problemSize)
         {
-            var values = population.GetValues();
-            var problemSize = population.ProblemSize;
-
             var counts = new double[problemSize];
-            foreach (var instance in values)
+            foreach (var instance in population)
             {
                 AddToUniCounts(counts, instance);
             }
@@ -107,26 +107,21 @@ namespace MscThesis.Core.Algorithms.BitStrings
             }
         }
 
-        internal static double[,,] GetJointCounts(Population<BitString> population)
+        internal static double[,,] GetJointCounts(IEnumerable<BitString> population, int problemSize)
         {
-            var values = population.GetValues();
-            var problemSize = population.ProblemSize;
-
             var counts = new double[problemSize, problemSize, 4];
-            foreach (var instance in values)
+            foreach (var instance in population)
             {
                 AddToJointCounts(counts, instance);
             }
             return counts;
         }
 
-        internal static double[,,] GetJointCounts(Population<BitString> population, int[] positions)
+        internal static double[,,] GetJointCounts(IEnumerable<BitString> population, int[] positions)
         {
-            var values = population.GetValues();
             var numPositions = positions.Length;
-
             var counts = new double[numPositions, numPositions, 4];
-            foreach (var instance in values)
+            foreach (var instance in population)
             {
                 AddToJointCounts(counts, instance, positions);
             }

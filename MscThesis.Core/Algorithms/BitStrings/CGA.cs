@@ -11,8 +11,7 @@ namespace MscThesis.Core.Algorithms.BitStrings
 
         public CGA(
             int problemSize,
-            FitnessComparison comparisonStrategy,
-            double K) : base(problemSize, comparisonStrategy)
+            double K) : base(problemSize)
         {
             _kInv = 1.0d / K;
         }
@@ -68,10 +67,9 @@ namespace MscThesis.Core.Algorithms.BitStrings
             }
 
             var individuals = new List<BitString> { x, y };
-            var population = new Population<BitString>(individuals, _comparisonStrategy);
             return new RunIteration
             {
-                Population = population
+                Population = individuals
             };
         }
 

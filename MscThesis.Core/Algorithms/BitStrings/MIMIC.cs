@@ -12,8 +12,7 @@ namespace MscThesis.Core.Algorithms
     {
         private readonly ISelectionOperator<BitString> _selectionOperator;
         private readonly int _populationSize;
-
-        private Population<BitString> _population;
+        private List<BitString> _population;
 
         public override ISet<Property> StatisticsProperties => new HashSet<Property>
         {
@@ -22,9 +21,8 @@ namespace MscThesis.Core.Algorithms
 
         public MIMIC(
             int problemSize,
-            FitnessComparison comparisonStrategy,
             int populationSize,
-            ISelectionOperator<BitString> selectionOperator) : base(problemSize, comparisonStrategy)
+            ISelectionOperator<BitString> selectionOperator) : base(problemSize)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
@@ -33,7 +31,7 @@ namespace MscThesis.Core.Algorithms
         protected override void Initialize(FitnessFunction<BitString> fitnessFunction)
         {
             // Initialize population uniformly
-            _population = new Population<BitString>(_comparisonStrategy);
+            _population = new List<BitString>();
             for (int i = 0; i < _populationSize; i++)
             {
                 var bs = BitString.CreateUniform(_random.Value, _problemSize);
@@ -43,24 +41,22 @@ namespace MscThesis.Core.Algorithms
 
         protected override RunIteration NextIteration(FitnessFunction<BitString> fitnessFunction)
         {
-            var problemSize = _population.ProblemSize;
+            var uniCounts = BitStringEntropyUtils.GetUniCounts(_population, _problemSize);
+            var uniFreqs = BitStringEntropyUtils.ComputeUniFrequencies(uniCounts, _populationSize);
+            var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(_population, _problemSize);
 
-            var uniCounts = BitStringEntropyUtils.GetUniCounts(_population);
-            var uniFreqs = BitStringEntropyUtils.ComputeUniFrequencies(uniCounts, _population.Size);
-            var uniEntropies = BitStringEntropyUtils.ComputeUniEntropies(_population);
-
-            var jointCounts = BitStringEntropyUtils.GetJointCounts(_population);
-            var jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(jointCounts, _population.Size);
+            var jointCounts = BitStringEntropyUtils.GetJointCounts(_population, _problemSize);
+            var jointFreqs = BitStringEntropyUtils.ComputeJointFrequencies(jointCounts, _populationSize);
             var jointEntropies = BitStringEntropyUtils.ComputeJointEntropies(jointFreqs, uniFreqs);
 
-            var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, jointEntropies);
+            var ordering = MIMICUtils.GetOrdering(_problemSize, uniEntropies, jointEntropies);
 
             // Sample solutions from model
-            var minProb = 1.0d / problemSize;
+            var minProb = 1.0d / _problemSize;
             var maxProb = 1.0d - minProb;
             for (int i = 0; i < _populationSize; i++)
             {
-                var vals = new bool[problemSize];
+                var vals = new bool[_problemSize];
 
                 // Sample the first variable
                 var first = ordering[0];
@@ -69,7 +65,7 @@ namespace MscThesis.Core.Algorithms
                 vals[first] = RandomUtils.SampleBernoulli(_random.Value, probFirst);
 
                 // Sample the rest
-                for (int k = 1; k < problemSize; k++)
+                for (int k = 1; k < _problemSize; k++)
                 {
                     var position = ordering[k];
                     var prev = ordering[k - 1];
@@ -112,10 +108,10 @@ namespace MscThesis.Core.Algorithms
                 individual.Fitness = fitnessFunction.ComputeFitness(individual);
             }
 
-            _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);
+            _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction).ToList();
 
-            var jointIndices = Enumerable.Range(0, problemSize).Select(i => Enumerable.Range(i + 1, problemSize - i - 1).Select(j => (i, j))).SelectMany(x => x);
-            var avgJointEntropy = jointIndices.Select(idxs => jointEntropies[idxs.i, idxs.j]).Sum() / (problemSize * (problemSize + 1)) / 2;
+            var jointIndices = Enumerable.Range(0, _problemSize).Select(i => Enumerable.Range(i + 1, _problemSize - i - 1).Select(j => (i, j))).SelectMany(x => x);
+            var avgJointEntropy = jointIndices.Select(idxs => jointEntropies[idxs.i, idxs.j]).Sum() / (_problemSize * (_problemSize + 1)) / 2;
 
             var stats = new Dictionary<Property, double>()
             {

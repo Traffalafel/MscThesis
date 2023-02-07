@@ -6,12 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MscThesis.Framework\MscThesis.Framework.csproj" />
+    <ProjectReference Include="..\MscThesis.Runner\MscThesis.Runner.csproj" />
   </ItemGroup>
 
 </Project>

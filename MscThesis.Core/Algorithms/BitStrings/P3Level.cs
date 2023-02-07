@@ -13,7 +13,7 @@ namespace MscThesis.Core.Algorithms
         private double[] _uniCounts;
         private double[,,] _jointCounts;
 
-        public P3Level(Random random, int problemSize, FitnessFunction<BitString> fitnessFunction) : base(random, fitnessFunction.Comparison)
+        public P3Level(Random random, int problemSize, FitnessFunction<BitString> fitnessFunction) : base(random)
         {
             _fitnessFunction = fitnessFunction;
             _uniCounts = new double[problemSize];

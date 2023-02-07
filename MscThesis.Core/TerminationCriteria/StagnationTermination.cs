@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MscThesis.Core.TerminationCriteria
 {
-    public class StagnationTermination : TerminationCriterion
+    public class StagnationTermination : ITerminationCriterion
     {
         private readonly double _epsilon;
         private readonly int _maxIterations;
@@ -12,7 +12,7 @@ namespace MscThesis.Core.TerminationCriteria
         private int _stagnatedIterations;
         private FitnessComparison _comparison;
 
-        public override Property Reason => Property.Stagnation;
+        public Property Reason => Property.Stagnation;
 
         public StagnationTermination(double epsilon, int maxIterations, FitnessComparison comparison)
         {
@@ -23,7 +23,7 @@ namespace MscThesis.Core.TerminationCriteria
             _stagnatedIterations = 0;
         }
 
-        public override bool ShouldTerminate(IEnumerable<double?> fitnesses)
+        public bool ShouldTerminate(IEnumerable<double?> fitnesses)
         {
             var bestFitness = _comparison.GetFittest(fitnesses);
 

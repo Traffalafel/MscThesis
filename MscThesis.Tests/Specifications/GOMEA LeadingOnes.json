@@ -1,0 +1,34 @@
+﻿{
+  "NumRuns": 10,
+  "Variable": "ProblemSize",
+  "VariableSteps": {
+    "Start": 10,
+    "Stop": 30,
+    "Step": 10
+  },
+  "MaxParallelization": 1,
+  "Problem": {
+    "Name": "LeadingOnes"
+  },
+  "Optimizers": [
+    {
+      "Name": "GOMEA_PopulationSize:n",
+      "Algorithm": "GOMEA",
+      "Parameters": {
+        "PopulationSize": "n"
+      }
+    }
+  ],
+  "Terminations": [
+    {
+      "Name": "Optimum reached"
+    },
+    {
+      "Name": "Stagnation",
+      "Parameters": {
+        "MaxIterations": "n",
+        "Epsilon": "10E-5"
+      }
+    }
+  ]
+}

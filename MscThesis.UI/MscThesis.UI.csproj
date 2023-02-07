@@ -40,7 +40,6 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\icon.jpg" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -65,7 +64,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\MscThesis.Framework\MscThesis.Framework.csproj" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -121,6 +120,10 @@
 
 	<ItemGroup>
 		<Content Include="appsettings.json"></Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\MscThesis.Runner\MscThesis.Runner.csproj" />
 	</ItemGroup>
 	
 </Project>

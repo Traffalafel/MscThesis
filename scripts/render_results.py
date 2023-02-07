@@ -9,8 +9,8 @@ from scipy.optimize import curve_fit
 from sklearn.metrics import r2_score
 import numpy as np
 
-# You are hereby entering the spaghetti zone
-# Enter at your own risk
+# You are now entering the spaghetti zone at your own risk
+# This script renders results based on a convoluted set of arguments
 
 RESULTS_DIR = "results"
 FILENAME_PATTERN_TEMPLATE = "*1(_\d+)?_variable*2"
@@ -79,6 +79,7 @@ def main():
     parser.add_argument("--fit")
     parser.add_argument("--compare")
     parser.add_argument("--compare-fit")
+    parser.add_argument("--ignore-sizes")
     parser.add_argument("--compare-own-x", action=argparse.BooleanOptionalAction)
     parser.add_argument("--save", action=argparse.BooleanOptionalAction)
     parser.add_argument("--line", action=argparse.BooleanOptionalAction)
@@ -88,9 +89,10 @@ def main():
     args = parser.parse_args()
 
     if args.title is not None:
-        plt.title(args.title)
+        title = args.title
     else:
-        plt.title(args.name)
+        title = args.name
+    plt.title(title, fontsize=14)
 
     if args.variable is None:
         # Create single result chart
@@ -110,8 +112,12 @@ def main():
             y_pred = [f(x) for x in xs]
             score = r2_score(ys, y_pred)
             margin_x = sum(xs[i] - xs[i-1] for i in range(1, len(xs))) / (2*(len(xs)-1))
-            end_x = max(xs) + margin_x
-            dx = np.linspace(1, end_x, 100)
+            if args.x_limit is not None:
+                x_lim = int(args.x_limit)
+            else:
+                x_lim = max(xs)+margin_x
+            plt.gca().set_xlim(left=0, right=x_lim)
+            dx = np.linspace(1, x_lim, 100)
             plt.plot(dx, [f(x) for x in dx])
             print(args.name)
             for p in fit_params:
@@ -141,7 +147,7 @@ def main():
                 if args.compare_own_x:
                     end_x = max(xs_compare) + margin_x
                 else:
-                    end_x = max(xs) + margin_x
+                    end_x = x_lim
                 dx = np.linspace(1, end_x, 100)
                 plt.plot(dx, [f(x) for x in dx])
 
@@ -156,7 +162,11 @@ def main():
             filepath = os.path.join(dirpath, f)
             val = (size, filepath, args.variable)
             vals.append(val)
-        utils.create_chart(vals, args.property, args.x_limit)
+        if args.ignore_sizes is None:
+            ignore_sizes = []
+        else:
+            ignore_sizes = [int(n) for n in args.ignore_sizes.split(',')]
+        utils.create_chart(vals, args.property, args.x_limit, ignore_sizes)
         parameter = args.variable
 
     plt.xlabel(translate(parameter, args))
@@ -168,14 +178,17 @@ def main():
 
     if args.y_limit is not None:
         y_limit = float(args.y_limit)
-        plt.gca().set_ylim(top=y_limit)
+        plt.gca().set_ylim(top=y_limit, bottom=-0.0125*y_limit)
 
     if args.save:
         if args.output_dir is not None:
             output_dir = args.output_dir
         else:
             output_dir = CHARTS_DIR_DEFAULT
-        file_path = os.path.join(output_dir, f"{args.name} {parameter} {args.property}.png")
+        file_name = f"{args.name} {parameter} {args.property}"
+        if args.compare is not None:
+            file_name += " comparison"
+        file_path = os.path.join(output_dir, file_name+".png")
         plt.savefig(file_path, dpi=300)
         plt.cla()
         plt.clf()

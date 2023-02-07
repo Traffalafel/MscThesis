@@ -5,17 +5,22 @@ using System.Collections.Generic;
 namespace MscThesis.Core
 {
 
-    public class FitnessComparison
+    public class FitnessComparison : IComparer<double?>
     {
-        private Func<double, double, bool> _strategy;
+        private readonly Func<double, double, bool> _strategy;
+
+        public static FitnessComparison Minimization => new FitnessComparison((v1, v2) => v1 < v2);
+        public static FitnessComparison Maximization => new FitnessComparison((v1, v2) => v1 > v2);
 
         private FitnessComparison(Func<double, double, bool> strategy)
         {
             _strategy = strategy;
         }
 
-        public static FitnessComparison Minimization => new FitnessComparison((v1, v2) => v1 < v2);
-        public static FitnessComparison Maximization => new FitnessComparison((v1, v2) => v1 > v2);
+        public int Compare(double? x, double? y)
+        {
+            return IsFitter(x, y) ? 1 : -1;
+        }
 
         public double? GetFittest(IEnumerable<double?> vals)
         {
@@ -28,6 +33,25 @@ namespace MscThesis.Core
                 }
             }
             return fittest;
+        }
+
+        // true => i1 is fitter than i2
+        public bool IsFitter(Instance i1, Instance i2)
+        {
+            if (i1 == null && i2 == null)
+            {
+                return false;
+            }
+            if (i1 != null && i2 == null)
+            {
+                return true;
+            }
+            if (i1 == null && i2 != null)
+            {
+                return false;
+            }
+
+            return IsFitter(i1.Fitness, i2.Fitness);
         }
 
         public bool IsFitter(double? val1, double? val2)
@@ -47,38 +71,6 @@ namespace MscThesis.Core
         public bool IsFitter(double val1, double val2)
         {
             return _strategy(val1, val2);
-        }
-
-        // true => i1 is fitter than i2
-        public bool IsFitter(Instance i1, Instance i2)
-        {
-            if (i1 == null && i2 == null)
-            {
-                return false;
-            }
-            if (i1 != null && i2 == null)
-            {
-                return true;
-            }
-            if (i1 == null && i2 != null)
-            {
-                return false;
-            }
-
-            if (i1.Fitness == null && i2.Fitness == null)
-            {
-                return false;
-            }
-            if (i1.Fitness != null && i2.Fitness == null)
-            {
-                return true;
-            }
-            if (i1.Fitness == null && i2.Fitness != null)
-            {
-                return false;
-            }
-
-            return IsFitter(i1.Fitness.Value, i2.Fitness.Value);
         }
     }
 }

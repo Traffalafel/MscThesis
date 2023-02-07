@@ -1,6 +1,7 @@
 ﻿using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MscThesis.Core.Selection
@@ -16,19 +17,22 @@ namespace MscThesis.Core.Selection
             _tournamentSize = tournamentSize;
         }
 
-        public Population<T> Select(Random random, Population<T> population, FitnessFunction<T> fitnessFunction)
+        public List<T> Select(Random random, List<T> population, FitnessFunction<T> fitnessFunction)
         {
             var comparison = fitnessFunction.Comparison;
-            var output = new Population<T>(comparison);
-            var numTournaments = population.Size;
+            var output = new List<T>();
 
-            for (int i = 0; i < numTournaments; i++)
+            for (int i = 0; i < _numTournaments; i++)
             {
                 var sample = Enumerable.Range(0, _tournamentSize).Select(_ =>
                 {
-                    return RandomUtils.Choose(random, population.Individuals);
+                    return RandomUtils.Choose(random, population);
                 });
-                var fittest = sample.Aggregate((i1, i2) => comparison.IsFitter(i1, i2) ? i1 : i2);
+                var fittest = sample.Aggregate((i1, i2) => {
+                    i1.Fitness ??= fitnessFunction.ComputeFitness(i1);
+                    i2.Fitness ??= fitnessFunction.ComputeFitness(i2);
+                    return comparison.IsFitter(i1, i2) ? i1 : i2;
+                });
                 output.Add(fittest);
             }
 

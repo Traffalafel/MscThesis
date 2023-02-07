@@ -15,7 +15,7 @@ namespace MscThesis.Core.Algorithms
         public P3(
             int problemSize,
             FitnessFunction<BitString> fitnessFunction
-            ) : base(problemSize, fitnessFunction.Comparison)
+            ) : base(problemSize)
         {
             _fitnessFunction = fitnessFunction;
             _hashset = new HashSet<string>();
@@ -122,10 +122,10 @@ namespace MscThesis.Core.Algorithms
             return _hashset.Contains(individual.ToString());
         }
 
-        private Population<BitString> GetPopulation()
+        private List<BitString> GetPopulation()
         {
-            var individuals = _pyramid.Select(level => level.Population.Individuals).SelectMany(x => x);
-            return new Population<BitString>(individuals, _comparisonStrategy);
+            var individuals = _pyramid.Select(level => level.Population).SelectMany(x => x);
+            return individuals.ToList();
         }
 
     }

@@ -1,7 +1,7 @@
 ﻿using MscThesis.Core;
 using MscThesis.Core.Formats;
-using MscThesis.Framework;
-using MscThesis.Framework.Tests;
+using MscThesis.Runner;
+using MscThesis.Runner.Tests;
 using System.Collections.ObjectModel;
 using System.Globalization;
 

@@ -7,15 +7,15 @@ namespace MscThesis.Core.Algorithms
     public abstract class PyramidLevel<T> where T : Instance
     {
         protected Random _random;
-        protected Population<T> _population;
+        protected List<T> _population;
         protected List<HashSet<int>> _clusters;
 
-        public Population<T> Population => _population;
+        public List<T> Population => _population;
 
-        public PyramidLevel(Random random, FitnessComparison comparisonStrategy)
+        public PyramidLevel(Random random)
         {
             _random = random;
-            _population = new Population<T>(comparisonStrategy);
+            _population = new List<T>();
         }
 
         public void Add(T individual)
@@ -26,18 +26,19 @@ namespace MscThesis.Core.Algorithms
 
         public void Mix(T individual)
         {
+            var populationSize = _population.Count;
             foreach (var cluster in _clusters)
             {
-                var numRemaining = _population.Size;
+                var numRemaining = populationSize;
                 var different = false;
                 do
                 {
                     var idx = _random.Next(numRemaining);
-                    var donor = _population.Individuals[idx];
+                    var donor = _population[idx];
 
                     different = Mix(donor, individual, cluster);
 
-                    Swap(_population.Individuals, idx, numRemaining - 1);
+                    Swap(_population, idx, numRemaining - 1);
                     numRemaining--;
                 }
                 while (numRemaining > 0 && !different);

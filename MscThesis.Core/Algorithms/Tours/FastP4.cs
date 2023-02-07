@@ -1,6 +1,5 @@
 ﻿using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,16 +14,16 @@ namespace MscThesis.Core.Algorithms.Tours
         private readonly int _sheddingInterval;
         private int _sheddingCounter;
 
-        private Population<Tour> Population
+        private List<Tour> Population
         {
             get
             {
-                var individuals = _pyramid.Select(level => level.Population.Individuals).SelectMany(x => x);
-                return new Population<Tour>(individuals, _comparisonStrategy);
+                var individuals = _pyramid.Select(level => level.Population).SelectMany(x => x);
+                return new List<Tour>(individuals);
             }
         }
 
-        public FastP4(int problemSize, int sheddingInterval, FitnessFunction<Tour> fitnessFunction) : base(problemSize, fitnessFunction.Comparison)
+        public FastP4(int problemSize, int sheddingInterval, FitnessFunction<Tour> fitnessFunction) : base(problemSize)
         {
             _fitnessFunction = fitnessFunction;
             _numFreeNodes = _problemSize - 1;

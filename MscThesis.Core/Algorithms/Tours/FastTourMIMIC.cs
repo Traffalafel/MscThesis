@@ -1,5 +1,4 @@
-﻿using MscThesis.Core.Algorithms.BitStrings;
-using MscThesis.Core.FitnessFunctions;
+﻿using MscThesis.Core.FitnessFunctions;
 using MscThesis.Core.Formats;
 using MscThesis.Core.Selection;
 using System;
@@ -13,35 +12,35 @@ namespace MscThesis.Core.Algorithms
         private readonly ISelectionOperator<Tour> _selectionOperator;
         private readonly int _populationSize;
         private readonly int _numSampledPositions;
-
-        private Population<Tour> _population;
+        private List<Tour> _population;
+        private readonly int _numFreeNodes;
 
         private double[,,,] _jointFreqs;
         private double[,] _jointEntropies;
 
         public FastTourMIMIC(
             int problemSize,
-            FitnessComparison comparisonStrategy,
             int populationSize,
             int numSampledPositions,
-            ISelectionOperator<Tour> selectionOperator) : base(problemSize, comparisonStrategy)
+            ISelectionOperator<Tour> selectionOperator) : base(problemSize)
         {
             _selectionOperator = selectionOperator;
             _populationSize = populationSize;
             _numSampledPositions = numSampledPositions;
+            _numFreeNodes = problemSize - 1;
         }
 
         protected override void Initialize(FitnessFunction<Tour> fitnessFunction)
         {
             // Initialize population uniformly
-            _population = new Population<Tour>(_comparisonStrategy);
+            _population = new List<Tour>();
             for (int i = 0; i < _populationSize; i++)
             {
                 var permutation = Tour.CreateUniform(_random.Value, _problemSize);
                 _population.Add(permutation);
             }
 
-            _jointFreqs = TourEntropyUtils.GetJointCounts(_population);
+            _jointFreqs = TourEntropyUtils.GetJointCounts(_population, _numFreeNodes);
             _jointEntropies = TourEntropyUtils.ComputeJointEntropies(_jointFreqs);
         }
 
@@ -52,15 +51,13 @@ namespace MscThesis.Core.Algorithms
 
         protected override RunIteration NextIteration(FitnessFunction<Tour> fitnessFunction)
         {
-            var problemSize = _population.ProblemSize;
+            var uniCounts = TourEntropyUtils.GetUniCounts(_population, _numFreeNodes);
+            var uniFreqs = TourEntropyUtils.ComputeUniFrequencies(uniCounts, _populationSize);
+            var uniEntropies = TourEntropyUtils.ComputeUniEntropies(_population, _numFreeNodes);
 
-            var uniCounts = TourEntropyUtils.GetUniCounts(_population);
-            var uniFreqs = TourEntropyUtils.ComputeUniFrequencies(uniCounts, _population.Size);
-            var uniEntropies = TourEntropyUtils.ComputeUniEntropies(_population);
-
-            var toSample = Math.Min(_numSampledPositions, problemSize);
-            var samplePositions = RandomUtils.SampleUnique(_random.Value, toSample, problemSize);
-            var jointCountsSample = TourEntropyUtils.GetJointCounts(_population, samplePositions);
+            var toSample = Math.Min(_numSampledPositions, _numFreeNodes);
+            var samplePositions = RandomUtils.SampleUnique(_random.Value, toSample, _numFreeNodes);
+            var jointCountsSample = TourEntropyUtils.GetJointCounts(_population, samplePositions, _numFreeNodes);
             var jointFreqsSample = TourEntropyUtils.ComputeJointFrequencies(jointCountsSample, _populationSize);
             var jointEntropySample = TourEntropyUtils.ComputeJointEntropies(jointFreqsSample);
             for (int i = 0; i < samplePositions.Length; i++)
@@ -74,9 +71,9 @@ namespace MscThesis.Core.Algorithms
                         (iPos, jPos) = (jPos, iPos);
                     }
 
-                    for (int k = 0; k < problemSize; k++)
+                    for (int k = 0; k < _numFreeNodes; k++)
                     {
-                        for (int l = 0; l < problemSize; l++)
+                        for (int l = 0; l < _numFreeNodes; l++)
                         {
                             _jointFreqs[iPos, jPos, k, l] = jointFreqsSample[i, j, k, l];
                             _jointEntropies[iPos, jPos] = jointEntropySample[i, j];
@@ -85,14 +82,14 @@ namespace MscThesis.Core.Algorithms
                 }
             }
 
-            var ordering = MIMICUtils.GetOrdering(problemSize, uniEntropies, _jointEntropies);
+            var ordering = MIMICUtils.GetOrdering(_numFreeNodes, uniEntropies, _jointEntropies);
 
             // Sample solutions from model
-            var minProb = 1.0d / (problemSize*problemSize);
+            var minProb = 1.0d / (_numFreeNodes*_numFreeNodes);
             var maxProb = 1.0d - minProb;
             for (int i = 0; i < _populationSize; i++)
             {
-                var values = new int[problemSize];
+                var values = new int[_numFreeNodes];
                 var chosen = new HashSet<int>();
 
                 // Sample the first variable
@@ -104,7 +101,7 @@ namespace MscThesis.Core.Algorithms
                 chosen.Add(valueFirst);
 
                 // Sample the rest
-                for (int k = 1; k < problemSize; k++)
+                for (int k = 1; k < _numFreeNodes; k++)
                 {
                     var position = ordering[k];
                     var positionPrev = ordering[k - 1];
@@ -132,10 +129,10 @@ namespace MscThesis.Core.Algorithms
                 individual.Fitness = fitnessFunction.ComputeFitness(individual);
             }
 
-            _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction);
+            _population = _selectionOperator.Select(_random.Value, _population, fitnessFunction).ToList();
 
-            var jointIndices = Enumerable.Range(0, problemSize).Select(i => Enumerable.Range(i + 1, problemSize - i - 1).Select(j => (i, j))).SelectMany(x => x);
-            var avgJointEntropy = jointIndices.Select(idxs => _jointEntropies[idxs.i, idxs.j]).Sum() / (problemSize * (problemSize + 1)) / 2;
+            var jointIndices = Enumerable.Range(0, _numFreeNodes).Select(i => Enumerable.Range(i + 1, _numFreeNodes - i - 1).Select(j => (i, j))).SelectMany(x => x);
+            var avgJointEntropy = jointIndices.Select(idxs => _jointEntropies[idxs.i, idxs.j]).Sum() / (_numFreeNodes * (_problemSize + 1)) / 2;
 
             var stats = new Dictionary<Property, double>()
             {
